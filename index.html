@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Cut — Complete Programme</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Public+Sans:wght@400;500;600;700&family=Spline+Sans+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F4EFE5;--paper-2:#FBF8F1;--ink:#17150F;--ink-soft:#5B564A;
+    --line:#DED6C4;--accent:#C8341F;--accent-soft:#F3D9D2;--go:#1F6B3B;--go-soft:#DCEBD9;
+    --shadow:0 1px 2px rgba(23,21,15,.04),0 6px 20px rgba(23,21,15,.05);
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+  body{background:var(--paper);color:var(--ink);font-family:"Public Sans",sans-serif;line-height:1.5;
+    background-image:radial-gradient(circle at 100% -5%,rgba(200,52,31,.06),transparent 40%),radial-gradient(circle at 0 105%,rgba(31,107,59,.05),transparent 38%);min-height:100vh}
+  .wrap{max-width:880px;margin:0 auto;padding:0 clamp(14px,4vw,40px) 60px}
+
+  /* ---------- masthead ---------- */
+  .mast{padding:clamp(26px,6vw,52px) 0 18px}
+  .kicker{font-family:"Spline Sans Mono",monospace;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  h1{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(46px,13vw,96px);line-height:.86;letter-spacing:-.03em;margin:8px 0 2px}
+  .tagline{font-size:15px;color:var(--ink-soft);max-width:60ch;margin-top:12px}
+  .tagline b{color:var(--ink)}
+
+  /* ---------- sticky tabs ---------- */
+  .tabbar{position:sticky;top:0;z-index:50;background:rgba(244,239,229,.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line);margin:0 calc(-1*clamp(14px,4vw,40px));padding:0 clamp(14px,4vw,40px)}
+  .tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;max-width:880px;margin:0 auto}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:none;background:none;cursor:pointer;font-family:"Public Sans",sans-serif;font-weight:600;font-size:14px;
+    color:var(--ink-soft);padding:15px 14px 13px;position:relative;white-space:nowrap;transition:color .2s}
+  .tab .ic{font-family:"Spline Sans Mono",monospace;font-size:10px;color:var(--accent);margin-right:6px;font-weight:600}
+  .tab:hover{color:var(--ink)}
+  .tab.active{color:var(--ink)}
+  .tab.active::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;background:var(--accent);border-radius:3px 3px 0 0}
+
+  /* ---------- panels ---------- */
+  .panel{display:none;padding-top:30px;animation:fade .45s cubic-bezier(.2,.7,.2,1)}
+  .panel.active{display:block}
+  @keyframes fade{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+  h2{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(24px,5vw,34px);letter-spacing:-.02em;line-height:1.04;margin-bottom:6px}
+  .h2sub{font-size:14.5px;color:var(--ink-soft);max-width:66ch;margin-bottom:22px}
+  .h2sub b{color:var(--ink)}
+  h3{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);margin:32px 0 14px;display:flex;align-items:center;gap:10px}
+  h3::after{content:"";flex:1;height:1px;background:var(--line)}
+  h4{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:16px;margin-bottom:8px}
+
+  /* stat strip */
+  .position{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow)}
+  .position div{background:var(--paper-2);padding:18px 18px}
+  .position .lab{font-family:"Spline Sans Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+  .position .big{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(20px,4.6vw,26px);line-height:1.05;margin-top:5px}
+  .position .ar{color:var(--accent)}
+  .position .small{font-size:12px;color:var(--ink-soft);margin-top:3px}
+  @media(max-width:560px){.position{grid-template-columns:1fr}}
+
+  .targets{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden;box-shadow:var(--shadow);margin-bottom:14px}
+  .targets div{background:var(--paper-2);padding:16px 14px}
+  .targets .lab{font-family:"Spline Sans Mono",monospace;font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-soft)}
+  .targets .val{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(20px,5vw,28px);line-height:1.1;margin-top:4px}
+  .targets .val span{font-size:.46em;font-weight:600;color:var(--ink-soft)}
+  @media(max-width:560px){.targets{grid-template-columns:1fr 1fr}}
+
+  .note{font-size:13.5px;color:var(--ink-soft);background:var(--accent-soft);border-left:3px solid var(--accent);padding:12px 15px;border-radius:0 12px 12px 0;margin:14px 0}
+  .note.green{background:var(--go-soft);border-color:var(--go)}
+  .note b{color:var(--ink)}
+
+  .card{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:18px 20px;box-shadow:var(--shadow);margin-bottom:12px}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+  @media(max-width:620px){.grid2,.grid3{grid-template-columns:1fr}}
+  .card p,.card li{font-size:13.8px;color:var(--ink)}
+  ul.dot{list-style:none;margin-top:6px}
+  ul.dot li{padding:5px 0 5px 18px;position:relative}
+  ul.dot li::before{content:"";position:absolute;left:2px;top:12px;width:6px;height:6px;background:var(--accent);border-radius:50%}
+  ul.dot li b{font-weight:700}
+  ol.num{margin:6px 0 0 18px}
+  ol.num li{margin-bottom:6px;font-size:13.8px}
+
+  /* pillars */
+  .pillars{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:6px}
+  @media(max-width:620px){.pillars{grid-template-columns:1fr}}
+  .pillar{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:16px 18px;box-shadow:var(--shadow)}
+  .pillar .n{font-family:"Spline Sans Mono",monospace;font-size:11px;color:var(--accent);font-weight:600}
+  .pillar h4{margin:4px 0 4px}
+  .pillar p{font-size:13px;color:var(--ink-soft)}
+
+  /* week strip */
+  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin:6px 0 4px}
+  .week .d{background:var(--paper-2);border:1px solid var(--line);border-radius:11px;padding:11px 6px;text-align:center}
+  .week .d.train{background:var(--ink);border-color:var(--ink)}
+  .week .dl{font-family:"Spline Sans Mono",monospace;font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-soft)}
+  .week .d.train .dl{color:#E9E1CF}
+  .week .dv{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:12px;margin-top:5px;color:var(--ink);line-height:1.15}
+  .week .d.train .dv{color:#fff}
+  @media(max-width:560px){.week{grid-template-columns:repeat(4,1fr)}}
+
+  /* meal / session blocks */
+  .block{background:var(--paper-2);border:1px solid var(--line);border-radius:16px;padding:6px 4px 8px;margin-bottom:12px;overflow:hidden;box-shadow:var(--shadow)}
+  .block.pad{padding:18px 20px}
+  .block .head{display:flex;justify-content:space-between;align-items:baseline;padding:13px 16px 10px;flex-wrap:wrap;gap:6px}
+  .block .head .t{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:17px}
+  .block .head .e{font-family:"Spline Sans Mono",monospace;font-size:11px;color:var(--accent);text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+  .tag{font-family:"Spline Sans Mono",monospace;font-size:9px;font-weight:600;letter-spacing:.05em;color:#fff;background:var(--go);padding:3px 7px;border-radius:6px;text-transform:uppercase;margin-left:8px;vertical-align:middle}
+  ul.foods{list-style:none;padding:0 16px 6px}
+  ul.foods li{font-size:14px;padding:4px 0 4px 18px;position:relative}
+  ul.foods li::before{content:"";position:absolute;left:2px;top:11px;width:6px;height:6px;background:var(--accent);border-radius:50%}
+  ul.foods li i{font-style:normal;color:var(--ink-soft)}
+  .macros{display:flex;gap:7px;flex-wrap:wrap;font-family:"Spline Sans Mono",monospace;font-size:11px;padding:0 16px 12px}
+  .macros span{background:var(--paper);border:1px solid var(--line);border-radius:20px;padding:3px 10px;color:var(--ink-soft)}
+  .macros span b{color:var(--ink)}
+  .kcal{font-family:"Spline Sans Mono",monospace;font-weight:600;font-size:13px;color:var(--accent)}
+
+  table.prog{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.prog th{font-family:"Spline Sans Mono",monospace;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-soft);text-align:left;padding:7px 14px;border-bottom:1px solid var(--line);font-weight:600}
+  table.prog td{padding:10px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.prog tr:last-child td{border-bottom:none}
+  table.prog td.ex{font-weight:600;width:44%}
+  table.prog td.ex small{display:block;font-weight:400;color:var(--ink-soft);font-size:11.5px;margin-top:2px}
+  table.prog td.num{font-family:"Spline Sans Mono",monospace;white-space:nowrap}
+  table.prog .rpe{color:var(--accent)}
+
+  .daytotal{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:var(--paper);border-radius:14px;padding:15px 18px;flex-wrap:wrap;gap:8px;box-shadow:var(--shadow)}
+  .daytotal .t{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:15px}
+  .daytotal .m{font-family:"Spline Sans Mono",monospace;font-size:13px;color:#E9E1CF}
+  .daytotal .m b{color:#fff}
+
+  /* RPE scale */
+  .rpescale{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+  .rpescale div{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:11px 8px;text-align:center}
+  .rpescale .lvl{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:19px}
+  .rpescale .desc{font-size:11.5px;color:var(--ink-soft);margin-top:2px}
+  .rpescale .target{outline:2px solid var(--accent);background:var(--accent-soft)}
+  @media(max-width:560px){.rpescale{grid-template-columns:1fr 1fr}}
+
+  /* shopping checklist */
+  .shop{columns:2;column-gap:24px}
+  @media(max-width:560px){.shop{columns:1}}
+  .shop label{display:flex;align-items:flex-start;gap:10px;padding:7px 0;font-size:14px;cursor:pointer;break-inside:avoid}
+  .shop input{appearance:none;-webkit-appearance:none;min-width:19px;height:19px;border:2px solid var(--line);border-radius:6px;margin-top:1px;cursor:pointer;position:relative;transition:.15s}
+  .shop input:checked{background:var(--go);border-color:var(--go)}
+  .shop input:checked::after{content:"✓";position:absolute;color:#fff;font-size:12px;font-weight:700;left:2.5px;top:-1.5px}
+  .shop input:checked + span{color:var(--ink-soft);text-decoration:line-through}
+  .shop span b{font-weight:700}
+
+  /* nn list */
+  .nn{counter-reset:nn;list-style:none}
+  .nn li{position:relative;padding:14px 16px 14px 56px;background:var(--paper-2);border:1px solid var(--line);border-radius:14px;margin-bottom:9px;font-size:14.5px;box-shadow:var(--shadow)}
+  .nn li::before{counter-increment:nn;content:counter(nn);position:absolute;left:14px;top:50%;transform:translateY(-50%);width:30px;height:30px;background:var(--accent);color:#fff;border-radius:9px;display:grid;place-items:center;font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:16px}
+  .nn li b{font-weight:700}
+
+  /* timeline */
+  .arc{border-left:2px solid var(--line);margin-left:8px}
+  .arc .ph{position:relative;padding:0 0 20px 28px}
+  .arc .ph::before{content:"";position:absolute;left:-9px;top:3px;width:15px;height:15px;border-radius:50%;background:var(--paper);border:3px solid var(--accent)}
+  .arc .ph.deload::before{border-color:var(--go);background:var(--go-soft)}
+  .arc .wk{font-family:"Spline Sans Mono",monospace;font-size:11px;letter-spacing:.05em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  .arc .ph.deload .wk{color:var(--go)}
+  .arc .tx{font-size:14px;margin-top:3px}
+  .arc .tx b{font-weight:700}
+
+  table.swap{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.swap td{padding:9px 4px;border-bottom:1px solid var(--line);vertical-align:top}
+  table.swap tr:last-child td{border-bottom:none}
+  table.swap td:first-child{font-weight:600;width:42%}
+  table.swap td:last-child{color:var(--ink-soft)}
+  .arw{color:var(--accent);font-weight:700}
+
+  footer{margin-top:36px;padding-top:16px;border-top:1px solid var(--line);font-family:"Spline Sans Mono",monospace;font-size:11px;color:var(--ink-soft);display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="mast">
+    <div class="kicker">Complete Programme · 12 weeks · Start Mon 1 June 2026</div>
+    <h1>The Cut.</h1>
+    <p class="tagline">One job for twelve weeks: strip ~7.5 to 8kg of fat to <b>~12% with visible abs by late August</b>, holding every gram of muscle you built. You don't make decisions. You execute what's on this page.</p>
+  </div>
+
+  <div class="tabbar">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-tab="overview"><span class="ic">01</span>Overview</button>
+      <button class="tab" data-tab="nutrition"><span class="ic">02</span>Nutrition</button>
+      <button class="tab" data-tab="training"><span class="ic">03</span>Training</button>
+      <button class="tab" data-tab="cardio"><span class="ic">04</span>Cardio &amp; Recovery</button>
+      <button class="tab" data-tab="system"><span class="ic">05</span>Lock-In</button>
+      <button class="tab" data-tab="arc"><span class="ic">06</span>12 Weeks</button>
+    </div>
+  </div>
+
+  <!-- ============================= OVERVIEW ============================= -->
+  <section class="panel active" id="overview">
+    <h2>Where you are, where you're going</h2>
+    <p class="h2sub">Locked to your Tanita scan, 17 May 2026. The gap is fat, not muscle, so the entire plan is built to remove fat while defending the lean mass.</p>
+    <div class="position">
+      <div><div class="lab">Now</div><div class="big">92.6kg · 19.2%</div><div class="small">Fat 17.8kg · lean 74.8kg · BMR 2,196</div></div>
+      <div><div class="lab">Target <span class="ar">&rarr;</span></div><div class="big">~84.5kg · 12%</div><div class="small">Same lean, abs showing</div></div>
+      <div><div class="lab">Pace</div><div class="big">0.6–0.7 kg/wk</div><div class="small">~11–13 wks · the scale average decides</div></div>
+    </div>
+
+    <h3>How this works</h3>
+    <p class="card" style="margin-bottom:14px">Four pillars, and the whole point is that you never rely on willpower or motivation. The food is pre-decided, the training is written set by set, the recovery is a checklist, and the system keeps you honest when motivation disappears around week three. Open the tab, do the thing.</p>
+    <div class="pillars">
+      <div class="pillar"><div class="n">02</div><h4>Nutrition</h4><p>2,400 training / 2,050 rest, 200g protein, built from your own groceries. Pre-logged, batch-prepped.</p></div>
+      <div class="pillar"><div class="n">03</div><h4>Training</h4><p>4-day Lower/Upper, legs prioritised, elbow-safe, loaded from your real numbers and run by RPE.</p></div>
+      <div class="pillar"><div class="n">04</div><h4>Cardio &amp; Recovery</h4><p>Steps as the engine, sleep and supplements that actually move the needle. No junk.</p></div>
+      <div class="pillar"><div class="n">05</div><h4>Lock-In</h4><p>Accountability to Mufleh, a 10-minute Sunday checkpoint, and a decision made in advance for the week-6 stall.</p></div>
+    </div>
+
+    <h3>The one rule above all</h3>
+    <div class="note"><b>Trust the weekly average, not the mirror.</b> Your fat sits on your trunk (10.4kg of your 17.8kg total), and the abdomen empties last for men. Your face and arms will lean out weeks before your abs sharpen. That lag is where people panic and quit. Don't. The scale average and the monthly photos tell the truth.</div>
+  </section>
+
+  <!-- ============================= NUTRITION ============================= -->
+  <section class="panel" id="nutrition">
+    <h2>Nutrition</h2>
+    <p class="h2sub">Maintenance is ~2,900 to 3,000 (BMR 2,196 plus four training days). These targets sit ~600 under, the aggressive-but-survivable line. Deliberately not a crash, so you can hold it seven days and never need a blowout. <b>Protein is the floor every single day.</b></p>
+
+    <h3>Daily Targets</h3>
+    <div class="targets">
+      <div><div class="lab">Train day</div><div class="val">2,400<span> kcal</span></div></div>
+      <div><div class="lab">Rest day</div><div class="val">2,050<span> kcal</span></div></div>
+      <div><div class="lab">Protein</div><div class="val">200<span> g</span></div></div>
+      <div><div class="lab">Fat / Carbs</div><div class="val">70<span> / ~230g</span></div></div>
+    </div>
+    <div class="note">Carbs cluster around your evening session for performance. Fat stays moderate for hormones on a long cut. Eat the protein first at every meal.</div>
+
+    <h3>Daily Template · Training Day</h3>
+
+    <div class="block">
+      <div class="head"><div class="t">Breakfast</div><div class="kcal">~525 kcal</div></div>
+      <ul class="foods"><li>Black coffee</li><li>Aldi protein pancakes <i>· 160g</i></li><li>2 whole eggs <i>· your fat + hormone floor</i></li></ul>
+      <div class="macros"><span>P <b>33g</b></span><span>C <b>46g</b></span><span>F <b>22g</b></span></div>
+    </div>
+    <div class="block">
+      <div class="head"><div class="t">Mid-morning</div><div class="kcal">~220 kcal</div></div>
+      <ul class="foods"><li>Banana <i>· 1 medium</i></li><li>Impact Whey <i>· 1 scoop (25g)</i></li></ul>
+      <div class="macros"><span>P <b>21g</b></span><span>C <b>29g</b></span><span>F <b>2g</b></span></div>
+    </div>
+    <div class="block">
+      <div class="head"><div class="t">Lunch</div><div class="kcal">~730 kcal</div></div>
+      <ul class="foods"><li>5% lean beef mince <i>· 250g</i></li><li>Bolognese sauce <i>· 50g</i></li><li>Rice <i>· 100g dry</i></li><li>Baby leaf salad <i>· 100g</i></li></ul>
+      <div class="macros"><span>P <b>57g</b></span><span>C <b>82g</b></span><span>F <b>12g</b></span></div>
+    </div>
+    <div class="block">
+      <div class="head"><div class="t">Pre-gym <span class="tag">Training only</span></div><div class="kcal">~300 kcal</div></div>
+      <ul class="foods"><li>Oats <i>· 50g</i></li><li>Impact Whey <i>· 1 scoop (25g)</i></li></ul>
+      <div class="macros"><span>P <b>25g</b></span><span>C <b>32g</b></span><span>F <b>4g</b></span></div>
+    </div>
+    <div class="block">
+      <div class="head"><div class="t">Dinner / post-gym</div><div class="kcal">~575 kcal</div></div>
+      <ul class="foods"><li>5% lean beef mince <i>· 200g</i></li><li>0% Greek yogurt <i>· 160g</i></li><li>Chia seeds <i>· 20g</i></li><li>Veg + 1 tbsp olive oil</li></ul>
+      <div class="macros"><span>P <b>59g</b></span><span>C <b>14g</b></span><span>F <b>30g</b></span></div>
+    </div>
+    <div class="daytotal"><div class="t">Training day total</div><div class="m">~2,350 kcal · <b>195g P</b> · 203g C · 70g F</div></div>
+
+    <div class="grid2" style="margin-top:14px">
+      <div class="card" style="border-color:var(--go);background:var(--go-soft)">
+        <h4>Rest day rule</h4>
+        <p>Skip the <b>pre-gym oats</b>, keep that whey scoop in water on its own, and drop lunch rice to <b>60g</b>. Everything else stays.</p>
+        <p style="margin-top:8px;font-family:'Spline Sans Mono',monospace;font-size:12.5px;color:var(--ink-soft)">Lands ~<b style="color:var(--ink)">2,050 kcal</b>, protein still ~190g.</p>
+      </div>
+      <div class="card">
+        <h4>The scheduled refeed</h4>
+        <p>Every <b>2 to 3 weeks</b>, one day at <b>~2,900 kcal</b>: carbs up ~150g, fat low, protein held. The controlled version of the Sunday blowout, in the diary, on your terms. This replaces free days entirely. There are no free days now.</p>
+      </div>
+    </div>
+
+    <h3>The Weekly Shop · inside €70–80</h3>
+    <div class="card">
+      <div class="shop">
+        <label><input type="checkbox"><span><b>5% lean beef mince</b> · ~3.2kg (freeze half)</span></label>
+        <label><input type="checkbox"><span><b>Eggs</b> · 15</span></label>
+        <label><input type="checkbox"><span><b>Aldi protein pancakes</b> · 160g × 7</span></label>
+        <label><input type="checkbox"><span><b>0% Greek yogurt</b> · ~1.2kg</span></label>
+        <label><input type="checkbox"><span><b>Bananas</b> · 7</span></label>
+        <label><input type="checkbox"><span><b>Whey</b> · ~280g used/week</span></label>
+        <label><input type="checkbox"><span><b>Rice</b> · 1kg bag</span></label>
+        <label><input type="checkbox"><span><b>Oats</b> · ~250g</span></label>
+        <label><input type="checkbox"><span><b>Chia seeds</b> · ~150g</span></label>
+        <label><input type="checkbox"><span><b>Bolognese sauce</b> · 1 jar</span></label>
+        <label><input type="checkbox"><span><b>Salad + mixed veg</b> · ~1.5kg</span></label>
+        <label><input type="checkbox"><span><b>Olive oil + coffee</b> · pantry</span></label>
+      </div>
+    </div>
+
+    <h3>Sunday Prep · 75–90 min</h3>
+    <div class="card">
+      <ol class="num">
+        <li>Brown all the mince in two batches, stir the bolognese sauce through it.</li>
+        <li>Portion into tubs: <b>7 lunch tubs (250g)</b>, <b>7 dinner tubs (200g)</b>. Three days in the fridge, rest in the freezer.</li>
+        <li>Cook the whole bag of rice, portion it.</li>
+        <li>Make <b>7 yogurt + chia overnight pots.</b></li>
+        <li>Wash and bag the salad. Eggs and pancakes cook fresh in five minutes each morning.</li>
+      </ol>
+      <p style="margin-top:10px;color:var(--ink-soft)">Outcome: lunch and dinner are grab-and-go all week. The plan now survives a tired Tuesday because there's nothing left to decide.</p>
+    </div>
+
+    <h3>Swaps · same macros, your shelf</h3>
+    <div class="card">
+      <table class="swap">
+        <tr><td>2 eggs <span class="arw">→</span></td><td>1 scoop whey + 10g chia</td></tr>
+        <tr><td>Beef mince <span class="arw">→</span></td><td>Chicken breast, gram for gram, a touch leaner</td></tr>
+        <tr><td>Rice <span class="arw">→</span></td><td>Potato, pasta, or extra oats, equal carbs</td></tr>
+        <tr><td>Banana <span class="arw">→</span></td><td>Any fruit, ~25 to 30g carbs worth</td></tr>
+        <tr><td>Greek yogurt <span class="arw">→</span></td><td>Cottage cheese or an extra whey scoop</td></tr>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================= TRAINING ============================= -->
+  <section class="panel" id="training">
+    <h2>Training</h2>
+    <p class="h2sub">4-day Lower / Upper, legs trained twice because your scan and your lifts both flag them as the weak link, bench (100kg) basically equals squat (100kg) and your deadlift (90kg) sits below both. Upper days are split so your elbow gets spacing between pressing. <b>On a cut you hold loads, you don't chase them.</b></p>
+
+    <div class="week">
+      <div class="d train"><div class="dl">Mon</div><div class="dv">Lower A</div></div>
+      <div class="d train"><div class="dl">Tue</div><div class="dv">Upper A</div></div>
+      <div class="d"><div class="dl">Wed</div><div class="dv">Steps + LISS</div></div>
+      <div class="d train"><div class="dl">Thu</div><div class="dv">Lower B</div></div>
+      <div class="d train"><div class="dl">Fri</div><div class="dv">Upper B</div></div>
+      <div class="d"><div class="dl">Sat</div><div class="dv">Steps + LISS</div></div>
+      <div class="d"><div class="dl">Sun</div><div class="dv">Rest + Check</div></div>
+    </div>
+    <div class="note">Shift days to fit work and Mufleh, just keep a rest day between the two Lower sessions. Every session opens with 5 min easy cardio, band pull-aparts ×20, and wrist-extensor eccentrics 2×15 to keep the elbow quiet.</div>
+
+    <h3>How to read RPE — read this first</h3>
+    <div class="card pad">
+      <p>RPE = how many reps you have <b>left in the tank</b> when you stop a set. You're aiming for RPE 8 on most lifts, which means you stop with about two good reps still in you. <b>You do not train to failure</b> on a cut, it costs recovery you can't spare.</p>
+      <div class="rpescale">
+        <div><div class="lvl">7</div><div class="desc">3 reps left</div></div>
+        <div class="target"><div class="lvl">8</div><div class="desc">2 left · your target</div></div>
+        <div><div class="lvl">9</div><div class="desc">1 left</div></div>
+        <div><div class="lvl">10</div><div class="desc">failure</div></div>
+      </div>
+      <h4 style="margin-top:14px">Worked example — Back Squat</h4>
+      <p>The Lower A card says <b>4 × 4–6</b>. So four working sets of four to six reps. Warm up (empty bar, then 60kg ×5, 80kg ×3), then do your four sets at <b>100kg</b>.</p>
+      <ul class="dot">
+        <li>The <b>last set is your gauge.</b> Rack it and ask how many more you could've done.</li>
+        <li>About 2 more = RPE 8 = perfect, you've got the weight right.</li>
+        <li>4+ more left and it flew up = too light → <b>go to 105kg next time.</b></li>
+        <li>Couldn't hit 4 reps, or the last rep was an all-out grind = too heavy → drop ~5kg.</li>
+      </ul>
+      <h4 style="margin-top:14px">Progression — "build from here"</h4>
+      <p>Double progression: once you can hit the <b>top of the rep range on every set</b> (all four sets of six) while the last set is still only RPE 8, add the smallest jump (2.5kg each side, +5kg total), then drop back to the bottom of the range and climb again. On a cut you might only nudge these up a little across 12 weeks, and that's a win. <b>Log every set.</b></p>
+    </div>
+
+    <div class="block pad" style="padding:18px 20px">
+      <div class="head" style="padding:0 0 10px"><div class="t">Starting Loads · Week 1</div><div class="e">from your working sets, pulled to RPE 8</div></div>
+      <table class="prog">
+        <tr><th>Main lift</th><th>Start</th><th>Aim (last set)</th></tr>
+        <tr><td class="ex">Back Squat <small>Lower A</small></td><td class="num">100 kg</td><td class="num">4–6 @ <span class="rpe">RPE 8</span> · 105 if easy</td></tr>
+        <tr><td class="ex">Bench Press <small>Upper A · bar or ~34kg DBs</small></td><td class="num">90 kg</td><td class="num">5–8 @ <span class="rpe">RPE 8</span></td></tr>
+        <tr><td class="ex">Deadlift <small>Lower B · trap-bar or conventional</small></td><td class="num">90 kg</td><td class="num">3–5 @ <span class="rpe">RPE 7–8</span></td></tr>
+        <tr><td class="ex">Romanian Deadlift <small>Lower A · full stretch</small></td><td class="num">70 kg</td><td class="num">6–8 @ <span class="rpe">RPE 8</span></td></tr>
+        <tr><td class="ex">Overhead Press <small>Upper B · bar or ~22kg DBs</small></td><td class="num">50 kg</td><td class="num">6–8 @ <span class="rpe">RPE 8</span></td></tr>
+      </table>
+    </div>
+    <div class="note">Bench and press start below your stated maxes on purpose. Your 100kg bench and 60kg press were near-failure last sets (RPE 9–10). At RPE 8 you keep two reps in reserve, so you start a touch lighter. Accessories below run on feel at the listed RPE, no fixed numbers needed.</div>
+
+    <div class="block">
+      <div class="head"><div class="t">Lower A</div><div class="e">Quad emphasis</div></div>
+      <table class="prog">
+        <tr><th>Exercise</th><th>Sets × Reps</th><th>RPE</th><th>Rest</th></tr>
+        <tr><td class="ex">Back Squat <small>or Hack Squat</small></td><td class="num">4 × 4–6</td><td class="num rpe">7–8</td><td class="num">3 min</td></tr>
+        <tr><td class="ex">Romanian Deadlift</td><td class="num">3 × 6–8</td><td class="num rpe">8</td><td class="num">2–3 min</td></tr>
+        <tr><td class="ex">Leg Press</td><td class="num">3 × 10–12</td><td class="num rpe">9</td><td class="num">2 min</td></tr>
+        <tr><td class="ex">Walking Lunges <small>DB, per leg</small></td><td class="num">3 × 10–12</td><td class="num rpe">9</td><td class="num">90 s</td></tr>
+        <tr><td class="ex">Leg Extension <small>drop-set last</small></td><td class="num">3 × 12–15</td><td class="num rpe">10</td><td class="num">90 s</td></tr>
+        <tr><td class="ex">Standing Calf Raise</td><td class="num">4 × 8–12</td><td class="num rpe">9</td><td class="num">90 s</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <div class="head"><div class="t">Upper A</div><div class="e">Horizontal push / pull</div></div>
+      <table class="prog">
+        <tr><th>Exercise</th><th>Sets × Reps</th><th>RPE</th><th>Rest</th></tr>
+        <tr><td class="ex">Bench Press <small>bar or neutral DBs</small></td><td class="num">4 × 5–8</td><td class="num rpe">8</td><td class="num">2–3 min</td></tr>
+        <tr><td class="ex">Chest-Supported Row</td><td class="num">4 × 8–10</td><td class="num rpe">8</td><td class="num">2 min</td></tr>
+        <tr><td class="ex">Incline DB Press</td><td class="num">3 × 8–12</td><td class="num rpe">9</td><td class="num">2 min</td></tr>
+        <tr><td class="ex">Lat Pulldown <small>neutral grip</small></td><td class="num">3 × 10–12</td><td class="num rpe">9</td><td class="num">90 s</td></tr>
+        <tr><td class="ex">Lateral Raise</td><td class="num">3 × 12–20</td><td class="num rpe">10</td><td class="num">60 s</td></tr>
+        <tr><td class="ex">Rope Triceps Pushdown</td><td class="num">3 × 10–15</td><td class="num rpe">9</td><td class="num">60 s</td></tr>
+        <tr><td class="ex">Hammer Curl <small>spares the tendon</small></td><td class="num">3 × 10–12</td><td class="num rpe">9</td><td class="num">60 s</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <div class="head"><div class="t">Lower B</div><div class="e">Hamstring / glute + core</div></div>
+      <table class="prog">
+        <tr><th>Exercise</th><th>Sets × Reps</th><th>RPE</th><th>Rest</th></tr>
+        <tr><td class="ex">Trap-Bar Deadlift <small>or conventional</small></td><td class="num">3 × 3–5</td><td class="num rpe">7–8</td><td class="num">3 min</td></tr>
+        <tr><td class="ex">Bulgarian Split Squat <small>per leg</small></td><td class="num">3 × 8–10</td><td class="num rpe">9</td><td class="num">2 min</td></tr>
+        <tr><td class="ex">Seated Leg Curl</td><td class="num">4 × 10–12</td><td class="num rpe">9</td><td class="num">90 s</td></tr>
+        <tr><td class="ex">Hip Thrust</td><td class="num">3 × 8–12</td><td class="num rpe">9</td><td class="num">2 min</td></tr>
+        <tr><td class="ex">Seated Calf Raise</td><td class="num">4 × 12–15</td><td class="num rpe">10</td><td class="num">60 s</td></tr>
+        <tr><td class="ex">Hanging Leg Raise <small>build the abs</small></td><td class="num">3 × 10–15</td><td class="num rpe">9</td><td class="num">90 s</td></tr>
+      </table>
+    </div>
+    <div class="block">
+      <div class="head"><div class="t">Upper B</div><div class="e">Vertical push / pull</div></div>
+      <table class="prog">
+        <tr><th>Exercise</th><th>Sets × Reps</th><th>RPE</th><th>Rest</th></tr>
+        <tr><td class="ex">Overhead Press <small>bar or neutral DBs</small></td><td class="num">4 × 6–8</td><td class="num rpe">8</td><td class="num">2–3 min</td></tr>
+        <tr><td class="ex">Pull-up <small>weighted or assisted</small></td><td class="num">4 × 6–10</td><td class="num rpe">8</td><td class="num">2 min</td></tr>
+        <tr><td class="ex">Machine Shoulder Press</td><td class="num">3 × 10–12</td><td class="num rpe">9</td><td class="num">90 s</td></tr>
+        <tr><td class="ex">Seated Cable Row</td><td class="num">3 × 10–12</td><td class="num rpe">9</td><td class="num">90 s</td></tr>
+        <tr><td class="ex">Cable Lateral Raise</td><td class="num">3 × 12–20</td><td class="num rpe">10</td><td class="num">60 s</td></tr>
+        <tr><td class="ex">Overhead Cable Triceps</td><td class="num">3 × 10–15</td><td class="num rpe">9</td><td class="num">60 s</td></tr>
+        <tr><td class="ex">Incline DB Curl</td><td class="num">3 × 10–12</td><td class="num rpe">9</td><td class="num">60 s</td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="border-color:var(--go);background:var(--go-soft)">
+      <h4>Deloads — weeks 5 and 9</h4>
+      <p>You can't run hard for 12 straight weeks in a deficit. On those weeks cut sets by ~40%, drop loads ~10%, keep everything at RPE 5–6, and pair each with a refeed day. If the elbow niggles before then, deload the pressing early. Never train through tendon pain.</p>
+    </div>
+  </section>
+
+  <!-- ============================= CARDIO & RECOVERY ============================= -->
+  <section class="panel" id="cardio">
+    <h2>Cardio &amp; Recovery</h2>
+    <p class="h2sub">Steps are the engine, low fatigue and muscle-sparing. No HIIT, it steals recovery from your legs and you can't afford that in a deficit. The food creates the deficit; cardio is the dial you turn only if the scale stalls. And recovery is where most cuts are quietly lost.</p>
+
+    <h3>Cardio &amp; Steps</h3>
+    <div class="grid2">
+      <div class="card">
+        <h4>Daily</h4>
+        <ul class="dot">
+          <li><b>10,000–12,000 steps</b> every day. You already hit ~9.7k on a quiet day.</li>
+          <li>Desk job kills this. Walk your calls, take stairs, a 15-min lunch walk banks ~2k and clears your head.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Structured · Wed + Sat</h4>
+        <ul class="dot">
+          <li><b>2 × 25–30 min</b> incline treadmill walk or easy bike, conversational pace.</li>
+          <li>Stall-breaker only: if the 7-day average flatlines for 2 weeks, add a third session <i>before</i> you cut food again.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>Recovery</h3>
+    <div class="grid2">
+      <div class="card">
+        <h4>Sleep — non-negotiable</h4>
+        <ul class="dot">
+          <li><b>7.5–8 hours</b>, fixed wake time even at weekends.</li>
+          <li>Last caffeine by early afternoon. Keep any pre-gym hit small or it wrecks sleep.</li>
+          <li>Poor sleep is the single biggest driver of the next-day blowout. Protect it like a session.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Supplements — minimal, proven</h4>
+        <ul class="dot">
+          <li><b>Creatine</b> 5g daily, no loading. Best muscle-retention tool on a cut.</li>
+          <li><b>Vitamin D3</b>, sensible at Irish latitude with indoor work.</li>
+          <li><b>Fish oil</b> for joints and the elbow.</li>
+          <li>Check halal capsules. Skip fat burners, they're a waste of money.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Hydration</h4>
+        <ul class="dot">
+          <li><b>3 litres+ daily.</b> High protein and creatine both need it.</li>
+          <li>Hunger is often thirst. A glass of water before you decide you're hungry saves a lot of snacking.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h4>Daily shape</h4>
+        <ul class="dot">
+          <li>Pre-log the day each morning, copy yesterday.</li>
+          <li>Train evening with Mufleh, the fixed slot is your accountability.</li>
+          <li>Walk at lunch, wind down screens before bed.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================= SYSTEM ============================= -->
+  <section class="panel" id="system">
+    <h2>The Lock-In System</h2>
+    <p class="h2sub">Your block was never knowledge, it was execution drifting once the novelty fades. So this runs on systems and accountability, not motivation. Motivation will be gone by week three. These won't be.</p>
+
+    <ol class="nn">
+      <li><b>Bolt it to the gym anchor.</b> You never skip Mufleh. Tell him the target and send him your Sunday weigh-in average every week. Make the diet as visible and accountable as the lifting.</li>
+      <li><b>Sunday checkpoint, 10 minutes.</b> Log the 7-day weight average, take one progress photo in the same light, adjust food only if the rules say so. That ritual is the whole control system.</li>
+      <li><b>Pre-commit to the stall now.</b> Around week 4 to 6 the scale freezes for a week or two while fat still leaves. Your response is decided today: do nothing, hold the line. You can't renegotiate a decision you already made when thinking clearly.</li>
+      <li><b>Judge by data, not the mirror.</b> Trunk fat empties last, so your abs lag the scale by weeks. The face and arms lean out first. Trust the average.</li>
+    </ol>
+
+    <h3>The Scale Rules</h3>
+    <div class="card">
+      <ul class="dot">
+        <li>Weigh <b>daily</b>, morning, after the toilet, before food.</li>
+        <li>Act only on the <b>7-day average</b>, never a single number.</li>
+        <li>Losing faster than <b>0.8 kg/wk</b>? Add 150 kcal, that pace eats muscle at your leanness.</li>
+        <li>Slower than <b>0.4 kg/wk</b> after 2 weeks? Cut 150 kcal or add a cardio session.</li>
+        <li>Ignore the scale for 2–3 days after any high day. That's water and glycogen, not fat.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ============================= ARC ============================= -->
+  <section class="panel" id="arc">
+    <h2>The 12-Week Arc</h2>
+    <p class="h2sub">What each phase should feel like, so nothing surprises you into quitting. The hard part is weeks 6 to 8. The system is built to carry you through it.</p>
+    <div class="arc">
+      <div class="ph"><div class="wk">Weeks 1–4 · Establish</div><div class="tx">Lock the routine. Expect ~0.6–0.7kg/wk and a first &ldquo;whoosh&rdquo; after a flat patch. ~<b>90kg</b> by end of week 4.</div></div>
+      <div class="ph deload"><div class="wk">Week 5 · Deload + refeed</div><div class="tx">Back off training, one refeed day. You'll look and feel fuller, that's glycogen, not fat. Don't panic.</div></div>
+      <div class="ph"><div class="wk">Weeks 6–8 · The grind</div><div class="tx">Novelty's gone, this is where the system earns its keep. Scale may stall, hold. Arms and face visibly leaner. ~<b>87kg</b>.</div></div>
+      <div class="ph deload"><div class="wk">Week 9 · Deload + re-scan</div><div class="tx">Second deload. Re-Tanita to confirm fat is leaving and lean is holding, adjust calories off real data.</div></div>
+      <div class="ph"><div class="wk">Weeks 10–12 · Final push</div><div class="tx">Tighten to ~<b>84–85kg / 12%</b>. Top abs visible, definition arriving. Late-August target hit.</div></div>
+      <div class="ph"><div class="wk">After · Decide</div><div class="tx">Hold the leanness, or push to ~10% for a full shred into September. New scan, new plan.</div></div>
+    </div>
+  </section>
+
+  <footer>
+    <span>THE CUT · Complete Programme v1 · locked to Tanita 17/05/2026</span>
+    <span>Review every Sunday · adjust on the average</span>
+  </footer>
+
+</div>
+
+<script>
+  (function(){
+    var tabs = document.querySelectorAll('.tab');
+    var panels = document.querySelectorAll('.panel');
+    tabs.forEach(function(t){
+      t.addEventListener('click', function(){
+        var id = t.getAttribute('data-tab');
+        tabs.forEach(function(x){ x.classList.remove('active'); });
+        panels.forEach(function(p){ p.classList.remove('active'); });
+        t.classList.add('active');
+        document.getElementById(id).classList.add('active');
+        // keep the active tab in view on mobile
+        t.scrollIntoView({inline:'center', block:'nearest', behavior:'smooth'});
+        // scroll content to top of the tab bar
+        window.scrollTo({top: document.querySelector('.tabbar').offsetTop, behavior:'smooth'});
+      });
+    });
+  })();
+</script>
+</body>
+</html>
