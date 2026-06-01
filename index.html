@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -235,6 +234,100 @@
   .rpe .c.t .lv,.rpe .c.t .d{color:var(--on-accent);}
   .rpe .d{font-size:10.5px;color:var(--text-3);font-weight:600;margin-top:2px;}
 
+  /* ---- body-composition analyzer ---- */
+  .metricbar{display:flex;gap:7px;overflow-x:auto;margin:14px 0 10px;padding-bottom:2px;}
+  .metricbar::-webkit-scrollbar{height:0;}
+  .mchip{flex:none;border:1px solid var(--border);background:var(--surface);color:var(--text-2);font-family:inherit;font-weight:700;font-size:12.5px;padding:7px 13px;border-radius:11px;cursor:pointer;transition:all .2s var(--ease);box-shadow:var(--shadow-sm);}
+  .mchip.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent);}
+  .mchip:active{transform:scale(.96);}
+  .chartcard{padding:14px 12px 8px;}
+  #chart svg{display:block;width:100%;height:auto;}
+  .chart-line{fill:none;stroke:var(--accent);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+  .chart-area{fill:color-mix(in srgb,var(--accent) 16%,transparent);}
+  .chart-pt{fill:var(--surface);stroke:var(--accent);stroke-width:2.5;}
+  .chart-pt.last{fill:var(--accent);}
+  .chart-grid{stroke:var(--border);stroke-width:1;}
+  .chart-x{fill:var(--text-3);font-size:9px;font-family:'JetBrains Mono',monospace;}
+  .chart-v{fill:var(--text-2);font-size:9px;font-weight:700;font-family:'JetBrains Mono',monospace;}
+  .scan-empty{padding:26px 10px;text-align:center;color:var(--text-3);font-size:13px;}
+
+  .verdict{border-radius:var(--r-md);padding:15px 16px;margin-bottom:12px;border:1px solid var(--border);box-shadow:var(--shadow-sm);background:var(--surface);}
+  .verdict .vh{display:flex;align-items:center;gap:9px;font-weight:800;font-size:15px;}
+  .verdict .vd{font-size:13px;color:var(--text-2);margin-top:6px;line-height:1.5;}
+  .verdict .vico{width:26px;height:26px;border-radius:8px;display:grid;place-items:center;flex:none;font-weight:900;font-size:14px;}
+  .verdict.good{background:color-mix(in srgb,var(--accent) 10%,var(--surface));border-color:color-mix(in srgb,var(--accent) 35%,var(--border));}
+  .verdict.good .vico{background:var(--accent);color:var(--on-accent);}
+  .verdict.warn{background:color-mix(in srgb,#FF8A3D 12%,var(--surface));border-color:color-mix(in srgb,#FF8A3D 38%,var(--border));}
+  .verdict.warn .vico{background:#FF8A3D;color:#1A0E04;}
+  .verdict.flat .vico{background:var(--surface-2);color:var(--text-2);}
+
+  .deltagrid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:6px;}
+  .dcell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-sm);padding:12px 10px;box-shadow:var(--shadow-sm);}
+  .dcell .l{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3);font-weight:700;}
+  .dcell .v{font-size:15px;font-weight:800;margin-top:4px;font-family:'JetBrains Mono',monospace;}
+  .dcell .v.up{color:#E0563B;}
+  .dcell .v.down,.dcell .v.good{color:color-mix(in srgb,var(--text) 22%,var(--accent));}
+  @media(max-width:430px){.deltagrid{grid-template-columns:1fr 1fr;}}
+
+  .addbtn{width:100%;border:none;background:var(--accent);color:var(--on-accent);font-family:inherit;font-weight:800;font-size:14.5px;padding:14px;border-radius:14px;cursor:pointer;box-shadow:var(--shadow-sm);transition:transform .15s var(--ease);}
+  .addbtn:active{transform:scale(.98);}
+  .ghostbtn{flex:none;border:1px solid var(--border);background:var(--surface);color:var(--text-2);font-family:inherit;font-weight:700;font-size:14px;padding:14px 18px;border-radius:14px;cursor:pointer;}
+  .form-wrap{max-height:0;overflow:hidden;transition:max-height .4s var(--ease);}
+  .form-wrap.open{max-height:1200px;margin-top:10px;}
+  .filebtn{display:block;text-align:center;border:1.5px dashed var(--border);border-radius:13px;padding:13px;font-size:13px;font-weight:700;color:var(--text-2);cursor:pointer;background:var(--surface-2);}
+  #scanPreview img{width:100%;border-radius:13px;margin-top:10px;border:1px solid var(--border);}
+  .frow{display:flex;gap:10px;margin-top:10px;}
+  .field{flex:1;min-width:0;}
+  .field label{display:block;font-size:11px;font-weight:700;color:var(--text-3);text-transform:uppercase;letter-spacing:.05em;margin-bottom:5px;}
+  .field input{width:100%;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-family:inherit;font-size:15px;font-weight:600;padding:11px 12px;border-radius:11px;outline:none;transition:border-color .2s;}
+  .field input:focus{border-color:var(--accent);}
+  .calc{font-size:12.5px;color:var(--text-2);background:var(--surface-2);border:1px solid var(--border);border-radius:11px;padding:10px 12px;margin-top:10px;font-family:'JetBrains Mono',monospace;}
+  .calc b{color:var(--text);}
+  .formbtns{display:flex;gap:10px;margin-top:12px;}
+  .formbtns .addbtn{flex:1;}
+
+  .hist{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:13px 15px;box-shadow:var(--shadow-sm);margin-bottom:9px;}
+  .hist .hd{flex:none;width:58px;}
+  .hist .hd b{font-size:13.5px;font-weight:800;display:block;}
+  .hist .hd small{font-size:10px;color:var(--text-3);font-weight:600;}
+  .hist .hm{flex:1;display:flex;gap:7px;flex-wrap:wrap;}
+  .hist .hm span{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--surface-2);border:1px solid var(--border);border-radius:8px;padding:3px 8px;color:var(--text-2);}
+  .hist .hm span b{color:var(--text);}
+  .hist .del{flex:none;width:30px;height:30px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2);color:var(--text-3);cursor:pointer;font-size:17px;line-height:1;display:grid;place-items:center;}
+  .hist .del:active{transform:scale(.9);}
+  .resetlink{margin-top:4px;font-size:12px;color:var(--text-3);font-weight:600;text-decoration:underline;cursor:pointer;background:none;border:none;font-family:inherit;padding:4px 0;}
+
+  /* ---- daily / monthly / compare / method ---- */
+  .subseg{display:flex;background:var(--surface-2);border:1px solid var(--border);border-radius:13px;padding:4px;gap:4px;margin:14px 0 4px;}
+  .subseg button{flex:1;border:none;background:transparent;color:var(--text-2);padding:10px;border-radius:10px;font-size:13.5px;font-weight:700;font-family:inherit;cursor:pointer;transition:all .2s var(--ease);}
+  .subseg button.on{background:var(--surface);color:var(--text);box-shadow:var(--shadow-sm);}
+  .pane{display:none;}
+  .pane.on{display:block;animation:viewIn .35s var(--ease);}
+  .sumrow{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:14px 0 4px;}
+  .sum{background:var(--hero-bg);color:var(--hero-text);border-radius:var(--r-md);padding:14px 12px;box-shadow:var(--shadow-sm);}
+  .sum .l{font-size:9px;letter-spacing:.06em;text-transform:uppercase;color:var(--hero-sub);font-weight:700;}
+  .sum .v{font-size:19px;font-weight:800;margin-top:5px;font-family:'JetBrains Mono',monospace;line-height:1.1;}
+  .sum .v small{font-size:.5em;color:var(--hero-sub);font-weight:700;}
+  .sum .v.ar{color:var(--accent);}
+  .linkbtn{display:inline-flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--border);color:var(--text-2);font-family:inherit;font-weight:700;font-size:12.5px;padding:9px 13px;border-radius:11px;cursor:pointer;box-shadow:var(--shadow-sm);margin-top:12px;}
+  .linkbtn:active{transform:scale(.97);}
+  .cmpsel{display:flex;gap:10px;margin-bottom:12px;}
+  .cmpsel select{flex:1;min-width:0;border:1px solid var(--border);background:var(--surface-2);color:var(--text);font-family:inherit;font-weight:700;font-size:13px;padding:11px 10px;border-radius:11px;outline:none;}
+  .cmprow{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--border);border-radius:13px;padding:11px 14px;box-shadow:var(--shadow-sm);margin-bottom:8px;}
+  .cmprow .cl{flex:none;width:66px;font-weight:800;font-size:13px;}
+  .cmprow .cm{flex:1;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--text-2);}
+  .cmprow .cd{flex:none;font-family:'JetBrains Mono',monospace;font-weight:800;font-size:13px;}
+  .cmprow .cd.up{color:#E0563B;}
+  .cmprow .cd.good{color:color-mix(in srgb,var(--text) 22%,var(--accent));}
+  .backbtn{display:inline-flex;align-items:center;gap:7px;background:none;border:none;color:var(--text-2);font-family:inherit;font-weight:700;font-size:14px;cursor:pointer;padding:6px 0;}
+  .backbtn svg{width:18px;height:18px;}
+  .formula{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-md);padding:15px 16px;box-shadow:var(--shadow-sm);margin-bottom:10px;}
+  .formula h4{font-size:14.5px;font-weight:800;margin-bottom:4px;}
+  .formula .eq{font-family:'JetBrains Mono',monospace;font-size:12px;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);margin:8px 0;overflow-x:auto;white-space:nowrap;}
+  .formula .eq b{color:color-mix(in srgb,var(--text) 22%,var(--accent));}
+  .formula p{font-size:12.8px;color:var(--text-2);line-height:1.5;}
+  .chart-avg{stroke:var(--text-3);stroke-width:1.3;stroke-dasharray:4 3;fill:none;}
+
   /* bottom nav */
   .nav{position:fixed;left:0;right:0;bottom:0;z-index:40;}
   .nav-inner{max-width:480px;margin:0 auto;height:calc(72px + env(safe-area-inset-bottom));padding:0 14px env(safe-area-inset-bottom);background:var(--nav-bg);backdrop-filter:saturate(160%) blur(18px);-webkit-backdrop-filter:saturate(160%) blur(18px);border-top:1px solid var(--nav-border);display:flex;align-items:center;justify-content:space-around;transition:background-color .4s var(--ease),border-color .4s;}
@@ -269,6 +362,7 @@
       <button class="dn-btn" data-view="food">Food</button>
       <button class="dn-btn" data-view="plan">Plan</button>
       <button class="dn-btn" data-view="progress">Progress</button>
+      <button class="dn-btn" data-view="method">Method</button>
       <button class="dn-btn" data-view="you">You</button>
     </nav>
     <button class="tgl" id="themeToggle" aria-label="Toggle theme">
@@ -460,21 +554,168 @@
 
     <!-- ================= PROGRESS ================= -->
     <section class="view" id="view-progress">
-      <div class="slabel" style="margin-top:8px;"><h2>The Cut</h2><span class="hint">19% → 12%</span></div>
+      <div class="slabel" style="margin-top:8px;"><h2>Body Composition</h2><span class="hint" id="progHint">Tanita · monthly</span></div>
       <div class="prog-card">
         <div class="prog-top">
-          <div><div class="prog-now">Current body fat</div><div class="prog-big">19.2<small>%</small></div></div>
+          <div><div class="prog-now">Latest body fat</div><div class="prog-big" id="pgBf">19.2<small>%</small></div></div>
           <div class="prog-arrow">→</div>
           <div class="prog-tgt"><div class="l">Target</div><div class="v">12%</div></div>
         </div>
-        <div class="pbar"><i></i></div>
-        <div class="prog-meta"><span>92.6 kg now</span><span><b>7.6 kg</b> fat to lose</span><span>~85 kg goal</span></div>
+        <div class="pbar"><i id="pgBar"></i></div>
+        <div class="prog-meta"><span id="pgWeight">92.6 kg now</span><span id="pgToLose"><b>7.6 kg</b> to goal</span><span>~85 kg goal</span></div>
       </div>
+
+      <button class="linkbtn" id="openMethod">&#9432;&nbsp; How this is calculated</button>
+
+      <div class="subseg" id="progSeg">
+        <button data-pane="daily" class="on">Daily</button>
+        <button data-pane="monthly">Monthly scans</button>
+      </div>
+
+      <!-- DAILY PANE -->
+      <div class="pane on" id="dailyPane">
+        <div class="sumrow">
+          <div class="sum"><div class="l">7-day avg</div><div class="v" id="dAvg">&mdash;</div></div>
+          <div class="sum"><div class="l">Trend</div><div class="v ar" id="dTrend">&mdash;</div></div>
+          <div class="sum"><div class="l">Goal ETA</div><div class="v" id="dEta">&mdash;</div></div>
+        </div>
+        <div class="card2 chartcard"><div id="dchart"></div></div>
+        <div class="slabel"><h2>Log today</h2><span class="hint">weight + tape, whenever</span></div>
+        <button class="addbtn" id="dAddToggle">+ Add a daily entry</button>
+        <div class="form-wrap" id="dForm">
+          <div class="frow">
+            <div class="field"><label>Date</label><input type="date" id="dDate"></div>
+            <div class="field"><label>Weight (kg)</label><input type="number" id="dWeight" step="0.1" inputmode="decimal" placeholder="92.6"></div>
+          </div>
+          <div class="frow">
+            <div class="field"><label>Waist (cm)</label><input type="number" id="dWaist" step="0.1" inputmode="decimal" placeholder="opt."></div>
+            <div class="field"><label>Note</label><input type="text" id="dNote" placeholder="opt." maxlength="40"></div>
+          </div>
+          <div class="calc" id="dCalc">Weigh first thing, after the toilet, before food, for a clean reading.</div>
+          <div class="formbtns">
+            <button class="ghostbtn" id="dCancel">Cancel</button>
+            <button class="addbtn" id="dSave">Save entry</button>
+          </div>
+        </div>
+        <div class="slabel"><h2>Recent days</h2><span class="hint" id="dCount"></span></div>
+        <div id="dHistory"></div>
+      </div>
+
+      <!-- MONTHLY PANE -->
+      <div class="pane" id="monthlyPane">
+        <div class="metricbar" id="metricBar">
+          <button class="mchip on" data-metric="weight">Weight</button>
+          <button class="mchip" data-metric="bf">Fat %</button>
+          <button class="mchip" data-metric="fat">Fat mass</button>
+          <button class="mchip" data-metric="muscle">Muscle</button>
+        </div>
+        <div class="card2 chartcard"><div id="chart"></div></div>
+
+        <div class="slabel"><h2>This month's read</h2><span class="hint" id="cmpHint"></span></div>
+        <div id="verdict"></div>
+        <div class="deltagrid" id="deltaGrid"></div>
+
+        <div class="slabel"><h2>Latest breakdown</h2><span class="hint" id="latestDate"></span></div>
+        <div class="tgrid" id="breakdown"></div>
+
+        <div class="slabel"><h2>Compare scans</h2></div>
+        <div class="cmpsel"><select id="cmpA"></select><select id="cmpB"></select></div>
+        <div id="cmpOut"></div>
+
+        <div class="slabel"><h2>Log a scan</h2><span class="hint">every month</span></div>
+        <button class="addbtn" id="addToggle">+ Add this month's scan</button>
+        <div class="form-wrap" id="addForm">
+          <label class="filebtn">&#128247; Snap or attach your scan (optional)
+            <input type="file" id="scanFile" accept="image/*" hidden>
+          </label>
+          <div id="scanPreview"></div>
+          <div class="frow">
+            <div class="field"><label>Date</label><input type="date" id="fDate"></div>
+            <div class="field"><label>Weight (kg)</label><input type="number" id="fWeight" step="0.1" inputmode="decimal" placeholder="92.6"></div>
+          </div>
+          <div class="frow">
+            <div class="field"><label>Body fat %</label><input type="number" id="fBf" step="0.1" inputmode="decimal" placeholder="19.2"></div>
+            <div class="field"><label>Muscle (kg)</label><input type="number" id="fMuscle" step="0.1" inputmode="decimal" placeholder="opt."></div>
+          </div>
+          <div class="frow">
+            <div class="field"><label>Visceral fat</label><input type="number" id="fVfa" step="1" inputmode="numeric" placeholder="opt."></div>
+            <div class="field"><label>BMR (kcal)</label><input type="number" id="fBmr" step="1" inputmode="numeric" placeholder="opt."></div>
+          </div>
+          <div class="calc" id="calcLine">Enter weight and body fat to compute fat mass and lean mass.</div>
+          <div class="formbtns">
+            <button class="ghostbtn" id="cancelAdd">Cancel</button>
+            <button class="addbtn" id="saveScan">Analyse &amp; save</button>
+          </div>
+        </div>
+
+        <div class="slabel"><h2>History</h2><span class="hint" id="histCount"></span></div>
+        <div id="history"></div>
+      </div>
+
       <div class="slabel"><h2>Phases</h2></div>
       <div class="phase"><div class="ph-num">1</div><div class="ph-main"><div class="t">Establish · June</div><div class="s">Lock the plan, fast initial drop</div></div><div class="ph-tgt">16–17%</div></div>
       <div class="phase"><div class="ph-num">2</div><div class="ph-main"><div class="t">Grind · July</div><div class="s">Hold intake, adherence tested</div></div><div class="ph-tgt">14–15%</div></div>
       <div class="phase"><div class="ph-num">3</div><div class="ph-main"><div class="t">Shred · August</div><div class="s">Abs sharpen, trunk fat goes</div></div><div class="ph-tgt">12%</div></div>
-      <div class="note">The mirror lags the scale by weeks because your fat sits on the trunk. Judge progress by the weekly average and a monthly photo, never a single day.</div>
+      <div class="note">The mirror lags the scale by weeks because your fat sits on the trunk. Judge progress by the weekly average and a monthly scan, never a single day.</div>
+    </section>
+
+    <!-- ================= METHOD ================= -->
+    <section class="view" id="view-method">
+      <button class="backbtn" id="methodBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>Back to Progress</button>
+      <div class="slabel" style="margin-top:4px;"><h2>Method &amp; Algorithms</h2><span class="hint">no black boxes</span></div>
+      <div class="note">Two engines run side by side. <b>Daily weigh-ins</b> drive the trend and projection, because one reading is noisy (water, salt, food) but the average is honest. <b>Monthly scans</b> drive the composition read, the only way to separate fat from muscle. Each is used for what it is good at.</div>
+
+      <div class="formula">
+        <h4>Fat mass &amp; lean mass</h4>
+        <div class="eq">fat mass = weight <b>&times;</b> bodyfat% <b>&divide;</b> 100</div>
+        <div class="eq">lean (FFM) = weight <b>&minus;</b> fat mass</div>
+        <p>Every composition number builds on these two. From your May scan: 92.6 &times; 19.2 &divide; 100 = 17.8kg fat, leaving 74.8kg lean.</p>
+      </div>
+
+      <div class="formula">
+        <h4>Target weight</h4>
+        <div class="eq">target = latest lean <b>&divide;</b> (1 &minus; 0.12)</div>
+        <p>Holds your lean mass and solves for the weight at 12% body fat. 74.8 &divide; 0.88 = ~85kg. It recomputes from your newest scan, so if you build muscle the target rises with you.</p>
+      </div>
+
+      <div class="formula">
+        <h4>7-day average</h4>
+        <div class="eq">avg = mean( last 7 daily weights )</div>
+        <p>A single morning can swing &plusmn;1kg on water alone. The average strips that noise out. Act on the average, never one day.</p>
+      </div>
+
+      <div class="formula">
+        <h4>Weekly trend</h4>
+        <div class="eq">trend = slope( weight vs day ) <b>&times;</b> 7</div>
+        <p>A least-squares line through your last few weeks of entries, so irregular logging still gives a fair kg-per-week rate. Healthy cut band is <b>0.4&ndash;0.8 kg/wk</b>.</p>
+      </div>
+
+      <div class="formula">
+        <h4>Goal ETA</h4>
+        <div class="eq">weeks = (7-day avg &minus; target) <b>&divide;</b> |weekly loss|</div>
+        <p>Projects when you reach ~85kg at the current rate. It needs roughly two weeks of daily weights and an actual downward trend before it will show a date.</p>
+      </div>
+
+      <div class="formula">
+        <h4>Composition verdict (decision tree)</h4>
+        <div class="eq">fat &darr; &amp; muscle held &rarr; clean fat loss</div>
+        <div class="eq">fat &darr; &amp; muscle &darr; &gt;0.4kg &rarr; ease deficit +150</div>
+        <div class="eq">fat &uarr; &amp; muscle &uarr; &ge; fat &rarr; lean gain</div>
+        <div class="eq">fat &uarr; otherwise &rarr; review intake</div>
+        <div class="eq">fat flat (&plusmn;0.15kg) &rarr; holding, trust avg</div>
+        <p>Run automatically on each new scan against the one before it.</p>
+      </div>
+
+      <div class="formula">
+        <h4>Rate guardrails</h4>
+        <div class="eq">&gt; 0.8 kg/wk &rarr; add 150 kcal (protect muscle)</div>
+        <div class="eq">&lt; 0.4 kg/wk for 2 wks &rarr; cut 150 or add cardio</div>
+      </div>
+
+      <div class="formula">
+        <h4>Why both, not one</h4>
+        <p>Daily-only can't tell fat loss from muscle loss. Monthly-only is too sparse to steer week to week, and one scan carries its own error. Layering them is the dependable choice: <b>steer daily, verify monthly</b>.</p>
+      </div>
     </section>
 
     <!-- ================= YOU ================= -->
@@ -671,6 +912,304 @@ document.getElementById('fab').addEventListener('click', ()=>{
   document.querySelector('.scroll').scrollTo({top:0,behavior:'smooth'});
 });
 
+/* ---------- body-composition analyzer ---------- */
+var TARGET_BF = 12;
+var SEED_SCANS = [
+  {date:'2025-09-27', weight:88.9, bf:18.9, muscle:68.5, vfa:7},
+  {date:'2026-05-17', weight:92.6, bf:19.2, muscle:71.1, vfa:7, bmr:2196}
+];
+var SCANS = loadScans();
+var curMetric = 'weight';
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+function loadScans(){
+  try{ var r=localStorage.getItem('cut-scans'); if(r){ var a=JSON.parse(r); if(Array.isArray(a)&&a.length) return a; } }catch(e){}
+  return SEED_SCANS.map(function(s){return Object.assign({},s);});
+}
+function saveScans(){ try{ localStorage.setItem('cut-scans', JSON.stringify(SCANS)); }catch(e){} }
+function sortScans(){ SCANS.sort(function(a,b){ return a.date<b.date?-1:(a.date>b.date?1:0); }); }
+function fatMass(s){ return s.weight*s.bf/100; }
+function ffm(s){ return s.weight-fatMass(s); }
+function targetWeight(){ var l=SCANS[SCANS.length-1]; return ffm(l)/(1-TARGET_BF/100); }
+function shortDate(d){ var p=d.split('-'); return MONTHS[(+p[1])-1]+" '"+p[0].slice(2); }
+function fullDate(d){ var p=d.split('-'); return (+p[2])+' '+MONTHS[(+p[1])-1]+' '+p[0]; }
+function weeksBetween(a,b){ return (new Date(b)-new Date(a))/(6048e5); }
+function metricVal(s,m){ if(m==='weight')return s.weight; if(m==='bf')return s.bf; if(m==='fat')return fatMass(s); if(m==='muscle')return (s.muscle!=null?s.muscle:null); return null; }
+function metricName(m){ return {weight:'Weight',bf:'Body fat',fat:'Fat mass',muscle:'Muscle'}[m]; }
+
+function renderProgress(){
+  sortScans();
+  var latest=SCANS[SCANS.length-1], prev=SCANS.length>1?SCANS[SCANS.length-2]:null;
+  if(latest){
+    document.getElementById('pgBf').innerHTML=latest.bf.toFixed(1)+'<small>%</small>';
+    document.getElementById('pgWeight').textContent=latest.weight.toFixed(1)+' kg now';
+    var tw=targetWeight(), toLose=latest.weight-tw;
+    document.getElementById('pgToLose').innerHTML='<b>'+(toLose>0.05?toLose.toFixed(1):'0')+' kg</b> to goal';
+    var startFat=fatMass(SCANS[0]), tgtFat=tw*TARGET_BF/100;
+    var prog=(startFat-fatMass(latest))/(startFat-tgtFat)*100;
+    document.getElementById('pgBar').style.width=Math.max(0,Math.min(100,prog)).toFixed(0)+'%';
+  }
+  drawChart(curMetric);
+  renderVerdict(latest,prev);
+  renderBreakdown(latest);
+  renderHistory();
+  document.getElementById('latestDate').textContent=latest?fullDate(latest.date):'';
+  document.getElementById('histCount').textContent=SCANS.length+' logged';
+  renderDaily(); populateCompare();
+}
+
+function drawChart(m){
+  curMetric=m;
+  document.querySelectorAll('.mchip').forEach(function(c){c.classList.toggle('on',c.dataset.metric===m);});
+  var el=document.getElementById('chart'), arr=[];
+  SCANS.forEach(function(s,i){ var v=metricVal(s,m); if(v!=null) arr.push({i:i,v:v}); });
+  if(!arr.length){ el.innerHTML='<div class="scan-empty">No '+metricName(m).toLowerCase()+' data yet.</div>'; return; }
+  var W=320,H=170,L=12,R=12,T=18,B=26;
+  var vals=arr.map(function(a){return a.v;});
+  var mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals);
+  var pad=(mx-mn)*0.2||Math.max(1,mx*0.04), lo=mn-pad, hi=mx+pad, n=SCANS.length;
+  function X(i){ return n===1?W/2:L+i*(W-L-R)/(n-1); }
+  function Yv(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
+  var grid=''; [0,0.5,1].forEach(function(g){ var yy=(T+g*(H-T-B)).toFixed(1); grid+='<line class="chart-grid" x1="'+L+'" y1="'+yy+'" x2="'+(W-R)+'" y2="'+yy+'"/>'; });
+  var pts=arr.map(function(a){return X(a.i).toFixed(1)+','+Yv(a.v).toFixed(1);});
+  var area='';
+  if(arr.length>1){ area='<path class="chart-area" d="M'+X(arr[0].i).toFixed(1)+','+(H-B)+' L'+pts.join(' L')+' L'+X(arr[arr.length-1].i).toFixed(1)+','+(H-B)+' Z"/>'; }
+  var line='<polyline class="chart-line" points="'+pts.join(' ')+'"/>';
+  var circ='',labs='';
+  arr.forEach(function(a,k){ var last=(k===arr.length-1);
+    circ+='<circle class="chart-pt '+(last?'last':'')+'" cx="'+X(a.i).toFixed(1)+'" cy="'+Yv(a.v).toFixed(1)+'" r="'+(last?4.5:3.5)+'"/>';
+    if(k===0||last){ labs+='<text class="chart-v" x="'+X(a.i).toFixed(1)+'" y="'+(Yv(a.v)-8).toFixed(1)+'" text-anchor="middle">'+a.v.toFixed(1)+'</text>'; }
+  });
+  var xl=''; SCANS.forEach(function(s,i){ xl+='<text class="chart-x" x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle">'+shortDate(s.date)+'</text>'; });
+  el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+grid+area+line+circ+labs+xl+'</svg>';
+  var pl=el.querySelector('.chart-line');
+  if(pl&&pl.getTotalLength){ var len=pl.getTotalLength(); if(len){ pl.style.strokeDasharray=len; pl.style.strokeDashoffset=len; pl.getBoundingClientRect(); pl.style.transition='stroke-dashoffset .85s var(--ease)'; pl.style.strokeDashoffset=0; } }
+}
+
+function renderVerdict(latest,prev){
+  var v=document.getElementById('verdict'), hint=document.getElementById('cmpHint'), dg=document.getElementById('deltaGrid');
+  if(!prev){
+    v.className='verdict flat';
+    v.innerHTML='<div class="vh"><span class="vico">i</span>First scan logged</div><div class="vd">Add next month\'s scan and the app will compare fat, lean mass and rate automatically.</div>';
+    hint.textContent=''; dg.innerHTML=''; return;
+  }
+  var dW=latest.weight-prev.weight, dFat=fatMass(latest)-fatMass(prev);
+  var dMus=(latest.muscle!=null&&prev.muscle!=null)?latest.muscle-prev.muscle:null;
+  var wks=weeksBetween(prev.date,latest.date), rate=wks>0?dW/wks:0;
+  hint.textContent=wks>=1?('vs '+shortDate(prev.date)+' · '+Math.round(wks)+' wks'):'vs last scan';
+  var cls='flat',ico='~',title='Holding',desc='';
+  if(dFat<-0.15){
+    if(dMus!=null&&dMus<-0.4){ cls='warn';ico='!';title='Fat down, but muscle dropped';
+      desc='Lost '+Math.abs(dFat).toFixed(1)+'kg fat but '+Math.abs(dMus).toFixed(1)+'kg muscle. Ease the deficit ~150 kcal, push protein and keep loads heavy.'; }
+    else { cls='good';ico='\u2713';title='Clean fat loss';
+      desc='Down '+Math.abs(dFat).toFixed(1)+'kg fat with lean mass held'+(dMus!=null?(' ('+(dMus>=0?'+':'')+dMus.toFixed(1)+'kg muscle)'):'')+'. Exactly the goal.';
+      if(rate<-0.9) desc+=' Pace is quick at '+Math.abs(rate).toFixed(1)+'kg/wk, consider +150 kcal to protect muscle.'; }
+  } else if(dFat>0.15){
+    if(dMus!=null&&dMus>=dFat){ cls='good';ico='\u2713';title='Lean gain';
+      desc='Muscle up '+dMus.toFixed(1)+'kg, fat up '+dFat.toFixed(1)+'kg. Good if you are bulking; tighten if you meant to cut.'; }
+    else { cls='warn';ico='!';title='Fat up this month';
+      desc='Fat mass rose '+dFat.toFixed(1)+'kg. Recheck your intake logging and steps before the next scan.'; }
+  } else {
+    desc='Fat mass barely moved. A flat month mid-cut is normal, trust the weekly weigh-in average, not this single reading.';
+  }
+  v.className='verdict '+cls;
+  v.innerHTML='<div class="vh"><span class="vico">'+ico+'</span>'+title+'</div><div class="vd">'+desc+'</div>';
+  function cell(l,val,unit,c){ return '<div class="dcell"><div class="l">'+l+'</div><div class="v '+c+'">'+val+unit+'</div></div>'; }
+  function sg(x){ return (x>0?'+':'')+x.toFixed(1); }
+  var t='';
+  t+=cell('Weight \u0394',sg(dW),' kg',dW>0?'up':'down');
+  t+=cell('Fat mass \u0394',sg(dFat),' kg',dFat>0?'up':'good');
+  if(dMus!=null) t+=cell('Muscle \u0394',sg(dMus),' kg',dMus>=0?'good':'up');
+  t+=cell('Rate',sg(rate),' kg/wk',rate>0?'up':'down');
+  dg.innerHTML=t;
+}
+
+function renderBreakdown(s){
+  var el=document.getElementById('breakdown'); if(!s){el.innerHTML='';return;}
+  function ti(l,val,u){ return '<div class="ti"><div class="l">'+l+'</div><div class="v">'+val+'<span> '+u+'</span></div></div>'; }
+  var out=ti('Fat mass',fatMass(s).toFixed(1),'kg')+ti('Lean / FFM',ffm(s).toFixed(1),'kg');
+  out+=(s.muscle!=null?ti('Muscle',s.muscle.toFixed(1),'kg'):ti('Body fat',s.bf.toFixed(1),'%'));
+  out+=(s.vfa!=null?ti('Visceral',s.vfa,'rating'):(s.bmr!=null?ti('BMR',s.bmr,'kcal'):ti('Weight',s.weight.toFixed(1),'kg')));
+  el.innerHTML=out;
+}
+
+function renderHistory(){
+  var el=document.getElementById('history'), out='';
+  for(var i=SCANS.length-1;i>=0;i--){ var s=SCANS[i];
+    out+='<div class="hist"><div class="hd"><b>'+shortDate(s.date)+'</b><small>'+s.date.split('-')[2]+'/'+s.date.split('-')[1]+'</small></div>'+
+      '<div class="hm"><span><b>'+s.weight.toFixed(1)+'</b>kg</span><span><b>'+s.bf.toFixed(1)+'</b>%</span>'+
+      (s.muscle!=null?'<span><b>'+s.muscle.toFixed(1)+'</b>kg mus</span>':'')+
+      (s.vfa!=null?'<span>VFA <b>'+s.vfa+'</b></span>':'')+
+      '</div><button class="del" data-del="'+i+'" aria-label="Delete">\u00d7</button></div>';
+  }
+  out+='<button class="resetlink" id="resetScans">Reset to my Tanita history</button>';
+  el.innerHTML=out;
+}
+
+function updateCalc(){
+  var w=parseFloat(document.getElementById('fWeight').value), b=parseFloat(document.getElementById('fBf').value), el=document.getElementById('calcLine');
+  if(w>0&&b>0){ var fm=w*b/100; el.innerHTML='Fat mass <b>'+fm.toFixed(1)+'kg</b> · Lean mass <b>'+(w-fm).toFixed(1)+'kg</b>'; }
+  else el.textContent='Enter weight and body fat to compute fat mass and lean mass.';
+}
+function clearForm(){ ['fWeight','fBf','fMuscle','fVfa','fBmr'].forEach(function(id){document.getElementById(id).value='';}); document.getElementById('scanPreview').innerHTML=''; updateCalc(); }
+function saveScan(){
+  var date=document.getElementById('fDate').value||new Date().toISOString().slice(0,10);
+  var w=parseFloat(document.getElementById('fWeight').value), b=parseFloat(document.getElementById('fBf').value);
+  if(!(w>30&&w<300)){ alert('Enter a valid weight in kg.'); return; }
+  if(!(b>3&&b<60)){ alert('Enter a valid body fat %.'); return; }
+  var s={date:date,weight:w,bf:b};
+  var mu=parseFloat(document.getElementById('fMuscle').value); if(mu>0)s.muscle=mu;
+  var vf=parseFloat(document.getElementById('fVfa').value); if(vf>0)s.vfa=vf;
+  var bm=parseFloat(document.getElementById('fBmr').value); if(bm>0)s.bmr=bm;
+  SCANS=SCANS.filter(function(x){return x.date!==date;});
+  SCANS.push(s); sortScans(); saveScans();
+  document.getElementById('addForm').classList.remove('open'); clearForm(); renderProgress();
+}
+
+function initProgress(){
+  renderProgress();
+  document.getElementById('metricBar').addEventListener('click',function(e){ var c=e.target.closest('.mchip'); if(c) drawChart(c.dataset.metric); });
+  var form=document.getElementById('addForm');
+  document.getElementById('addToggle').addEventListener('click',function(){
+    form.classList.toggle('open');
+    if(form.classList.contains('open')){ document.getElementById('fDate').value=new Date().toISOString().slice(0,10); updateCalc(); }
+  });
+  document.getElementById('cancelAdd').addEventListener('click',function(){ form.classList.remove('open'); clearForm(); });
+  ['fWeight','fBf','fMuscle'].forEach(function(id){ document.getElementById(id).addEventListener('input',updateCalc); });
+  document.getElementById('scanFile').addEventListener('change',function(e){
+    var f=e.target.files[0]; if(!f) return;
+    if(f.type.indexOf('image')===0){ var r=new FileReader(); r.onload=function(){ document.getElementById('scanPreview').innerHTML='<img src="'+r.result+'" alt="scan">'; }; r.readAsDataURL(f); }
+    else document.getElementById('scanPreview').innerHTML='<div class="calc">Attached '+f.name+'. Read the numbers off it below.</div>';
+  });
+  document.getElementById('saveScan').addEventListener('click',saveScan);
+  document.getElementById('history').addEventListener('click',function(e){
+    var d=e.target.closest('[data-del]');
+    if(d){ SCANS.splice(+d.dataset.del,1); if(!SCANS.length) SCANS=SEED_SCANS.map(function(s){return Object.assign({},s);}); saveScans(); renderProgress(); return; }
+    if(e.target.id==='resetScans'){ SCANS=SEED_SCANS.map(function(s){return Object.assign({},s);}); saveScans(); renderProgress(); }
+  });
+}
+
+/* ---------- daily log + trend + projection ---------- */
+var SEED_DAILY = [{date:'2026-05-17', weight:92.6}];
+var DAILY = loadDaily();
+function loadDaily(){ try{ var r=localStorage.getItem('cut-daily'); if(r){ var a=JSON.parse(r); if(Array.isArray(a)) return a; } }catch(e){} return SEED_DAILY.map(function(x){return Object.assign({},x);}); }
+function saveDaily(){ try{ localStorage.setItem('cut-daily', JSON.stringify(DAILY)); }catch(e){} }
+function sortDaily(){ DAILY.sort(function(a,b){ return a.date<b.date?-1:(a.date>b.date?1:0); }); }
+function escapeHtml(s){ return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];}); }
+function avgLastN(n){ var s=DAILY.slice(-n); if(!s.length) return null; return s.reduce(function(a,x){return a+x.weight;},0)/s.length; }
+function weeklyTrend(){
+  sortDaily(); if(DAILY.length<2) return null;
+  var pts=DAILY.slice(-21).map(function(x){return {t:(new Date(x.date))/864e5, w:x.weight};});
+  var n=pts.length, st=pts[0].t, sx=0,sy=0,sxx=0,sxy=0;
+  pts.forEach(function(p){ var x=p.t-st; sx+=x; sy+=p.w; sxx+=x*x; sxy+=x*p.w; });
+  var d=n*sxx-sx*sx; if(d===0) return null;
+  return ((n*sxy-sx*sy)/d)*7;
+}
+function goalEta(){
+  var avg=avgLastN(7), tr=weeklyTrend(); if(avg==null||tr==null) return {note:'log ~2 weeks'};
+  if(tr>=-0.05) return {note:'not losing yet'};
+  var wks=(avg-targetWeight())/(-tr); if(wks<=0) return {txt:'at goal'};
+  var dt=new Date(Date.now()+wks*6048e5);
+  return {txt:'~'+MONTHS[dt.getMonth()]+" '"+dt.getFullYear().toString().slice(2)};
+}
+function renderDaily(){
+  sortDaily();
+  var avg=avgLastN(7), tr=weeklyTrend(), eta=goalEta();
+  document.getElementById('dAvg').innerHTML = avg!=null? avg.toFixed(1)+'<small> kg</small>' : '&mdash;';
+  document.getElementById('dTrend').innerHTML = tr!=null? (tr>0?'+':'')+tr.toFixed(2)+'<small> kg/wk</small>' : '&mdash;';
+  document.getElementById('dEta').innerHTML = eta.txt? eta.txt : '<small>'+eta.note+'</small>';
+  drawDailyChart();
+  var el=document.getElementById('dHistory'), arr=DAILY.slice(-14), out='';
+  for(var i=arr.length-1;i>=0;i--){ var s=arr[i], gi=DAILY.indexOf(s);
+    out+='<div class="hist"><div class="hd"><b>'+shortDate(s.date)+'</b><small>'+s.date.split('-')[2]+'/'+s.date.split('-')[1]+'</small></div>'+
+      '<div class="hm"><span><b>'+s.weight.toFixed(1)+'</b>kg</span>'+(s.waist!=null?'<span><b>'+s.waist.toFixed(1)+'</b>cm</span>':'')+(s.note?'<span>'+escapeHtml(s.note)+'</span>':'')+'</div>'+
+      '<button class="del" data-dday="'+gi+'" aria-label="Delete">\u00d7</button></div>';
+  }
+  if(!DAILY.length) out='<div class="scan-empty">No daily entries yet. Add today\'s weight.</div>';
+  else out+='<button class="resetlink" id="resetDaily">Clear daily log</button>';
+  el.innerHTML=out;
+  document.getElementById('dCount').textContent=DAILY.length+' days';
+}
+function drawDailyChart(){
+  var el=document.getElementById('dchart');
+  if(!DAILY.length){ el.innerHTML='<div class="scan-empty">Add daily weights to see the trend.</div>'; return; }
+  var arr=DAILY.slice(-30), W=320,H=170,L=12,R=12,T=18,B=26;
+  var vals=arr.map(function(a){return a.weight;});
+  var mn=Math.min.apply(null,vals), mx=Math.max.apply(null,vals);
+  var pad=(mx-mn)*0.25||0.7, lo=mn-pad, hi=mx+pad, n=arr.length;
+  function X(i){ return n===1?W/2:L+i*(W-L-R)/(n-1); }
+  function Yv(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
+  var grid=''; [0,0.5,1].forEach(function(g){ var yy=(T+g*(H-T-B)).toFixed(1); grid+='<line class="chart-grid" x1="'+L+'" y1="'+yy+'" x2="'+(W-R)+'" y2="'+yy+'"/>'; });
+  var pts=arr.map(function(a,i){return X(i).toFixed(1)+','+Yv(a.weight).toFixed(1);});
+  var area=''; if(arr.length>1){ area='<path class="chart-area" d="M'+X(0).toFixed(1)+','+(H-B)+' L'+pts.join(' L')+' L'+X(arr.length-1).toFixed(1)+','+(H-B)+' Z"/>'; }
+  var line='<polyline class="chart-line" points="'+pts.join(' ')+'"/>';
+  var avg=avgLastN(7), avgline='';
+  if(avg!=null&&avg>=lo&&avg<=hi){ var ay=Yv(avg).toFixed(1); avgline='<line class="chart-avg" x1="'+L+'" y1="'+ay+'" x2="'+(W-R)+'" y2="'+ay+'"/>'; }
+  var circ=''; arr.forEach(function(a,k){ var last=k===arr.length-1; circ+='<circle class="chart-pt '+(last?'last':'')+'" cx="'+X(k).toFixed(1)+'" cy="'+Yv(a.weight).toFixed(1)+'" r="'+(last?4:2.6)+'"/>'; });
+  var idx=[0,Math.floor((n-1)/2),n-1].filter(function(v,i,s){return s.indexOf(v)===i;}), xl='';
+  idx.forEach(function(i){ xl+='<text class="chart-x" x="'+X(i).toFixed(1)+'" y="'+(H-8)+'" text-anchor="middle">'+shortDate(arr[i].date)+'</text>'; });
+  el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+grid+area+avgline+line+circ+xl+'</svg>';
+  var pl=el.querySelector('.chart-line'); if(pl&&pl.getTotalLength){ var len=pl.getTotalLength(); if(len){ pl.style.strokeDasharray=len; pl.style.strokeDashoffset=len; pl.getBoundingClientRect(); pl.style.transition='stroke-dashoffset .85s var(--ease)'; pl.style.strokeDashoffset=0; } }
+}
+function dClear(){ ['dWeight','dWaist','dNote'].forEach(function(id){document.getElementById(id).value='';}); }
+function dSaveFn(){
+  var date=document.getElementById('dDate').value||new Date().toISOString().slice(0,10);
+  var w=parseFloat(document.getElementById('dWeight').value);
+  if(!(w>30&&w<300)){ alert('Enter a valid weight in kg.'); return; }
+  var e={date:date,weight:w};
+  var wa=parseFloat(document.getElementById('dWaist').value); if(wa>0)e.waist=wa;
+  var nt=document.getElementById('dNote').value.trim(); if(nt)e.note=nt.slice(0,40);
+  DAILY=DAILY.filter(function(x){return x.date!==date;});
+  DAILY.push(e); sortDaily(); saveDaily();
+  document.getElementById('dForm').classList.remove('open'); dClear(); renderDaily();
+}
+
+/* ---------- compare two scans ---------- */
+function populateCompare(){
+  var a=document.getElementById('cmpA'), b=document.getElementById('cmpB'); if(!a||!b) return;
+  var av=a.value, bv=b.value;
+  var opts=SCANS.map(function(s,i){return '<option value="'+i+'">'+fullDate(s.date)+'</option>';}).join('');
+  a.innerHTML=opts; b.innerHTML=opts;
+  a.value=(av!==''&&+av<SCANS.length)?av:0;
+  b.value=(bv!==''&&+bv<SCANS.length)?bv:(SCANS.length-1);
+  renderCompare();
+}
+function renderCompare(){
+  var out=document.getElementById('cmpOut'); if(!out) return;
+  var a=+document.getElementById('cmpA').value, b=+document.getElementById('cmpB').value;
+  if(isNaN(a)||isNaN(b)||!SCANS[a]||!SCANS[b]){ out.innerHTML=''; return; }
+  var sa=SCANS[a], sb=SCANS[b];
+  function row(l,va,vb,u,better){
+    var d=vb-va, c=better==='down'?(d<-0.001?'good':(d>0.001?'up':'')):(better==='up'?(d>0.001?'good':(d<-0.001?'up':'')):'');
+    return '<div class="cmprow"><div class="cl">'+l+'</div><div class="cm">'+va.toFixed(1)+u+' \u2192 '+vb.toFixed(1)+u+'</div><div class="cd '+c+'">'+(d>0?'+':'')+d.toFixed(1)+u+'</div></div>';
+  }
+  var h=row('Weight',sa.weight,sb.weight,'kg','down')+row('Fat %',sa.bf,sb.bf,'%','down')+row('Fat mass',fatMass(sa),fatMass(sb),'kg','down')+row('Lean',ffm(sa),ffm(sb),'kg','up');
+  if(sa.muscle!=null&&sb.muscle!=null) h+=row('Muscle',sa.muscle,sb.muscle,'kg','up');
+  out.innerHTML=h+'<div class="calc">Spanning '+Math.abs(Math.round(weeksBetween(sa.date,sb.date)))+' weeks.</div>';
+}
+
+/* ---------- extra wiring (panes, daily, compare, method) ---------- */
+function initExtras(){
+  document.getElementById('progSeg').addEventListener('click',function(e){ var b=e.target.closest('button'); if(!b) return;
+    document.querySelectorAll('#progSeg button').forEach(function(x){x.classList.toggle('on',x===b);});
+    document.getElementById('dailyPane').classList.toggle('on',b.dataset.pane==='daily');
+    document.getElementById('monthlyPane').classList.toggle('on',b.dataset.pane==='monthly');
+  });
+  var df=document.getElementById('dForm');
+  document.getElementById('dAddToggle').addEventListener('click',function(){ df.classList.toggle('open'); if(df.classList.contains('open')) document.getElementById('dDate').value=new Date().toISOString().slice(0,10); });
+  document.getElementById('dCancel').addEventListener('click',function(){ df.classList.remove('open'); dClear(); });
+  document.getElementById('dSave').addEventListener('click',dSaveFn);
+  document.getElementById('dHistory').addEventListener('click',function(e){
+    var d=e.target.closest('[data-dday]'); if(d){ DAILY.splice(+d.dataset.dday,1); saveDaily(); renderDaily(); return; }
+    if(e.target.id==='resetDaily'){ DAILY=[]; saveDaily(); renderDaily(); }
+  });
+  document.getElementById('cmpA').addEventListener('change',renderCompare);
+  document.getElementById('cmpB').addEventListener('change',renderCompare);
+  document.getElementById('openMethod').addEventListener('click',function(){ showView('method'); });
+  document.getElementById('methodBack').addEventListener('click',function(){ showView('progress'); });
+  renderDaily();
+}
+
 (function(){
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="16" fill="#16181C"/><path d="M20 22v20M14 26v12M44 22v20M50 26v12M20 32h24" stroke="#C2F03C" stroke-width="5" stroke-linecap="round" fill="none"/></svg>`;
   const link = document.createElement('link');
@@ -683,6 +1222,8 @@ buildSwatches();
 applyTheme(mq.matches ? 'dark' : 'light');
 applyAccent(0);
 renderTabs(); renderHero(); renderExercises();
+initProgress();
+initExtras();
 </script>
 </body>
 </html>
