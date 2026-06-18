@@ -4,328 +4,817 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#FFFFFF">
+<meta name="theme-color" content="#ECEDE7">
 <title>The Cut · Kay</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-  :root{
-    --lime:#C6F03C; --lime-deep:#B2DE26; --on-accent:#15171C;
-    --bg:#FFFFFF; --panel:#F2F3F5; --raise:#FFFFFF;
-    --ink:#15171C; --ink2:#20242C; --muted:#8A9099; --muted2:#B4B9C0;
-    --line:#E8EAED; --grey2:#E9EBEE; --hairline:rgba(0,0,0,.05);
-    --hero-bg:#15171C; --hero-text:#FFFFFF; --hero-sub:#C9CDD3; --hero-track:#33373F; --hero-muted:#9CA1A8;
-    --nav:rgba(255,255,255,.94); --shadow:0 1px 2px rgba(20,22,26,.04),0 10px 28px rgba(20,22,26,.06);
-    --font:'Montserrat',system-ui,-apple-system,sans-serif;
-    --gap:12px; --sec:26px; --rad:22px;
-  }
-  [data-theme="dark"]{
-    --bg:#0E0F12; --panel:#17191E; --raise:#1F2228;
-    --ink:#F3F4F6; --ink2:#E3E5E9; --muted:#9AA0AA; --muted2:#6B7079;
-    --line:#292C32; --grey2:#2C2F36; --hairline:rgba(255,255,255,.07);
-    --lime-deep:#AFDA22;
-    --hero-bg:#1B1E24; --hero-text:#F3F4F6; --hero-sub:#AEB3BB; --hero-track:#2E323A; --hero-muted:#8A909A;
-    --nav:rgba(14,15,18,.9); --shadow:0 2px 6px rgba(0,0,0,.3),0 16px 40px rgba(0,0,0,.5);
-  }
-  *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
-  html{-webkit-text-size-adjust:100%}
-  body{font-family:var(--font);background:var(--bg);color:var(--ink);line-height:1.5;-webkit-font-smoothing:antialiased;transition:background-color .35s cubic-bezier(.2,.7,.2,1),color .35s}
-  .wrap{max-width:560px;margin:0 auto;padding:0 16px calc(98px + env(safe-area-inset-bottom))}
-  svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+:root{
+  --lime:#C9F24D; --lime-deep:#B2E02C; --on-lime:#15181A;
+  --forest:#11402E; --forest-2:#17563C; --on-forest:#E3F5E9;
+  --ink:#16191C; --on-ink:#F2F4EF;
+  --bg:#ECEDE7; --card:#FFFFFF; --panel:#F4F5F0; --raise:#FFFFFF;
+  --text:#15181A; --muted:#7E837B; --muted2:#AEB2A9; --line:#E5E6DF; --hair:rgba(20,24,20,.06);
+  --shadow:0 1px 2px rgba(20,24,20,.04),0 14px 34px rgba(20,24,20,.07);
+  --shadow-sm:0 1px 2px rgba(20,24,20,.05),0 6px 16px rgba(20,24,20,.05);
+  --font:'Montserrat',system-ui,-apple-system,sans-serif;
+  --r:24px; --r-sm:18px; --gap:14px; --sec:30px;
+}
+[data-theme="dark"]{
+  --on-lime:#15181A;
+  --ink:#1C1F22; --on-ink:#F2F4EF;
+  --bg:#0D0F0C; --card:#16191B; --panel:#1B1E1F; --raise:#1E2123;
+  --text:#F0F2EC; --muted:#9A9F96; --muted2:#666B62; --line:#282B27; --hair:rgba(255,255,255,.06);
+  --shadow:0 2px 6px rgba(0,0,0,.4),0 18px 44px rgba(0,0,0,.55); --shadow-sm:0 1px 3px rgba(0,0,0,.4),0 8px 20px rgba(0,0,0,.4);
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;transition:background-color .4s,color .4s}
+svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:translateY(0)}}
+.view{display:none}
+.view.on{display:block;animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
 
-  @webkit-keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  @keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
-  .pop{animation:pop .5s cubic-bezier(.2,.7,.2,1) both}
-  .p2{animation-delay:.06s}.p3{animation-delay:.12s}.p4{animation-delay:.18s}
-  .view{display:none}
-  .view.on{display:block;animation:pop .45s cubic-bezier(.2,.7,.2,1) both}
+/* ===== shell ===== */
+.app{display:flex;min-height:100vh}
+.sidebar{display:none}
+.main{flex:1;min-width:0;width:100%;max-width:560px;margin:0 auto;padding:0 16px calc(104px + env(safe-area-inset-bottom))}
 
-  /* top bar */
-  .topbar{display:flex;align-items:center;gap:12px;padding:18px 0 10px;position:sticky;top:0;z-index:30;background:linear-gradient(to bottom,var(--bg) 72%,transparent)}
-  .logo{width:42px;height:42px;border-radius:13px;background:var(--lime);display:grid;place-items:center;color:var(--on-accent)}
-  .logo svg{width:22px;height:22px;stroke-width:2.3}
-  .tt h1{font-size:20px;font-weight:800;letter-spacing:-.01em;line-height:1}
-  .tt p{font-size:12px;color:var(--muted);font-weight:600;margin-top:3px}
-  .topbar .right{margin-left:auto;width:40px;height:40px;border-radius:50%;background:var(--panel);border:1px solid var(--line);display:grid;place-items:center;color:var(--ink);cursor:pointer;transition:transform .15s}
-  .topbar .right:active{transform:scale(.9)}
-  [data-theme="light"] .right .i-sun{display:none}
-  [data-theme="dark"] .right .i-moon{display:none}
+/* top bar (mobile greeting) */
+.topbar{display:flex;align-items:center;gap:12px;padding:20px 0 8px;position:sticky;top:0;z-index:30;background:linear-gradient(to bottom,var(--bg) 74%,transparent)}
+.brand{display:flex;align-items:center;gap:11px}
+.logo{width:42px;height:42px;border-radius:13px;background:var(--ink);display:grid;place-items:center;color:var(--lime)}
+.logo svg{width:23px;height:23px;stroke-width:2.4}
+.brand .bt b{font-size:17px;font-weight:800;letter-spacing:-.01em;display:block;line-height:1}
+.brand .bt span{font-size:12px;color:var(--muted);font-weight:600}
+.ttools{margin-left:auto;display:flex;gap:8px}
+.iconbtn{width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;color:var(--text);cursor:pointer;transition:transform .15s;box-shadow:var(--shadow-sm)}
+.iconbtn:active{transform:scale(.9)}
+[data-theme="light"] .iconbtn .i-sun{display:none}
+[data-theme="dark"] .iconbtn .i-moon{display:none}
 
-  /* hero */
-  .hero{background:var(--hero-bg);border-radius:26px;padding:22px;color:var(--hero-text);margin-top:8px;position:relative;overflow:hidden;box-shadow:var(--shadow)}
-  .hero::after{content:"";position:absolute;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--lime) 18%,transparent),transparent 70%);top:-90px;right:-70px}
-  .hero .lab{font-size:11px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--lime)}
-  .hero .toprow{display:flex;align-items:flex-start;justify-content:space-between;gap:14px;position:relative;z-index:1}
-  .hero .head{font-size:28px;font-weight:800;letter-spacing:-.02em;margin-top:10px;line-height:1.05}
-  .hero .head span{color:var(--hero-muted);font-weight:700}
-  .hero .sub{font-size:13px;color:var(--hero-sub);margin-top:8px;font-weight:500;line-height:1.5}
-  .ring{position:relative;width:74px;height:74px;flex:0 0 auto}
-  .ring svg{transform:rotate(-90deg)}
-  .ring .fil{transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)}
-  .ring .rt{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
-  .ring .rt b{font-size:16px;font-weight:800;line-height:1}
-  .ring .rt span{font-size:9px;color:var(--hero-muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
-  .hchips{display:flex;gap:8px;margin-top:18px;flex-wrap:wrap;position:relative;z-index:1}
-  .hchip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);padding:7px 12px;border-radius:11px;font-size:12px;font-weight:600;color:var(--hero-text)}
-  .hchip svg{width:14px;height:14px;opacity:.85}
-  .hchip b{font-weight:800}
-  .herostats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:20px;position:relative;z-index:1}
-  .hs .v{font-size:18px;font-weight:800;letter-spacing:-.01em}
-  .hs .k{font-size:10px;color:var(--hero-muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
-  .hs .bar{height:3px;border-radius:3px;background:var(--hero-track);margin-top:8px;overflow:hidden}
-  .hs .bar i{display:block;height:100%;background:var(--lime);border-radius:3px}
+/* section heads */
+.shead{display:flex;align-items:flex-end;justify-content:space-between;margin:var(--sec) 0 14px}
+.view>.shead:first-child,.dash+.shead{margin-top:22px}
+.shead h2{font-size:23px;font-weight:800;letter-spacing:-.02em}
+.shead h2.sm{font-size:18px}
+.shead .tagn{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding-bottom:3px}
 
-  /* section heads */
-  .shead{display:flex;align-items:center;justify-content:space-between;margin:var(--sec) 0 12px}
-  .view .shead:first-of-type{margin-top:18px}
-  .shead h2{font-size:20px;font-weight:800;letter-spacing:-.01em}
-  .shead h2.sm{font-size:16px}
-  .shead .tagn{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em}
+/* ===== cards / tiles ===== */
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow-sm)}
+.card+.card,.tilegrid+.card,.card+.tilegrid,.shead+.card{margin-top:var(--gap)}
+.card.ink{background:var(--ink);border-color:transparent;color:var(--on-ink)}
+.card.forest{background:var(--forest);border-color:transparent;color:var(--on-forest)}
+.card.lime{background:var(--lime);border-color:transparent;color:var(--on-lime)}
+.card.outline{background:transparent;border:1.5px solid var(--lime)}
+.ch{font-size:15px;font-weight:800;margin-bottom:13px;display:flex;align-items:center;gap:9px}
+.card.ink .ch,.card.forest .ch{color:#fff}
+.card p{font-size:13px;font-weight:500;line-height:1.55}
+.card.ink p,.card.forest p{color:rgba(255,255,255,.72)}
 
-  /* pills */
-  .pills{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-ms-overflow-style:none;scrollbar-width:none}
-  .pills::-webkit-scrollbar{display:none}
-  .pill{flex:0 0 auto;border:1.5px solid var(--line);background:var(--raise);color:var(--ink);font-family:var(--font);font-size:13px;font-weight:700;padding:9px 16px;border-radius:100px;cursor:pointer;transition:.15s;white-space:nowrap}
-  .pill:active{transform:scale(.96)}
-  .pill.active{background:var(--lime);border-color:var(--lime);color:var(--on-accent)}
+.tilegrid{display:grid;gap:var(--gap)}
+.tilegrid.g2{grid-template-columns:1fr 1fr}
+.tilegrid.g3{grid-template-columns:repeat(3,1fr)}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;box-shadow:var(--shadow-sm);position:relative;overflow:hidden}
+.tile.ink{background:var(--ink);border-color:transparent;color:var(--on-ink)}
+.tile.forest{background:var(--forest);border-color:transparent;color:var(--on-forest)}
+.tile.lime{background:var(--lime);border-color:transparent;color:var(--on-lime)}
+.tile .ti{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.tile.ink .ti,.tile.forest .ti{color:rgba(255,255,255,.6)}
+.tile .ti svg{width:15px;height:15px}
+.tile .tv{font-size:30px;font-weight:800;letter-spacing:-.03em;margin-top:10px;line-height:1}
+.tile .tv small{font-size:14px;font-weight:700;color:var(--muted)}
+.tile.ink .tv small,.tile.forest .tv small{color:rgba(255,255,255,.55)}
+.tile .tk{font-size:12px;font-weight:600;color:var(--muted);margin-top:4px}
+.tile.ink .tk,.tile.forest .tk{color:rgba(255,255,255,.6)}
+.tile .out{position:absolute;top:13px;right:13px;width:26px;height:26px;border-radius:50%;background:rgba(20,24,20,.06);display:grid;place-items:center;color:var(--text)}
+.tile.ink .out,.tile.forest .out{background:rgba(255,255,255,.12);color:#fff}
+.tile.lime .out{background:rgba(20,24,20,.12)}
+.tile .out svg{width:13px;height:13px;stroke-width:2.4}
+.tdot{width:8px;height:8px;border-radius:50%;display:inline-block}
+.chip{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;padding:4px 9px;border-radius:8px;text-transform:uppercase;letter-spacing:.03em}
+.chip.lime{background:var(--lime);color:var(--on-lime)}
+.chip.soft{background:rgba(20,24,20,.06);color:var(--muted)}
 
-  /* macro tiles */
-  .mcard{background:var(--panel);border-radius:var(--rad);padding:20px}
-  .mcard .mtop{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-  .mcard .kc{display:flex;align-items:center;gap:9px}
-  .mcard .kc .flame{width:34px;height:34px;border-radius:11px;background:var(--hero-bg);color:var(--lime);display:grid;place-items:center}
-  .mcard .kc .num{font-size:28px;font-weight:900;letter-spacing:-.02em;line-height:1}
-  .mcard .kc .num small{font-size:13px;font-weight:700;color:var(--muted)}
-  .mcard .when{font-size:11px;font-weight:700;color:var(--muted);text-align:right;text-transform:uppercase;letter-spacing:.04em;max-width:44%}
-  .tiles{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-  .tile{background:var(--raise);border:1px solid var(--line);border-radius:15px;padding:13px 10px;text-align:center}
-  .tile .dot{width:9px;height:9px;border-radius:50%;margin:0 auto 7px}
-  .tile .tv{font-size:18px;font-weight:800;letter-spacing:-.01em}
-  .tile .tk{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
-  .dot.p{background:#C6F03C}.dot.c{background:#3BA7FF}.dot.f{background:#FF8A4C}
+/* ===== hero (blurred blobs) ===== */
+.hero{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--line);border-radius:28px;padding:24px;box-shadow:var(--shadow)}
+.hero .blobs{position:absolute;inset:0;filter:blur(34px);opacity:.92;pointer-events:none}
+.blob{position:absolute;border-radius:50%}
+.blob.l{width:230px;height:230px;background:var(--lime);top:-30px;right:30px;opacity:.85}
+.blob.f{width:180px;height:180px;background:var(--forest);bottom:-60px;right:120px;opacity:.7}
+.blob.k{width:120px;height:120px;background:var(--ink);top:60px;right:200px;opacity:.5}
+[data-theme="dark"] .hero .blobs{opacity:.6}
+.hero>*{position:relative;z-index:1}
+.hero .htop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
+.hlab{font-size:11px;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.hero .hday{font-size:32px;font-weight:800;letter-spacing:-.03em;margin-top:8px;line-height:1.02}
+.hero .hsub{font-size:13px;color:var(--muted);font-weight:600;margin-top:6px;max-width:62%}
+.ring{position:relative;width:78px;height:78px;flex:0 0 auto}
+.ring svg{transform:rotate(-90deg)}
+.ring .fil{transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)}
+.ring .rt{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .rt b{font-size:17px;font-weight:800;line-height:1}
+.ring .rt span{font-size:9px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.hchips{display:flex;gap:8px;margin-top:22px;flex-wrap:wrap}
+.hchip{display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);padding:8px 13px;border-radius:12px;font-size:12px;font-weight:600;color:var(--text)}
+.hchip svg{width:14px;height:14px;color:var(--muted)}
+.hchip b{font-weight:800;font-size:14px}
 
-  /* card */
-  .card{background:var(--panel);border-radius:var(--rad);padding:20px;margin-top:var(--gap)}
-  .card.dark{background:var(--hero-bg);color:var(--hero-text)}
-  .card.dark .ch{color:var(--lime)}
-  .card.dark p{color:var(--hero-sub)}
-  .card.limeline{background:var(--raise);border:1.5px solid var(--lime)}
-  .ch{font-size:15px;font-weight:800;margin-bottom:12px;display:flex;align-items:center;gap:8px}
-  .clist{list-style:none}
-  .clist li{display:flex;gap:11px;padding:9px 0;font-size:13.5px;font-weight:500;border-bottom:1px solid var(--hairline)}
-  .clist li:last-child{border-bottom:none}
-  .clist li .ck{flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:var(--lime);display:grid;place-items:center;color:var(--on-accent);margin-top:1px}
-  .clist li .ck svg{width:12px;height:12px;stroke-width:3}
-  .clist li b{font-weight:700}
+/* progress hero stats */
+.herostats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:22px}
+.hs .v{font-size:19px;font-weight:800;letter-spacing:-.02em}
+.hs .k{font-size:10px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.04em;margin-top:3px}
+.hs .bar{height:4px;border-radius:4px;background:var(--line);margin-top:9px;overflow:hidden}
+.hs .bar i{display:block;height:100%;background:var(--lime);border-radius:4px}
 
-  .two{display:grid;grid-template-columns:1fr 1fr;gap:var(--gap);margin-top:var(--gap)}
-  .bigtile{background:var(--panel);border-radius:20px;padding:18px;text-align:center}
-  .bigtile .bv{font-size:30px;font-weight:900;letter-spacing:-.02em;line-height:1}
-  .bigtile.lime .bv{color:var(--lime-deep)}
-  .bigtile .bk{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:6px}
-  .bigtile .bi{width:30px;height:30px;border-radius:10px;background:var(--raise);display:grid;place-items:center;margin:0 auto 10px;color:var(--ink)}
+/* big number stat */
+.bignum{font-size:56px;font-weight:800;letter-spacing:-.04em;line-height:.95}
+.bignum small{font-size:18px;font-weight:700;color:var(--muted);letter-spacing:0}
+.bigsub{font-size:13px;font-weight:600;color:var(--muted);margin-top:4px}
 
-  /* split + workout */
-  .splitrow{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;background:var(--hero-bg);border-radius:20px;padding:15px 12px;color:var(--hero-text);margin-top:5px;text-align:center}
-  .splitrow .sd{font-size:11.5px;font-weight:800}
-  .splitrow .sl{font-size:9px;color:var(--hero-muted);font-weight:600;margin-top:2px;letter-spacing:.01em}
-  .splitrow .sd.low{color:var(--lime)}
-  .whead{display:flex;align-items:center;gap:10px;background:var(--hero-bg);border-radius:20px 20px 0 0;padding:16px 18px;color:var(--hero-text)}
-  .whead .tg{font-size:9.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:5px 9px;border-radius:7px;background:var(--lime);color:var(--on-accent)}
-  .whead .wt{font-size:16px;font-weight:800}
-  .whead .wm{margin-left:auto;font-size:11px;color:var(--hero-muted);font-weight:700;display:flex;align-items:center;gap:5px}
-  .wlist{border:1.5px solid var(--grey2);border-top:none;border-radius:0 0 20px 20px;overflow:hidden}
-  .exrow{display:flex;align-items:flex-start;gap:12px;padding:14px 16px 14px 18px;border-top:1px solid var(--grey2);background:var(--raise);position:relative}
-  .exrow:first-child{border-top:none}
-  .exrow::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:3px;background:var(--lime)}
-  .exbody{flex:1;min-width:0}
-  .en{display:flex;gap:9px;align-items:baseline}
-  .enum{font-size:11px;font-weight:800;color:var(--muted2);min-width:15px}
-  .ename{font-size:14.5px;font-weight:700;letter-spacing:-.01em;color:var(--ink);text-decoration:none;display:inline-flex;align-items:center;gap:7px}
-  .ename .txt{border-bottom:1.5px solid color-mix(in srgb,var(--lime) 60%,transparent);padding-bottom:1px}
-  .ename .play{flex:0 0 auto;width:17px;height:17px;border-radius:5px;background:color-mix(in srgb,var(--lime) 24%,transparent);display:grid;place-items:center}
-  .ename .play svg{width:9px;height:9px;fill:var(--ink)}
-  .exmeta{display:flex;flex-wrap:wrap;gap:6px;margin:9px 0 0 24px}
-  .mp{font-size:11px;font-weight:700;padding:4px 9px;border-radius:7px;background:var(--panel);color:var(--ink)}
-  .mp.load{background:color-mix(in srgb,var(--lime) 20%,transparent);color:color-mix(in srgb,var(--ink) 60%,var(--lime-deep))}
-  .mp.rir{background:color-mix(in srgb,#3BA7FF 16%,transparent);color:color-mix(in srgb,var(--ink) 45%,#1E73C8)}
-  .exnote{font-size:12px;color:var(--muted);margin:8px 0 0 24px;font-weight:500;line-height:1.45}
-  .exchk{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:2px solid var(--grey2);background:transparent;cursor:pointer;display:grid;place-items:center;color:transparent;transition:.2s;margin-top:2px}
-  .exchk svg{width:15px;height:15px;stroke-width:3}
-  .exchk:active{transform:scale(.85)}
-  .exrow.done{background:color-mix(in srgb,var(--lime) 8%,var(--raise))}
-  .exrow.done .exchk{background:var(--lime);border-color:var(--lime);color:var(--on-accent)}
-  .exrow.done .ename .txt{color:var(--muted2);text-decoration:line-through;border-bottom-color:transparent}
+/* ===== day strip / pills ===== */
+.daystrip{display:flex;gap:7px;overflow-x:auto;padding:2px 0 6px;-ms-overflow-style:none;scrollbar-width:none}
+.daystrip::-webkit-scrollbar{display:none}
+.dseg{flex:0 0 auto;min-width:62px;text-align:center;border:1.5px solid var(--line);background:var(--card);border-radius:16px;padding:11px 10px;cursor:pointer;transition:.15s}
+.dseg:active{transform:scale(.96)}
+.dseg .dn{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.03em}
+.dseg .dl{font-size:14px;font-weight:800;margin-top:4px}
+.dseg.on{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.dseg.on .dn{color:rgba(255,255,255,.6)}
+.dseg.on .dl{color:var(--lime)}
+.pills{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-ms-overflow-style:none;scrollbar-width:none}
+.pills::-webkit-scrollbar{display:none}
+.pill{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--text);font-family:var(--font);font-size:13px;font-weight:700;padding:9px 16px;border-radius:100px;cursor:pointer;transition:.15s;white-space:nowrap}
+.pill:active{transform:scale(.96)}
+.pill.active{background:var(--lime);border-color:var(--lime);color:var(--on-lime)}
 
-  /* progression example */
-  .pweek{display:flex;align-items:center;gap:10px;padding:11px 0;border-bottom:1px solid var(--hairline)}
-  .pweek:last-child{border-bottom:none}
-  .pweek .wk{flex:0 0 auto;width:44px;font-size:11px;font-weight:800;color:var(--muted)}
-  .pweek .sets{display:flex;gap:6px;flex-wrap:wrap}
-  .setc{font-size:11.5px;font-weight:700;padding:4px 8px;border-radius:7px;background:var(--panel);color:var(--ink);font-variant-numeric:tabular-nums}
-  .setc.top{background:var(--lime);color:var(--on-accent)}
-  .prule{display:flex;align-items:center;gap:10px;background:color-mix(in srgb,var(--lime) 12%,var(--raise));border-radius:14px;padding:12px 14px;margin-top:12px;font-size:13px;font-weight:600}
-  .prule b{font-weight:800}
-  .prule .arr{flex:0 0 auto;width:24px;height:24px;border-radius:7px;background:var(--lime);color:var(--on-accent);display:grid;place-items:center;font-weight:900}
+/* ===== calendar ===== */
+.calendar{background:var(--ink);color:var(--on-ink);border-radius:var(--r);padding:20px;box-shadow:var(--shadow)}
+.calendar .calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.calendar .calh b{font-size:16px;font-weight:800}
+.calendar .calh .pill{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);color:#fff;font-size:12px;padding:6px 12px}
+.caldow,.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.caldow span{text-align:center;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);padding-bottom:6px}
+.cal-d{aspect-ratio:1;display:grid;place-items:center;font-size:12.5px;font-weight:700;border-radius:50%;color:rgba(255,255,255,.85)}
+.cal-empty{visibility:hidden}
+.cal-done{background:var(--lime);color:var(--on-lime);font-weight:800}
+.cal-today{border:2px solid var(--lime);color:#fff;font-weight:800}
+.cal-sched{background:rgba(255,255,255,.07);color:rgba(255,255,255,.5)}
+.callegend{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}
+.callegend span{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6)}
+.callegend i{width:10px;height:10px;border-radius:50%;display:block}
 
-  /* meals */
-  .meal{background:var(--raise);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-top:10px}
-  .meal-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
-  .meal-h .t">Breakfast</div><div class="k">~470 kcal</div></div><ul class="foods"><li>Black coffee</li><li>Protein pancakes <i>· 160g</i></li><li>2 whole eggs</li></ul><div class="m2"><span>P <b>40</b></span><span>C <b>48</b></span><span>F <b>13</b></span></div></div>
-  .meal-h .t{font-size:14.5px;font-weight:800;display:flex;align-items:center;gap:7px}
-  .meal-h .k{font-size:12px;color:var(--muted);font-weight:700}
-  .tagm{font-size:9px;font-weight:800;text-transform:uppercase;background:var(--lime);color:var(--on-accent);padding:2px 6px;border-radius:5px;letter-spacing:.03em}
-  .foods{list-style:none}
-  .foods li{font-size:13px;font-weight:500;padding:3px 0}
-  .foods li i{color:var(--muted);font-style:normal;font-size:12px}
-  .m2{display:flex;gap:12px;margin-top:9px;padding-top:9px;border-top:1px solid var(--hairline)}
-  .m2 span{font-size:12px;color:var(--muted);font-weight:600}
-  .m2 b{color:var(--ink);font-weight:800}
-  .daytot{display:flex;justify-content:space-between;align-items:center;background:var(--hero-bg);color:var(--hero-text);border-radius:18px;padding:14px 16px;font-size:12.5px;font-weight:700;margin-top:10px}
-  .daytot .m{font-weight:800;color:var(--lime)}
-  .shop label{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--hairline);font-size:13.5px;font-weight:500;cursor:pointer}
-  .shop label:last-child{border-bottom:none}
-  .shop input{width:19px;height:19px;accent-color:var(--lime);flex:0 0 auto}
-  .shop b{font-weight:700}
-  ol.steps{list-style:none;counter-reset:s}
-  ol.steps li{position:relative;padding-left:30px;font-size:13px;font-weight:500;margin-bottom:11px;counter-increment:s}
-  ol.steps li:last-child{margin-bottom:0}
-  ol.steps li::before{content:counter(s);position:absolute;left:0;top:-1px;width:21px;height:21px;border-radius:7px;background:var(--lime);color:var(--on-accent);font-size:12px;font-weight:800;display:grid;place-items:center}
-  ol.steps b{font-weight:700}
-  table.swp{width:100%;border-collapse:collapse}
-  table.swp td{padding:9px 0;border-bottom:1px solid var(--hairline);font-size:13px;font-weight:600}
-  table.swp tr:last-child td{border-bottom:none}
-  table.swp td:last-child{text-align:right;color:var(--muted)}
-  .arw{color:var(--muted2);font-weight:700;margin:0 4px}
+/* ===== workout ===== */
+.whead{display:flex;align-items:center;gap:11px;padding:4px 2px 14px}
+.whead .tg{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:6px 11px;border-radius:9px;background:var(--ink);color:var(--lime)}
+.whead .wt{font-size:17px;font-weight:800}
+.whead .wm{margin-left:auto;font-size:11px;color:var(--muted);font-weight:700;display:flex;align-items:center;gap:5px}
+.wlist{display:flex;flex-direction:column;gap:9px}
+.exrow{display:flex;align-items:flex-start;gap:13px;padding:15px 16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);box-shadow:var(--shadow-sm);transition:.2s}
+.exbody{flex:1;min-width:0}
+.en{display:flex;gap:9px;align-items:baseline}
+.enum{font-size:11px;font-weight:800;color:var(--muted2);min-width:16px}
+.ename{font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.ename .play{flex:0 0 auto;width:19px;height:19px;border-radius:6px;background:var(--lime);display:grid;place-items:center}
+.ename .play svg{width:9px;height:9px;fill:var(--on-lime)}
+.exmeta{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0 0 25px}
+.mp{font-size:11px;font-weight:700;padding:4px 9px;border-radius:8px;background:var(--panel);color:var(--text)}
+.mp.load{background:rgba(201,242,77,.22);color:color-mix(in srgb,var(--text) 55%,var(--lime-deep))}
+.mp.rir{background:rgba(17,64,46,.1);color:var(--forest)}
+[data-theme="dark"] .mp.rir{background:rgba(201,242,77,.12);color:var(--lime)}
+.exnote{font-size:12px;color:var(--muted);margin:9px 0 0 25px;font-weight:500;line-height:1.45}
+.exchk{flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:2px solid var(--line);background:transparent;cursor:pointer;display:grid;place-items:center;color:transparent;transition:.2s;margin-top:1px}
+.exchk svg{width:16px;height:16px;stroke-width:3}
+.exchk:active{transform:scale(.85)}
+.exrow.done{border-color:var(--lime);background:color-mix(in srgb,var(--lime) 7%,var(--card))}
+.exrow.done .exchk{background:var(--lime);border-color:var(--lime);color:var(--on-lime)}
+.exrow.done .ename{color:var(--muted2)}
+.exrow.done .ename .play{background:var(--muted2)}
 
-  /* plan */
-  .week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
-  .wd{text-align:center;border:1px solid var(--line);background:var(--raise);border-radius:13px;padding:10px 2px 8px}
-  .wd .dn{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted2);font-weight:700}
-  .wd .dd{font-size:15px;font-weight:800;margin-top:4px}
-  .wd .pip{width:5px;height:5px;border-radius:50%;background:var(--lime);margin:6px auto 0}
-  .wd .pip.r{background:var(--grey2)}
-  .wd .pip.h{background:#FF8A4C}
-  .plist{display:flex;flex-direction:column;gap:10px;margin-top:8px}
-  .pc{display:flex;align-items:center;gap:13px;background:var(--raise);border:1px solid var(--line);border-radius:18px;padding:13px 15px}
-  .pc-d{flex:0 0 auto;width:42px;text-align:center}
-  .pc-d b{font-size:14px;font-weight:800;display:block}
-  .pc-d small{font-size:9px;color:var(--muted2);text-transform:uppercase;font-weight:700}
-  .pc-bar{flex:0 0 auto;width:3px;align-self:stretch;border-radius:3px;background:var(--lime)}
-  .pc-bar.r{background:var(--grey2)}.pc-bar.h{background:#FF8A4C}
-  .pc-i{flex:1}
-  .pc-i .t{font-size:14.5px;font-weight:800}
-  .pc-i .s{font-size:12px;color:var(--muted2);font-weight:500;margin-top:1px}
-  .pc.r .pc-i .t{color:var(--muted)}
-  .spec{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:12px}
-  .spc{background:var(--raise);border:1px solid var(--line);border-radius:15px;padding:13px}
-  .spc .l{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase}
-  .spc .v{font-size:17px;font-weight:800;margin-top:4px}
-  .phase{display:flex;align-items:center;gap:14px;background:var(--raise);border:1px solid var(--line);border-radius:18px;padding:14px 15px;margin-top:10px}
-  .phase .pn{flex:0 0 auto;width:30px;height:30px;border-radius:9px;background:var(--panel);color:var(--ink);font-weight:800;display:grid;place-items:center;font-size:14px}
-  .phase .pm{flex:1}
-  .phase .pm .t{font-size:14.5px;font-weight:800}
-  .phase .pm .s{font-size:12px;color:var(--muted2);font-weight:500;margin-top:1px}
-  .phase .pt{font-size:14px;font-weight:800;color:color-mix(in srgb,var(--ink) 55%,var(--lime-deep))}
+.clist{list-style:none}
+.clist li{display:flex;gap:11px;padding:9px 0;font-size:13.5px;font-weight:500;border-bottom:1px solid var(--hair)}
+.clist li:last-child{border-bottom:none}
+.card.ink .clist li,.card.forest .clist li{border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
+.clist li .ck{flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:var(--lime);display:grid;place-items:center;color:var(--on-lime);margin-top:1px}
+.clist li .ck svg{width:12px;height:12px;stroke-width:3}
+.clist li b{font-weight:700}
 
-  /* focus */
-  .prio{display:flex;gap:15px;background:var(--raise);border:1px solid var(--line);border-radius:20px;padding:18px;margin-top:12px;align-items:flex-start}
-  .prio .pn{flex:0 0 auto;width:38px;height:38px;border-radius:12px;background:var(--lime);color:var(--on-accent);font-size:18px;font-weight:900;display:grid;place-items:center}
-  .prio .pt{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-  .prio h3{font-size:17px;font-weight:800;letter-spacing:-.01em;margin:2px 0 7px}
-  .prio p{font-size:13.5px;font-weight:500;color:var(--ink);line-height:1.55}
-  .prio .nlist{list-style:none;margin-top:4px}
-  .prio .nlist li{font-size:13.5px;font-weight:600;padding:4px 0 4px 18px;position:relative}
-  .prio .nlist li::before{content:"";position:absolute;left:0;top:11px;width:7px;height:2px;border-radius:2px;background:var(--muted2)}
+/* progression */
+.pweek{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--hair)}
+.pweek:last-child{border-bottom:none}
+.pweek .wk{flex:0 0 auto;width:46px;font-size:11px;font-weight:800;color:var(--muted)}
+.pweek .sets{display:flex;gap:6px;flex-wrap:wrap}
+.setc{font-size:11.5px;font-weight:700;padding:4px 8px;border-radius:8px;background:var(--panel);color:var(--text);font-variant-numeric:tabular-nums}
+.setc.top{background:var(--lime);color:var(--on-lime)}
+.prule{display:flex;align-items:center;gap:11px;background:var(--forest);color:var(--on-forest);border-radius:14px;padding:13px 15px;margin-top:13px;font-size:13px;font-weight:600}
+.prule b{font-weight:800;color:#fff}
+.prule .arr{flex:0 0 auto;width:26px;height:26px;border-radius:8px;background:var(--lime);color:var(--on-lime);display:grid;place-items:center;font-weight:900}
 
-  /* tracker */
-  .seg{display:flex;gap:4px;background:var(--panel);border-radius:14px;padding:4px;margin:16px 0 12px}
-  .seg button{flex:1;border:none;background:transparent;color:var(--muted);font-family:var(--font);font-weight:700;font-size:13px;padding:9px;border-radius:10px;cursor:pointer;transition:.15s}
-  .seg button.on{background:var(--raise);color:var(--ink);box-shadow:var(--shadow)}
-  .pane{display:none}.pane.on{display:block;animation:pop .35s ease both}
-  .sumrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}
-  .sum{background:var(--raise);border:1px solid var(--line);border-radius:15px;padding:13px}
-  .sum .l{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase}
-  .sum .v{font-size:18px;font-weight:800;margin-top:4px}
-  .sum .v small{font-size:11px;color:var(--muted);font-weight:600}
-  .sum .v.up{color:#E5564B}.sum .v.good{color:#3FA34D}
-  .chartcard{background:var(--panel);border-radius:var(--rad);padding:14px}
-  .chartcard svg{width:100%;height:auto;display:block}
-  .c-grid{stroke:var(--line);stroke-width:1}
-  .c-avg{stroke:color-mix(in srgb,var(--lime) 60%,transparent);stroke-width:1.4;stroke-dasharray:4 4}
-  .c-line{fill:none;stroke:var(--lime-deep);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round}
-  .c-area{fill:color-mix(in srgb,var(--lime) 13%,transparent);stroke:none}
-  .c-pt{fill:var(--raise);stroke:var(--lime-deep);stroke-width:2.5}
-  .c-pt.last{fill:var(--lime-deep)}
-  .c-v{fill:var(--ink);font-size:10px;font-weight:800;font-family:var(--font)}
-  .c-x{fill:var(--muted2);font-size:9px;font-weight:700;font-family:var(--font)}
-  .empty{padding:28px 10px;text-align:center;color:var(--muted2);font-size:13px;font-weight:600}
-  .mchips{display:flex;gap:7px;overflow-x:auto;margin-bottom:10px;-ms-overflow-style:none;scrollbar-width:none}
-  .mchips::-webkit-scrollbar{display:none}
-  .verdict{border-radius:18px;padding:15px 16px;border:1px solid var(--line);background:var(--raise)}
-  .verdict.good{background:color-mix(in srgb,#3FA34D 9%,var(--raise));border-color:color-mix(in srgb,#3FA34D 28%,var(--line))}
-  .verdict.warn{background:color-mix(in srgb,#E5954B 11%,var(--raise));border-color:color-mix(in srgb,#E5954B 30%,var(--line))}
-  .verdict .vh{display:flex;align-items:center;gap:8px;font-size:14px;font-weight:800}
-  .verdict .vico{width:21px;height:21px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-size:12px;font-weight:800}
-  .verdict.good .vico{background:#3FA34D;color:#fff}.verdict.warn .vico{background:#E5954B;color:#fff}
-  .verdict .vd{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:6px;line-height:1.5}
-  .dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:10px}
-  .dcl{background:var(--raise);border:1px solid var(--line);border-radius:14px;padding:12px}
-  .dcl .l{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase}
-  .dcl .v{font-size:17px;font-weight:800;margin-top:4px}
-  .dcl .v.up{color:#E5564B}.dcl .v.good{color:#3FA34D}
-  .hist{display:flex;align-items:center;gap:12px;background:var(--raise);border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin-top:8px}
-  .hist .hd b{font-size:13px;font-weight:800}.hist .hd small{font-size:11px;color:var(--muted2);font-weight:600;display:block}
-  .hist .hm{flex:1;display:flex;gap:11px;flex-wrap:wrap;justify-content:flex-end}
-  .hist .hm span{font-size:11.5px;color:var(--muted);font-weight:600}
-  .hist .hm b{color:var(--ink);font-weight:800}
-  .hist .del{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:none;background:var(--panel);color:var(--muted);font-size:16px;cursor:pointer}
-  .addbtn{width:100%;border:1.5px dashed var(--grey2);background:var(--raise);color:var(--ink);font-family:var(--font);font-weight:700;font-size:13.5px;padding:13px;border-radius:18px;cursor:pointer;margin-top:12px;transition:.15s}
-  .addbtn:active{transform:scale(.99)}
-  .form{display:none;background:var(--raise);border:1px solid var(--line);border-radius:18px;padding:16px;margin-top:10px}
-  .form.open{display:block;animation:pop .3s ease both}
-  .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
-  .field label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;display:block;margin-bottom:5px}
-  .field input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;font-weight:600;padding:10px 12px;border-radius:11px}
-  .calc{font-size:12px;color:var(--muted);font-weight:500;margin:2px 0 12px;line-height:1.5}
-  .formbtns"><button class="ghost" id="dCancel">Cancel</button><button class="save" id="dSave">Save</button></div>
-  .reset{background:none;border:none;color:var(--muted2);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;padding:10px 0;text-decoration:underline;display:block;margin:2px auto 0}
-  details.fx{background:var(--panel);border-radius:16px;margin-top:10px;overflow:hidden}
-  details.fx summary{padding:14px 16px;font-size:13.5px;font-weight:800;cursor:pointer;list-style:none}
-  details.fx summary::-webkit-details-marker{display:none}
-  details.fx summary::after{content:"+";float:right;color:var(--muted);font-weight:700}
-  details.fx[open] summary::after{content:"\2212"}
-  details.fx .fb{padding:0 16px 16px;font-size:12.5px;color:var(--muted);font-weight:500;line-height:1.55}
-  details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 10px;font-size:12px;font-weight:700;color:var(--ink);margin:6px 0;font-variant-numeric:tabular-nums}
-  .eq b{color:color-mix(in srgb,var(--ink) 50%,var(--lime-deep))}
+/* meals */
+.meal{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:15px 16px;box-shadow:var(--shadow-sm)}
+.meal+.meal{margin-top:10px}
+.meal-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.meal-h .t{font-size:14.5px;font-weight:800;display:flex;align-items:center;gap:7px}
+.meal-h .k{font-size:12px;color:var(--muted);font-weight:700}
+.foods{list-style:none}
+.foods li{font-size:13px;font-weight:500;padding:3px 0}
+.foods li i{color:var(--muted);font-style:normal;font-size:12px}
+.m2{display:flex;gap:14px;margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)}
+.m2 span{font-size:12px;color:var(--muted);font-weight:600}
+.m2 b{color:var(--text);font-weight:800}
+.daytot{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:var(--on-ink);border-radius:var(--r-sm);padding:15px 17px;font-size:12.5px;font-weight:700;margin-top:11px}
+.daytot .m{font-weight:800;color:var(--lime)}
+.shop label{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--hair);font-size:13.5px;font-weight:500;cursor:pointer}
+.shop label:last-child{border-bottom:none}
+.shop input{width:19px;height:19px;accent-color:var(--lime);flex:0 0 auto}
+.shop b{font-weight:700}
+ol.steps{list-style:none;counter-reset:s}
+ol.steps li{position:relative;padding-left:31px;font-size:13px;font-weight:500;margin-bottom:11px;counter-increment:s}
+ol.steps li:last-child{margin-bottom:0}
+ol.steps li::before{content:counter(s);position:absolute;left:0;top:-1px;width:22px;height:22px;border-radius:8px;background:var(--lime);color:var(--on-lime);font-size:12px;font-weight:800;display:grid;place-items:center}
+ol.steps b{font-weight:700}
+table.swp{width:100%;border-collapse:collapse}
+table.swp td{padding:9px 0;border-bottom:1px solid var(--hair);font-size:13px;font-weight:600}
+table.swp tr:last-child td{border-bottom:none}
+table.swp td:last-child{text-align:right;color:var(--muted)}
+.arw{color:var(--muted2);font-weight:700;margin:0 4px}
 
-  /* settings */
-  .sgroup{margin-top:22px}
-  .sgroup h3{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:10px}
-  .seg2{display:flex;gap:6px}
-  .seg2 button{flex:1;border:1.5px solid var(--line);background:var(--raise);color:var(--muted);font-family:var(--font);font-weight:700;font-size:13px;padding:12px;border-radius:13px;cursor:pointer}
-  .seg2 button.on{background:var(--lime);color:var(--on-accent);border-color:var(--lime)}
-  .swatches{display:flex;gap:12px}
-  .sw{width:42px;height:42px;border-radius:13px;cursor:pointer;border:3px solid transparent;transition:.15s}
-  .sw.on{border-color:var(--ink);transform:scale(1.06)}
+/* plan */
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.wd{text-align:center;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:11px 2px 9px;box-shadow:var(--shadow-sm)}
+.wd .dn{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted2);font-weight:700}
+.wd .dd{font-size:15px;font-weight:800;margin-top:4px}
+.wd .pip{width:6px;height:6px;border-radius:50%;background:var(--lime);margin:7px auto 0}
+.wd .pip.r{background:var(--line)}.wd .pip.h{background:var(--forest)}
+.plist{display:flex;flex-direction:column;gap:10px}
+.pc{display:flex;align-items:center;gap:13px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:14px 16px;box-shadow:var(--shadow-sm)}
+.pc-d{flex:0 0 auto;width:44px;text-align:center}
+.pc-d b{font-size:14px;font-weight:800;display:block}
+.pc-d small{font-size:9px;color:var(--muted2);text-transform:uppercase;font-weight:700}
+.pc-bar{flex:0 0 auto;width:4px;align-self:stretch;border-radius:4px;background:var(--lime)}
+.pc-bar.r{background:var(--line)}.pc-bar.h{background:var(--forest)}
+.pc-i{flex:1}
+.pc-i .t{font-size:14.5px;font-weight:800}
+.pc-i .s{font-size:12px;color:var(--muted2);font-weight:500;margin-top:1px}
+.pc.r .pc-i .t{color:var(--muted)}
+.phase{display:flex;align-items:center;gap:14px;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:15px 16px;box-shadow:var(--shadow-sm)}
+.phase+.phase{margin-top:10px}
+.phase .pn{flex:0 0 auto;width:32px;height:32px;border-radius:10px;background:var(--panel);color:var(--text);font-weight:800;display:grid;place-items:center;font-size:14px}
+.phase .pm{flex:1}.phase .pm .t{font-size:14.5px;font-weight:800}.phase .pm .s{font-size:12px;color:var(--muted2);font-weight:500;margin-top:1px}
+.phase .pt{font-size:14px;font-weight:800;color:var(--forest)}
+[data-theme="dark"] .phase .pt{color:var(--lime)}
 
-  .foot{margin-top:var(--sec);padding:18px 2px 0;border-top:1px solid var(--line)}
-  .foot p{font-size:11.5px;color:var(--muted);font-weight:500;margin-bottom:7px}
-  .foot b{color:var(--ink);font-weight:700}
+/* focus */
+.prio{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--shadow-sm);align-items:flex-start}
+.prio+.prio{margin-top:var(--gap)}
+.prio .pn{flex:0 0 auto;width:40px;height:40px;border-radius:13px;background:var(--lime);color:var(--on-lime);font-size:18px;font-weight:900;display:grid;place-items:center}
+.prio .pt{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.prio h3{font-size:18px;font-weight:800;letter-spacing:-.01em;margin:3px 0 8px}
+.prio p{font-size:13.5px;font-weight:500;color:var(--text);line-height:1.55}
+.prio .nlist{list-style:none}
+.prio .nlist li{font-size:13.5px;font-weight:600;padding:4px 0 4px 18px;position:relative}
+.prio .nlist li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:2px;border-radius:2px;background:var(--lime)}
 
-  /* tab bar */
-  .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:40;background:var(--nav);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--line)}
-  .tabinner{max-width:540px;margin:0 auto;display:flex;justify-content:space-around;padding:9px 4px calc(9px + env(safe-area-inset-bottom))}
-  .tab{display:flex;flex-direction:column;align-items:center;gap:3px;color:var(--muted);background:none;border:none;font-family:var(--font);font-size:9.5px;font-weight:700;padding:4px 7px;border-radius:14px;cursor:pointer;transition:.15s}
-  .tab svg{width:21px;height:21px}
-  .tab.active{color:var(--ink)}
-  .tab.active svg{stroke:var(--lime)}
-  .tab .tabdot{width:5px;height:5px;border-radius:50%;background:transparent}
-  .tab.active .tabdot{background:var(--lime)}
+/* ===== tracker ===== */
+.seg{display:flex;gap:4px;background:var(--panel);border-radius:15px;padding:4px;margin:14px 0}
+.seg button{flex:1;border:none;background:transparent;color:var(--muted);font-family:var(--font);font-weight:700;font-size:13px;padding:10px;border-radius:11px;cursor:pointer;transition:.15s}
+.seg button.on{background:var(--card);color:var(--text);box-shadow:var(--shadow-sm)}
+.pane{display:none}.pane.on{display:block;animation:rise .35s ease both}
+.chartcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow-sm);margin-bottom:var(--gap)}
+.chartcard svg{width:100%;height:auto;display:block}
+.c-grid{stroke:var(--line);stroke-width:1}
+.c-avg{stroke:rgba(201,242,77,.7);stroke-width:1.5;stroke-dasharray:4 4}
+.c-line{fill:none;stroke:var(--lime-deep);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.c-area{fill:rgba(201,242,77,.14);stroke:none}
+.c-pt{fill:var(--card);stroke:var(--lime-deep);stroke-width:3}
+.c-pt.last{fill:var(--lime-deep)}
+.c-v{fill:var(--text);font-size:10px;font-weight:800;font-family:var(--font)}
+.c-x{fill:var(--muted2);font-size:9px;font-weight:700;font-family:var(--font)}
+.empty{padding:30px 10px;text-align:center;color:var(--muted2);font-size:13px;font-weight:600}
+.mchips{display:flex;gap:7px;overflow-x:auto;margin-bottom:var(--gap);-ms-overflow-style:none;scrollbar-width:none}
+.mchips::-webkit-scrollbar{display:none}
+.verdict{border-radius:var(--r-sm);padding:16px;border:1px solid var(--line);background:var(--card);box-shadow:var(--shadow-sm)}
+.verdict.good{background:var(--forest);border-color:transparent;color:var(--on-forest)}
+.verdict.warn{background:var(--ink);border-color:transparent;color:var(--on-ink)}
+.verdict .vh{display:flex;align-items:center;gap:9px;font-size:14px;font-weight:800}
+.verdict.good .vh,.verdict.warn .vh{color:#fff}
+.verdict .vico{width:22px;height:22px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-size:12px;font-weight:800}
+.verdict.good .vico{background:var(--lime);color:var(--on-lime)}.verdict.warn .vico{background:var(--lime);color:var(--on-lime)}
+.verdict .vd{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:7px;line-height:1.5}
+.verdict.good .vd,.verdict.warn .vd{color:rgba(255,255,255,.72)}
+.dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:var(--gap)}
+.dcl{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;box-shadow:var(--shadow-sm)}
+.dcl .l{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase}
+.dcl .v{font-size:18px;font-weight:800;margin-top:4px}
+.dcl .v.up{color:#D6604D}.dcl .v.good{color:var(--forest)}
+[data-theme="dark"] .dcl .v.good{color:var(--lime)}
+.hist{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-top:8px;box-shadow:var(--shadow-sm)}
+.hist .hd b{font-size:13px;font-weight:800}.hist .hd small{font-size:11px;color:var(--muted2);font-weight:600;display:block}
+.hist .hm{flex:1;display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
+.hist .hm span{font-size:11.5px;color:var(--muted);font-weight:600}
+.hist .hm b{color:var(--text);font-weight:800}
+.hist .del{flex:0 0 auto;width:27px;height:27px;border-radius:50%;border:none;background:var(--panel);color:var(--muted);font-size:16px;cursor:pointer}
+.addbtn{width:100%;border:1.5px dashed var(--line);background:var(--card);color:var(--text);font-family:var(--font);font-weight:700;font-size:13.5px;padding:14px;border-radius:var(--r-sm);cursor:pointer;margin-top:var(--gap);transition:.15s}
+.addbtn:active{transform:scale(.99)}
+.form{display:none;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;margin-top:10px;box-shadow:var(--shadow-sm)}
+.form.open{display:block;animation:rise .3s ease both}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.field label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;display:block;margin-bottom:5px}
+.field input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;font-weight:600;padding:11px 12px;border-radius:12px}
+.calc{font-size:12px;color:var(--muted);font-weight:500;margin:2px 0 12px;line-height:1.5}
+.formbtns{display:flex;gap:10px}
+.ghost{flex:1;border:1px solid var(--line);background:transparent;color:var(--muted);font-family:var(--font);font-weight:700;padding:12px;border-radius:12px;cursor:pointer}
+.save{flex:2;border:none;background:var(--lime);color:var(--on-lime);font-family:var(--font);font-weight:800;padding:12px;border-radius:12px;cursor:pointer}
+.reset{background:none;border:none;color:var(--muted2);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;padding:10px 0;text-decoration:underline;display:block;margin:2px auto 0}
+details.fx{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);margin-top:10px;overflow:hidden;box-shadow:var(--shadow-sm)}
+details.fx summary{padding:15px 16px;font-size:13.5px;font-weight:800;cursor:pointer;list-style:none}
+details.fx summary::-webkit-details-marker{display:none}
+details.fx summary::after{content:"+";float:right;color:var(--muted);font-weight:700}
+details.fx[open] summary::after{content:"\2212"}
+details.fx .fb{padding:0 16px 16px;font-size:12.5px;color:var(--muted);font-weight:500;line-height:1.55}
+details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:12px;font-weight:700;color:var(--text);margin:6px 0;font-variant-numeric:tabular-nums}
+.eq b{color:var(--forest)}
+[data-theme="dark"] .eq b{color:var(--lime)}
+
+/* settings */
+.sgroup{margin-top:24px}
+.sgroup h3{font-size:13px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:11px}
+.seg2{display:flex;gap:7px}
+.seg2 button{flex:1;border:1.5px solid var(--line);background:var(--card);color:var(--muted);font-family:var(--font);font-weight:700;font-size:13px;padding:13px;border-radius:14px;cursor:pointer;box-shadow:var(--shadow-sm)}
+.seg2 button.on{background:var(--lime);color:var(--on-lime);border-color:var(--lime)}
+.swatches{display:flex;gap:12px}
+.sw{width:44px;height:44px;border-radius:14px;cursor:pointer;border:3px solid transparent;transition:.15s;box-shadow:var(--shadow-sm)}
+.sw.on{border-color:var(--text);transform:scale(1.06)}
+.foot{margin-top:var(--sec);padding:18px 2px 0;border-top:1px solid var(--line)}
+.foot p{font-size:11.5px;color:var(--muted);font-weight:500;margin-bottom:7px}
+.foot b{color:var(--text);font-weight:700}
+
+/* ===== mobile floating nav ===== */
+.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;justify-content:center;padding:0 16px calc(14px + env(safe-area-inset-bottom));pointer-events:none}
+.tabinner{pointer-events:auto;display:flex;gap:2px;background:var(--ink);border-radius:24px;padding:7px;box-shadow:0 8px 30px rgba(0,0,0,.28);max-width:100%}
+.tab{display:grid;place-items:center;width:48px;height:48px;border-radius:18px;color:rgba(255,255,255,.55);background:transparent;border:none;cursor:pointer;transition:.18s}
+.tab svg{width:21px;height:21px}
+.tab.active{background:var(--lime);color:var(--on-lime)}
+
+/* ===== desktop ===== */
+@media(min-width:980px){
+  .sidebar{display:flex;flex-direction:column;align-items:center;gap:6px;position:fixed;top:0;left:0;bottom:0;width:88px;padding:24px 0;background:var(--card);border-right:1px solid var(--line);z-index:50}
+  .sidebar .logo{width:46px;height:46px;margin-bottom:18px}
+  .sb-item{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:.18s;position:relative}
+  .sb-item svg{width:22px;height:22px}
+  .sb-item:hover{background:var(--panel);color:var(--text)}
+  .sb-item.active{background:var(--ink);color:var(--lime)}
+  .sb-spacer{flex:1}
+  .sb-avatar{width:44px;height:44px;border-radius:50%;background:var(--lime);color:var(--on-lime);display:grid;place-items:center;font-weight:800;font-size:16px;margin-top:8px}
+  .tabbar{display:none}
+  .main{margin-left:88px;max-width:none;padding:0 40px 56px;width:auto}
+  .topbar{padding:30px 0 10px;background:transparent;position:static}
+  .topbar .tttext b{font-size:26px;font-weight:800;letter-spacing:-.02em;display:block;line-height:1}
+  .topbar .tttext span{font-size:13px;color:var(--muted);font-weight:600}
+  .topbar .brand .logo,.topbar .brand .bt{display:none}
+  .view{max-width:1180px}
+  .shead h2{font-size:26px}
+
+  /* dashboard grid */
+  .dash{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:start}
+  .dash .hero{grid-column:1/3}
+  .dash .calendar{grid-column:3/4;grid-row:1/3;align-self:stretch}
+  .dash .d-steps{grid-column:1/2}
+  .dash .d-weight{grid-column:2/3}
+  .hero .hday{font-size:38px}
+  .hero .hsub{max-width:70%}
+
+  /* two/three column content on desktop */
+  .cols2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
+  .cols2>*{margin-top:0!important}
+  .span2{grid-column:1/3}
+  .wlist{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+  .tilegrid.g3{gap:16px}
+  .meal{margin-top:0}
+  .mealwrap{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .prio{padding:24px}
+}
+@media(min-width:1280px){
+  .dash .hero .hday{font-size:42px}
+}
 </style>
 </head>
 <body>
+<div class="app">
+
+  <!-- ===== desktop sidebar ===== -->
+  <aside class="sidebar">
+    <div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div>
+    <button class="sb-item active" data-v="train" title="Train"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg></button>
+    <button class="sb-item" data-v="food" title="Food"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg></button>
+    <button class="sb-item" data-v="plan" title="Plan"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cal"/></svg></button>
+    <button class="sb-item" data-v="progress" title="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg></button>
+    <button class="sb-item" data-v="focus" title="Focus"><svg viewBox="0 0 24 24" class="ic"><use href="#i-target"/></svg></button>
+    <div class="sb-spacer"></div>
+    <button class="sb-item" id="tglD" title="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg></button>
+    <button class="sb-item" data-v="you" title="You"><svg viewBox="0 0 24 24" class="ic"><use href="#i-user"/></svg></button>
+    <div class="sb-avatar">K</div>
+  </aside>
+
+  <main class="main">
+
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div>
+      <div class="bt"><b>THE CUT</b><span>Kay · 12% target</span></div>
+    </div>
+    <div class="tttext"><b>Hi, Kay</b><span>Let's get the work in today</span></div>
+    <div class="ttools">
+      <div class="iconbtn" id="tgl" aria-label="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg></div>
+    </div>
+  </div>
+
+  <!-- ===================== TRAIN / DASHBOARD ===================== -->
+  <section class="view on" id="v-train">
+    <div class="dash">
+      <div class="hero">
+        <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
+        <div class="htop">
+          <div>
+            <div class="hlab">Today's session</div>
+            <div class="hday" id="hDay">Lower A</div>
+            <div class="hsub" id="hSub">Quad lead · tap a move for its form video</div>
+          </div>
+          <div class="ring">
+            <svg width="78" height="78" viewBox="0 0 78 78">
+              <circle cx="39" cy="39" r="33" stroke="var(--line)" stroke-width="7" fill="none"/>
+              <circle class="fil" id="ringFil" cx="39" cy="39" r="33" stroke="var(--lime-deep)" stroke-width="7" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="rt"><b id="ringNum">0/7</b><span>Done</span></div>
+          </div>
+        </div>
+        <div class="hchips">
+          <div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-dumbbell"/></svg><b id="cMoves">7</b>&nbsp;moves</div>
+          <div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-bars"/></svg><b id="cSets">20</b>&nbsp;sets</div>
+          <div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clock"/></svg>&nbsp;<b id="cTime">~76</b>&nbsp;min</div>
+        </div>
+      </div>
+
+      <div class="calendar">
+        <div class="calh"><b id="calMonth">June 2026</b><span class="pill">Training days</span></div>
+        <div class="caldow"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+        <div class="calgrid" id="calGrid"></div>
+        <div class="callegend"><span><i style="background:var(--lime)"></i>Done</span><span><i style="border:2px solid var(--lime)"></i>Today</span><span><i style="background:rgba(255,255,255,.18)"></i>Scheduled</span></div>
+      </div>
+
+      <div class="tile forest d-steps">
+        <div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-walk"/></svg>Cardio this week</div>
+        <div class="tv">3&#215;<small> walks</small></div>
+        <div class="tk">15-min incline · Mon, Thu, Sat · 10&#8211;15%</div>
+      </div>
+
+      <div class="tile d-weight">
+        <div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-trend"/></svg>Weight goal</div>
+        <div class="tv" id="dWeightV">92.6<small> &#8594; 85.0 kg</small></div>
+        <div class="hs" style="margin-top:12px"><div class="bar"><i id="dWeightBar" style="width:8%"></i></div></div>
+        <div class="tk" id="dWeightPct" style="margin-top:8px">on the way to 12%</div>
+      </div>
+    </div>
+
+    <div class="shead"><h2>The workout</h2><span class="tagn">tick as you go</span></div>
+    <div class="pills" id="dayTabs"></div>
+    <div style="margin-top:14px">
+      <div class="whead" id="wHead"></div>
+      <div class="wlist" id="workoutBox"></div>
+    </div>
+
+    <div class="card outline" style="margin-top:var(--gap)">
+      <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-pulse"/></svg>Abs · after lifting</div>
+      <p>Abs close the session, they don't open it. <b>Hanging Leg Raise</b> ends Monday, <b>Cable Crunch</b> ends Thursday. Want more, add a set to any day. They show up when the fat drops, not from extra crunches.</p>
+    </div>
+
+    <div class="shead"><h2>Warm up first</h2><span class="tagn">before the heavy work</span></div>
+    <div class="cols2">
+      <div class="card">
+        <ul class="clist">
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>5 min easy</b> on the bike or treadmill to raise the temperature.</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Ramp the first big lift:</b> empty bar, ~50%, ~70%, ~85% for a few reps each. Never hit a top set cold.</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Lower:</b> leg swings, bodyweight squats, glute bridges, hip 90/90, ankle rocks.</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Upper:</b> band pull-aparts, shoulder dislocates, scapular push-ups, a light first set.</li>
+        </ul>
+      </div>
+      <div>
+        <details class="fx" open><summary>Cramps · your leg-press one</summary><div class="fb">A lying leg press cramping your abs is the hip flexor and lower abs seizing fully shortened: knees to chest, pelvis tucked, braced hard. A breath-hold and a deficit tip it over.<div class="eq">Knees out of your chest, pelvis <b>down</b></div>Breathe out as you press. Salt before training, 300&#8211;400mg magnesium at night, keep carbs on lifting days. If it cramps, straighten the leg, breathe out, ease off.</div></details>
+        <details class="fx"><summary>Bracing &amp; breathing</summary><div class="fb">Breathe into the belly and brace like you're taking a punch. Heavy low reps: hold at the top, exhale through the sticking point. Higher reps: breathe normally, exhale on the push. A full breath-hold through long sets is what makes you light-headed.</div></details>
+        <details class="fx"><summary>Control &amp; range</summary><div class="fb">Most pulls are form breaking under fatigue or too much weight, so keep 1&#8211;2 in the tank on compounds. Lower under control, the fast drop is where strains happen. Full but pain-free range. Sharp pain is a stop signal, burn is not.</div></details>
+        <details class="fx"><summary>Straps &amp; gear</summary><div class="fb"><b>Straps</b> when grip gives out first: RDLs, rows, pulldowns, shrugs. <b>Belt</b> for top sets of squat, hip thrust, overhead press. <b>Wrist wraps</b> for heavy press. <b>Knee sleeves</b> for warmth. Flat stable shoes on lower days.</div></details>
+      </div>
+    </div>
+
+    <div class="shead"><h2>Progression</h2><span class="tagn">where muscle is built</span></div>
+    <div class="card">
+      <p style="margin-bottom:14px">Add reps before weight. Take one set up a rep each week until every set sits at the top of the range, then add 2.5kg and start again. Bench, top of a 4&#215;5&#8211;6:</p>
+      <div class="pweek"><div class="wk">Week 1</div><div class="sets"><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
+      <div class="pweek"><div class="wk">Week 2</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
+      <div class="pweek"><div class="wk">Week 3</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
+      <div class="pweek"><div class="wk">Week 4</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span></div></div>
+      <div class="prule"><span class="arr">&#43;</span><div>All four at the top, so next week is <b>97.5kg &#215; 5</b> and it repeats. Same rule on your 3-set lifts.</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== FOOD ===================== -->
+  <section class="view" id="v-food">
+    <div class="shead"><h2>Nutrition</h2><span class="tagn">every day</span></div>
+    <div class="cols2">
+      <div class="card ink">
+        <div class="ti" style="color:rgba(255,255,255,.6);display:flex;align-items:center;gap:8px;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em"><svg viewBox="0 0 24 24" class="ic" style="width:15px;height:15px;color:var(--lime)"><use href="#i-flame"/></svg>Daily target</div>
+        <div class="bignum" style="margin-top:12px">2,365<small> kcal</small></div>
+        <div class="bigsub" style="color:rgba(255,255,255,.55)">Protein floor, hold it daily</div>
+        <div class="tilegrid g3" style="margin-top:18px">
+          <div class="tile lime"><div class="ti">Protein</div><div class="tv">240<small>g</small></div></div>
+          <div class="tile" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:#fff"><div class="ti" style="color:rgba(255,255,255,.6)">Carbs</div><div class="tv">250<small style="color:rgba(255,255,255,.5)">g</small></div></div>
+          <div class="tile" style="background:rgba(255,255,255,.06);border-color:rgba(255,255,255,.1);color:#fff"><div class="ti" style="color:rgba(255,255,255,.6)">Fat</div><div class="tv">45<small style="color:rgba(255,255,255,.5)">g</small></div></div>
+        </div>
+      </div>
+      <div class="card outline">
+        <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-target"/></svg>What this pace means</div>
+        <p>2,365 a day is about 535 under maintenance, roughly <b>0.5kg a week</b>. Sustainable, and 240g protein holds your muscle. The trade-off: a true 12% lands closer to mid-September than end of August. Want August back? Keep 250g carbs on training days but drop Wednesday and Sunday carbs, the weekly average falls. Your call.</p>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:var(--gap)"><ul class="clist">
+      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>240g protein is the one number you never miss.</b> Train or rest, it holds your 71kg of muscle through the deficit.</li>
+      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>45g fat is the floor</b>, not a target to cut under. Keep it there for hormones.</li>
+      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Cluster carbs around the five sessions and the Saturday meal out. Rest days come in lighter on their own.</li>
+    </ul></div>
+
+    <div class="shead"><h2>The plate</h2><span class="tagn">protein first</span></div>
+    <div class="mealwrap">
+      <div class="meal"><div class="meal-h"><div class="t">Breakfast</div><div class="k">~470</div></div><ul class="foods"><li>Black coffee</li><li>Protein pancakes <i>· 160g</i></li><li>2 whole eggs</li></ul><div class="m2"><span>P <b>40</b></span><span>C <b>48</b></span><span>F <b>13</b></span></div></div>
+      <div class="meal"><div class="meal-h"><div class="t">Mid-morning</div><div class="k">~250</div></div><ul class="foods"><li>Banana</li><li>Whey <i>· 1 scoop</i></li></ul><div class="m2"><span>P <b>30</b></span><span>C <b>30</b></span><span>F <b>2</b></span></div></div>
+      <div class="meal"><div class="meal-h"><div class="t">Lunch</div><div class="k">~570</div></div><ul class="foods"><li>Chicken breast <i>· 250g</i></li><li>Rice <i>· 80g dry</i></li><li>Salad + veg</li></ul><div class="m2"><span>P <b>62</b></span><span>C <b>70</b></span><span>F <b>9</b></span></div></div>
+      <div class="meal"><div class="meal-h"><div class="t">Pre-gym <span class="chip lime">train</span></div><div class="k">~290</div></div><ul class="foods"><li>Oats <i>· 50g</i></li><li>Whey <i>· 1 scoop</i></li></ul><div class="m2"><span>P <b>28</b></span><span>C <b>42</b></span><span>F <b>4</b></span></div></div>
+      <div class="meal"><div class="meal-h"><div class="t">Dinner / post-gym</div><div class="k">~690</div></div><ul class="foods"><li>5% beef mince <i>· 250g</i></li><li>0% Greek yogurt <i>· 200g</i></li><li>Potato <i>· 150g</i> + veg</li></ul><div class="m2"><span>P <b>80</b></span><span>C <b>60</b></span><span>F <b>17</b></span></div></div>
+    </div>
+    <div class="daytot"><span>Day total</span><span class="m">~2,365 · 240P · 250C · 45F</span></div>
+    <p style="font-size:12px;color:var(--muted);font-weight:500;margin-top:11px;line-height:1.5"><b style="color:var(--text)">Rest days (Wed, Sun):</b> drop the pre-gym oats and lunch rice, hold both protein meals. The day lands lighter without a session to fuel.</p>
+
+    <div class="card forest" style="margin-top:var(--gap)">
+      <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime)"><use href="#i-bolt"/></svg>Saturday: arms, then your night</div>
+      <p>Saturday trains delts and arms, walks, then it's your social slot. Hold the 240g protein and spend the day's carbs on the meal out rather than across the day. The shawarma goes here, on purpose. Train, walk, then go enjoy it.</p>
+    </div>
+
+    <div class="cols2" style="margin-top:var(--sec)">
+      <div>
+        <div class="shead" style="margin-top:0"><h2 class="sm">Weekly shop</h2><span class="tagn">€70&#8211;80</span></div>
+        <div class="card shop">
+          <label><input type="checkbox"><span><b>5% beef mince</b> · ~2kg</span></label>
+          <label><input type="checkbox"><span><b>Chicken breast</b> · ~1.5kg</span></label>
+          <label><input type="checkbox"><span><b>Eggs</b> · 15</span></label>
+          <label><input type="checkbox"><span><b>Protein pancakes</b> · 160g × 5</span></label>
+          <label><input type="checkbox"><span><b>0% Greek yogurt</b> · ~1.2kg</span></label>
+          <label><input type="checkbox"><span><b>Bananas</b> · 7</span></label>
+          <label><input type="checkbox"><span><b>Whey</b> · ~400g</span></label>
+          <label><input type="checkbox"><span><b>Rice, oats, potatoes</b></span></label>
+          <label><input type="checkbox"><span><b>Salad + veg</b> · ~1.5kg</span></label>
+        </div>
+      </div>
+      <div>
+        <div class="shead" style="margin-top:0"><h2 class="sm">Sunday prep</h2><span class="tagn">75&#8211;90 min</span></div>
+        <div class="card"><ol class="steps">
+          <li>Brown the mince in batches, season. Bake or pan the chicken.</li>
+          <li>Portion <b>lunch and dinner tubs</b>, 3 days fridge, rest freezer.</li>
+          <li>Cook rice and potatoes, portion them.</li>
+          <li>Make the <b>yogurt pots</b>, wash and bag the salad.</li>
+          <li>Eggs and pancakes cook fresh each morning.</li>
+        </ol></div>
+        <div class="card" style="margin-top:var(--gap)"><table class="swp"><tbody>
+          <tr><td>Beef mince <span class="arw">&#8594;</span></td><td>Chicken, gram for gram</td></tr>
+          <tr><td>Chicken <span class="arw">&#8594;</span></td><td>Turkey, fish, prawns</td></tr>
+          <tr><td>Rice <span class="arw">&#8594;</span></td><td>Potato, pasta, oats</td></tr>
+          <tr><td>2 eggs <span class="arw">&#8594;</span></td><td>1 scoop whey + nuts</td></tr>
+        </tbody></table></div>
+      </div>
+    </div>
+
+    <div class="cols2" style="margin-top:var(--gap)">
+      <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-drop"/></svg>Hydration</div>
+        <ul class="clist">
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>4.0 L</b>&nbsp;train &amp; Sat</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>3.5 L</b>&nbsp;rest days</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Salt + electrolytes pre-train</li>
+        </ul></div>
+      <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-plate"/></svg>Supps</div>
+        <ul class="clist">
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Whey &amp; Creatine 5g</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Magnesium</b> 300&#8211;400mg PM, cramps</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Multivit &amp; Vit D, AM</li>
+        </ul></div>
+    </div>
+  </section>
+
+  <!-- ===================== PLAN ===================== -->
+  <section class="view" id="v-plan">
+    <div class="shead"><h2>This week</h2><span class="tagn">5 train · 2 rest</span></div>
+    <div class="week">
+      <div class="wd"><div class="dn">Mon</div><div class="dd">1</div><div class="pip"></div></div>
+      <div class="wd"><div class="dn">Tue</div><div class="dd">2</div><div class="pip"></div></div>
+      <div class="wd"><div class="dn">Wed</div><div class="dd">3</div><div class="pip r"></div></div>
+      <div class="wd"><div class="dn">Thu</div><div class="dd">4</div><div class="pip"></div></div>
+      <div class="wd"><div class="dn">Fri</div><div class="dd">5</div><div class="pip"></div></div>
+      <div class="wd"><div class="dn">Sat</div><div class="dd">6</div><div class="pip h"></div></div>
+      <div class="wd"><div class="dn">Sun</div><div class="dd">7</div><div class="pip r"></div></div>
+    </div>
+
+    <div class="cols2" style="margin-top:var(--sec)">
+      <div>
+        <div class="shead" style="margin-top:0"><h2 class="sm">Split</h2></div>
+        <div class="plist">
+          <div class="pc"><div class="pc-d"><b>Mon</b><small>D1</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower A</div><div class="s">Quad lead · then a walk</div></div></div>
+          <div class="pc"><div class="pc-d"><b>Tue</b><small>D2</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper A</div><div class="s">Push &amp; delts</div></div></div>
+          <div class="pc r"><div class="pc-d"><b>Wed</b><small>&#8212;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t">Rest</div><div class="s">Recover · lower carbs</div></div></div>
+          <div class="pc"><div class="pc-d"><b>Thu</b><small>D3</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower B</div><div class="s">Posterior chain · then a walk</div></div></div>
+          <div class="pc"><div class="pc-d"><b>Fri</b><small>D4</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper B</div><div class="s">Pull &amp; delts</div></div></div>
+          <div class="pc"><div class="pc-d"><b>Sat</b><small>D5</small></div><div class="pc-bar h"></div><div class="pc-i"><div class="t">Arms &amp; Delts</div><div class="s">Delts, arms, forearms · walk · social</div></div></div>
+          <div class="pc r"><div class="pc-d"><b>Sun</b><small>&#8212;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t">Checkpoint</div><div class="s">7-day average · photo · adjust</div></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="shead" style="margin-top:0"><h2 class="sm">Cardio</h2><span class="tagn">post-workout</span></div>
+        <div class="card forest">
+          <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime)"><use href="#i-walk"/></svg>15-min incline walk &#215; 3</div>
+          <p>Straight after the weights on <b>Mon, Thu and Sat</b>. Burns fat without denting recovery or appetite. That's the only cardio. If the scale stalls two weeks, add a fourth walk before touching the food.</p>
+        </div>
+        <div class="tilegrid g2" style="margin-top:var(--gap)">
+          <div class="tile"><div class="ti">Speed</div><div class="tv">5&#8211;6<small> km/h</small></div></div>
+          <div class="tile"><div class="ti">Incline</div><div class="tv">10&#8211;15<small>%</small></div></div>
+        </div>
+        <div class="card" style="margin-top:var(--gap)"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-check"/></svg>Recovery</div>
+          <ul class="clist">
+            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sleep 7.5h</b>, fixed wake time. The biggest lever you're leaving on the table.</li>
+            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Last caffeine early afternoon, screens down before bed.</li>
+            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Pre-log the day each morning, train the evening with Mufleh.</li>
+          </ul></div>
+      </div>
+    </div>
+
+    <div class="shead"><h2 class="sm">Scale rules</h2></div>
+    <div class="card ink"><ul class="clist">
+      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Weigh daily</b>, first thing, same conditions. Act on the 7-day average only.</li>
+      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Around 0.5kg down</b> hold everything. Faster than 0.8, eat a little more.</li>
+      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Flat for two weeks</b>, drop midweek carbs or add the fourth walk.</li>
+      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sub-15%</b>, ease the deficit to protect muscle. Ignore the scale 2&#8211;3 days after Saturday.</li>
+    </ul></div>
+
+    <div class="shead"><h2 class="sm">Phases</h2></div>
+    <div class="tilegrid">
+      <div class="phase"><div class="pn">1</div><div class="pm"><div class="t">Establish · June</div><div class="s">Lock the plan, fast initial drop</div></div><div class="pt">16&#8211;17%</div></div>
+      <div class="phase"><div class="pn">2</div><div class="pm"><div class="t">Grind · July</div><div class="s">Hold intake, adherence tested</div></div><div class="pt">14&#8211;15%</div></div>
+      <div class="phase"><div class="pn">3</div><div class="pm"><div class="t">Shred · Aug&#8211;Sep</div><div class="s">Abs sharpen, trunk fat goes</div></div><div class="pt">12%</div></div>
+    </div>
+  </section>
+
+  <!-- ===================== PROGRESS ===================== -->
+  <section class="view" id="v-progress">
+    <div class="cols2">
+      <div class="hero">
+        <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
+        <div class="htop">
+          <div>
+            <div class="hlab">The Mission</div>
+            <div class="hday"><span id="pgWnow">92.6</span> <span style="color:var(--muted)">&#8594;</span> 85.0</div>
+            <div class="hsub" id="pgToGo">~8kg of fat to shift · about 0.5kg a week.</div>
+          </div>
+          <div class="ring">
+            <svg width="78" height="78" viewBox="0 0 78 78">
+              <circle cx="39" cy="39" r="33" stroke="var(--line)" stroke-width="7" fill="none"/>
+              <circle class="fil" id="pgRing" cx="39" cy="39" r="33" stroke="var(--lime-deep)" stroke-width="7" fill="none" stroke-linecap="round"/>
+            </svg>
+            <div class="rt"><b id="pgBf">19.2%</b><span>Body fat</span></div>
+          </div>
+        </div>
+        <div class="herostats">
+          <div class="hs"><div class="v">12%</div><div class="k">Target BF</div><div class="bar"><i id="pgBar" style="width:36%"></i></div></div>
+          <div class="hs"><div class="v">~535</div><div class="k">Deficit/day</div><div class="bar"><i style="width:45%"></i></div></div>
+          <div class="hs"><div class="v">2,365</div><div class="k">Daily intake</div><div class="bar"><i style="width:82%"></i></div></div>
+        </div>
+      </div>
+      <div>
+        <div class="seg" id="seg" style="margin-top:0">
+          <button data-pane="daily" class="on">Daily weigh-in</button>
+          <button data-pane="monthly">Monthly scan</button>
+        </div>
+        <div class="pane on" id="paneDaily">
+          <div class="tilegrid g3" style="margin-bottom:var(--gap)">
+            <div class="tile"><div class="ti">7-day avg</div><div class="tv" id="dAvg" style="font-size:24px">&#8212;</div></div>
+            <div class="tile"><div class="ti">Trend</div><div class="tv" id="dTrend" style="font-size:24px">&#8212;</div></div>
+            <div class="tile"><div class="ti">Goal ETA</div><div class="tv" id="dEta" style="font-size:24px">&#8212;</div></div>
+          </div>
+          <div class="chartcard"><div id="dChart"></div></div>
+          <button class="addbtn" id="dAdd">+ Add a daily weigh-in</button>
+          <div class="form" id="dForm">
+            <div class="frow"><div class="field"><label>Date</label><input type="date" id="dDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="dWeight" placeholder="93.8"></div></div>
+            <div class="calc">Weigh first thing, after the toilet, before food.</div>
+            <div class="formbtns"><button class="ghost" id="dCancel">Cancel</button><button class="save" id="dSave">Save</button></div>
+          </div>
+          <div class="shead"><h2 class="sm">Recent days</h2><span class="tagn" id="dCount"></span></div>
+          <div id="dHist"></div>
+        </div>
+        <div class="pane" id="paneMonthly">
+          <div class="mchips" id="mchips">
+            <button class="pill active" data-m="weight">Weight</button>
+            <button class="pill" data-m="bf">Fat %</button>
+            <button class="pill" data-m="fat">Fat mass</button>
+            <button class="pill" data-m="muscle">Muscle</button>
+          </div>
+          <div class="chartcard"><div id="mChart"></div></div>
+          <div class="shead"><h2 class="sm">This month's read</h2><span class="tagn" id="vHint"></span></div>
+          <div id="verdict" class="verdict"></div>
+          <div class="dgrid" id="dgrid"></div>
+          <div class="shead"><h2 class="sm">Latest breakdown</h2><span class="tagn" id="bDate"></span></div>
+          <div class="tilegrid g2" id="breakdown"></div>
+          <button class="addbtn" id="sAdd">+ Add this month's scan</button>
+          <div class="form" id="sForm">
+            <div class="frow"><div class="field"><label>Date</label><input type="date" id="sDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sWeight" placeholder="92.6"></div></div>
+            <div class="frow"><div class="field"><label>Body fat %</label><input type="number" step="0.1" inputmode="decimal" id="sBf" placeholder="19.2"></div><div class="field"><label>Muscle (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sMus" placeholder="opt."></div></div>
+            <div class="calc">Enter weight and body fat, the rest computes.</div>
+            <div class="formbtns"><button class="ghost" id="sCancel">Cancel</button><button class="save" id="sSave">Analyse &amp; save</button></div>
+          </div>
+          <div class="shead"><h2 class="sm">History</h2><span class="tagn" id="sCount"></span></div>
+          <div id="sHist"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="shead"><h2 class="sm">How this is worked out</h2></div>
+    <div class="cols2">
+      <details class="fx" style="margin-top:0"><summary>Target weight</summary><div class="fb"><div class="eq">target = lean <b>&#247;</b> (1 &#8722; 0.12)</div>Holds your lean mass and solves for 12%. 74.8 &#247; 0.88 &#8776; 85kg. Recomputes from your newest scan, so building muscle lifts the target.</div></details>
+      <details class="fx" style="margin-top:0"><summary>7-day average &amp; trend</summary><div class="fb"><div class="eq">avg = mean(last 7) · trend = slope <b>&#215;</b> 7</div>One morning swings a kilo on water. The average strips that out, the slope gives a fair kg/week. Aim for 0.4&#8211;0.8.</div></details>
+    </div>
+  </section>
+
+  <!-- ===================== FOCUS ===================== -->
+  <section class="view" id="v-focus">
+    <div class="hero">
+      <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
+      <div class="hlab">The next 90 days</div>
+      <div class="hday" style="margin-top:8px">Three things<br>move the needle.</div>
+      <div class="hsub" style="max-width:80%">Everything else is detail. Get these right and August looks after itself.</div>
+    </div>
+    <div class="cols2" style="margin-top:var(--gap)">
+      <div class="prio" style="margin-top:0">
+        <div class="pn">1</div>
+        <div><div class="pt">Priority</div><h3>Sleep</h3>
+          <p>Get to <b>7.5 hours</b>. This is the biggest weakness in the plan right now. Under-slept means hungrier, weaker and looser with food, it quietly undoes the deficit.</p>
+        </div>
+      </div>
+      <div class="prio" style="margin-top:0">
+        <div class="pn">2</div>
+        <div><div class="pt">Priority</div><h3>Consistency</h3>
+          <ul class="nlist"><li>No random cheat weekends.</li><li>No bulking.</li><li>No cutting harder.</li><li>No changing the plan.</li></ul>
+          <p style="margin-top:8px">It works if you run it, not if you tweak it every week.</p>
+        </div>
+      </div>
+      <div class="prio span2" style="margin-top:0">
+        <div class="pn">3</div>
+        <div><div class="pt">Priority</div><h3>Strength retention</h3>
+          <p>During a cut your job is not to get stronger. It's to <b>refuse to get weaker</b>. Hold your bench near 100kg for reps while bodyweight drops from 92.6 to 86, and you've run an excellent cut.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== YOU ===================== -->
+  <section class="view" id="v-you">
+    <div class="shead"><h2>Customise</h2></div>
+    <div class="cols2">
+      <div>
+        <div class="sgroup" style="margin-top:0"><h3>Theme</h3>
+          <div class="seg2" id="themeSeg"><button data-t="light" class="on">Light</button><button data-t="dark">Dark</button><button data-t="system">System</button></div>
+        </div>
+        <div class="sgroup"><h3>Accent</h3><div class="swatches" id="swatches"></div></div>
+      </div>
+      <div class="card" style="margin-top:0">
+        <div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg>About</div>
+        <p style="color:var(--muted)">The Cut runs your 5-day programme next to a flat 2,365 kcal target, locked to your 17 May Tanita: 92.6kg, 19.2%, lean 74.8kg. Tick sets as you train, tap a move for its form video, log weigh-ins and scans in Progress. Everything saves on this device only.</p>
+      </div>
+    </div>
+    <div class="foot">
+      <p><b>Days:</b> Mon, Tue, Thu, Fri, Sat train · Wed, Sun rest. A day between the two Lower sessions.</p>
+      <p><b>Confirmed:</b> 240P / 250C / 45F daily · incline walks Mon/Thu/Sat · deadlift removed, hip thrust and back extension cover the chain · base proteins minced beef and chicken.</p>
+      <p style="color:var(--muted2);margin-top:12px">Built for Kay · review weekly, re-scan monthly, ease the deficit as you lean out.</p>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<div class="tabbar">
+  <div class="tabinner">
+    <button class="tab active" data-v="train" aria-label="Train"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg></button>
+    <button class="tab" data-v="food" aria-label="Food"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg></button>
+    <button class="tab" data-v="plan" aria-label="Plan"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cal"/></svg></button>
+    <button class="tab" data-v="progress" aria-label="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg></button>
+    <button class="tab" data-v="focus" aria-label="Focus"><svg viewBox="0 0 24 24" class="ic"><use href="#i-target"/></svg></button>
+    <button class="tab" data-v="you" aria-label="You"><svg viewBox="0 0 24 24" class="ic"><use href="#i-user"/></svg></button>
+  </div>
+</div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
@@ -347,383 +836,14 @@
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
 </svg>
 
-<div class="wrap">
-
-  <div class="topbar">
-    <div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div>
-    <div class="tt"><h1>THE CUT</h1><p>Khaled · 12% target</p></div>
-    <div class="right" id="tgl" aria-label="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg></div>
-  </div>
-
-  <!-- ===================== TRAIN ===================== -->
-  <section class="view on" id="v-train">
-    <div class="hero pop">
-      <div class="toprow">
-        <div>
-          <div class="lab">Today's session</div>
-          <div class="head" id="hDay">Lower A</div>
-          <div class="sub" id="hSub">Quad lead · tap a move for its form video</div>
-        </div>
-        <div class="ring">
-          <svg width="74" height="74" viewBox="0 0 74 74">
-            <circle cx="37" cy="37" r="32" stroke="var(--hero-track)" stroke-width="7" fill="none"/>
-            <circle class="fil" id="ringFil" cx="37" cy="37" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/>
-          </svg>
-          <div class="rt"><b id="ringNum">0/7</b><span>Done</span></div>
-        </div>
-      </div>
-      <div class="hchips">
-        <div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-dumbbell"/></svg><b id="cMoves">7</b>&nbsp;moves</div>
-        <div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-bars"/></svg><b id="cSets">20</b>&nbsp;sets</div>
-        <div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clock"/></svg>&nbsp;<span id="cTime">~76</span> min</div>
-      </div>
-    </div>
-
-    <div class="splitrow pop p2">
-      <div><div class="sd low">Mon</div><div class="sl">Lower A</div></div>
-      <div><div class="sd">Tue</div><div class="sl">Upper A</div></div>
-      <div><div class="sd low">Thu</div><div class="sl">Lower B</div></div>
-      <div><div class="sd">Fri</div><div class="sl">Upper B</div></div>
-      <div><div class="sd">Sat</div><div class="sl">Arms</div></div>
-    </div>
-
-    <div class="pills" id="dayTabs" style="margin-top:6px"></div>
-    <div style="margin-top:14px" id="workoutBox"></div>
-
-    <div class="card limeline" style="margin-top:var(--gap)">
-      <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-pulse"/></svg>Abs · after lifting</div>
-      <p style="font-size:13px;font-weight:500;line-height:1.55">Abs close the session, they don't open it. <b>Hanging Leg Raise</b> ends Monday, <b>Cable Crunch</b> ends Thursday. Want more, add a set to any day. They show up when the fat drops, not from extra crunches.</p>
-    </div>
-
-    <div class="shead"><h2>Progression</h2><span class="tagn">where muscle is built</span></div>
-    <div class="card" style="margin-top:0">
-      <p style="font-size:13px;font-weight:500;line-height:1.55;margin-bottom:14px">Add reps before weight. Take one set up a rep each week until every set sits at the top of the range, then add 2.5kg and start again. Bench, top of a 4&#215;5&#8211;6:</p>
-      <div class="pweek"><div class="wk">Week 1</div><div class="sets"><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
-      <div class="pweek"><div class="wk">Week 2</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
-      <div class="pweek"><div class="wk">Week 3</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
-      <div class="pweek"><div class="wk">Week 4</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span></div></div>
-      <div class="prule"><span class="arr">&#43;</span><div>All four sets at the top, so next week is <b>97.5kg &#215; 5</b> and it repeats. Same rule on your 3-set lifts.</div></div>
-    </div>
-
-    <div class="card" style="margin-top:var(--gap)">
-      <div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-check"/></svg>Holding it together</div>
-      <ul class="clist">
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Defend, don't chase.</b> In a deficit, matching last week is muscle staying.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Log every set</b>, weight, reps, RIR. You can't defend a number you don't track.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Deload week 5 and 9</b>, or sooner if you stall hard. Cut sets ~40%, keep it light.</li>
-      </ul>
-    </div>
-
-    <div class="card limeline" style="margin-top:var(--gap)">
-      <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-target"/></svg>Injury &amp; Cramp Prevention</div>
-      <ul class="clist">
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Dynamic Warm-Ups:</b> Run 5-10 min light cardio followed by move-specific warm-up sets. Avoid pre-workout static stretching.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Straps &amp; Gear:</b> Deploy straps on heavy pulls (RDLs, Rows) when grip fatigue risks spinal alignment.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Crush Cramps:</b> Hit your 3.5-4.0L fluid target daily and supplement clean electrolytes (Magnesium/Sodium).</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Controlled Eccentrics:</b> Control the lowering phase completely. Never bounce heavy loads off your joints.</li>
-      </ul>
-    </div>
-  </section>
-
-  <!-- ===================== FOOD ===================== -->
-  <section class="view" id="v-food">
-    <div class="shead"><h2>Daily target</h2><span class="tagn">every day</span></div>
-    <div class="mcard">
-      <div class="mtop"><div class="kc"><div class="flame"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg></div><div class="num">2,365<small> kcal</small></div></div><div class="when">Protein floor, hold it daily</div></div>
-      <div class="tiles">
-        <div class="tile"><div class="dot p"></div><div class="tv">240g</div><div class="tk">Protein</div></div>
-        <div class="tile"><div class="dot c"></div><div class="tv">250g</div><div class="tk">Carbs</div></div>
-        <div class="tile"><div class="dot f"></div><div class="tv">45g</div><div class="tk">Fat</div></div>
-      </div>
-    </div>
-
-    <div class="card limeline" style="margin-top:var(--gap)">
-      <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-target"/></svg>What this pace means</div>
-      <p style="font-size:13px;font-weight:500;line-height:1.55">2,365 a day is about 535 under your maintenance, roughly <b>0.5kg a week</b>. Sustainable, and 240g protein is more than enough to hold your muscle. The trade-off: a true 12% lands closer to mid-September than end of August at this intake every day. Want August back? Keep 250g carbs on the five training days but drop Wednesday and Sunday carbs, the weekly average falls and the rate climbs. Your call.</p>
-    </div>
-
-    <div class="card" style="margin-top:var(--gap)"><ul class="clist">
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>240g protein is the one number you never miss.</b> Train or rest, it holds your 71kg of muscle through the deficit.</li>
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>45g fat is the floor</b>, not a target to cut under. Keep it there for hormones.</li>
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Cluster carbs around the five sessions and the Saturday meal out. Rest days come in lighter on their own.</li>
-    </ul></div>
-
-    <div class="shead"><h2>The plate</h2><span class="tagn">protein first</span></div>
-    <div class="meal"><div class="meal-h"><div class="t">Breakfast</div><div class="k">~470 kcal</div></div><ul class="foods"><li>Black coffee</li><li>Protein pancakes <i>· 160g</i></li><li>2 whole eggs</li></ul><div class="m2"><span>P <b>40</b></span><span>C <b>48</b></span><span>F <b>13</b></span></div></div>
-    <div class="meal"><div class="meal-h"><div class="t">Mid-morning</div><div class="k">~250 kcal</div></div><ul class="foods"><li>Banana</li><li>Whey <i>· 1 scoop</i></li></ul><div class="m2"><span>P <b>30</b></span><span>C <b>30</b></span><span>F <b>2</b></span></div></div>
-    <div class="meal"><div class="meal-h"><div class="t">Lunch</div><div class="k">~570 kcal</div></div><ul class="foods"><li>Chicken breast <i>· 250g</i></li><li>Rice <i>· 80g dry</i></li><li>Salad + veg</li></ul><div class="m2"><span>P <b>62</b></span><span>C <b>70</b></span><span>F <b>9</b></span></div></div>
-    <div class="meal"><div class="meal-h"><div class="t">Pre-gym <span class="tagm">train</span></div><div class="k">~290 kcal</div></div><ul class="foods"><li>Oats <i>· 50g</i></li><li>Whey <i>· 1 scoop</i></li></ul><div class="m2"><span>P <b>28</b></span><span>C <b>42</b></span><span>F <b>4</b></span></div></div>
-    <div class="meal"><div class="meal-h"><div class="t">Dinner / post-gym</div><div class="k">~690 kcal</div></div><ul class="foods"><li>5% beef mince <i>· 250g</i></li><li>0% Greek yogurt <i>· 200g</i></li><li>Potato <i>· 150g</i> + veg</li></ul><div class="m2"><span>P <b>80</b></span><span>C <b>60</b></span><span>F <b>17</b></span></div></div>
-    <div class="daytot"><span>Day total</span><span class="m">~2,365 · 240P · 250C · 45F</span></div>
-    <p style="font-size:12px;color:var(--muted);font-weight:500;margin-top:10px;line-height:1.5"><b>Rest days (Wed, Sun):</b> drop the pre-gym oats and lunch rice, hold both protein meals. The day lands lighter without a session to fuel.</p>
-
-    <div class="card dark" style="margin-top:var(--gap)">
-      <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime)"><use href="#i-bolt"/></svg>Saturday: arms, then your night</div>
-      <p style="font-size:13px;font-weight:500;line-height:1.55">Saturday trains delts and arms, walks, then it's your social slot. Hold the 240g protein and spend the day's carbs on the meal out rather than across the day. The shawarma goes here, on purpose. Train, walk, then go enjoy it, that's the design, not a cheat.</p>
-    </div>
-
-    <div class="shead"><h2>Weekly shop</h2><span class="tagn">inside €70&#8211;80</span></div>
-    <div class="card shop" style="margin-top:0">
-      <label><input type="checkbox"><span><b>5% beef mince</b> · ~2kg</span></label>
-      <label><input type="checkbox"><span><b>Chicken breast</b> · ~1.5kg</span></label>
-      <label><input type="checkbox"><span><b>Eggs</b> · 15</span></label>
-      <label><input type="checkbox"><span><b>Protein pancakes</b> · 160g × 5</span></label>
-      <label><input type="checkbox"><span><b>0% Greek yogurt</b> · ~1.2kg</span></label>
-      <label><input type="checkbox"><span><b>Bananas</b> · 7</span></label>
-      <label><input type="checkbox"><span><b>Whey</b> · ~400g</span></label>
-      <label><input type="checkbox"><span><b>Rice, oats, potatoes</b></span></label>
-      <label><input type="checkbox"><span><b>Salad + veg</b> · ~1.5kg</span></label>
-      <label><input type="checkbox"><span><b>Olive oil + coffee</b> · pantry</span></label>
-    </div>
-
-    <div class="shead"><h2>Sunday prep</h2><span class="tagn">75&#8211;90 min</span></div>
-    <div class="card" style="margin-top:0"><ol class="steps">
-      <li>Brown the mince in batches, season. Bake or pan the chicken.</li>
-      <li>Portion <b>lunch and dinner tubs</b>, 3 days fridge, the rest freezer.</li>
-      <li>Cook rice and potatoes, portion them.</li>
-      <li>Make the <b>yogurt pots</b>, wash and bag the salad.</li>
-      <li>Eggs and pancakes cook fresh each morning.</li>
-    </ol></div>
-
-    <div class="shead"><h2>Swaps</h2><span class="tagn">same macros</span></div>
-    <div class="card" style="margin-top:0"><table class="swp"><tbody>
-      <tr><td>Beef mince <span class="arw">&#8594;</span></td><td>Chicken, gram for gram</td></tr>
-      <tr><td>Chicken <span class="arw">&#8594;</span></td><td>Turkey, white fish, prawns</td></tr>
-      <tr><td>Rice <span class="arw">&#8594;</span></td><td>Potato, pasta, extra oats</td></tr>
-      <tr><td>2 eggs <span class="arw">&#8594;</span></td><td>1 scoop whey + 10g nuts</td></tr>
-      <tr><td>Greek yogurt <span class="arw">&#8594;</span></td><td>Cottage cheese, extra whey</td></tr>
-    </tbody></table></div>
-
-    <div class="two">
-      <div class="card" style="margin-top:0"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-drop"/></svg>Hydration</div>
-        <ul class="clist">
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>4.0 L</b>&nbsp;train &amp; Sat</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>3.5 L</b>&nbsp;rest days</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Electrolytes low-carb</li>
-        </ul></div>
-      <div class="card" style="margin-top:0"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-plate"/></svg>Supps</div>
-        <ul class="clist">
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Whey &amp; Creatine 5g</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Collagen, evening</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Multivit &amp; Vit D, AM</li>
-        </ul></div>
-    </div>
-
-    <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-clock"/></svg>Eating around the late gym</div>
-      <ul class="clist">
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Front-load the day: two protein meals before the gym so the ~9pm dinner is the small meal, not a blowout.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Base protein on <b>minced beef and chicken</b>. Lean it on rest days, save carbs for training.</li>
-      </ul></div>
-  </section>
-
-  <!-- ===================== PLAN ===================== -->
-  <section class="view" id="v-plan">
-    <div class="shead"><h2>This week</h2><span class="tagn">5 train · 2 rest</span></div>
-    <div class="week">
-      <div class="wd"><div class="dn">Mon</div><div class="dd">1</div><div class="pip"></div></div>
-      <div class="wd"><div class="dn">Tue</div><div class="dd">2</div><div class="pip"></div></div>
-      <div class="wd"><div class="dn">Wed</div><div class="dd">3</div><div class="pip r"></div></div>
-      <div class="wd"><div class="dn">Thu</div><div class="dd">4</div><div class="pip"></div></div>
-      <div class="wd"><div class="dn">Fri</div><div class="dd">5</div><div class="pip"></div></div>
-      <div class="wd"><div class="dn">Sat</div><div class="dd">6</div><div class="pip h"></div></div>
-      <div class="wd"><div class="dn">Sun</div><div class="dd">7</div><div class="pip r"></div></div>
-    </div>
-
-    <div class="shead"><h2>Split</h2></div>
-    <div class="plist">
-      <div class="pc"><div class="pc-d"><b>Mon</b><small>D1</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower A</div><div class="s">Quad lead · then a walk</div></div></div>
-      <div class="pc"><div class="pc-d"><b>Tue</b><small>D2</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper A</div><div class="s">Push &amp; delts</div></div></div>
-      <div class="pc r"><div class="pc-d"><b>Wed</b><small>&#8212;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t">Rest</div><div class="s">Full recover · lower carbs</div></div></div>
-      <div class="pc"><div class="pc-d"><b>Thu</b><small>D3</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower B</div><div class="s">Posterior chain · then a walk</div></div></div>
-      <div class="pc"><div class="pc-d"><b>Fri</b><small>D4</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper B</div><div class="s">Pull &amp; delts</div></div></div>
-      <div class="pc"><div class="pc-d"><b>Sat</b><small>D5</small></div><div class="pc-bar h"></div><div class="pc-i"><div class="t">Arms &amp; Delts</div><div class="s">Delts, arms, forearms · walk · social</div></div></div>
-      <div class="pc r"><div class="pc-d"><b>Sun</b><small>&#8212;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t">Checkpoint</div><div class="s">7-day average · photo · adjust</div></div></div>
-    </div>
-
-    <div class="shead"><h2>Cardio</h2><span class="tagn">post-workout</span></div>
-    <div class="card dark" style="margin-top:0">
-      <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime)"><use href="#i-walk"/></svg>15-min incline walk &#215; 3</div>
-      <p style="font-size:13px;font-weight:500;line-height:1.55">Straight after the weights on <b>Monday, Thursday and Saturday</b>. It burns fat without denting recovery or appetite. That is the only cardio, no extra sessions. If the scale stalls two weeks, add a fourth walk before touching the food.</p>
-    </div>
-    <div class="spec">
-      <div class="spc"><div class="l">Days</div><div class="v">Mon · Thu · Sat</div></div>
-      <div class="spc"><div class="l">Duration</div><div class="v">15 min</div></div>
-      <div class="spc"><div class="l">Speed</div><div class="v">5&#8211;6 km/h</div></div>
-      <div class="spc"><div class="l">Incline</div><div class="v">10&#8211;15%</div></div>
-    </div>
-
-    <div class="shead"><h2>Recovery</h2></div>
-    <div class="card" style="margin-top:0"><ul class="clist">
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sleep 7.5h</b>, fixed wake time. This is the biggest lever you're leaving on the table.</li>
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Last caffeine early afternoon, screens down before bed.</li>
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Pre-log the day each morning, train the evening with Mufleh.</li>
-    </ul></div>
-
-    <div class="shead"><h2>Scale rules</h2></div>
-    <div class="card dark" style="margin-top:0"><ul class="clist">
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Weigh daily</b>, first thing, same conditions. Act on the 7-day average only.</li>
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Around 0.5kg down</b> hold everything. Faster than 0.8, eat a little more.</li>
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Flat for two weeks</b>, drop midweek carbs or add the fourth walk.</li>
-      <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sub-15%</b>, ease the deficit to protect muscle. Ignore the scale 2&#8211;3 days after Saturday.</li>
-    </ul></div>
-
-    <div class="shead"><h2>Phases</h2></div>
-    <div class="phase"><div class="pn">1</div><div class="pm"><div class="t">Establish · June</div><div class="s">Lock the plan, fast initial drop</div></div><div class="pt">16&#8211;17%</div></div>
-    <div class="phase"><div class="pn">2</div><div class="pm"><div class="t">Grind · July</div><div class="s">Hold intake, adherence tested</div></div><div class="pt">14&#8211;15%</div></div>
-    <div class="phase"><div class="pn">3</div><div class="pm"><div class="t">Shred · Aug&#8211;Sep</div><div class="s">Abs sharpen, trunk fat goes</div></div><div class="pt">12%</div></div>
-  </section>
-
-  <!-- ===================== PROGRESS ===================== -->
-  <section class="view" id="v-progress">
-    <div class="hero pop">
-      <div class="toprow">
-        <div>
-          <div class="lab">The Mission</div>
-          <div class="head"><span id="pgWnow">92.6</span> <span>&#8594;</span> 85.0<span> kg</span></div>
-          <div class="sub" id="pgToGo">~8kg of fat to shift · about 0.5kg a week.</div>
-        </div>
-        <div class="ring">
-          <svg width="74" height="74" viewBox="0 0 74 74">
-            <circle cx="37" cy="37" r="32" stroke="var(--hero-track)" stroke-width="7" fill="none"/>
-            <circle class="fil" id="pgRing" cx="37" cy="37" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/>
-          </svg>
-          <div class="rt"><b id="pgBf">19.2%</b><span>Body fat</span></div>
-        </div>
-      </div>
-      <div class="herostats">
-        <div class="hs"><div class="v">12%</div><div class="k">Target BF</div><div class="bar"><i id="pgBar" style="width:36%"></i></div></div>
-        <div class="hs"><div class="v">~535</div><div class="k">Deficit/day</div><div class="bar"><i style="width:45%"></i></div></div>
-        <div class="hs"><div class="v">2,365</div><div class="k">Daily intake</div><div class="bar"><i style="width:82%"></i></div></div>
-      </div>
-    </div>
-
-    <div class="seg" id="seg">
-      <button data-pane="daily" class="on">Daily weigh-in</button>
-      <button data-pane="monthly">Monthly scan</button>
-    </div>
-
-    <div class="pane on" id="paneDaily">
-      <div class="sumrow">
-        <div class="sum"><div class="l">7-day avg</div><div class="v" id="dAvg">&#8212;</div></div>
-        <div class="sum"><div class="l">Trend</div><div class="v" id="dTrend">&#8212;</div></div>
-        <div class="sum"><div class="l">Goal ETA</div><div class="v" id="dEta"><small>log ~2 wks</small></div></div>
-      </div>
-      <div class="chartcard"><div id="dChart"></div></div>
-      <button class="addbtn" id="dAdd">+ Add a daily weigh-in</button>
-      <div class="form" id="dForm">
-        <div class="frow"><div class="field"><label>Date</label><input type="date" id="dDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="dWeight" placeholder="93.8"></div></div>
-        <div class="calc">Weigh first thing, after the toilet, before food, for a clean reading.</div>
-        <div class="formbtns"><button class="ghost" id="dCancel">Cancel</button><button class="save" id="dSave">Save</button></div>
-      </div>
-      <div class="shead"><h2 class="sm">Recent days</h2><span class="tagn" id="dCount"></span></div>
-      <div id="dHist"></div>
-    </div>
-
-    <div class="pane" id="paneMonthly">
-      <div class="mchips" id="mchips">
-        <button class="pill active" data-m="weight">Weight</button>
-        <button class="pill" data-m="bf">Fat %</button>
-        <button class="pill" data-m="fat">Fat mass</button>
-        <button class="pill" data-m="muscle">Muscle</button>
-      </div>
-      <div class="chartcard"><div id="mChart"></div></div>
-      <div class="shead"><h2 class="sm">This month's read</h2><span class="tagn" id="vHint"></span></div>
-      <div id="verdict" class="verdict"></div>
-      <div class="dgrid" id="dgrid"></div>
-      <div class="shead"><h2 class="sm">Latest breakdown</h2><span class="tagn" id="bDate"></span></div>
-      <div class="tiles" id="breakdown" style="grid-template-columns:repeat(2,1fr)"></div>
-      <button class="addbtn" id="sAdd">+ Add this month's scan</button>
-      <div class="form" id="sForm">
-        <div class="frow"><div class="field"><label>Date</label><input type="date" id="sDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sWeight" placeholder="92.6"></div></div>
-        <div class="frow"><div class="field"><label>Body fat %</label><input type="number" step="0.1" inputmode="decimal" id="sBf" placeholder="19.2"></div><div class="field"><label>Muscle (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sMus" placeholder="opt."></div></div>
-        <div class="calc">Enter weight and body fat, the rest computes from your scan.</div>
-        <div class="formbtns"><button class="ghost" id="sCancel">Cancel</button><button class="save" id="sSave">Analyse &amp; save</button></div>
-      </div>
-      <div class="shead"><h2 class="sm">History</h2><span class="tagn" id="sCount"></span></div>
-      <div id="sHist"></div>
-    </div>
-
-    <div class="shead"><h2 class="sm">How this is worked out</h2></div>
-    <details class="fx"><summary>Target weight</summary><div class="fb"><div class="eq">target = lean <b>&#247;</b> (1 &#8722; 0.12)</div>Holds your lean mass and solves for the weight that puts you at 12%. 74.8 &#247; 0.88 &#8776; 85kg. It recomputes from your newest scan, so building muscle lifts the target with you.</div></details>
-    <details class="fx"><summary>7-day average &amp; trend</summary><div class="fb"><div class="eq">avg = mean(last 7 weigh-ins)</div><div class="eq">trend = slope(weight vs day) <b>&#215;</b> 7</div>One morning swings a kilo on water. The average strips that out, the slope gives a fair kg-per-week even with gaps. Aim for 0.4&#8211;0.8.</div></details>
-    <details class="fx"><summary>Composition verdict</summary><div class="fb"><div class="eq">fat &#8595; &amp; muscle held &#8594; clean loss</div><div class="eq">fat &#8595; &amp; muscle &#8595; &gt;0.4 &#8594; ease deficit</div><div class="eq">fat &#8593; otherwise &#8594; review intake</div>Runs each new scan against the one before. Steer daily, verify monthly.</div></details>
-  </section>
-
-  <!-- ===================== FOCUS ===================== -->
-  <section class="view" id="v-focus">
-    <div class="hero pop">
-      <div class="lab">The next 90 days</div>
-      <div class="head" style="font-size:24px">Three things<br>move the needle.</div>
-      <div class="sub">Everything else is detail. Get these right and August looks after itself.</div>
-    </div>
-    <div class="prio">
-      <div class="pn">1</div>
-      <div><div class="pt">Priority</div><h3>Sleep</h3>
-        <p>Get to <b>7.5 hours</b>. This is the biggest weakness in the plan right now. Under-slept means hungrier, weaker and looser with food, it quietly undoes the deficit.</p>
-      </div>
-    </div>
-    <div class="prio">
-      <div class="pn">2</div>
-      <div><div class="pt">Priority</div><h3>Consistency</h3>
-        <ul class="nlist">
-          <li>No random cheat weekends.</li>
-          <li>No bulking.</li>
-          <li>No cutting harder.</li>
-          <li>No changing the plan.</li>
-        </ul>
-        <p style="margin-top:8px">It works if you run it, not if you tweak it every week.</p>
-      </div>
-    </div>
-    <div class="prio">
-      <div class="pn">3</div>
-      <div><div class="pt">Priority</div><h3>Strength retention</h3>
-        <p>During a cut your job is not to get stronger. It's to <b>refuse to get weaker</b>. Hold your bench near 100kg for reps while bodyweight drops from 92.6 to 86, and you've run an excellent cut.</p>
-      </div>
-    </div>
-    <div class="foot">
-      <p style="color:var(--muted2)">Sleep first, then adherence, then defend the loads. Track the rest in Progress.</p>
-    </div>
-  </section>
-
-  <!-- ===================== YOU ===================== -->
-  <section class="view" id="v-you">
-    <div class="shead"><h2>Customise</h2></div>
-    <div class="sgroup"><h3>Theme</h3>
-      <div class="seg2" id="themeSeg"><button data-t="light" class="on">Light</button><button data-t="dark">Dark</button><button data-t="system">System</button></div>
-    </div>
-    <div class="sgroup"><h3>Accent</h3><div class="swatches" id="swatches"></div></div>
-    <div class="sgroup"><h3>About</h3>
-      <p style="font-size:13px;color:var(--muted);font-weight:500;line-height:1.55">The Cut runs your 5-day programme next to a flat 2,365 kcal target, locked to your 17 May Tanita: 92.6kg, 19.2%, lean 74.8kg. Tick sets as you train, tap a move for its form video, log weigh-ins and scans in Progress. Everything saves on this device only.</p>
-    </div>
-    <div class="foot">
-      <p><b>Days:</b> Mon, Tue, Thu, Fri, Sat train · Wed, Sun rest. A day between the two Lower sessions.</p>
-      <p><b>Confirmed:</b> 240P / 250C / 45F daily · incline walks Mon/Thu/Sat · deadlift removed, hip thrust and back extension cover the chain · base proteins minced beef and chicken.</p>
-      <p style="color:var(--muted2);margin-top:12px">Built for Khaled · review weekly, re-scan monthly, ease the deficit as you lean out.</p>
-    </div>
-  </section>
-
-</div>
-
-<div class="tabbar">
-  <div class="tabinner">
-    <button class="tab active" data-v="train"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg>Train<span class="tabdot"></span></button>
-    <button class="tab" data-v="food"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg>Food<span class="tabdot"></span></button>
-    <button class="tab" data-v="plan"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cal"/></svg>Plan<span class="tabdot"></span></button>
-    <button class="tab" data-v="progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg>Progress<span class="tabdot"></span></button>
-    <button class="tab" data-v="focus"><svg viewBox="0 0 24 24" class="ic"><use href="#i-target"/></svg>Focus<span class="tabdot"></span></button>
-    <button class="tab" data-v="you"><svg viewBox="0 0 24 24" class="ic"><use href="#i-user"/></svg>You<span class="tabdot"></span></button>
-  </div>
-</div>
-
 <script>
 var S='https://www.youtube.com/results?search_query=';
 function q(s){return S+encodeURIComponent(s+' proper form');}
-/* Lower-first order kept, Saturday arms day added */
 var PROGRAM=[
   {key:'lowerA',name:'Lower A',focus:'Quad lead',sub:'Quad lead · tap a move for its form video',time:'~76',ex:[
     {n:'Back Squat',sr:'3 × 5-8',rir:'2 RIR',ld:'80 → 100kg',q:q('barbell back squat'),note:'Most room to grow. Build the pattern, add weight only when 8 is clean across all sets.'},
-    {n:'Romanian Deadlift',sr:'3 × 8-10',rir:'1-2 RIR',ld:'80 → 100kg',q:q('romanian deadlift'),note:"Controlled hinge, slow stretch. Lighter than a heavy deadlift, shouldn't make you dizzy. If it does, swap to a back extension."},
-    {n:'Leg Press (lying)',sr:'3 × 10-12',rir:'1-2 RIR',ld:'160 → 220kg',q:q('lying leg press'),note:'About 4 plates a side, leaving reps in the higher range.'},
+    {n:'Romanian Deadlift',sr:'3 × 8-10',rir:'1-2 RIR',ld:'80 → 100kg',q:q('romanian deadlift'),note:"Controlled hinge, slow stretch. Lighter than a heavy deadlift. If it makes you dizzy, swap to a back extension."},
+    {n:'Leg Press (lying)',sr:'3 × 10-12',rir:'1-2 RIR',ld:'160 → 220kg',q:q('lying leg press'),note:'About 4 plates a side. Keep the knees out of your chest and the pelvis down at the bottom, that deep tuck is what cramped your abs. Breathe out as you press.'},
     {n:'Seated Leg Curl',sr:'3 × 10-12',rir:'1 RIR',ld:'by feel · add load',q:q('seated leg curl')},
     {n:'Walking Lunge',sr:'2 × 10-12/leg',ld:'DB 12 → 20kg',q:q('dumbbell walking lunge'),note:'Evens out left and right, chases the glutes.'},
     {n:'Standing Calf Raise',sr:'3 × 10-15',ld:'by feel · add load',q:q('standing calf raise')},
@@ -758,19 +878,19 @@ var PROGRAM=[
   ]},
   {key:'arms',name:'Arms & Delts',focus:'Delts · arms · forearms',sub:'Delts, arms &amp; forearms · your Saturday pump',time:'~55',ex:[
     {n:'DB Lateral Raise',sr:'4 × 12-15',rir:'0-1 RIR',ld:'10 → 16kg',q:q('dumbbell lateral raise'),note:'Width is the goal. Strict, lead with the elbow, no swing.'},
-    {n:'Rear Delt Fly',sr:'3 × 15',rir:'1 RIR',ld:'by feel',q:q('rear delt fly'),note:'Your add. Pull with the rear delt, not the traps. Rounds the shoulder out.'},
-    {n:'Cable Lateral Raise',sr:'3 × 15',rir:'0 RIR',ld:'light · constant tension',q:q('cable lateral raise'),note:'Burns the side delt out with tension top to bottom.'},
+    {n:'Rear Delt Fly',sr:'3 × 15',rir:'1 RIR',ld:'by feel',q:q('rear delt fly'),note:'Your add. Pull with the rear delt, not the traps.'},
+    {n:'Cable Lateral Raise',sr:'3 × 15',rir:'0 RIR',ld:'light · constant tension',q:q('cable lateral raise'),note:'Burns the side delt out top to bottom.'},
     {n:'EZ-Bar Curl',sr:'3 × 8-12',rir:'1-2 RIR',ld:'by feel · add load',q:q('ez bar curl'),note:'Heaviest curl of the day.'},
     {n:'Overhead Triceps Extension',sr:'3 × 10-12',rir:'1 RIR',ld:'by feel',q:q('overhead cable triceps extension'),note:'Long head, full stretch overhead.'},
-    {n:'Incline DB Curl',sr:'3 × 10-12',rir:'1 RIR',ld:'by feel',q:q('incline dumbbell curl'),note:'Curls from a stretch, the bit normal curls miss.'},
+    {n:'Incline DB Curl',sr:'3 × 10-12',rir:'1 RIR',ld:'by feel',q:q('incline dumbbell curl'),note:'Curls from a stretch.'},
     {n:'Triceps Pushdown',sr:'3 × 12-15',rir:'0-1 RIR',ld:'by feel',q:q('rope triceps pushdown')},
-    {n:'Hammer Curl + Wrist Curl',sr:'3 × 12-15 superset',ld:'by feel',q:q('hammer curl wrist curl forearm'),note:'Forearms and brachialis, the bit that fills the sleeve.'}
+    {n:'Hammer Curl + Wrist Curl',sr:'3 × 12-15 superset',ld:'by feel',q:q('hammer curl wrist curl forearm'),note:'Forearms and brachialis.'}
   ]}
 ];
 
 var curDay=0;
 var done={}; PROGRAM.forEach(function(d){done[d.key]=new Set();});
-var RC=2*Math.PI*32;
+var RC=2*Math.PI*33;
 var play='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
 
 function renderDayTabs(){
@@ -780,19 +900,17 @@ function renderDayTabs(){
 }
 function renderWorkout(){
   var d=PROGRAM[curDay];
-  var rows=d.ex.map(function(e,i){
+  document.getElementById('wHead').innerHTML='<span class="tg">'+d.name+'</span><span class="wt">'+d.focus+'</span><span class="wm"><svg viewBox="0 0 24 24" class="ic" style="width:14px;height:14px"><use href="#i-dumbbell"/></svg>'+d.time+' min</span>';
+  document.getElementById('workoutBox').innerHTML=d.ex.map(function(e,i){
     var dn=done[d.key].has(i);
     var pills='<span class="mp">'+e.sr+'</span>'+(e.rir?'<span class="mp rir">'+e.rir+'</span>':'')+'<span class="mp load">'+e.ld+'</span>';
     return '<div class="exrow'+(dn?' done':'')+'">'
       +'<div class="exbody"><div class="en"><span class="enum">'+(i+1)+'</span>'
-      +'<a class="ename" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span><span class="txt">'+e.n+'</span></a></div>'
+      +'<a class="ename" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a></div>'
       +'<div class="exmeta">'+pills+'</div>'
       +(e.note?'<div class="exnote">'+e.note+'</div>':'')+'</div>'
       +'<button class="exchk" data-idx="'+i+'" aria-label="Done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button></div>';
   }).join('');
-  document.getElementById('workoutBox').innerHTML=
-    '<div class="whead"><span class="tg">'+d.name+'</span><span class="wt">'+d.focus+'</span><span class="wm"><svg viewBox="0 0 24 24" class="ic" style="width:14px;height:14px"><use href="#i-dumbbell"/></svg>'+d.time+' min</span></div>'
-    +'<div class="wlist">'+rows+'</div>';
   document.getElementById('hDay').textContent=d.name;
   document.getElementById('hSub').innerHTML=d.sub;
   document.getElementById('cMoves').textContent=d.ex.length;
@@ -808,10 +926,30 @@ function updateRing(){
 }
 function selectDay(i){ curDay=i; renderDayTabs(); renderWorkout(); }
 
+/* calendar */
+function renderCalendar(){
+  var now=new Date(), y=now.getFullYear(), m=now.getMonth(), today=now.getDate();
+  var firstDow=(new Date(y,m,1).getDay()+6)%7;
+  var days=new Date(y,m+1,0).getDate();
+  var train=[1,2,4,5,6];
+  var html='';
+  for(var b=0;b<firstDow;b++) html+='<span class="cal-d cal-empty"></span>';
+  for(var d=1;d<=days;d++){
+    var wd=new Date(y,m,d).getDay(), isT=train.indexOf(wd)>=0, cls='cal-d';
+    if(d===today) cls+=' cal-today';
+    else if(isT&&d<today) cls+=' cal-done';
+    else if(isT) cls+=' cal-sched';
+    html+='<span class="'+cls+'">'+d+'</span>';
+  }
+  document.getElementById('calGrid').innerHTML=html;
+  var MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  document.getElementById('calMonth').textContent=MN[m]+' '+y;
+}
+
 function showView(v){
   var sec=document.querySelectorAll('.view'); for(var i=0;i<sec.length;i++) sec[i].classList.remove('on');
   document.getElementById('v-'+v).classList.add('on');
-  var tb=document.querySelectorAll('.tab'); for(var j=0;j<tb.length;j++) tb[j].classList.toggle('active',tb[j].getAttribute('data-v')===v);
+  var nav=document.querySelectorAll('[data-v]'); for(var j=0;j<nav.length;j++) nav[j].classList.toggle('active',nav[j].getAttribute('data-v')===v);
   window.scrollTo({top:0,behavior:'smooth'});
   if(v==='progress') renderProgress();
 }
@@ -822,18 +960,18 @@ function eff(m){ return m==='system'?(mq.matches?'dark':'light'):m; }
 function applyTheme(m){
   themeMode=m; root.setAttribute('data-theme',eff(m));
   var bs=document.querySelectorAll('#themeSeg button'); for(var i=0;i<bs.length;i++) bs[i].classList.toggle('on',bs[i].getAttribute('data-t')===m);
-  var mt=document.querySelector('meta[name=theme-color]'); if(mt) mt.setAttribute('content',eff(m)==='dark'?'#0E0F12':'#FFFFFF');
+  var mt=document.querySelector('meta[name=theme-color]'); if(mt) mt.setAttribute('content',eff(m)==='dark'?'#0D0F0C':'#ECEDE7');
   if(document.getElementById('v-progress').classList.contains('on')) renderProgress();
 }
 mq.addEventListener('change',function(){ if(themeMode==='system') applyTheme('system'); });
 var ACCENTS=[
-  {lime:'#C6F03C',deep:'#B2DE26',on:'#15171C'},
-  {lime:'#FF8A3D',deep:'#F2701A',on:'#1A0E04'},
-  {lime:'#54A0FF',deep:'#2E86F0',on:'#FFFFFF'},
-  {lime:'#A78BFA',deep:'#8B6CF0',on:'#16101F'},
-  {lime:'#FB7185',deep:'#F4576E',on:'#FFFFFF'}
+  {lime:'#C9F24D',deep:'#B2E02C',on:'#15181A',forest:'#11402E',f2:'#17563C'},
+  {lime:'#FF8A3D',deep:'#F2701A',on:'#1A0E04',forest:'#5A2410',f2:'#7A3417'},
+  {lime:'#54A0FF',deep:'#2E86F0',on:'#06122A',forest:'#13335E',f2:'#1B477E'},
+  {lime:'#A78BFA',deep:'#8B6CF0',on:'#16101F',forest:'#3A2A66',f2:'#4C3A82'},
+  {lime:'#FB7185',deep:'#F4576E',on:'#2A0A12',forest:'#5E1830',f2:'#7E2444'}
 ];
-function applyAccent(i){ var a=ACCENTS[i]; root.style.setProperty('--lime',a.lime); root.style.setProperty('--lime-deep',a.deep); root.style.setProperty('--on-accent',a.on); var sw=document.querySelectorAll('.sw'); for(var k=0;k<sw.length;k++) sw[k].classList.toggle('on',k===i); }
+function applyAccent(i){ var a=ACCENTS[i]; root.style.setProperty('--lime',a.lime); root.style.setProperty('--lime-deep',a.deep); root.style.setProperty('--on-lime',a.on); root.style.setProperty('--forest',a.forest); root.style.setProperty('--forest-2',a.f2); var sw=document.querySelectorAll('.sw'); for(var k=0;k<sw.length;k++) sw[k].classList.toggle('on',k===i); }
 function buildSwatches(){ document.getElementById('swatches').innerHTML=ACCENTS.map(function(a,i){return '<div class="sw '+(i===0?'on':'')+'" data-acc="'+i+'" style="background:'+a.lime+'"></div>';}).join(''); }
 
 /* ---------- tracker ---------- */
@@ -855,6 +993,13 @@ function fullD(d){ var p=d.split('-'); return (+p[2])+' '+MM[(+p[1])-1]+' '+p[0]
 function wksBet(a,b){ return (new Date(b)-new Date(a))/6048e5; }
 function byDate(a){ a.sort(function(x,y){return x.date<y.date?-1:(x.date>y.date?1:0);}); }
 
+function initWeightCard(){
+  byDate(SCANS); var L=SCANS[SCANS.length-1], tw=tgtW();
+  document.getElementById('dWeightV').innerHTML=L.weight.toFixed(1)+'<small> &#8594; '+tw.toFixed(1)+' kg</small>';
+  var sf=fatMass(SCANS[0]), tf=tw*TBF/100, prog=(sf-fatMass(L))/(sf-tf)*100; prog=Math.max(0,Math.min(100,prog));
+  document.getElementById('dWeightBar').style.width=prog.toFixed(0)+'%';
+  document.getElementById('dWeightPct').textContent=prog<3?'on the way to 12%':prog.toFixed(0)+'% of the way to 12%';
+}
 function renderProgress(){
   byDate(SCANS); byDate(DAILY);
   var L=SCANS[SCANS.length-1];
@@ -862,8 +1007,7 @@ function renderProgress(){
   document.getElementById('pgWnow').textContent=L.weight.toFixed(1);
   var tw=tgtW(), toLose=L.weight-tw;
   document.getElementById('pgToGo').textContent='~'+(toLose>0.05?toLose.toFixed(1):'0')+'kg of fat to shift · about 0.5kg a week.';
-  var sf=fatMass(SCANS[0]), tf=tw*TBF/100, prog=(sf-fatMass(L))/(sf-tf)*100;
-  prog=Math.max(0,Math.min(100,prog));
+  var sf=fatMass(SCANS[0]), tf=tw*TBF/100, prog=(sf-fatMass(L))/(sf-tf)*100; prog=Math.max(0,Math.min(100,prog));
   document.getElementById('pgBar').style.width=prog.toFixed(0)+'%';
   var pr=document.getElementById('pgRing'); pr.style.strokeDasharray=RC; pr.style.strokeDashoffset=RC*(1-prog/100);
   renderDaily(); drawM(curM); renderVerdict(); renderBreakdown(); renderSHist();
@@ -873,11 +1017,11 @@ function renderDaily(){
   var last7=DAILY.slice(-7), avg=last7.length?last7.reduce(function(a,e){return a+e.weight;},0)/last7.length:0;
   document.getElementById('dAvg').innerHTML=n?avg.toFixed(1)+'<small> kg</small>':'&#8212;';
   var tr=trend(), te=document.getElementById('dTrend');
-  if(tr===null){ te.textContent='\u2014'; te.className='v'; }
-  else { te.innerHTML=(tr>0?'+':'')+tr.toFixed(2)+'<small> kg/wk</small>'; te.className='v '+(tr<-0.01?'good':(tr>0.01?'up':'')); }
+  if(tr===null){ te.textContent='\u2014'; }
+  else { te.innerHTML=(tr>0?'+':'')+tr.toFixed(2)+'<small> kg</small>'; }
   var eta=document.getElementById('dEta');
   if(tr!==null&&tr<-0.05){ var wk=(avg-tgtW())/Math.abs(tr); eta.innerHTML=Math.max(0,Math.round(wk))+'<small> wks</small>'; }
-  else eta.innerHTML='<small>log ~2 wks</small>';
+  else eta.innerHTML='<small style="font-size:13px">log ~2 wks</small>';
   document.getElementById('dCount').textContent=n+(n===1?' day':' days');
   lineChart('dChart',DAILY.map(function(e){return e.weight;}),DAILY.map(function(e){return shortD(e.date);}),true);
   document.getElementById('dHist').innerHTML=DAILY.slice().reverse().map(function(e,ri){
@@ -940,78 +1084,64 @@ function renderVerdict(){
   v.innerHTML='<div class="vh"><span class="vico">'+ico+'</span>'+title+'</div><div class="vd">'+desc+'</div>';
   function sg(x){ return (x>0?'+':'')+x.toFixed(1); }
   function cell(l,val,c){ return '<div class="dcl"><div class="l">'+l+'</div><div class="v '+c+'">'+val+'</div></div>'; }
-  dg.innerHTML=cell('Weight total',sg(dW)+' kg',dW>0.15?'up':(dW<-0.15?'good':''))
-    +cell('Fat shifted',sg(dF)+' kg',dF<-0.15?'good':(dF>0.15?'up':''))
-    +cell('Muscle delta',dM!=null?sg(dM)+' kg':'--',dM!=null&&(dM<-0.4?'up':(dM>0.15?'good':''))+'')
-    +cell('Rate / week',rate.toFixed(2)+' kg',rate>0.1?'up':(rate<-0.1?'good':''));
+  dg.innerHTML=cell('Weight \u0394',sg(dW)+' kg',dW<0?'good':'up')+cell('Fat mass \u0394',sg(dF)+' kg',dF<0?'good':'up')
+    +(dM!=null?cell('Muscle \u0394',sg(dM)+' kg',dM>=0?'good':'up'):'')+cell('Rate',sg(rate)+' kg/wk',rate<0?'good':'up');
 }
 function renderBreakdown(){
-  var L=SCANS[SCANS.length-1]; document.getElementById('bDate').textContent=fullD(L.date);
-  var fm=fatMass(L), mm=L.muscle!=null?L.muscle:(ffm(L)*0.55);
-  function t(k,v){ return '<div class="tile"><div class="tv">'+v.toFixed(1)+' kg</div><div class="tk">'+k+'</div></div>'; }
-  document.getElementById('breakdown').innerHTML=t('Fat mass',fm)+t('Lean mass',ffm(L))+t('Skeletal muscle',mm)+t('Water & bone',ffm(L)-mm);
+  var L=SCANS[SCANS.length-1];
+  document.getElementById('bDate').textContent=fullD(L.date);
+  function tile(k,val){ return '<div class="tile"><div class="ti">'+k+'</div><div class="tv">'+val+'<small> kg</small></div></div>'; }
+  document.getElementById('breakdown').innerHTML=tile('Fat mass',fatMass(L).toFixed(1))+tile('Lean / FFM',ffm(L).toFixed(1))
+    +(L.muscle!=null?tile('Muscle',L.muscle.toFixed(1)):'')+tile('Target',tgtW().toFixed(1));
 }
 function renderSHist(){
-  document.getElementById('sCount').textContent=SCANS.length+(SCANS.length===1?' scan':' scans');
+  document.getElementById('sCount').textContent=SCANS.length+' logged';
   document.getElementById('sHist').innerHTML=SCANS.slice().reverse().map(function(s,ri){
     var idx=SCANS.length-1-ri;
-    return '<div class="hist"><div class="hd"><b>'+shortD(s.date)+'</b><small>'+s.date.split('-')[0]+'</small></div>'
-      +'<div class="hm"><span><b>'+s.weight.toFixed(1)+'</b>kg</span><span><b>'+s.bf.toFixed(1)+'%</b> BF</span></div>'
-      +(idx>0?'<button class="del" data-ds="'+idx+'">&times;</button>':'<div style="width:26px"></div>')+'</div>';
-  }).join('');
+    return '<div class="hist"><div class="hd"><b>'+shortD(s.date)+'</b><small>'+s.date.slice(8)+'/'+s.date.slice(5,7)+'</small></div><div class="hm"><span><b>'+s.weight.toFixed(1)+'</b> kg</span><span><b>'+s.bf.toFixed(1)+'</b>%</span>'+(s.muscle!=null?'<span><b>'+s.muscle.toFixed(1)+'</b> mus</span>':'')+'</div><button class="del" data-sd="'+idx+'">&times;</button></div>';
+  }).join('')+'<button class="reset" id="sReset">Reset to Tanita history</button>';
 }
 
-/* Event listeners */
-document.querySelector('.tabbar').addEventListener('click',function(e){ var t=e.target.closest('.tab'); if(t) showView(t.getAttribute('data-v')); });
-document.getElementById('tgl').addEventListener('click',function(){ applyTheme(themeMode==='light'?'dark':'light'); });
-document.getElementById('themeSeg').addEventListener('click',function(e){ if(e.target.tagName==='BUTTON') applyTheme(e.target.getAttribute('data-t')); });
-document.getElementById('swatches').addEventListener('click',function(e){ if(e.target.classList.contains('sw')) applyAccent(+e.target.getAttribute('data-acc')); });
-document.getElementById('seg').addEventListener('click',function(e){
-  if(e.target.tagName!=='BUTTON')return;
-  var p=e.target.getAttribute('data-pane');
-  document.querySelectorAll('#seg button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-pane')===p);});
-  document.getElementById('paneDaily').classList.toggle('on',p==='daily');
-  document.getElementById('paneMonthly').classList.toggle('on',p==='monthly');
+/* events */
+document.addEventListener('click',function(e){
+  var dt=e.target.closest('#dayTabs .pill'); if(dt){ selectDay(+dt.getAttribute('data-day')); return; }
+  var c=e.target.closest('.exchk'); if(c){ var i=+c.getAttribute('data-idx'),k=PROGRAM[curDay].key; if(done[k].has(i))done[k].delete(i);else done[k].add(i); c.closest('.exrow').classList.toggle('done',done[k].has(i)); updateRing(); return; }
+  var nav=e.target.closest('[data-v]'); if(nav){ showView(nav.getAttribute('data-v')); return; }
+  var sg=e.target.closest('#seg button'); if(sg){ var bb=document.querySelectorAll('#seg button'); for(var s=0;s<bb.length;s++) bb[s].classList.remove('on'); sg.classList.add('on'); document.getElementById('paneDaily').classList.toggle('on',sg.getAttribute('data-pane')==='daily'); document.getElementById('paneMonthly').classList.toggle('on',sg.getAttribute('data-pane')==='monthly'); return; }
+  var mc=e.target.closest('#mchips .pill'); if(mc){ drawM(mc.getAttribute('data-m')); return; }
+  var ts=e.target.closest('#themeSeg button'); if(ts){ applyTheme(ts.getAttribute('data-t')); return; }
+  var sw=e.target.closest('.sw'); if(sw){ applyAccent(+sw.getAttribute('data-acc')); return; }
+  if(e.target.id==='dReset'){ DAILY=[]; save('tc-daily',DAILY); renderProgress(); return; }
+  if(e.target.id==='sReset'){ SCANS=clone(SEED_S); save('tc-scans',SCANS); renderProgress(); initWeightCard(); return; }
+  var dd=e.target.closest('[data-dd]'); if(dd){ DAILY.splice(+dd.getAttribute('data-dd'),1); save('tc-daily',DAILY); renderProgress(); return; }
+  var sd=e.target.closest('[data-sd]'); if(sd){ if(SCANS.length>1){ SCANS.splice(+sd.getAttribute('data-sd'),1); save('tc-scans',SCANS); renderProgress(); initWeightCard(); } return; }
 });
-document.getElementById('mchips').addEventListener('click',function(e){ if(e.target.classList.contains('pill')) drawM(e.target.getAttribute('data-m')); });
+document.getElementById('tgl').addEventListener('click',function(){ applyTheme(eff(themeMode)==='dark'?'light':'dark'); });
+document.getElementById('tglD').addEventListener('click',function(){ applyTheme(eff(themeMode)==='dark'?'light':'dark'); });
 
-/* Form toggles */
-function setupForm(btnId,formId,cancelId){
-  document.getElementById(btnId).addEventListener('click',function(){ document.getElementById(formId).classList.add('open'); });
-  document.getElementById(cancelId).addEventListener('click',function(){ document.getElementById(formId).classList.remove('open'); });
-}
-setupForm('dAdd','dForm','dCancel'); setupForm('sAdd','sForm','sCancel');
-
-/* Logging handlers */
+var dForm=document.getElementById('dForm');
+document.getElementById('dAdd').addEventListener('click',function(){ dForm.classList.toggle('open'); if(dForm.classList.contains('open')) document.getElementById('dDate').value=new Date().toISOString().slice(0,10); });
+document.getElementById('dCancel').addEventListener('click',function(){ dForm.classList.remove('open'); });
 document.getElementById('dSave').addEventListener('click',function(){
-  var dt=document.getElementById('dDate').value, wt=parseFloat(document.getElementById('dWeight').value);
-  if(!dt||isNaN(wt))return; DAILY.push({date:dt,weight:wt}); save('tc-daily',DAILY);
-  document.getElementById('dForm').classList.remove('open'); renderDaily();
+  var dt=document.getElementById('dDate').value, w=parseFloat(document.getElementById('dWeight').value);
+  if(!dt||!(w>0)) return;
+  DAILY=DAILY.filter(function(x){return x.date!==dt;}); DAILY.push({date:dt,weight:w}); save('tc-daily',DAILY);
+  dForm.classList.remove('open'); document.getElementById('dWeight').value=''; renderProgress();
 });
+var sForm=document.getElementById('sForm');
+document.getElementById('sAdd').addEventListener('click',function(){ sForm.classList.toggle('open'); if(sForm.classList.contains('open')) document.getElementById('sDate').value=new Date().toISOString().slice(0,10); });
+document.getElementById('sCancel').addEventListener('click',function(){ sForm.classList.remove('open'); });
 document.getElementById('sSave').addEventListener('click',function(){
-  var dt=document.getElementById('sDate').value, wt=parseFloat(document.getElementById('sWeight').value), bf=parseFloat(document.getElementById('sBf').value), mu=parseFloat(document.getElementById('sMus').value);
-  if(!dt||isNaN(wt)||isNaN(bf))return; var o={date:dt,weight:wt,bf:bf}; if(!isNaN(mu))o.muscle=mu;
-  SCANS.push(o); save('tc-scans',SCANS); document.getElementById('sForm').classList.remove('open'); renderProgress();
+  var dt=document.getElementById('sDate').value, w=parseFloat(document.getElementById('sWeight').value), bf=parseFloat(document.getElementById('sBf').value), mus=parseFloat(document.getElementById('sMus').value);
+  if(!dt||!(w>0)||!(bf>0)) return;
+  var o={date:dt,weight:w,bf:bf}; if(mus>0)o.muscle=mus;
+  SCANS=SCANS.filter(function(x){return x.date!==dt;}); SCANS.push(o); save('tc-scans',SCANS);
+  sForm.classList.remove('open'); ['sWeight','sBf','sMus'].forEach(function(id){document.getElementById(id).value='';}); renderProgress(); initWeightCard();
 });
-document.getElementById('paneDaily').addEventListener('click',function(e){
-  if(e.target.classList.contains('del')){ var idx=+e.target.getAttribute('data-dd'); DAILY.splice(idx,1); save('tc-daily',DAILY); renderDaily(); }
-  if(e.target.id==='dReset'){ if(confirm('Clear all logged daily entries?')){ DAILY=[]; save('tc-daily',DAILY); renderDaily(); } }
-});
-document.getElementById('paneMonthly').addEventListener('click',function(e){
-  if(e.target.classList.contains('del')){ var idx=+e.target.getAttribute('data-ds'); if(idx>0){ SCANS.splice(idx,1); save('tc-scans',SCANS); renderProgress(); } }
-});
-document.getElementById('workoutBox').addEventListener('click',function(e){
-  var chk=e.target.closest('.exchk'); if(!chk)return;
-  var idx=+chk.getAttribute('data-idx'), k=PROGRAM[curDay].key;
-  if(done[k].has(idx)) done[k].delete(idx); else done[k].add(idx);
-  chk.closest('.exrow').classList.toggle('done'); updateRing();
-});
-document.getElementById('dayTabs').addEventListener('click',function(e){ if(e.target.classList.contains('pill')) selectDay(+e.target.getAttribute('data-day')); });
 
-/* Init */
-var todayStr=new Date().toISOString().slice(0,10);
-document.getElementById('dDate').value=todayStr; document.getElementById('sDate').value=todayStr;
-buildSwatches(); renderDayTabs(); renderWorkout();
+/* init */
+buildSwatches(); applyTheme(mq.matches?'system':'light');
+renderDayTabs(); renderWorkout(); renderCalendar(); initWeightCard();
 </script>
 </body>
 </html>
