@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -33,6 +34,7 @@
   .wrap{max-width:560px;margin:0 auto;padding:0 16px calc(98px + env(safe-area-inset-bottom))}
   svg.ic{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
 
+  @webkit-keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
   @keyframes pop{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
   .pop{animation:pop .5s cubic-bezier(.2,.7,.2,1) both}
   .p2{animation-delay:.06s}.p3{animation-delay:.12s}.p4{animation-delay:.18s}
@@ -170,6 +172,7 @@
   /* meals */
   .meal{background:var(--raise);border:1px solid var(--line);border-radius:18px;padding:14px 16px;margin-top:10px}
   .meal-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .meal-h .t">Breakfast</div><div class="k">~470 kcal</div></div><ul class="foods"><li>Black coffee</li><li>Protein pancakes <i>· 160g</i></li><li>2 whole eggs</li></ul><div class="m2"><span>P <b>40</b></span><span>C <b>48</b></span><span>F <b>13</b></span></div></div>
   .meal-h .t{font-size:14.5px;font-weight:800;display:flex;align-items:center;gap:7px}
   .meal-h .k{font-size:12px;color:var(--muted);font-weight:700}
   .tagm{font-size:9px;font-weight:800;text-transform:uppercase;background:var(--lime);color:var(--on-accent);padding:2px 6px;border-radius:5px;letter-spacing:.03em}
@@ -286,9 +289,7 @@
   .field label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;display:block;margin-bottom:5px}
   .field input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-family:var(--font);font-size:15px;font-weight:600;padding:10px 12px;border-radius:11px}
   .calc{font-size:12px;color:var(--muted);font-weight:500;margin:2px 0 12px;line-height:1.5}
-  .formbtns{display:flex;gap:10px}
-  .ghost{flex:1;border:1px solid var(--line);background:transparent;color:var(--muted);font-family:var(--font);font-weight:700;padding:11px;border-radius:11px;cursor:pointer}
-  .save{flex:2;border:none;background:var(--lime);color:var(--on-accent);font-family:var(--font);font-weight:800;padding:11px;border-radius:11px;cursor:pointer}
+  .formbtns"><button class="ghost" id="dCancel">Cancel</button><button class="save" id="dSave">Save</button></div>
   .reset{background:none;border:none;color:var(--muted2);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;padding:10px 0;text-decoration:underline;display:block;margin:2px auto 0}
   details.fx{background:var(--panel);border-radius:16px;margin-top:10px;overflow:hidden}
   details.fx summary{padding:14px 16px;font-size:13.5px;font-weight:800;cursor:pointer;list-style:none}
@@ -350,7 +351,7 @@
 
   <div class="topbar">
     <div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div>
-    <div class="tt"><h1>THE CUT</h1><p>Kay · 12% target</p></div>
+    <div class="tt"><h1>THE CUT</h1><p>Khaled · 12% target</p></div>
     <div class="right" id="tgl" aria-label="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg></div>
   </div>
 
@@ -403,12 +404,23 @@
       <div class="pweek"><div class="wk">Week 4</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span></div></div>
       <div class="prule"><span class="arr">&#43;</span><div>All four sets at the top, so next week is <b>97.5kg &#215; 5</b> and it repeats. Same rule on your 3-set lifts.</div></div>
     </div>
+
     <div class="card" style="margin-top:var(--gap)">
       <div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-check"/></svg>Holding it together</div>
       <ul class="clist">
         <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Defend, don't chase.</b> In a deficit, matching last week is muscle staying.</li>
         <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Log every set</b>, weight, reps, RIR. You can't defend a number you don't track.</li>
         <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Deload week 5 and 9</b>, or sooner if you stall hard. Cut sets ~40%, keep it light.</li>
+      </ul>
+    </div>
+
+    <div class="card limeline" style="margin-top:var(--gap)">
+      <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-target"/></svg>Injury &amp; Cramp Prevention</div>
+      <ul class="clist">
+        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Dynamic Warm-Ups:</b> Run 5-10 min light cardio followed by move-specific warm-up sets. Avoid pre-workout static stretching.</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Straps &amp; Gear:</b> Deploy straps on heavy pulls (RDLs, Rows) when grip fatigue risks spinal alignment.</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Crush Cramps:</b> Hit your 3.5-4.0L fluid target daily and supplement clean electrolytes (Magnesium/Sodium).</li>
+        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Controlled Eccentrics:</b> Control the lowering phase completely. Never bounce heavy loads off your joints.</li>
       </ul>
     </div>
   </section>
@@ -686,7 +698,7 @@
     <div class="foot">
       <p><b>Days:</b> Mon, Tue, Thu, Fri, Sat train · Wed, Sun rest. A day between the two Lower sessions.</p>
       <p><b>Confirmed:</b> 240P / 250C / 45F daily · incline walks Mon/Thu/Sat · deadlift removed, hip thrust and back extension cover the chain · base proteins minced beef and chicken.</p>
-      <p style="color:var(--muted2);margin-top:12px">Built for Kay · review weekly, re-scan monthly, ease the deficit as you lean out.</p>
+      <p style="color:var(--muted2);margin-top:12px">Built for Khaled · review weekly, re-scan monthly, ease the deficit as you lean out.</p>
     </div>
   </section>
 
@@ -928,63 +940,78 @@ function renderVerdict(){
   v.innerHTML='<div class="vh"><span class="vico">'+ico+'</span>'+title+'</div><div class="vd">'+desc+'</div>';
   function sg(x){ return (x>0?'+':'')+x.toFixed(1); }
   function cell(l,val,c){ return '<div class="dcl"><div class="l">'+l+'</div><div class="v '+c+'">'+val+'</div></div>'; }
-  dg.innerHTML=cell('Weight \u0394',sg(dW)+' kg',dW<0?'good':'up')+cell('Fat mass \u0394',sg(dF)+' kg',dF<0?'good':'up')
-    +(dM!=null?cell('Muscle \u0394',sg(dM)+' kg',dM>=0?'good':'up'):'')+cell('Rate',sg(rate)+' kg/wk',rate<0?'good':'up');
+  dg.innerHTML=cell('Weight total',sg(dW)+' kg',dW>0.15?'up':(dW<-0.15?'good':''))
+    +cell('Fat shifted',sg(dF)+' kg',dF<-0.15?'good':(dF>0.15?'up':''))
+    +cell('Muscle delta',dM!=null?sg(dM)+' kg':'--',dM!=null&&(dM<-0.4?'up':(dM>0.15?'good':''))+'')
+    +cell('Rate / week',rate.toFixed(2)+' kg',rate>0.1?'up':(rate<-0.1?'good':''));
 }
 function renderBreakdown(){
-  var L=SCANS[SCANS.length-1];
-  document.getElementById('bDate').textContent=fullD(L.date);
-  function tile(k,val){ return '<div class="tile" style="text-align:left;padding:14px"><div class="tk" style="margin:0 0 4px">'+k+'</div><div class="tv">'+val+'<small style="font-size:12px;color:var(--muted)"> kg</small></div></div>'; }
-  document.getElementById('breakdown').innerHTML=tile('Fat mass',fatMass(L).toFixed(1))+tile('Lean / FFM',ffm(L).toFixed(1))
-    +(L.muscle!=null?tile('Muscle',L.muscle.toFixed(1)):'')+tile('Target',tgtW().toFixed(1));
+  var L=SCANS[SCANS.length-1]; document.getElementById('bDate').textContent=fullD(L.date);
+  var fm=fatMass(L), mm=L.muscle!=null?L.muscle:(ffm(L)*0.55);
+  function t(k,v){ return '<div class="tile"><div class="tv">'+v.toFixed(1)+' kg</div><div class="tk">'+k+'</div></div>'; }
+  document.getElementById('breakdown').innerHTML=t('Fat mass',fm)+t('Lean mass',ffm(L))+t('Skeletal muscle',mm)+t('Water & bone',ffm(L)-mm);
 }
 function renderSHist(){
-  document.getElementById('sCount').textContent=SCANS.length+' logged';
+  document.getElementById('sCount').textContent=SCANS.length+(SCANS.length===1?' scan':' scans');
   document.getElementById('sHist').innerHTML=SCANS.slice().reverse().map(function(s,ri){
     var idx=SCANS.length-1-ri;
-    return '<div class="hist"><div class="hd"><b>'+shortD(s.date)+'</b><small>'+s.date.slice(8)+'/'+s.date.slice(5,7)+'</small></div><div class="hm"><span><b>'+s.weight.toFixed(1)+'</b> kg</span><span><b>'+s.bf.toFixed(1)+'</b>%</span>'+(s.muscle!=null?'<span><b>'+s.muscle.toFixed(1)+'</b> mus</span>':'')+'</div><button class="del" data-sd="'+idx+'">&times;</button></div>';
-  }).join('')+'<button class="reset" id="sReset">Reset to Tanita history</button>';
+    return '<div class="hist"><div class="hd"><b>'+shortD(s.date)+'</b><small>'+s.date.split('-')[0]+'</small></div>'
+      +'<div class="hm"><span><b>'+s.weight.toFixed(1)+'</b>kg</span><span><b>'+s.bf.toFixed(1)+'%</b> BF</span></div>'
+      +(idx>0?'<button class="del" data-ds="'+idx+'">&times;</button>':'<div style="width:26px"></div>')+'</div>';
+  }).join('');
 }
 
-/* events */
-document.addEventListener('click',function(e){
-  var dt=e.target.closest('#dayTabs .pill'); if(dt){ selectDay(+dt.getAttribute('data-day')); return; }
-  var c=e.target.closest('.exchk'); if(c){ var i=+c.getAttribute('data-idx'),k=PROGRAM[curDay].key; if(done[k].has(i))done[k].delete(i);else done[k].add(i); c.closest('.exrow').classList.toggle('done',done[k].has(i)); updateRing(); return; }
-  var tb=e.target.closest('.tab'); if(tb){ showView(tb.getAttribute('data-v')); return; }
-  var sg=e.target.closest('#seg button'); if(sg){ var bb=document.querySelectorAll('#seg button'); for(var s=0;s<bb.length;s++) bb[s].classList.remove('on'); sg.classList.add('on'); document.getElementById('paneDaily').classList.toggle('on',sg.getAttribute('data-pane')==='daily'); document.getElementById('paneMonthly').classList.toggle('on',sg.getAttribute('data-pane')==='monthly'); return; }
-  var mc=e.target.closest('#mchips .pill'); if(mc){ drawM(mc.getAttribute('data-m')); return; }
-  var ts=e.target.closest('#themeSeg button'); if(ts){ applyTheme(ts.getAttribute('data-t')); return; }
-  var sw=e.target.closest('.sw'); if(sw){ applyAccent(+sw.getAttribute('data-acc')); return; }
-  if(e.target.id==='dReset'){ DAILY=[]; save('tc-daily',DAILY); renderProgress(); return; }
-  if(e.target.id==='sReset'){ SCANS=clone(SEED_S); save('tc-scans',SCANS); renderProgress(); return; }
-  var dd=e.target.closest('[data-dd]'); if(dd){ DAILY.splice(+dd.getAttribute('data-dd'),1); save('tc-daily',DAILY); renderProgress(); return; }
-  var sd=e.target.closest('[data-sd]'); if(sd){ if(SCANS.length>1){ SCANS.splice(+sd.getAttribute('data-sd'),1); save('tc-scans',SCANS); renderProgress(); } return; }
+/* Event listeners */
+document.querySelector('.tabbar').addEventListener('click',function(e){ var t=e.target.closest('.tab'); if(t) showView(t.getAttribute('data-v')); });
+document.getElementById('tgl').addEventListener('click',function(){ applyTheme(themeMode==='light'?'dark':'light'); });
+document.getElementById('themeSeg').addEventListener('click',function(e){ if(e.target.tagName==='BUTTON') applyTheme(e.target.getAttribute('data-t')); });
+document.getElementById('swatches').addEventListener('click',function(e){ if(e.target.classList.contains('sw')) applyAccent(+e.target.getAttribute('data-acc')); });
+document.getElementById('seg').addEventListener('click',function(e){
+  if(e.target.tagName!=='BUTTON')return;
+  var p=e.target.getAttribute('data-pane');
+  document.querySelectorAll('#seg button').forEach(function(b){b.classList.toggle('on',b.getAttribute('data-pane')===p);});
+  document.getElementById('paneDaily').classList.toggle('on',p==='daily');
+  document.getElementById('paneMonthly').classList.toggle('on',p==='monthly');
 });
-document.getElementById('tgl').addEventListener('click',function(){ applyTheme(eff(themeMode)==='dark'?'light':'dark'); });
+document.getElementById('mchips').addEventListener('click',function(e){ if(e.target.classList.contains('pill')) drawM(e.target.getAttribute('data-m')); });
 
-var dForm=document.getElementById('dForm');
-document.getElementById('dAdd').addEventListener('click',function(){ dForm.classList.toggle('open'); if(dForm.classList.contains('open')) document.getElementById('dDate').value=new Date().toISOString().slice(0,10); });
-document.getElementById('dCancel').addEventListener('click',function(){ dForm.classList.remove('open'); });
+/* Form toggles */
+function setupForm(btnId,formId,cancelId){
+  document.getElementById(btnId).addEventListener('click',function(){ document.getElementById(formId).classList.add('open'); });
+  document.getElementById(cancelId).addEventListener('click',function(){ document.getElementById(formId).classList.remove('open'); });
+}
+setupForm('dAdd','dForm','dCancel'); setupForm('sAdd','sForm','sCancel');
+
+/* Logging handlers */
 document.getElementById('dSave').addEventListener('click',function(){
-  var dt=document.getElementById('dDate').value, w=parseFloat(document.getElementById('dWeight').value);
-  if(!dt||!(w>0)) return;
-  DAILY=DAILY.filter(function(x){return x.date!==dt;}); DAILY.push({date:dt,weight:w}); save('tc-daily',DAILY);
-  dForm.classList.remove('open'); document.getElementById('dWeight').value=''; renderProgress();
+  var dt=document.getElementById('dDate').value, wt=parseFloat(document.getElementById('dWeight').value);
+  if(!dt||isNaN(wt))return; DAILY.push({date:dt,weight:wt}); save('tc-daily',DAILY);
+  document.getElementById('dForm').classList.remove('open'); renderDaily();
 });
-var sForm=document.getElementById('sForm');
-document.getElementById('sAdd').addEventListener('click',function(){ sForm.classList.toggle('open'); if(sForm.classList.contains('open')) document.getElementById('sDate').value=new Date().toISOString().slice(0,10); });
-document.getElementById('sCancel').addEventListener('click',function(){ sForm.classList.remove('open'); });
 document.getElementById('sSave').addEventListener('click',function(){
-  var dt=document.getElementById('sDate').value, w=parseFloat(document.getElementById('sWeight').value), bf=parseFloat(document.getElementById('sBf').value), mus=parseFloat(document.getElementById('sMus').value);
-  if(!dt||!(w>0)||!(bf>0)) return;
-  var o={date:dt,weight:w,bf:bf}; if(mus>0)o.muscle=mus;
-  SCANS=SCANS.filter(function(x){return x.date!==dt;}); SCANS.push(o); save('tc-scans',SCANS);
-  sForm.classList.remove('open'); ['sWeight','sBf','sMus'].forEach(function(id){document.getElementById(id).value='';}); renderProgress();
+  var dt=document.getElementById('sDate').value, wt=parseFloat(document.getElementById('sWeight').value), bf=parseFloat(document.getElementById('sBf').value), mu=parseFloat(document.getElementById('sMus').value);
+  if(!dt||isNaN(wt)||isNaN(bf))return; var o={date:dt,weight:wt,bf:bf}; if(!isNaN(mu))o.muscle=mu;
+  SCANS.push(o); save('tc-scans',SCANS); document.getElementById('sForm').classList.remove('open'); renderProgress();
 });
+document.getElementById('paneDaily').addEventListener('click',function(e){
+  if(e.target.classList.contains('del')){ var idx=+e.target.getAttribute('data-dd'); DAILY.splice(idx,1); save('tc-daily',DAILY); renderDaily(); }
+  if(e.target.id==='dReset'){ if(confirm('Clear all logged daily entries?')){ DAILY=[]; save('tc-daily',DAILY); renderDaily(); } }
+});
+document.getElementById('paneMonthly').addEventListener('click',function(e){
+  if(e.target.classList.contains('del')){ var idx=+e.target.getAttribute('data-ds'); if(idx>0){ SCANS.splice(idx,1); save('tc-scans',SCANS); renderProgress(); } }
+});
+document.getElementById('workoutBox').addEventListener('click',function(e){
+  var chk=e.target.closest('.exchk'); if(!chk)return;
+  var idx=+chk.getAttribute('data-idx'), k=PROGRAM[curDay].key;
+  if(done[k].has(idx)) done[k].delete(idx); else done[k].add(idx);
+  chk.closest('.exrow').classList.toggle('done'); updateRing();
+});
+document.getElementById('dayTabs').addEventListener('click',function(e){ if(e.target.classList.contains('pill')) selectDay(+e.target.getAttribute('data-day')); });
 
-/* init */
-buildSwatches(); applyTheme(mq.matches?'system':'light');
-renderDayTabs(); renderWorkout();
+/* Init */
+var todayStr=new Date().toISOString().slice(0,10);
+document.getElementById('dDate').value=todayStr; document.getElementById('sDate').value=todayStr;
+buildSwatches(); renderDayTabs(); renderWorkout();
 </script>
 </body>
 </html>
