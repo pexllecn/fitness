@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#ECEEF0">
-<title>The Cut · Kay</title>
+<title>The Cut</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -13,31 +14,31 @@
   --lime:#C9F24D; --lime-deep:#B6E52E; --on-lime:#16191A;
   --forest:#11402E; --forest-2:#17563C; --on-forest:#E4F5EA;
   --ink:#16191C; --on-ink:#F3F5EF;
-  --bg:#ECEEF0; --card:#FFFFFF; --panel:#F0F1F4; --raise:#FFFFFF;
+  --bg:#ECEEF0; --card:#FFFFFF; --panel:#F0F1F4;
   --text:#16191C; --muted:#7B828C; --muted2:#AAB0BA; --line:#E6E8EC; --hair:rgba(20,24,30,.06);
   --shadow:0 1px 2px rgba(22,26,34,.04),0 14px 32px rgba(22,26,34,.06);
   --shadow-sm:0 1px 2px rgba(22,26,34,.04),0 5px 14px rgba(22,26,34,.04);
+  --ok:#2C9E5B; --warn:#D6604D;
   --font:'Montserrat',system-ui,-apple-system,sans-serif;
   --r:24px; --r-sm:18px;
 }
 [data-theme="dark"]{
-  --on-lime:#16191A;
-  --ink:#1D2024; --on-ink:#F3F5EF;
-  --bg:#0B0C0E; --card:#15181B; --panel:#1A1D20; --raise:#1D2024;
+  --ink:#1D2024; --bg:#0B0C0E; --card:#15181B; --panel:#1A1D20;
   --text:#EFF1EB; --muted:#969CA5; --muted2:#5A606A; --line:#262A2F; --hair:rgba(255,255,255,.06);
   --shadow:0 2px 6px rgba(0,0,0,.42),0 18px 44px rgba(0,0,0,.55); --shadow-sm:0 1px 3px rgba(0,0,0,.4),0 8px 20px rgba(0,0,0,.4);
+  --ok:#43C77E;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;transition:background-color .4s,color .4s}
 svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+input,button,textarea{font-family:var(--font)}
+button{cursor:pointer}
 @keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-/* ===== shell ===== */
 .app{display:flex;min-height:100vh}
 .sidebar{display:none}
 .main{flex:1;min-width:0;width:100%;max-width:540px;margin:0 auto;padding:0 18px calc(108px + env(safe-area-inset-bottom))}
-
 .topbar{display:flex;align-items:center;gap:12px;padding:20px 0 14px;position:sticky;top:0;z-index:30;background:linear-gradient(to bottom,var(--bg) 72%,transparent)}
 .brand{display:flex;align-items:center;gap:11px}
 .logo{width:42px;height:42px;border-radius:13px;background:var(--ink);display:grid;place-items:center;color:var(--lime)}
@@ -46,12 +47,11 @@ svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;strok
 .brand .bt span{font-size:11.5px;color:var(--muted);font-weight:600}
 .tttext{display:none}
 .ttools{margin-left:auto;display:flex;gap:8px}
-.iconbtn{width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;color:var(--text);cursor:pointer;transition:transform .15s;box-shadow:var(--shadow-sm)}
+.iconbtn{width:42px;height:42px;border-radius:50%;background:var(--card);border:1px solid var(--line);display:grid;place-items:center;color:var(--text);transition:transform .15s;box-shadow:var(--shadow-sm)}
 .iconbtn:active{transform:scale(.9)}
 [data-theme="light"] .i-sun{display:none}
 [data-theme="dark"] .i-moon{display:none}
 
-/* ===== views & spacing engine ===== */
 .view{display:none}
 .view.on{display:flex;flex-direction:column;gap:26px;animation:rise .5s cubic-bezier(.2,.7,.2,1) both}
 .block{display:flex;flex-direction:column;gap:14px}
@@ -60,13 +60,11 @@ svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;strok
 .workout{display:flex;flex-direction:column;gap:12px}
 .mealwrap{display:flex;flex-direction:column;gap:11px}
 .trackwrap{display:flex;flex-direction:column;gap:14px}
-
 .shead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
 .shead h2{font-size:22px;font-weight:800;letter-spacing:-.02em}
 .shead h2.sm{font-size:17px}
 .shead .tagn{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;padding-bottom:3px;white-space:nowrap}
 
-/* ===== cards / tiles ===== */
 .card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow-sm)}
 .card.ink{background:var(--ink);border-color:transparent;color:var(--on-ink)}
 .card.forest{background:var(--forest);border-color:transparent;color:var(--on-forest)}
@@ -98,7 +96,6 @@ svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;strok
 .chip{display:inline-flex;align-items:center;font-size:9.5px;font-weight:800;padding:4px 8px;border-radius:7px;text-transform:uppercase;letter-spacing:.03em}
 .chip.lime{background:var(--lime);color:var(--on-lime)}
 
-/* ===== hero (dark, glowing blobs) ===== */
 .hero{position:relative;overflow:hidden;background:var(--ink);color:var(--on-ink);border-radius:28px;padding:26px;box-shadow:var(--shadow)}
 .hero .blobs{position:absolute;inset:0;filter:blur(40px);opacity:.8;pointer-events:none}
 .blob{position:absolute;border-radius:50%}
@@ -109,7 +106,7 @@ svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;strok
 .hero .htop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
 .hlab{font-size:10.5px;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .hero .hday{font-size:32px;font-weight:800;letter-spacing:-.03em;margin-top:9px;line-height:1.04;color:#fff}
-.hero .hsub{font-size:12.5px;color:rgba(255,255,255,.62);font-weight:500;margin-top:8px;max-width:78%;line-height:1.5}
+.hero .hsub{font-size:12.5px;color:rgba(255,255,255,.62);font-weight:500;margin-top:8px;max-width:80%;line-height:1.5}
 .ring{position:relative;width:76px;height:76px;flex:0 0 auto}
 .ring svg{transform:rotate(-90deg)}
 .ring .fil{transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)}
@@ -125,40 +122,36 @@ svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;strok
 .hs .k{font-size:9.5px;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:4px}
 .hs .bar{height:4px;border-radius:4px;background:rgba(255,255,255,.14);margin-top:10px;overflow:hidden}
 .hs .bar i{display:block;height:100%;background:var(--lime);border-radius:4px}
-
-.bignum{font-size:52px;font-weight:800;letter-spacing:-.04em;line-height:.95}
+.bignum{font-size:50px;font-weight:800;letter-spacing:-.04em;line-height:.95}
 .bignum small{font-size:17px;font-weight:700;color:var(--muted);letter-spacing:0}
 .bigsub{font-size:12.5px;font-weight:600;color:var(--muted);margin-top:6px}
 
-/* ===== dashboard grid ===== */
 .dash{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .dash .hero{grid-column:1/-1}
 .dash .calendar{display:none}
 
-/* ===== pills / day tabs ===== */
 .pills{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px;-ms-overflow-style:none;scrollbar-width:none}
 .pills::-webkit-scrollbar{display:none}
-.pill{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--text);font-family:var(--font);font-size:13px;font-weight:700;padding:9px 16px;border-radius:100px;cursor:pointer;transition:.15s;white-space:nowrap;box-shadow:var(--shadow-sm)}
+.pill{flex:0 0 auto;border:1.5px solid var(--line);background:var(--card);color:var(--text);font-size:13px;font-weight:700;padding:9px 16px;border-radius:100px;transition:.15s;white-space:nowrap;box-shadow:var(--shadow-sm)}
 .pill:active{transform:scale(.96)}
 .pill.active{background:var(--lime);border-color:var(--lime);color:var(--on-lime)}
 
-/* ===== calendar (desktop) ===== */
 .calendar{background:var(--ink);color:var(--on-ink);border-radius:var(--r);padding:22px;box-shadow:var(--shadow)}
 .calendar .calh{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
 .calendar .calh b{font-size:16px;font-weight:800}
 .calendar .calh .pill{background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.12);color:#fff;font-size:11px;padding:6px 12px;box-shadow:none}
 .caldow,.calgrid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .caldow span{text-align:center;font-size:10px;font-weight:700;color:rgba(255,255,255,.4);padding-bottom:6px}
-.cal-d{aspect-ratio:1;display:grid;place-items:center;font-size:12.5px;font-weight:700;border-radius:50%;color:rgba(255,255,255,.85)}
+.cal-d{aspect-ratio:1;display:grid;place-items:center;font-size:12.5px;font-weight:700;border-radius:50%;color:rgba(255,255,255,.85);position:relative}
 .cal-empty{visibility:hidden}
 .cal-done{background:var(--lime);color:var(--on-lime);font-weight:800}
+.cal-part{background:linear-gradient(135deg,var(--lime) 50%,rgba(255,255,255,.1) 50%);color:#fff;font-weight:800}
 .cal-today{border:2px solid var(--lime);color:#fff;font-weight:800}
 .cal-sched{background:rgba(255,255,255,.07);color:rgba(255,255,255,.5)}
 .callegend{display:flex;gap:14px;margin-top:16px;flex-wrap:wrap}
 .callegend span{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:600;color:rgba(255,255,255,.6)}
 .callegend i{width:10px;height:10px;border-radius:50%;display:block}
 
-/* ===== workout ===== */
 .whead{display:flex;align-items:center;gap:11px;padding:2px 2px 0}
 .whead .tg{font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:6px 11px;border-radius:9px;background:var(--ink);color:var(--lime)}
 .whead .wt{font-size:16px;font-weight:800}
@@ -177,7 +170,7 @@ svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;strok
 .mp.rir{background:rgba(17,64,46,.1);color:var(--forest)}
 [data-theme="dark"] .mp.rir{background:rgba(201,242,77,.12);color:var(--lime)}
 .exnote{font-size:12px;color:var(--muted);margin:9px 0 0 25px;font-weight:500;line-height:1.45}
-.exchk{flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:2px solid var(--line);background:transparent;cursor:pointer;display:grid;place-items:center;color:transparent;transition:.2s;margin-top:1px}
+.exchk{flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:2px solid var(--line);background:transparent;display:grid;place-items:center;color:transparent;transition:.2s;margin-top:1px}
 .exchk svg{width:16px;height:16px;stroke-width:3}
 .exchk:active{transform:scale(.85)}
 .exrow.done{border-color:var(--lime);background:color-mix(in srgb,var(--lime) 7%,var(--card))}
@@ -187,8 +180,7 @@ svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;strok
 
 .clist{list-style:none}
 .clist li{display:flex;gap:11px;padding:9px 0;font-size:13.5px;font-weight:500;border-bottom:1px solid var(--hair)}
-.clist li:last-child{border-bottom:none;padding-bottom:0}
-.clist li:first-child{padding-top:0}
+.clist li:last-child{border-bottom:none;padding-bottom:0}.clist li:first-child{padding-top:0}
 .card.ink .clist li,.card.forest .clist li{border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
 .clist li .ck{flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:var(--lime);display:grid;place-items:center;color:var(--on-lime);margin-top:1px}
 .clist li .ck svg{width:12px;height:12px;stroke-width:3}
@@ -204,35 +196,41 @@ svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;strok
 .prule b{font-weight:800;color:#fff}
 .prule .arr{flex:0 0 auto;width:26px;height:26px;border-radius:8px;background:var(--lime);color:var(--on-lime);display:grid;place-items:center;font-weight:900}
 
-/* meals */
+/* macro target + meals */
+.macrobar{display:flex;gap:10px;margin-top:16px}
+.mb{flex:1;text-align:center}
+.mb .v{font-size:24px;font-weight:800;letter-spacing:-.02em}
+.mb .v small{font-size:12px;color:var(--muted);font-weight:700}
+.mb .l{font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
+.modetog{display:flex;gap:4px;background:var(--panel);border-radius:14px;padding:4px}
+.modetog button{flex:1;border:none;background:transparent;color:var(--muted);font-weight:700;font-size:13px;padding:11px;border-radius:10px;transition:.15s}
+.modetog button.on{background:var(--card);color:var(--text);box-shadow:var(--shadow-sm)}
 .meal{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:16px;box-shadow:var(--shadow-sm)}
-.meal-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px}
+.meal-h{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:9px;gap:10px}
 .meal-h .t{font-size:14px;font-weight:800;display:flex;align-items:center;gap:7px}
-.meal-h .k{font-size:11.5px;color:var(--muted);font-weight:700}
-.foods{list-style:none}
-.foods li{font-size:12.5px;font-weight:500;padding:2px 0}
-.foods li i{color:var(--muted);font-style:normal;font-size:11.5px}
+.meal-h .k{font-size:11.5px;color:var(--muted);font-weight:700;white-space:nowrap}
+.meal .fd{font-size:12.5px;font-weight:500;color:var(--text);line-height:1.5}
 .m2{display:flex;gap:14px;margin-top:10px;padding-top:10px;border-top:1px solid var(--hair)}
 .m2 span{font-size:11.5px;color:var(--muted);font-weight:600}
 .m2 b{color:var(--text);font-weight:800}
-.daytot{display:flex;justify-content:space-between;align-items:center;background:var(--ink);color:var(--on-ink);border-radius:var(--r-sm);padding:16px 18px;font-size:12px;font-weight:700}
-.daytot .m{font-weight:800;color:var(--lime)}
-.shop label{display:flex;align-items:center;gap:11px;padding:10px 0;border-bottom:1px solid var(--hair);font-size:13px;font-weight:500;cursor:pointer}
-.shop label:last-child{border-bottom:none;padding-bottom:0}.shop label:first-child{padding-top:0}
-.shop input{width:19px;height:19px;accent-color:var(--lime);flex:0 0 auto}
-.shop b{font-weight:700}
-ol.steps{list-style:none;counter-reset:s}
-ol.steps li{position:relative;padding-left:31px;font-size:12.5px;font-weight:500;margin-bottom:11px;counter-increment:s}
-ol.steps li:last-child{margin-bottom:0}
-ol.steps li::before{content:counter(s);position:absolute;left:0;top:-1px;width:22px;height:22px;border-radius:8px;background:var(--lime);color:var(--on-lime);font-size:12px;font-weight:800;display:grid;place-items:center}
-ol.steps b{font-weight:700}
-table.swp{width:100%;border-collapse:collapse}
-table.swp td{padding:9px 0;border-bottom:1px solid var(--hair);font-size:12.5px;font-weight:600}
-table.swp tr:last-child td{border-bottom:none}
-table.swp td:last-child{text-align:right;color:var(--muted)}
-.arw{color:var(--muted2);font-weight:700;margin:0 4px}
+.totbar{display:flex;justify-content:space-between;align-items:center;border-radius:var(--r-sm);padding:15px 18px;font-size:12px;font-weight:700;border:1.5px solid var(--line);background:var(--card)}
+.totbar.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 8%,var(--card))}
+.totbar .m{font-weight:800}
+.totbar.ok .m{color:var(--ok)}
+.medit{display:flex;flex-direction:column;gap:9px}
+.medit input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:14px;font-weight:600;padding:10px 11px;border-radius:11px}
+.medit .nm{font-weight:800}
+.medit .pcf{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.medit .pcf .fl{position:relative}
+.medit .pcf .fl span{position:absolute;left:11px;top:9px;font-size:10px;font-weight:700;color:var(--muted2);text-transform:uppercase;pointer-events:none}
+.medit .pcf input{padding:22px 11px 8px;text-align:left}
+.medit .delm{align-self:flex-end;border:none;background:var(--panel);color:var(--warn);font-weight:700;font-size:12px;padding:7px 12px;border-radius:9px}
+.addrow{display:flex;gap:10px}
+.btn{border:1.5px dashed var(--line);background:var(--card);color:var(--text);font-weight:700;font-size:13.5px;padding:14px;border-radius:var(--r-sm);box-shadow:var(--shadow-sm);flex:1;transition:.15s}
+.btn:active{transform:scale(.99)}
+.btn.solid{border:none;background:var(--lime);color:var(--on-lime)}
+.btn.ghost{border-style:solid}
 
-/* plan */
 .week{display:grid;grid-template-columns:repeat(7,1fr);gap:7px}
 .wd{text-align:center;border:1px solid var(--line);background:var(--card);border-radius:14px;padding:12px 2px 10px;box-shadow:var(--shadow-sm)}
 .wd .dn{font-size:9px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted2);font-weight:700}
@@ -256,7 +254,6 @@ table.swp td:last-child{text-align:right;color:var(--muted)}
 .phase .pt{font-size:14px;font-weight:800;color:var(--forest)}
 [data-theme="dark"] .phase .pt{color:var(--lime)}
 
-/* focus */
 .prio{display:flex;gap:16px;background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px;box-shadow:var(--shadow-sm);align-items:flex-start}
 .prio .pn{flex:0 0 auto;width:40px;height:40px;border-radius:13px;background:var(--lime);color:var(--on-lime);font-size:18px;font-weight:900;display:grid;place-items:center}
 .prio .pt{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
@@ -266,9 +263,8 @@ table.swp td:last-child{text-align:right;color:var(--muted)}
 .prio .nlist li{font-size:13px;font-weight:600;padding:4px 0 4px 18px;position:relative}
 .prio .nlist li::before{content:"";position:absolute;left:0;top:11px;width:8px;height:2px;border-radius:2px;background:var(--lime)}
 
-/* ===== tracker ===== */
 .seg{display:flex;gap:4px;background:var(--panel);border-radius:15px;padding:4px}
-.seg button{flex:1;border:none;background:transparent;color:var(--muted);font-family:var(--font);font-weight:700;font-size:13px;padding:11px;border-radius:11px;cursor:pointer;transition:.15s}
+.seg button{flex:1;border:none;background:transparent;color:var(--muted);font-weight:700;font-size:13px;padding:11px;border-radius:11px;transition:.15s}
 .seg button.on{background:var(--card);color:var(--text);box-shadow:var(--shadow-sm)}
 .pane{display:none}.pane.on{display:flex;flex-direction:column;gap:14px;animation:rise .35s ease both}
 .chartcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow-sm)}
@@ -279,8 +275,8 @@ table.swp td:last-child{text-align:right;color:var(--muted)}
 .c-area{fill:rgba(182,229,46,.13);stroke:none}
 .c-pt{fill:var(--card);stroke:var(--lime-deep);stroke-width:3}
 .c-pt.last{fill:var(--lime-deep)}
-.c-v{fill:var(--text);font-size:10px;font-weight:800;font-family:var(--font)}
-.c-x{fill:var(--muted2);font-size:9px;font-weight:700;font-family:var(--font)}
+.c-v{fill:var(--text);font-size:10px;font-weight:800}
+.c-x{fill:var(--muted2);font-size:9px;font-weight:700}
 .empty{padding:30px 10px;text-align:center;color:var(--muted2);font-size:13px;font-weight:600}
 .mchips{display:flex;gap:7px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
 .mchips::-webkit-scrollbar{display:none}
@@ -297,7 +293,7 @@ table.swp td:last-child{text-align:right;color:var(--muted)}
 .dcl{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px;box-shadow:var(--shadow-sm)}
 .dcl .l{font-size:10px;color:var(--muted);font-weight:700;text-transform:uppercase}
 .dcl .v{font-size:18px;font-weight:800;margin-top:4px}
-.dcl .v.up{color:#D6604D}.dcl .v.good{color:var(--forest)}
+.dcl .v.up{color:var(--warn)}.dcl .v.good{color:var(--forest)}
 [data-theme="dark"] .dcl .v.good{color:var(--lime)}
 #dHist,#sHist{display:flex;flex-direction:column;gap:8px}
 .hist{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow-sm)}
@@ -305,19 +301,19 @@ table.swp td:last-child{text-align:right;color:var(--muted)}
 .hist .hm{flex:1;display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
 .hist .hm span{font-size:11.5px;color:var(--muted);font-weight:600}
 .hist .hm b{color:var(--text);font-weight:800}
-.hist .del{flex:0 0 auto;width:27px;height:27px;border-radius:50%;border:none;background:var(--panel);color:var(--muted);font-size:16px;cursor:pointer}
-.addbtn{width:100%;border:1.5px dashed var(--line);background:var(--card);color:var(--text);font-family:var(--font);font-weight:700;font-size:13.5px;padding:15px;border-radius:var(--r-sm);cursor:pointer;transition:.15s}
+.hist .del{flex:0 0 auto;width:27px;height:27px;border-radius:50%;border:none;background:var(--panel);color:var(--muted);font-size:16px}
+.addbtn{width:100%;border:1.5px dashed var(--line);background:var(--card);color:var(--text);font-weight:700;font-size:13.5px;padding:15px;border-radius:var(--r-sm)}
 .addbtn:active{transform:scale(.99)}
 .form{display:none;background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);padding:18px;box-shadow:var(--shadow-sm)}
 .form.open{display:block;animation:rise .3s ease both}
 .frow{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .field label{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;display:block;margin-bottom:5px}
-.field input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);font-family:var(--font);font-size:15px;font-weight:600;padding:11px 12px;border-radius:12px}
+.field input{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:15px;font-weight:600;padding:11px 12px;border-radius:12px}
 .calc{font-size:12px;color:var(--muted);font-weight:500;margin:2px 0 12px;line-height:1.5}
 .formbtns{display:flex;gap:10px}
-.ghost{flex:1;border:1px solid var(--line);background:transparent;color:var(--muted);font-family:var(--font);font-weight:700;padding:12px;border-radius:12px;cursor:pointer}
-.save{flex:2;border:none;background:var(--lime);color:var(--on-lime);font-family:var(--font);font-weight:800;padding:12px;border-radius:12px;cursor:pointer}
-.reset{background:none;border:none;color:var(--muted2);font-family:var(--font);font-size:12px;font-weight:600;cursor:pointer;padding:4px 0 0;text-decoration:underline;align-self:center}
+.ghost{flex:1;border:1px solid var(--line);background:transparent;color:var(--muted);font-weight:700;padding:12px;border-radius:12px}
+.save{flex:2;border:none;background:var(--lime);color:var(--on-lime);font-weight:800;padding:12px;border-radius:12px}
+.reset{background:none;border:none;color:var(--muted2);font-size:12px;font-weight:600;padding:4px 0 0;text-decoration:underline;align-self:center}
 details.fx{background:var(--card);border:1px solid var(--line);border-radius:var(--r-sm);overflow:hidden;box-shadow:var(--shadow-sm)}
 details.fx summary{padding:16px;font-size:13.5px;font-weight:800;cursor:pointer;list-style:none}
 details.fx summary::-webkit-details-marker{display:none}
@@ -328,30 +324,42 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
 .eq b{color:var(--forest)}
 [data-theme="dark"] .eq b{color:var(--lime)}
 
-/* settings */
+/* settings: macros */
+.stepper{display:flex;align-items:center;justify-content:space-between;padding:14px 0;border-bottom:1px solid var(--hair)}
+.stepper:last-of-type{border-bottom:none}
+.stepper .sl{font-size:14px;font-weight:700}
+.stepper .sl small{display:block;font-size:11px;color:var(--muted);font-weight:600}
+.stepctl{display:flex;align-items:center;gap:10px}
+.stepctl button{width:34px;height:34px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--text);font-size:20px;font-weight:700;display:grid;place-items:center;line-height:1}
+.stepctl input{width:64px;text-align:center;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:17px;font-weight:800;padding:8px 4px;border-radius:11px}
+.kcalrow{display:flex;justify-content:space-between;align-items:center;margin-top:16px;background:var(--ink);color:var(--on-ink);border-radius:14px;padding:14px 18px}
+.kcalrow .kn{font-size:24px;font-weight:800;color:var(--lime)}
+.kcalrow .kl{font-size:11px;font-weight:700;color:rgba(255,255,255,.6);text-transform:uppercase;letter-spacing:.05em}
+.deficitrow{display:flex;gap:10px;margin-top:12px}
 .sgroup h3{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:11px}
 .seg2{display:flex;gap:7px}
-.seg2 button{flex:1;border:1.5px solid var(--line);background:var(--card);color:var(--muted);font-family:var(--font);font-weight:700;font-size:13px;padding:13px;border-radius:14px;cursor:pointer;box-shadow:var(--shadow-sm)}
+.seg2 button{flex:1;border:1.5px solid var(--line);background:var(--card);color:var(--muted);font-weight:700;font-size:13px;padding:13px;border-radius:14px;box-shadow:var(--shadow-sm)}
 .seg2 button.on{background:var(--lime);color:var(--on-lime);border-color:var(--lime)}
 .swatches{display:flex;gap:12px}
-.sw{width:44px;height:44px;border-radius:14px;cursor:pointer;border:3px solid transparent;transition:.15s;box-shadow:var(--shadow-sm)}
+.sw{width:44px;height:44px;border-radius:14px;border:3px solid transparent;transition:.15s;box-shadow:var(--shadow-sm)}
 .sw.on{border-color:var(--text);transform:scale(1.06)}
+.backup textarea{width:100%;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:12px;font-weight:500;padding:11px;border-radius:12px;resize:vertical;min-height:64px;font-family:ui-monospace,monospace;word-break:break-all}
+.toast{position:fixed;left:50%;bottom:calc(120px + env(safe-area-inset-bottom));transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--on-ink);padding:12px 20px;border-radius:14px;font-size:13px;font-weight:700;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:.3s;z-index:100}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
 .foot{padding:6px 2px 0}
 .foot p{font-size:11.5px;color:var(--muted);font-weight:500;margin-bottom:7px;line-height:1.5}
 .foot b{color:var(--text);font-weight:700}
 
-/* ===== mobile floating nav ===== */
 .tabbar{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;justify-content:center;padding:0 16px calc(16px + env(safe-area-inset-bottom));pointer-events:none}
 .tabinner{pointer-events:auto;display:flex;gap:2px;background:var(--ink);border-radius:24px;padding:7px;box-shadow:0 10px 34px rgba(0,0,0,.3)}
-.tab{display:grid;place-items:center;width:48px;height:48px;border-radius:18px;color:rgba(255,255,255,.55);background:transparent;border:none;cursor:pointer;transition:.18s}
+.tab{display:grid;place-items:center;width:48px;height:48px;border-radius:18px;color:rgba(255,255,255,.55);background:transparent;border:none;transition:.18s}
 .tab svg{width:21px;height:21px}
 .tab.active{background:var(--lime);color:var(--on-lime)}
 
-/* ===== desktop ===== */
 @media(min-width:980px){
   .sidebar{display:flex;flex-direction:column;align-items:center;gap:6px;position:fixed;top:0;left:0;bottom:0;width:88px;padding:24px 0;background:var(--card);border-right:1px solid var(--line);z-index:50}
   .sidebar .logo{width:46px;height:46px;margin-bottom:18px}
-  .sb-item{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;color:var(--muted);background:transparent;border:none;cursor:pointer;transition:.18s}
+  .sb-item{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;color:var(--muted);background:transparent;border:none;transition:.18s}
   .sb-item svg{width:22px;height:22px}
   .sb-item:hover{background:var(--panel);color:var(--text)}
   .sb-item.active{background:var(--ink);color:var(--lime)}
@@ -365,29 +373,23 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
   .tttext b{font-size:27px;font-weight:800;letter-spacing:-.02em;display:block;line-height:1}
   .tttext span{font-size:13px;color:var(--muted);font-weight:600}
   .ttools{display:none}
-  .view{max-width:1180px}
-  .view.on{gap:32px}
+  .view{max-width:1180px}.view.on{gap:32px}
   .shead h2{font-size:25px}
-
   .cols2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
   .mealwrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .span2{grid-column:1/3}
   .wlist{display:grid;grid-template-columns:1fr 1fr;gap:11px}
   .tilegrid.g3{gap:16px}
-
   .dash{grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:start}
   .dash .hero{grid-column:1/3}
   .dash .calendar{display:block;grid-column:3/4;grid-row:1/3;align-self:stretch}
-  .dash .d-steps{grid-column:1/2}
-  .dash .d-weight{grid-column:2/3}
+  .dash .d-steps{grid-column:1/2}.dash .d-weight{grid-column:2/3}
   .hero .hday{font-size:38px}
 }
-@media(min-width:1280px){ .dash .hero .hday{font-size:42px} }
 </style>
 </head>
 <body>
 <div class="app">
-
   <aside class="sidebar">
     <div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div>
     <button class="sb-item active" data-v="train" title="Train"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg></button>
@@ -397,93 +399,51 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
     <button class="sb-item" data-v="focus" title="Focus"><svg viewBox="0 0 24 24" class="ic"><use href="#i-target"/></svg></button>
     <div class="sb-spacer"></div>
     <button class="sb-item" id="tglD" title="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg></button>
-    <button class="sb-item" data-v="you" title="You"><svg viewBox="0 0 24 24" class="ic"><use href="#i-user"/></svg></button>
+    <button class="sb-item" data-v="you" title="Settings"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cog"/></svg></button>
     <div class="sb-avatar">K</div>
   </aside>
-
   <main class="main">
   <div class="topbar">
-    <div class="brand">
-      <div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div>
-      <div class="bt"><b>THE CUT</b><span>Kay · 12% target</span></div>
-    </div>
+    <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div><div class="bt"><b>THE CUT</b><span>Kay · 12% target</span></div></div>
     <div class="tttext"><b>Hi, Kay</b><span>Let's get the work in today</span></div>
     <div class="ttools"><div class="iconbtn" id="tgl" aria-label="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg></div></div>
   </div>
 
-  <!-- ===================== TRAIN ===================== -->
+  <!-- TRAIN -->
   <section class="view on" id="v-train">
-    <div class="block">
-      <div class="dash">
-        <div class="hero">
-          <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
-          <div class="htop">
-            <div>
-              <div class="hlab">Today's session</div>
-              <div class="hday" id="hDay">Lower A</div>
-              <div class="hsub" id="hSub">Quad lead · tap any move for its form video</div>
-            </div>
-            <div class="ring">
-              <svg width="76" height="76" viewBox="0 0 76 76">
-                <circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/>
-                <circle class="fil" id="ringFil" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/>
-              </svg>
-              <div class="rt"><b id="ringNum">0/7</b><span>Done</span></div>
-            </div>
-          </div>
-          <div class="hchips">
-            <div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-dumbbell"/></svg><b id="cMoves">7</b>&nbsp;moves</div>
-            <div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-bars"/></svg><b id="cSets">20</b>&nbsp;sets</div>
-            <div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clock"/></svg><b id="cTime">~76</b>&nbsp;min</div>
-          </div>
+    <div class="block"><div class="dash">
+      <div class="hero">
+        <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
+        <div class="htop">
+          <div><div class="hlab">Today's session</div><div class="hday" id="hDay">Lower A</div><div class="hsub" id="hSub">Quad lead · tap any move for its form video</div></div>
+          <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="ringFil" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="ringNum">0/7</b><span>Done</span></div></div>
         </div>
-
-        <div class="calendar">
-          <div class="calh"><b id="calMonth">June 2026</b><span class="pill">Training days</span></div>
-          <div class="caldow"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
-          <div class="calgrid" id="calGrid"></div>
-          <div class="callegend"><span><i style="background:var(--lime)"></i>Done</span><span><i style="border:2px solid var(--lime)"></i>Today</span><span><i style="background:rgba(255,255,255,.18)"></i>Scheduled</span></div>
-        </div>
-
-        <div class="tile forest d-steps">
-          <div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-walk"/></svg>Cardio this week</div>
-          <div class="tv">3&#215;<small> walks</small></div>
-          <div class="tk">15-min incline · Mon, Thu, Sat</div>
-        </div>
-
-        <div class="tile d-weight">
-          <div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-trend"/></svg>Weight goal</div>
-          <div class="tv" id="dWeightV">92.6<small> &#8594; 85.0</small></div>
-          <div class="bar"><i id="dWeightBar" style="width:8%"></i></div>
-          <div class="tk" id="dWeightPct">on the way to 12%</div>
-        </div>
+        <div class="hchips"><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-dumbbell"/></svg><b id="cMoves">7</b>&nbsp;moves</div><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-bars"/></svg><b id="cSets">20</b>&nbsp;sets</div><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clock"/></svg><b id="cTime">~76</b>&nbsp;min</div></div>
       </div>
-    </div>
-
+      <div class="calendar">
+        <div class="calh"><b id="calMonth">June 2026</b><span class="pill">Sessions</span></div>
+        <div class="caldow"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+        <div class="calgrid" id="calGrid"></div>
+        <div class="callegend"><span><i style="background:var(--lime)"></i>Done</span><span><i style="border:2px solid var(--lime)"></i>Today</span><span><i style="background:rgba(255,255,255,.18)"></i>Scheduled</span></div>
+      </div>
+      <div class="tile forest d-steps"><div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-walk"/></svg>Cardio this week</div><div class="tv">3&#215;<small> walks</small></div><div class="tk">15-min incline · Mon, Thu, Sat</div></div>
+      <div class="tile d-weight"><div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-trend"/></svg>Weight goal</div><div class="tv" id="dWeightV">92.6<small> &#8594; 85.0</small></div><div class="bar"><i id="dWeightBar" style="width:8%"></i></div><div class="tk" id="dWeightPct">on the way to 12%</div></div>
+    </div></div>
     <div class="block">
       <div class="shead"><h2>The workout</h2><span class="tagn">tick as you go</span></div>
       <div class="pills" id="dayTabs"></div>
-      <div class="workout">
-        <div class="whead" id="wHead"></div>
-        <div class="wlist" id="workoutBox"></div>
-      </div>
-      <div class="card outline">
-        <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-pulse"/></svg>Abs come last</div>
-        <p>Abs close the session, they don't open it. <b>Hanging Leg Raise</b> ends Monday, <b>Cable Crunch</b> ends Thursday. They show up when the fat drops, not from extra crunches.</p>
-      </div>
+      <div class="workout"><div class="whead" id="wHead"></div><div class="wlist" id="workoutBox"></div></div>
+      <div class="card outline"><div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-pulse"/></svg>Abs come last</div><p>Abs close the session, they don't open it. <b>Hanging Leg Raise</b> ends Monday, <b>Cable Crunch</b> ends Thursday. They show up when the fat drops, not from extra crunches.</p></div>
     </div>
-
     <div class="block">
       <div class="shead"><h2>Warm up first</h2><span class="tagn">before the heavy work</span></div>
       <div class="cols2">
-        <div class="card">
-          <ul class="clist">
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>5 min easy</b> on the bike or treadmill to raise the temperature.</li>
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Ramp the first big lift:</b> empty bar, ~50%, ~70%, ~85%. Never hit a top set cold.</li>
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Lower:</b> leg swings, bodyweight squats, glute bridges, hip 90/90.</li>
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Upper:</b> band pull-aparts, dislocates, scapular push-ups.</li>
-          </ul>
-        </div>
+        <div class="card"><ul class="clist">
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>5 min easy</b> on the bike or treadmill to raise the temperature.</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Ramp the first big lift:</b> empty bar, ~50%, ~70%, ~85%. Never hit a top set cold.</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Lower:</b> leg swings, bodyweight squats, glute bridges, hip 90/90.</li>
+          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Upper:</b> band pull-aparts, dislocates, scapular push-ups.</li>
+        </ul></div>
         <div class="col">
           <details class="fx" open><summary>Cramps · your leg-press one</summary><div class="fb">A lying leg press cramping your abs is the hip flexor and lower abs seizing fully shortened. A breath-hold and a deficit tip it over.<div class="eq">Knees out of your chest, pelvis <b>down</b></div>Breathe out as you press. Salt before training, 300&#8211;400mg magnesium at night, keep carbs on lifting days.</div></details>
           <details class="fx"><summary>Bracing &amp; breathing</summary><div class="fb">Breathe into the belly and brace like you're taking a punch. Heavy low reps: hold at the top, exhale through the sticking point. A full breath-hold through long sets is what makes you light-headed.</div></details>
@@ -492,11 +452,9 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
         </div>
       </div>
     </div>
-
     <div class="block">
       <div class="shead"><h2>Progression</h2><span class="tagn">where muscle is built</span></div>
-      <div class="card">
-        <p style="margin-bottom:14px">Add reps before weight. Take one set up a rep each week until every set sits at the top of the range, then add 2.5kg and start again. Bench, top of a 4&#215;5&#8211;6:</p>
+      <div class="card"><p style="margin-bottom:14px">Add reps before weight. Take one set up a rep each week until every set sits at the top of the range, then add 2.5kg and start again. Bench, top of a 4&#215;5&#8211;6:</p>
         <div class="pweek"><div class="wk">Week 1</div><div class="sets"><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
         <div class="pweek"><div class="wk">Week 2</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
         <div class="pweek"><div class="wk">Week 3</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
@@ -506,110 +464,40 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
     </div>
   </section>
 
-  <!-- ===================== FOOD ===================== -->
+  <!-- FOOD -->
   <section class="view" id="v-food">
     <div class="block">
-      <div class="shead"><h2>Nutrition</h2><span class="tagn">every day</span></div>
-      <div class="cols2">
-        <div class="card">
-          <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-flame"/></svg>Daily target</div>
-          <div class="bignum">2,365<small> kcal</small></div>
-          <div class="bigsub">Protein floor, hold it every day</div>
-          <div class="tilegrid g3" style="margin-top:18px">
-            <div class="tile lime"><div class="ti">Protein</div><div class="tv">240<small>g</small></div></div>
-            <div class="tile soft"><div class="ti">Carbs</div><div class="tv">250<small>g</small></div></div>
-            <div class="tile soft"><div class="ti">Fat</div><div class="tv">45<small>g</small></div></div>
-          </div>
-        </div>
-        <div class="card outline">
-          <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-target"/></svg>What this pace means</div>
-          <p>2,365 a day is about 535 under maintenance, roughly <b>0.5kg a week</b>, and 240g protein holds your muscle. The trade-off: a true 12% lands nearer mid-September than end of August. Want August back? Keep 250g carbs on training days but drop Wednesday and Sunday carbs. Your call.</p>
+      <div class="shead"><h2>Nutrition</h2><span class="tagn" id="foodTag">weekday</span></div>
+      <div class="card">
+        <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-flame"/></svg>Daily target</div>
+        <div class="bignum"><span id="tKcal">2,365</span><small> kcal</small></div>
+        <div class="bigsub">Protein floor, hold it every day. Edit any number in Settings.</div>
+        <div class="macrobar">
+          <div class="mb"><div class="v" id="tP">240<small>g</small></div><div class="l">Protein</div></div>
+          <div class="mb"><div class="v" id="tC">250<small>g</small></div><div class="l">Carbs</div></div>
+          <div class="mb"><div class="v" id="tF">45<small>g</small></div><div class="l">Fat</div></div>
         </div>
       </div>
-      <div class="card"><ul class="clist">
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>240g protein is the one number you never miss.</b> Train or rest, it holds your 71kg of muscle.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>45g fat is the floor</b>, not a target to cut under. Keep it there for hormones.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Cluster carbs around the five sessions and the Saturday meal. Rest days come in lighter on their own.</li>
-      </ul></div>
+      <div class="modetog" id="mealMode"><button data-mode="weekday" class="on">Weekday plan</button><button data-mode="weekend">Weekend plan</button></div>
     </div>
-
     <div class="block">
-      <div class="shead"><h2>The plate</h2><span class="tagn">protein first</span></div>
-      <div class="mealwrap">
-        <div class="meal"><div class="meal-h"><div class="t">Breakfast</div><div class="k">~470</div></div><ul class="foods"><li>Black coffee</li><li>Protein pancakes <i>· 160g</i></li><li>2 whole eggs</li></ul><div class="m2"><span>P <b>40</b></span><span>C <b>48</b></span><span>F <b>13</b></span></div></div>
-        <div class="meal"><div class="meal-h"><div class="t">Mid-morning</div><div class="k">~250</div></div><ul class="foods"><li>Banana</li><li>Whey <i>· 1 scoop</i></li></ul><div class="m2"><span>P <b>30</b></span><span>C <b>30</b></span><span>F <b>2</b></span></div></div>
-        <div class="meal"><div class="meal-h"><div class="t">Lunch</div><div class="k">~570</div></div><ul class="foods"><li>Chicken breast <i>· 250g</i></li><li>Rice <i>· 80g dry</i></li><li>Salad + veg</li></ul><div class="m2"><span>P <b>62</b></span><span>C <b>70</b></span><span>F <b>9</b></span></div></div>
-        <div class="meal"><div class="meal-h"><div class="t">Pre-gym <span class="chip lime">train</span></div><div class="k">~290</div></div><ul class="foods"><li>Oats <i>· 50g</i></li><li>Whey <i>· 1 scoop</i></li></ul><div class="m2"><span>P <b>28</b></span><span>C <b>42</b></span><span>F <b>4</b></span></div></div>
-        <div class="meal"><div class="meal-h"><div class="t">Dinner / post-gym</div><div class="k">~690</div></div><ul class="foods"><li>5% beef mince <i>· 250g</i></li><li>0% Greek yogurt <i>· 200g</i></li><li>Potato <i>· 150g</i> + veg</li></ul><div class="m2"><span>P <b>80</b></span><span>C <b>60</b></span><span>F <b>17</b></span></div></div>
-      </div>
-      <div class="daytot"><span>Day total</span><span class="m">~2,365 · 240P · 250C · 45F</span></div>
-      <p style="font-size:12px;color:var(--muted);font-weight:500;line-height:1.5"><b style="color:var(--text)">Rest days (Wed, Sun):</b> drop the pre-gym oats and lunch rice, hold both protein meals. The day lands lighter without a session to fuel.</p>
+      <div class="shead"><h2 class="sm" id="planTitle">Weekday plate</h2><span class="tagn"><button class="reset" id="editMeals" style="text-decoration:none;color:var(--muted)">Edit meals</button></span></div>
+      <div class="mealwrap" id="mealList"></div>
+      <div class="addrow" id="mealAddRow" style="display:none"><button class="btn" id="addMeal">+ Add a meal</button><button class="btn solid" id="doneEdit" style="flex:0 0 auto;padding-left:22px;padding-right:22px">Done</button></div>
+      <div class="totbar" id="mealTot"></div>
+      <p style="font-size:12px;color:var(--muted);font-weight:500;line-height:1.5" id="planNote"></p>
     </div>
-
-    <div class="block">
-      <div class="card forest">
-        <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime)"><use href="#i-bolt"/></svg>Saturday: arms, then your night</div>
-        <p>Saturday trains delts and arms, walks, then it's your social slot. Hold the 240g protein and spend the day's carbs on the meal out rather than across the day. The shawarma goes here, on purpose.</p>
-      </div>
-    </div>
-
     <div class="block">
       <div class="cols2">
-        <div class="col">
-          <div class="shead"><h2 class="sm">Weekly shop</h2><span class="tagn">€70&#8211;80</span></div>
-          <div class="card shop">
-            <label><input type="checkbox"><span><b>5% beef mince</b> · ~2kg</span></label>
-            <label><input type="checkbox"><span><b>Chicken breast</b> · ~1.5kg</span></label>
-            <label><input type="checkbox"><span><b>Eggs</b> · 15</span></label>
-            <label><input type="checkbox"><span><b>Protein pancakes</b> · 160g × 5</span></label>
-            <label><input type="checkbox"><span><b>0% Greek yogurt</b> · ~1.2kg</span></label>
-            <label><input type="checkbox"><span><b>Bananas</b> · 7</span></label>
-            <label><input type="checkbox"><span><b>Whey</b> · ~400g</span></label>
-            <label><input type="checkbox"><span><b>Rice, oats, potatoes</b></span></label>
-            <label><input type="checkbox"><span><b>Salad + veg</b> · ~1.5kg</span></label>
-          </div>
-        </div>
-        <div class="col">
-          <div class="shead"><h2 class="sm">Sunday prep</h2><span class="tagn">75&#8211;90 min</span></div>
-          <div class="card"><ol class="steps">
-            <li>Brown the mince in batches, season. Bake or pan the chicken.</li>
-            <li>Portion <b>lunch and dinner tubs</b>, 3 days fridge, rest freezer.</li>
-            <li>Cook rice and potatoes, portion them.</li>
-            <li>Make the <b>yogurt pots</b>, wash and bag the salad.</li>
-            <li>Eggs and pancakes cook fresh each morning.</li>
-          </ol></div>
-          <div class="card"><table class="swp"><tbody>
-            <tr><td>Beef mince <span class="arw">&#8594;</span></td><td>Chicken, gram for gram</td></tr>
-            <tr><td>Chicken <span class="arw">&#8594;</span></td><td>Turkey, fish, prawns</td></tr>
-            <tr><td>Rice <span class="arw">&#8594;</span></td><td>Potato, pasta, oats</td></tr>
-            <tr><td>2 eggs <span class="arw">&#8594;</span></td><td>1 scoop whey + nuts</td></tr>
-          </tbody></table></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="block">
-      <div class="cols2">
-        <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-drop"/></svg>Hydration</div>
-          <ul class="clist">
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>4.0 L</b>&nbsp;train &amp; Sat</li>
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>3.5 L</b>&nbsp;rest days</li>
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Salt + electrolytes pre-train</li>
-          </ul></div>
-        <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-plate"/></svg>Supps</div>
-          <ul class="clist">
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Whey &amp; Creatine 5g</li>
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Magnesium</b> 300&#8211;400mg PM, cramps</li>
-            <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Multivit &amp; Vit D, AM</li>
-          </ul></div>
+        <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-drop"/></svg>Hydration</div><ul class="clist"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>4.0 L</b>&nbsp;train &amp; Sat</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>3.5 L</b>&nbsp;rest days</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Salt + electrolytes pre-train</li></ul></div>
+        <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-plate"/></svg>Supps</div><ul class="clist"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Whey &amp; Creatine 5g</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Magnesium</b> 300&#8211;400mg PM, cramps</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Multivit &amp; Vit D, AM</li></ul></div>
       </div>
     </div>
   </section>
 
-  <!-- ===================== PLAN ===================== -->
+  <!-- PLAN -->
   <section class="view" id="v-plan">
-    <div class="block">
-      <div class="shead"><h2>This week</h2><span class="tagn">5 train · 2 rest</span></div>
+    <div class="block"><div class="shead"><h2>This week</h2><span class="tagn">5 train · 2 rest</span></div>
       <div class="week">
         <div class="wd"><div class="dn">Mon</div><div class="dd">1</div><div class="pip"></div></div>
         <div class="wd"><div class="dn">Tue</div><div class="dd">2</div><div class="pip"></div></div>
@@ -620,43 +508,23 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
         <div class="wd"><div class="dn">Sun</div><div class="dd">7</div><div class="pip r"></div></div>
       </div>
     </div>
-
-    <div class="block">
-      <div class="cols2">
-        <div class="col">
-          <div class="shead"><h2 class="sm">Split</h2></div>
-          <div class="plist">
-            <div class="pc"><div class="pc-d"><b>Mon</b><small>D1</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower A</div><div class="s">Quad lead · then a walk</div></div></div>
-            <div class="pc"><div class="pc-d"><b>Tue</b><small>D2</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper A</div><div class="s">Push &amp; delts</div></div></div>
-            <div class="pc"><div class="pc-d"><b>Wed</b><small>&#8212;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Rest</div><div class="s">Recover · lower carbs</div></div></div>
-            <div class="pc"><div class="pc-d"><b>Thu</b><small>D3</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower B</div><div class="s">Posterior chain · then a walk</div></div></div>
-            <div class="pc"><div class="pc-d"><b>Fri</b><small>D4</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper B</div><div class="s">Pull &amp; delts</div></div></div>
-            <div class="pc"><div class="pc-d"><b>Sat</b><small>D5</small></div><div class="pc-bar h"></div><div class="pc-i"><div class="t">Arms &amp; Delts</div><div class="s">Delts, arms · walk · social</div></div></div>
-            <div class="pc"><div class="pc-d"><b>Sun</b><small>&#8212;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Checkpoint</div><div class="s">7-day average · photo · adjust</div></div></div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="shead"><h2 class="sm">Cardio</h2><span class="tagn">post-workout</span></div>
-          <div class="card forest">
-            <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime)"><use href="#i-walk"/></svg>15-min incline walk &#215; 3</div>
-            <p>Straight after the weights on <b>Mon, Thu and Sat</b>. Burns fat without denting recovery or appetite. That's the only cardio. If the scale stalls two weeks, add a fourth walk before touching the food.</p>
-          </div>
-          <div class="tilegrid g2">
-            <div class="tile soft"><div class="ti">Speed</div><div class="tv">5&#8211;6<small> km/h</small></div></div>
-            <div class="tile soft"><div class="ti">Incline</div><div class="tv">10&#8211;15<small>%</small></div></div>
-          </div>
-          <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-check"/></svg>Recovery</div>
-            <ul class="clist">
-              <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sleep 7.5h</b>, fixed wake time. The biggest lever left on the table.</li>
-              <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Last caffeine early afternoon, screens down before bed.</li>
-              <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Pre-log the day each morning, train the evening with Mufleh.</li>
-            </ul></div>
-        </div>
+    <div class="block"><div class="cols2">
+      <div class="col"><div class="shead"><h2 class="sm">Split</h2></div><div class="plist">
+        <div class="pc"><div class="pc-d"><b>Mon</b><small>D1</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower A</div><div class="s">Quad lead · then a walk</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Tue</b><small>D2</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper A</div><div class="s">Push &amp; delts</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Wed</b><small>&#8212;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Rest</div><div class="s">Recover · lower carbs</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Thu</b><small>D3</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower B</div><div class="s">Posterior chain · then a walk</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Fri</b><small>D4</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper B</div><div class="s">Pull &amp; delts</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Sat</b><small>D5</small></div><div class="pc-bar h"></div><div class="pc-i"><div class="t">Arms &amp; Delts</div><div class="s">Delts, arms · walk · social</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Sun</b><small>&#8212;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Checkpoint</div><div class="s">7-day average · photo · adjust</div></div></div>
+      </div></div>
+      <div class="col"><div class="shead"><h2 class="sm">Cardio</h2><span class="tagn">post-workout</span></div>
+        <div class="card forest"><div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime)"><use href="#i-walk"/></svg>15-min incline walk &#215; 3</div><p>Straight after the weights on <b>Mon, Thu and Sat</b>. Burns fat without denting recovery or appetite. That's the only cardio. If the scale stalls two weeks, add a fourth walk before touching the food.</p></div>
+        <div class="tilegrid g2"><div class="tile soft"><div class="ti">Speed</div><div class="tv">5&#8211;6<small> km/h</small></div></div><div class="tile soft"><div class="ti">Incline</div><div class="tv">10&#8211;15<small>%</small></div></div></div>
+        <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-check"/></svg>Recovery</div><ul class="clist"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sleep 7.5h</b>, fixed wake time. The biggest lever left.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Last caffeine early afternoon, screens down before bed.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Pre-log the day each morning, train the evening with Mufleh.</li></ul></div>
       </div>
-    </div>
-
-    <div class="block">
-      <div class="shead"><h2 class="sm">Scale rules</h2></div>
+    </div></div>
+    <div class="block"><div class="shead"><h2 class="sm">Scale rules</h2></div>
       <div class="card ink"><ul class="clist">
         <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Weigh daily</b>, first thing, same conditions. Act on the 7-day average only.</li>
         <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Around 0.5kg down</b> hold everything. Faster than 0.8, eat a little more.</li>
@@ -664,9 +532,7 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
         <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sub-15%</b>, ease the deficit to protect muscle. Ignore the scale 2&#8211;3 days after Saturday.</li>
       </ul></div>
     </div>
-
-    <div class="block">
-      <div class="shead"><h2 class="sm">Phases</h2></div>
+    <div class="block"><div class="shead"><h2 class="sm">Phases</h2></div>
       <div class="tilegrid">
         <div class="phase"><div class="pn">1</div><div class="pm"><div class="t">Establish · June</div><div class="s">Lock the plan, fast initial drop</div></div><div class="pt">16&#8211;17%</div></div>
         <div class="phase"><div class="pn">2</div><div class="pm"><div class="t">Grind · July</div><div class="s">Hold intake, adherence tested</div></div><div class="pt">14&#8211;15%</div></div>
@@ -675,157 +541,93 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
     </div>
   </section>
 
-  <!-- ===================== PROGRESS ===================== -->
+  <!-- PROGRESS -->
   <section class="view" id="v-progress">
-    <div class="block">
-      <div class="cols2">
-        <div class="hero">
-          <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
-          <div class="htop">
-            <div>
-              <div class="hlab">The Mission</div>
-              <div class="hday"><span id="pgWnow">92.6</span> <span style="color:rgba(255,255,255,.4)">&#8594;</span> 85.0</div>
-              <div class="hsub" id="pgToGo">~8kg of fat to shift · about 0.5kg a week.</div>
-            </div>
-            <div class="ring">
-              <svg width="76" height="76" viewBox="0 0 76 76">
-                <circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/>
-                <circle class="fil" id="pgRing" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/>
-              </svg>
-              <div class="rt"><b id="pgBf">19.2%</b><span>Body fat</span></div>
-            </div>
-          </div>
-          <div class="herostats">
-            <div class="hs"><div class="v">12%</div><div class="k">Target BF</div><div class="bar"><i id="pgBar" style="width:36%"></i></div></div>
-            <div class="hs"><div class="v">~535</div><div class="k">Deficit/day</div><div class="bar"><i style="width:45%"></i></div></div>
-            <div class="hs"><div class="v">2,365</div><div class="k">Daily intake</div><div class="bar"><i style="width:82%"></i></div></div>
-          </div>
-        </div>
-
-        <div class="trackwrap">
-          <div class="seg" id="seg">
-            <button data-pane="daily" class="on">Daily weigh-in</button>
-            <button data-pane="monthly">Monthly scan</button>
-          </div>
-          <div class="pane on" id="paneDaily">
-            <div class="tilegrid g3">
-              <div class="tile soft"><div class="ti">7-day avg</div><div class="tv" id="dAvg" style="font-size:23px">&#8212;</div></div>
-              <div class="tile soft"><div class="ti">Trend</div><div class="tv" id="dTrend" style="font-size:23px">&#8212;</div></div>
-              <div class="tile soft"><div class="ti">Goal ETA</div><div class="tv" id="dEta" style="font-size:23px">&#8212;</div></div>
-            </div>
-            <div class="chartcard"><div id="dChart"></div></div>
-            <button class="addbtn" id="dAdd">+ Add a daily weigh-in</button>
-            <div class="form" id="dForm">
-              <div class="frow"><div class="field"><label>Date</label><input type="date" id="dDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="dWeight" placeholder="93.8"></div></div>
-              <div class="calc">Weigh first thing, after the toilet, before food.</div>
-              <div class="formbtns"><button class="ghost" id="dCancel">Cancel</button><button class="save" id="dSave">Save</button></div>
-            </div>
-            <div class="shead"><h2 class="sm">Recent days</h2><span class="tagn" id="dCount"></span></div>
-            <div id="dHist"></div>
-          </div>
-          <div class="pane" id="paneMonthly">
-            <div class="mchips" id="mchips">
-              <button class="pill active" data-m="weight">Weight</button>
-              <button class="pill" data-m="bf">Fat %</button>
-              <button class="pill" data-m="fat">Fat mass</button>
-              <button class="pill" data-m="muscle">Muscle</button>
-            </div>
-            <div class="chartcard"><div id="mChart"></div></div>
-            <div class="shead"><h2 class="sm">This month's read</h2><span class="tagn" id="vHint"></span></div>
-            <div id="verdict" class="verdict"></div>
-            <div class="dgrid" id="dgrid"></div>
-            <div class="shead"><h2 class="sm">Latest breakdown</h2><span class="tagn" id="bDate"></span></div>
-            <div class="tilegrid g2" id="breakdown"></div>
-            <button class="addbtn" id="sAdd">+ Add this month's scan</button>
-            <div class="form" id="sForm">
-              <div class="frow"><div class="field"><label>Date</label><input type="date" id="sDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sWeight" placeholder="92.6"></div></div>
-              <div class="frow"><div class="field"><label>Body fat %</label><input type="number" step="0.1" inputmode="decimal" id="sBf" placeholder="19.2"></div><div class="field"><label>Muscle (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sMus" placeholder="opt."></div></div>
-              <div class="calc">Enter weight and body fat, the rest computes.</div>
-              <div class="formbtns"><button class="ghost" id="sCancel">Cancel</button><button class="save" id="sSave">Analyse &amp; save</button></div>
-            </div>
-            <div class="shead"><h2 class="sm">History</h2><span class="tagn" id="sCount"></span></div>
-            <div id="sHist"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="block">
-      <div class="shead"><h2 class="sm">How this is worked out</h2></div>
-      <div class="cols2">
-        <details class="fx"><summary>Target weight</summary><div class="fb"><div class="eq">target = lean <b>&#247;</b> (1 &#8722; 0.12)</div>Holds your lean mass and solves for 12%. 74.8 &#247; 0.88 &#8776; 85kg. Recomputes from your newest scan, so building muscle lifts the target.</div></details>
-        <details class="fx"><summary>7-day average &amp; trend</summary><div class="fb"><div class="eq">avg = mean(last 7) · trend = slope <b>&#215;</b> 7</div>One morning swings a kilo on water. The average strips that out, the slope gives a fair kg/week. Aim for 0.4&#8211;0.8.</div></details>
-      </div>
-    </div>
-  </section>
-
-  <!-- ===================== FOCUS ===================== -->
-  <section class="view" id="v-focus">
-    <div class="block">
+    <div class="block"><div class="cols2">
       <div class="hero">
         <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
-        <div class="hlab">The next 90 days</div>
-        <div class="hday" style="margin-top:9px">Three things<br>move the needle.</div>
-        <div class="hsub">Everything else is detail. Get these right and August looks after itself.</div>
+        <div class="htop"><div><div class="hlab">The Mission</div><div class="hday"><span id="pgWnow">92.6</span> <span style="color:rgba(255,255,255,.4)">&#8594;</span> 85.0</div><div class="hsub" id="pgToGo">~8kg of fat to shift · about 0.5kg a week.</div></div>
+        <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="pgRing" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="pgBf">19.2%</b><span>Body fat</span></div></div></div>
+        <div class="herostats"><div class="hs"><div class="v">12%</div><div class="k">Target BF</div><div class="bar"><i id="pgBar" style="width:36%"></i></div></div><div class="hs"><div class="v" id="pgDef">~535</div><div class="k">Deficit/day</div><div class="bar"><i style="width:45%"></i></div></div><div class="hs"><div class="v" id="pgIntake">2,365</div><div class="k">Daily intake</div><div class="bar"><i style="width:82%"></i></div></div></div>
       </div>
-    </div>
-    <div class="block">
-      <div class="cols2">
-        <div class="prio">
-          <div class="pn">1</div>
-          <div><div class="pt">Priority</div><h3>Sleep</h3><p>Get to <b>7.5 hours</b>. This is the biggest weakness in the plan right now. Under-slept means hungrier, weaker and looser with food, it quietly undoes the deficit.</p></div>
+      <div class="trackwrap">
+        <div class="seg" id="seg"><button data-pane="daily" class="on">Daily weigh-in</button><button data-pane="monthly">Monthly scan</button></div>
+        <div class="pane on" id="paneDaily">
+          <div class="tilegrid g3"><div class="tile soft"><div class="ti">7-day avg</div><div class="tv" id="dAvg" style="font-size:23px">&#8212;</div></div><div class="tile soft"><div class="ti">Trend</div><div class="tv" id="dTrend" style="font-size:23px">&#8212;</div></div><div class="tile soft"><div class="ti">Goal ETA</div><div class="tv" id="dEta" style="font-size:23px">&#8212;</div></div></div>
+          <div class="chartcard"><div id="dChart"></div></div>
+          <button class="addbtn" id="dAdd">+ Add a daily weigh-in</button>
+          <div class="form" id="dForm"><div class="frow"><div class="field"><label>Date</label><input type="date" id="dDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="dWeight" placeholder="93.8"></div></div><div class="calc">Weigh first thing, after the toilet, before food.</div><div class="formbtns"><button class="ghost" id="dCancel">Cancel</button><button class="save" id="dSave">Save</button></div></div>
+          <div class="shead"><h2 class="sm">Recent days</h2><span class="tagn" id="dCount"></span></div><div id="dHist"></div>
         </div>
-        <div class="prio">
-          <div class="pn">2</div>
-          <div><div class="pt">Priority</div><h3>Consistency</h3><ul class="nlist"><li>No random cheat weekends.</li><li>No bulking.</li><li>No cutting harder.</li><li>No changing the plan.</li></ul><p style="margin-top:8px">It works if you run it, not if you tweak it every week.</p></div>
-        </div>
-        <div class="prio span2">
-          <div class="pn">3</div>
-          <div><div class="pt">Priority</div><h3>Strength retention</h3><p>During a cut your job is not to get stronger. It's to <b>refuse to get weaker</b>. Hold your bench near 100kg for reps while bodyweight drops from 92.6 to 86, and you've run an excellent cut.</p></div>
+        <div class="pane" id="paneMonthly">
+          <div class="mchips" id="mchips"><button class="pill active" data-m="weight">Weight</button><button class="pill" data-m="bf">Fat %</button><button class="pill" data-m="fat">Fat mass</button><button class="pill" data-m="muscle">Muscle</button></div>
+          <div class="chartcard"><div id="mChart"></div></div>
+          <div class="shead"><h2 class="sm">This month's read</h2><span class="tagn" id="vHint"></span></div>
+          <div id="verdict" class="verdict"></div><div class="dgrid" id="dgrid"></div>
+          <div class="shead"><h2 class="sm">Latest breakdown</h2><span class="tagn" id="bDate"></span></div><div class="tilegrid g2" id="breakdown"></div>
+          <button class="addbtn" id="sAdd">+ Add this month's scan</button>
+          <div class="form" id="sForm"><div class="frow"><div class="field"><label>Date</label><input type="date" id="sDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sWeight" placeholder="92.6"></div></div><div class="frow"><div class="field"><label>Body fat %</label><input type="number" step="0.1" inputmode="decimal" id="sBf" placeholder="19.2"></div><div class="field"><label>Muscle (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sMus" placeholder="opt."></div></div><div class="calc">Enter weight and body fat, the rest computes.</div><div class="formbtns"><button class="ghost" id="sCancel">Cancel</button><button class="save" id="sSave">Analyse &amp; save</button></div></div>
+          <div class="shead"><h2 class="sm">History</h2><span class="tagn" id="sCount"></span></div><div id="sHist"></div>
         </div>
       </div>
-    </div>
+    </div></div>
   </section>
 
-  <!-- ===================== YOU ===================== -->
+  <!-- FOCUS -->
+  <section class="view" id="v-focus">
+    <div class="block"><div class="hero"><div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div><div class="hlab">The next 90 days</div><div class="hday" style="margin-top:9px">Three things<br>move the needle.</div><div class="hsub">Everything else is detail. Get these right and the rest looks after itself.</div></div></div>
+    <div class="block"><div class="cols2">
+      <div class="prio"><div class="pn">1</div><div><div class="pt">Priority</div><h3>Sleep</h3><p>Get to <b>7.5 hours</b>. The biggest weakness in the plan right now. Under-slept means hungrier, weaker and looser with food, it quietly undoes the deficit.</p></div></div>
+      <div class="prio"><div class="pn">2</div><div><div class="pt">Priority</div><h3>Consistency</h3><ul class="nlist"><li>No random cheat weekends.</li><li>No bulking.</li><li>No cutting harder.</li><li>No changing the plan.</li></ul><p style="margin-top:8px">It works if you run it, not if you tweak it every week.</p></div></div>
+      <div class="prio span2"><div class="pn">3</div><div><div class="pt">Priority</div><h3>Strength retention</h3><p>During a cut your job is not to get stronger. It's to <b>refuse to get weaker</b>. Hold your bench near 100kg for reps while bodyweight drops from 92.6 to 86, and you've run an excellent cut.</p></div></div>
+    </div></div>
+  </section>
+
+  <!-- SETTINGS -->
   <section class="view" id="v-you">
-    <div class="block">
-      <div class="shead"><h2>Customise</h2></div>
-      <div class="cols2">
-        <div class="col">
-          <div class="sgroup"><h3>Theme</h3>
-            <div class="seg2" id="themeSeg"><button data-t="light" class="on">Light</button><button data-t="dark">Dark</button><button data-t="system">System</button></div>
-          </div>
-          <div class="sgroup"><h3>Accent</h3><div class="swatches" id="swatches"></div></div>
-        </div>
-        <div class="card">
-          <div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg>About</div>
-          <p style="color:var(--muted)">The Cut runs your 5-day programme next to a flat 2,365 kcal target, locked to your 17 May Tanita: 92.6kg, 19.2%, lean 74.8kg. Tick sets as you train, tap a move for its form video, log weigh-ins and scans in Progress. Everything saves on this device only.</p>
-        </div>
+    <div class="block"><div class="shead"><h2>Settings</h2></div>
+      <div class="card">
+        <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-flame"/></svg>Macro targets</div>
+        <div class="stepper"><div class="sl">Protein<small>4 kcal/g</small></div><div class="stepctl"><button data-mac="p" data-d="-5">&#8722;</button><input type="number" id="inP" inputmode="numeric"><button data-mac="p" data-d="5">+</button></div></div>
+        <div class="stepper"><div class="sl">Carbs<small>4 kcal/g</small></div><div class="stepctl"><button data-mac="c" data-d="-5">&#8722;</button><input type="number" id="inC" inputmode="numeric"><button data-mac="c" data-d="5">+</button></div></div>
+        <div class="stepper"><div class="sl">Fat<small>9 kcal/g</small></div><div class="stepctl"><button data-mac="f" data-d="-5">&#8722;</button><input type="number" id="inF" inputmode="numeric"><button data-mac="f" data-d="5">+</button></div></div>
+        <div class="kcalrow"><div class="kl">Daily calories</div><div class="kn" id="setKcal">2,365</div></div>
+        <div class="stepper" style="margin-top:6px"><div class="sl">Maintenance<small>used for deficit &amp; ETA</small></div><div class="stepctl"><button data-mac="m" data-d="-50">&#8722;</button><input type="number" id="inM" inputmode="numeric"><button data-mac="m" data-d="50">+</button></div></div>
+        <div class="totbar" id="setDeficit" style="margin-top:12px"></div>
+        <div class="deficitrow"><button class="reset" id="macReset">Reset to plan (240 / 250 / 45)</button></div>
       </div>
     </div>
-    <div class="block">
-      <div class="foot">
-        <p><b>Days:</b> Mon, Tue, Thu, Fri, Sat train · Wed, Sun rest. A day between the two Lower sessions.</p>
-        <p><b>Confirmed:</b> 240P / 250C / 45F daily · incline walks Mon/Thu/Sat · deadlift removed, hip thrust and back extension cover the chain · base proteins minced beef and chicken.</p>
-        <p style="color:var(--muted2);margin-top:12px">Built for Kay · review weekly, re-scan monthly, ease the deficit as you lean out.</p>
+    <div class="block"><div class="cols2">
+      <div class="col">
+        <div class="sgroup"><h3>Theme</h3><div class="seg2" id="themeSeg"><button data-t="light" class="on">Light</button><button data-t="dark">Dark</button><button data-t="system">System</button></div></div>
+        <div class="sgroup"><h3>Accent</h3><div class="swatches" id="swatches"></div></div>
       </div>
-    </div>
+      <div class="card backup">
+        <div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-save"/></svg>Backup &amp; restore</div>
+        <p style="color:var(--muted);margin-bottom:12px">Everything saves on this device automatically. To move it to another device or keep a copy, grab a backup code and paste it back later.</p>
+        <div class="addrow"><button class="btn ghost" id="copyBackup">Copy backup code</button></div>
+        <textarea id="restoreBox" placeholder="Paste a backup code here, then tap Restore" style="margin-top:10px"></textarea>
+        <div class="addrow" style="margin-top:10px"><button class="btn ghost" id="restoreBtn">Restore</button><button class="reset" id="wipeBtn" style="align-self:center">Reset all data</button></div>
+      </div>
+    </div></div>
+    <div class="block"><div class="foot">
+      <p><b>Days:</b> Mon, Tue, Thu, Fri, Sat train · Wed, Sun rest. A day between the two Lower sessions.</p>
+      <p><b>Locked to your 17 May Tanita:</b> 92.6kg, 19.2%, lean 74.8kg, target 12%. Edit macros above and every screen updates.</p>
+      <p style="color:var(--muted2);margin-top:12px">Built for Kay · review weekly, re-scan monthly, ease the deficit as you lean out.</p>
+    </div></div>
   </section>
-
   </main>
 </div>
 
-<div class="tabbar">
-  <div class="tabinner">
-    <button class="tab active" data-v="train" aria-label="Train"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg></button>
-    <button class="tab" data-v="food" aria-label="Food"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg></button>
-    <button class="tab" data-v="plan" aria-label="Plan"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cal"/></svg></button>
-    <button class="tab" data-v="progress" aria-label="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg></button>
-    <button class="tab" data-v="focus" aria-label="Focus"><svg viewBox="0 0 24 24" class="ic"><use href="#i-target"/></svg></button>
-    <button class="tab" data-v="you" aria-label="You"><svg viewBox="0 0 24 24" class="ic"><use href="#i-user"/></svg></button>
-  </div>
-</div>
+<div class="tabbar"><div class="tabinner">
+  <button class="tab active" data-v="train" aria-label="Train"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg></button>
+  <button class="tab" data-v="food" aria-label="Food"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg></button>
+  <button class="tab" data-v="plan" aria-label="Plan"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cal"/></svg></button>
+  <button class="tab" data-v="progress" aria-label="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg></button>
+  <button class="tab" data-v="focus" aria-label="Focus"><svg viewBox="0 0 24 24" class="ic"><use href="#i-target"/></svg></button>
+  <button class="tab" data-v="you" aria-label="Settings"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cog"/></svg></button>
+</div></div>
+<div class="toast" id="toast"></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
@@ -839,15 +641,22 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
   <symbol id="i-plate" viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"/><path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></symbol>
   <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></symbol>
   <symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 21V11M12 21V4M19 21v-7"/></symbol>
-  <symbol id="i-user" viewBox="0 0 24 24"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2.2"/><circle cx="9" cy="17" r="2.2"/></symbol>
+  <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13a7.7 7.7 0 0 0 0-2l2-1.5-2-3.5-2.4 1a7.6 7.6 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.5L4.6 11a7.7 7.7 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.5z"/></symbol>
   <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
   <symbol id="i-bars" viewBox="0 0 24 24"><path d="M4 18V8M9 18V5M14 18v-8M19 18v-5"/></symbol>
   <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M13 22l-2-6-3-2 1.5-6 3 2 3 1M9 9l-2 4M11 16l-3 6"/></symbol>
+  <symbol id="i-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
 </svg>
 
 <script>
+"use strict";
+var $=function(id){return document.getElementById(id);};
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c];});}
+function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(t._t);t._t=setTimeout(function(){t.classList.remove('show');},1900);}
+
+/* ---------- workout data ---------- */
 var S='https://www.youtube.com/results?search_query=';
 function q(s){return S+encodeURIComponent(s+' proper form');}
 var PROGRAM=[
@@ -889,7 +698,7 @@ var PROGRAM=[
   ]},
   {key:'arms',name:'Arms & Delts',focus:'Delts · arms · forearms',sub:'Delts, arms &amp; forearms · your Saturday pump',time:'~55',ex:[
     {n:'DB Lateral Raise',sr:'4 × 12-15',rir:'0-1 RIR',ld:'10 → 16kg',q:q('dumbbell lateral raise'),note:'Width is the goal. Strict, lead with the elbow, no swing.'},
-    {n:'Rear Delt Fly',sr:'3 × 15',rir:'1 RIR',ld:'by feel',q:q('rear delt fly'),note:'Your add. Pull with the rear delt, not the traps.'},
+    {n:'Rear Delt Fly',sr:'3 × 15',rir:'1 RIR',ld:'by feel',q:q('rear delt fly'),note:'Pull with the rear delt, not the traps.'},
     {n:'Cable Lateral Raise',sr:'3 × 15',rir:'0 RIR',ld:'light · constant tension',q:q('cable lateral raise'),note:'Burns the side delt out top to bottom.'},
     {n:'EZ-Bar Curl',sr:'3 × 8-12',rir:'1-2 RIR',ld:'by feel · add load',q:q('ez bar curl'),note:'Heaviest curl of the day.'},
     {n:'Overhead Triceps Extension',sr:'3 × 10-12',rir:'1 RIR',ld:'by feel',q:q('overhead cable triceps extension'),note:'Long head, full stretch overhead.'},
@@ -898,81 +707,151 @@ var PROGRAM=[
     {n:'Hammer Curl + Wrist Curl',sr:'3 × 12-15 superset',ld:'by feel',q:q('hammer curl wrist curl forearm'),note:'Forearms and brachialis.'}
   ]}
 ];
+var WEEKDAY_TO_KEY={1:'lowerA',2:'upperA',4:'lowerB',5:'upperB',6:'arms'};
 
-var curDay=0;
-var done={}; PROGRAM.forEach(function(d){done[d.key]=new Set();});
-var RC=2*Math.PI*32;
-var play='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+/* ---------- default meals (sum to 240/250/45) ---------- */
+var DEFAULT_MEALS={
+  weekday:[
+    {name:'Breakfast',foods:'Protein pancakes 160g · 2 whole eggs · black coffee',p:40,c:48,f:13},
+    {name:'Mid-morning',foods:'Banana · whey 1 scoop',p:30,c:30,f:2},
+    {name:'Lunch',foods:'Chicken breast 250g · rice 80g dry · salad + veg',p:62,c:70,f:9},
+    {name:'Pre-gym',foods:'Oats 50g · whey 1 scoop',p:28,c:42,f:4},
+    {name:'Dinner / post-gym',foods:'5% beef mince 250g · 0% Greek yogurt 200g · potato 150g + veg',p:80,c:60,f:17}
+  ],
+  weekend:[
+    {name:'Late breakfast',foods:'3 eggs · 0% Greek yogurt 250g · coffee',p:45,c:18,f:17},
+    {name:'Lunch',foods:'Chicken 200g · rice 70g dry · veg',p:50,c:60,f:7},
+    {name:'Pre-social',foods:'Whey 1.5 scoop · banana',p:42,c:40,f:3},
+    {name:'Meal out (social)',foods:'Mixed grill / shawarma plate · spend the carbs here',p:103,c:132,f:18}
+  ]
+};
+var PLAN_NOTES={
+  weekday:'Rest days (Wed, Sun): drop the pre-gym oats and lunch rice, hold both protein meals. The day lands lighter without a session to fuel.',
+  weekend:'Saturday is the social slot. Hold protein, spend the day\u2019s carbs on the meal out rather than across the day. The shawarma goes here, on purpose.'
+};
 
-function renderDayTabs(){
-  document.getElementById('dayTabs').innerHTML=PROGRAM.map(function(d,i){
-    return '<button class="pill '+(i===curDay?'active':'')+'" data-day="'+i+'">'+d.name+'</button>';
-  }).join('');
+/* ---------- body comp ---------- */
+var TBF=12;
+var SEED_S=[{date:'2025-09-27',weight:88.9,bf:18.9,muscle:68.5},{date:'2026-05-17',weight:92.6,bf:19.2,muscle:71.1}];
+var SEED_D=[{date:'2026-05-17',weight:92.6},{date:'2026-06-06',weight:93.8}];
+
+/* ---------- state + persistence ---------- */
+var KEY='tcA-v1';
+function clone(o){return JSON.parse(JSON.stringify(o));}
+function defState(){return{macros:{p:240,c:250,f:45},maint:2900,theme:'light',accent:0,mode:'weekday',meals:clone(DEFAULT_MEALS),scans:clone(SEED_S),daily:clone(SEED_D),ticks:{}};}
+var STATE=defState();
+function migrate(){try{var os=localStorage.getItem('tc-scans'),od=localStorage.getItem('tc-daily');if(os){var a=JSON.parse(os);if(Array.isArray(a)&&a.length)STATE.scans=a;}if(od){var b=JSON.parse(od);if(Array.isArray(b)&&b.length)STATE.daily=b;}}catch(e){}}
+function loadState(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);var d=defState();STATE={macros:Object.assign(d.macros,o.macros||{}),maint:o.maint||d.maint,theme:o.theme||d.theme,accent:o.accent||0,mode:o.mode||'weekday',meals:o.meals&&o.meals.weekday?o.meals:d.meals,scans:Array.isArray(o.scans)&&o.scans.length?o.scans:d.scans,daily:Array.isArray(o.daily)?o.daily:d.daily,ticks:o.ticks||{}};}else{migrate();}}catch(e){STATE=defState();}}
+function saveState(){try{localStorage.setItem(KEY,JSON.stringify(STATE));}catch(e){}}
+
+/* ---------- macro math ---------- */
+function kcalOf(m){return Math.round(m.p*4+m.c*4+m.f*9);}
+function fmtK(n){return n.toLocaleString('en-GB');}
+function applyMacrosEverywhere(){
+  var m=STATE.macros,k=kcalOf(m);
+  $('tKcal').textContent=fmtK(k);$('tP').innerHTML=m.p+'<small>g</small>';$('tC').innerHTML=m.c+'<small>g</small>';$('tF').innerHTML=m.f+'<small>g</small>';
+  $('inP').value=m.p;$('inC').value=m.c;$('inF').value=m.f;$('inM').value=STATE.maint;$('setKcal').textContent=fmtK(k);
+  var def=STATE.maint-k,wk=def*7/7700;
+  $('setDeficit').className='totbar'+(def>0?' ok':'');
+  $('setDeficit').innerHTML='<span>Deficit</span><span class="m">'+(def>=0?'~'+fmtK(def):'+'+fmtK(-def))+' kcal/day · '+(def>0?'\u2248 '+wk.toFixed(2)+'kg/wk':'surplus')+'</span>';
+  $('pgDef').textContent=def>0?'~'+fmtK(def):'+'+fmtK(-def);
+  $('pgIntake').textContent=fmtK(k);
+  renderMealTotals();
 }
+
+/* ---------- workout render (per-date ticks) ---------- */
+var curDay=0,RC=2*Math.PI*32,play='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+function todayISO(){return new Date().toISOString().slice(0,10);}
+function doneSet(){var t=STATE.ticks[todayISO()];return(t&&t.key===PROGRAM[curDay].key&&Array.isArray(t.done))?t.done:[];}
+function setDone(arr){STATE.ticks[todayISO()]={key:PROGRAM[curDay].key,done:arr};saveState();}
+function renderDayTabs(){$('dayTabs').innerHTML=PROGRAM.map(function(d,i){return '<button class="pill '+(i===curDay?'active':'')+'" data-day="'+i+'">'+d.name+'</button>';}).join('');}
 function renderWorkout(){
-  var d=PROGRAM[curDay];
-  document.getElementById('wHead').innerHTML='<span class="tg">'+d.name+'</span><span class="wt">'+d.focus+'</span><span class="wm"><svg viewBox="0 0 24 24" class="ic" style="width:14px;height:14px"><use href="#i-dumbbell"/></svg>'+d.time+' min</span>';
-  document.getElementById('workoutBox').innerHTML=d.ex.map(function(e,i){
-    var dn=done[d.key].has(i);
+  var d=PROGRAM[curDay],dn=doneSet();
+  $('wHead').innerHTML='<span class="tg">'+d.name+'</span><span class="wt">'+d.focus+'</span><span class="wm"><svg viewBox="0 0 24 24" class="ic" style="width:14px;height:14px"><use href="#i-dumbbell"/></svg>'+d.time+' min</span>';
+  $('workoutBox').innerHTML=d.ex.map(function(e,i){
+    var on=dn.indexOf(i)>=0;
     var pills='<span class="mp">'+e.sr+'</span>'+(e.rir?'<span class="mp rir">'+e.rir+'</span>':'')+'<span class="mp load">'+e.ld+'</span>';
-    return '<div class="exrow'+(dn?' done':'')+'">'
-      +'<div class="exbody"><div class="en"><span class="enum">'+(i+1)+'</span>'
-      +'<a class="ename" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a></div>'
-      +'<div class="exmeta">'+pills+'</div>'
-      +(e.note?'<div class="exnote">'+e.note+'</div>':'')+'</div>'
-      +'<button class="exchk" data-idx="'+i+'" aria-label="Done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button></div>';
+    return '<div class="exrow'+(on?' done':'')+'"><div class="exbody"><div class="en"><span class="enum">'+(i+1)+'</span><a class="ename" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a></div><div class="exmeta">'+pills+'</div>'+(e.note?'<div class="exnote">'+e.note+'</div>':'')+'</div><button class="exchk" data-idx="'+i+'" aria-label="Done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button></div>';
   }).join('');
-  document.getElementById('hDay').textContent=d.name;
-  document.getElementById('hSub').innerHTML=d.sub;
-  document.getElementById('cMoves').textContent=d.ex.length;
-  document.getElementById('cSets').textContent=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);
-  document.getElementById('cTime').textContent=d.time;
+  $('hDay').textContent=d.name;$('hSub').innerHTML=d.sub;$('cMoves').textContent=d.ex.length;$('cSets').textContent=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);$('cTime').textContent=d.time;
   updateRing();
 }
-function updateRing(){
-  var d=PROGRAM[curDay],tot=d.ex.length,dn=done[d.key].size;
-  document.getElementById('ringNum').textContent=dn+'/'+tot;
-  var f=document.getElementById('ringFil');
-  f.style.strokeDasharray=RC; f.style.strokeDashoffset=RC*(1-dn/tot);
-}
-function selectDay(i){ curDay=i; renderDayTabs(); renderWorkout(); }
+function updateRing(){var d=PROGRAM[curDay],tot=d.ex.length,n=doneSet().length;$('ringNum').textContent=n+'/'+tot;var f=$('ringFil');f.style.strokeDasharray=RC;f.style.strokeDashoffset=RC*(1-n/tot);}
+function selectDay(i){curDay=i;renderDayTabs();renderWorkout();}
 
+/* ---------- calendar from real completion ---------- */
 function renderCalendar(){
-  var now=new Date(), y=now.getFullYear(), m=now.getMonth(), today=now.getDate();
-  var firstDow=(new Date(y,m,1).getDay()+6)%7;
-  var days=new Date(y,m+1,0).getDate();
-  var train=[1,2,4,5,6];
-  var html='';
-  for(var b=0;b<firstDow;b++) html+='<span class="cal-d cal-empty"></span>';
-  for(var d=1;d<=days;d++){
-    var wd=new Date(y,m,d).getDay(), isT=train.indexOf(wd)>=0, cls='cal-d';
-    if(d===today) cls+=' cal-today';
-    else if(isT&&d<today) cls+=' cal-done';
-    else if(isT) cls+=' cal-sched';
-    html+='<span class="'+cls+'">'+d+'</span>';
+  var now=new Date(),y=now.getFullYear(),m=now.getMonth(),today=now.getDate();
+  var firstDow=(new Date(y,m,1).getDay()+6)%7,days=new Date(y,m+1,0).getDate();
+  var html='';for(var b=0;b<firstDow;b++)html+='<span class="cal-d cal-empty"></span>';
+  for(var dd=1;dd<=days;dd++){
+    var date=y+'-'+String(m+1).padStart(2,'0')+'-'+String(dd).padStart(2,'0');
+    var wd=new Date(y,m,dd).getDay(),sched=WEEKDAY_TO_KEY[wd],rec=STATE.ticks[date],cls='cal-d';
+    if(rec&&rec.done&&rec.done.length){var tot=(PROGRAM.filter(function(p){return p.key===rec.key;})[0]||{ex:[]}).ex.length;cls+=rec.done.length>=tot?' cal-done':' cal-part';}
+    else if(dd===today)cls+=' cal-today';
+    else if(sched&&dd<today)cls+=' cal-sched';
+    else if(sched)cls+=' cal-sched';
+    if(dd===today&&!(rec&&rec.done&&rec.done.length))cls='cal-d cal-today';
+    html+='<span class="'+cls+'">'+dd+'</span>';
   }
-  document.getElementById('calGrid').innerHTML=html;
+  $('calGrid').innerHTML=html;
   var MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
-  document.getElementById('calMonth').textContent=MN[m]+' '+y;
+  $('calMonth').textContent=MN[m]+' '+y;
 }
 
+/* ---------- meals ---------- */
+var editMode=false;
+function mealKcal(x){return Math.round(x.p*4+x.c*4+x.f*9);}
+function renderMeals(){
+  var mode=STATE.mode,list=STATE.meals[mode];
+  $('foodTag').textContent=mode;$('planTitle').textContent=(mode==='weekday'?'Weekday':'Weekend')+' plate';$('planNote').innerHTML=PLAN_NOTES[mode];
+  var btns=document.querySelectorAll('#mealMode button');for(var b=0;b<btns.length;b++)btns[b].classList.toggle('on',btns[b].getAttribute('data-mode')===mode);
+  if(editMode){
+    $('mealList').innerHTML=list.map(function(x,i){
+      return '<div class="meal medit"><input class="nm" data-i="'+i+'" data-k="name" value="'+esc(x.name)+'" placeholder="Meal name"><input data-i="'+i+'" data-k="foods" value="'+esc(x.foods)+'" placeholder="Foods"><div class="pcf">'
+        +'<div class="fl"><span>Protein</span><input type="number" inputmode="numeric" data-i="'+i+'" data-k="p" value="'+x.p+'"></div>'
+        +'<div class="fl"><span>Carbs</span><input type="number" inputmode="numeric" data-i="'+i+'" data-k="c" value="'+x.c+'"></div>'
+        +'<div class="fl"><span>Fat</span><input type="number" inputmode="numeric" data-i="'+i+'" data-k="f" value="'+x.f+'"></div></div>'
+        +'<button class="delm" data-del="'+i+'">Remove meal</button></div>';
+    }).join('');
+    $('mealAddRow').style.display='flex';$('editMeals').textContent='Editing';
+  }else{
+    $('mealList').innerHTML=list.map(function(x){
+      return '<div class="meal"><div class="meal-h"><div class="t">'+esc(x.name)+'</div><div class="k">~'+mealKcal(x)+'</div></div><div class="fd">'+esc(x.foods)+'</div><div class="m2"><span>P <b>'+x.p+'</b></span><span>C <b>'+x.c+'</b></span><span>F <b>'+x.f+'</b></span></div></div>';
+    }).join('');
+    $('mealAddRow').style.display='none';$('editMeals').textContent='Edit meals';
+  }
+  renderMealTotals();
+}
+function renderMealTotals(){
+  var list=STATE.meals[STATE.mode],m=STATE.macros;
+  var P=0,C=0,F=0;list.forEach(function(x){P+=+x.p||0;C+=+x.c||0;F+=+x.f||0;});
+  var tol=8,ok=Math.abs(P-m.p)<=tol&&Math.abs(C-m.c)<=tol&&Math.abs(F-m.f)<=tol;
+  var el=$('mealTot');if(!el)return;
+  el.className='totbar'+(ok?' ok':'');
+  el.innerHTML='<span>Plan total</span><span class="m">'+Math.round(P*4+C*4+F*9)+' kcal · '+P+'P · '+C+'C · '+F+'F'+(ok?' \u2713':' / target '+m.p+'·'+m.c+'·'+m.f)+'</span>';
+}
+
+/* ---------- views ---------- */
 function showView(v){
-  var sec=document.querySelectorAll('.view'); for(var i=0;i<sec.length;i++) sec[i].classList.remove('on');
-  document.getElementById('v-'+v).classList.add('on');
-  var nav=document.querySelectorAll('[data-v]'); for(var j=0;j<nav.length;j++) nav[j].classList.toggle('active',nav[j].getAttribute('data-v')===v);
+  var s=document.querySelectorAll('.view');for(var i=0;i<s.length;i++)s[i].classList.remove('on');
+  $('v-'+v).classList.add('on');
+  var nav=document.querySelectorAll('[data-v]');for(var j=0;j<nav.length;j++)nav[j].classList.toggle('active',nav[j].getAttribute('data-v')===v);
   window.scrollTo({top:0,behavior:'smooth'});
-  if(v==='progress') renderProgress();
+  if(v==='progress')renderProgress();
 }
 
-var root=document.documentElement, themeMode='light', mq=window.matchMedia('(prefers-color-scheme: dark)');
-function eff(m){ return m==='system'?(mq.matches?'dark':'light'):m; }
-function applyTheme(m){
-  themeMode=m; root.setAttribute('data-theme',eff(m));
-  var bs=document.querySelectorAll('#themeSeg button'); for(var i=0;i<bs.length;i++) bs[i].classList.toggle('on',bs[i].getAttribute('data-t')===m);
-  var mt=document.querySelector('meta[name=theme-color]'); if(mt) mt.setAttribute('content',eff(m)==='dark'?'#0B0C0E':'#ECEEF0');
-  if(document.getElementById('v-progress').classList.contains('on')) renderProgress();
+/* ---------- theme + accent ---------- */
+var root=document.documentElement,mq=window.matchMedia('(prefers-color-scheme: dark)');
+function eff(m){return m==='system'?(mq.matches?'dark':'light'):m;}
+function applyTheme(m,save){
+  STATE.theme=m;root.setAttribute('data-theme',eff(m));
+  var bs=document.querySelectorAll('#themeSeg button');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i].getAttribute('data-t')===m);
+  var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',eff(m)==='dark'?'#0B0C0E':'#ECEEF0');
+  if($('v-progress').classList.contains('on'))renderProgress();
+  if(save)saveState();
 }
-mq.addEventListener('change',function(){ if(themeMode==='system') applyTheme('system'); });
+mq.addEventListener('change',function(){if(STATE.theme==='system')applyTheme('system',false);});
 var ACCENTS=[
   {lime:'#C9F24D',deep:'#B6E52E',on:'#16191A',forest:'#11402E',f2:'#17563C'},
   {lime:'#FF8A3D',deep:'#F2701A',on:'#1A0E04',forest:'#5A2410',f2:'#7A3417'},
@@ -980,174 +859,135 @@ var ACCENTS=[
   {lime:'#A78BFA',deep:'#8B6CF0',on:'#16101F',forest:'#3A2A66',f2:'#4C3A82'},
   {lime:'#FB7185',deep:'#F4576E',on:'#2A0A12',forest:'#5E1830',f2:'#7E2444'}
 ];
-function applyAccent(i){ var a=ACCENTS[i]; root.style.setProperty('--lime',a.lime); root.style.setProperty('--lime-deep',a.deep); root.style.setProperty('--on-lime',a.on); root.style.setProperty('--forest',a.forest); root.style.setProperty('--forest-2',a.f2); var sw=document.querySelectorAll('.sw'); for(var k=0;k<sw.length;k++) sw[k].classList.toggle('on',k===i); }
-function buildSwatches(){ document.getElementById('swatches').innerHTML=ACCENTS.map(function(a,i){return '<div class="sw '+(i===0?'on':'')+'" data-acc="'+i+'" style="background:'+a.lime+'"></div>';}).join(''); }
+function applyAccent(i,save){var a=ACCENTS[i];STATE.accent=i;root.style.setProperty('--lime',a.lime);root.style.setProperty('--lime-deep',a.deep);root.style.setProperty('--on-lime',a.on);root.style.setProperty('--forest',a.forest);root.style.setProperty('--forest-2',a.f2);var sw=document.querySelectorAll('.sw');for(var k=0;k<sw.length;k++)sw[k].classList.toggle('on',k===i);if(save)saveState();}
+function buildSwatches(){$('swatches').innerHTML=ACCENTS.map(function(a,i){return '<button class="sw'+(i===STATE.accent?' on':'')+'" data-acc="'+i+'" style="background:'+a.lime+'"></button>';}).join('');}
 
-var TBF=12;
-var SEED_S=[{date:'2025-09-27',weight:88.9,bf:18.9,muscle:68.5},{date:'2026-05-17',weight:92.6,bf:19.2,muscle:71.1}];
-var SEED_D=[{date:'2026-05-17',weight:92.6},{date:'2026-06-06',weight:93.8}];
-var SCANS=load('tc-scans',clone(SEED_S));
-var DAILY=load('tc-daily',clone(SEED_D));
-var curM='weight';
-var MM=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-function clone(a){return a.map(function(o){return Object.assign({},o);});}
-function load(k,def){ try{var r=localStorage.getItem(k); if(r){var a=JSON.parse(r); if(Array.isArray(a)) return a;}}catch(e){} return def; }
-function save(k,v){ try{localStorage.setItem(k,JSON.stringify(v));}catch(e){} }
-function fatMass(s){ return s.weight*s.bf/100; }
-function ffm(s){ return s.weight-fatMass(s); }
-function tgtW(){ var l=SCANS[SCANS.length-1]; return ffm(l)/(1-TBF/100); }
-function shortD(d){ var p=d.split('-'); return MM[(+p[1])-1]+" '"+p[0].slice(2); }
-function fullD(d){ var p=d.split('-'); return (+p[2])+' '+MM[(+p[1])-1]+' '+p[0]; }
-function wksBet(a,b){ return (new Date(b)-new Date(a))/6048e5; }
-function byDate(a){ a.sort(function(x,y){return x.date<y.date?-1:(x.date>y.date?1:0);}); }
-
+/* ---------- progress / tracker ---------- */
+var curM='weight',MM=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fatMass(s){return s.weight*s.bf/100;}
+function ffm(s){return s.weight-fatMass(s);}
+function byDate(a){a.sort(function(x,y){return x.date<y.date?-1:(x.date>y.date?1:0);});}
+function tgtW(){var l=STATE.scans[STATE.scans.length-1];return ffm(l)/(1-TBF/100);}
+function shortD(d){var p=d.split('-');return MM[(+p[1])-1]+" '"+p[0].slice(2);}
+function fullD(d){var p=d.split('-');return(+p[2])+' '+MM[(+p[1])-1]+' '+p[0];}
+function wksBet(a,b){return(new Date(b)-new Date(a))/6048e5;}
 function initWeightCard(){
-  byDate(SCANS); var L=SCANS[SCANS.length-1], tw=tgtW();
-  document.getElementById('dWeightV').innerHTML=L.weight.toFixed(1)+'<small> &#8594; '+tw.toFixed(1)+'</small>';
-  var sf=fatMass(SCANS[0]), tf=tw*TBF/100, prog=(sf-fatMass(L))/(sf-tf)*100; prog=Math.max(0,Math.min(100,prog));
-  document.getElementById('dWeightBar').style.width=prog.toFixed(0)+'%';
-  document.getElementById('dWeightPct').textContent=prog<3?'on the way to 12%':prog.toFixed(0)+'% of the way to 12%';
+  byDate(STATE.scans);var L=STATE.scans[STATE.scans.length-1],tw=tgtW();
+  $('dWeightV').innerHTML=L.weight.toFixed(1)+'<small> &#8594; '+tw.toFixed(1)+'</small>';
+  var sf=fatMass(STATE.scans[0]),tf=tw*TBF/100,prog=(sf-fatMass(L))/(sf-tf)*100;prog=Math.max(0,Math.min(100,prog));
+  $('dWeightBar').style.width=prog.toFixed(0)+'%';$('dWeightPct').textContent=prog<3?'on the way to 12%':prog.toFixed(0)+'% of the way to 12%';
 }
 function renderProgress(){
-  byDate(SCANS); byDate(DAILY);
-  var L=SCANS[SCANS.length-1];
-  document.getElementById('pgBf').textContent=L.bf.toFixed(1)+'%';
-  document.getElementById('pgWnow').textContent=L.weight.toFixed(1);
-  var tw=tgtW(), toLose=L.weight-tw;
-  document.getElementById('pgToGo').textContent='~'+(toLose>0.05?toLose.toFixed(1):'0')+'kg of fat to shift · about 0.5kg a week.';
-  var sf=fatMass(SCANS[0]), tf=tw*TBF/100, prog=(sf-fatMass(L))/(sf-tf)*100; prog=Math.max(0,Math.min(100,prog));
-  document.getElementById('pgBar').style.width=prog.toFixed(0)+'%';
-  var pr=document.getElementById('pgRing'); pr.style.strokeDasharray=RC; pr.style.strokeDashoffset=RC*(1-prog/100);
-  renderDaily(); drawM(curM); renderVerdict(); renderBreakdown(); renderSHist();
-}
-function renderDaily(){
-  byDate(DAILY); var n=DAILY.length;
-  var last7=DAILY.slice(-7), avg=last7.length?last7.reduce(function(a,e){return a+e.weight;},0)/last7.length:0;
-  document.getElementById('dAvg').innerHTML=n?avg.toFixed(1)+'<small> kg</small>':'&#8212;';
-  var tr=trend(), te=document.getElementById('dTrend');
-  if(tr===null){ te.textContent='\u2014'; }
-  else { te.innerHTML=(tr>0?'+':'')+tr.toFixed(2)+'<small> kg</small>'; }
-  var eta=document.getElementById('dEta');
-  if(tr!==null&&tr<-0.05){ var wk=(avg-tgtW())/Math.abs(tr); eta.innerHTML=Math.max(0,Math.round(wk))+'<small> wks</small>'; }
-  else eta.innerHTML='<small style="font-size:13px">log ~2 wks</small>';
-  document.getElementById('dCount').textContent=n+(n===1?' day':' days');
-  lineChart('dChart',DAILY.map(function(e){return e.weight;}),DAILY.map(function(e){return shortD(e.date);}),true);
-  document.getElementById('dHist').innerHTML=DAILY.slice().reverse().map(function(e,ri){
-    var idx=n-1-ri;
-    return '<div class="hist"><div class="hd"><b>'+shortD(e.date)+'</b><small>'+e.date.slice(8)+'/'+e.date.slice(5,7)+'</small></div><div class="hm"><span><b>'+e.weight.toFixed(1)+'</b> kg</span></div><button class="del" data-dd="'+idx+'">&times;</button></div>';
-  }).join('')+(n?'<button class="reset" id="dReset">Clear daily log</button>':'');
+  byDate(STATE.scans);byDate(STATE.daily);
+  var L=STATE.scans[STATE.scans.length-1];
+  $('pgBf').textContent=L.bf.toFixed(1)+'%';$('pgWnow').textContent=L.weight.toFixed(1);
+  var tw=tgtW(),toLose=L.weight-tw;
+  $('pgToGo').textContent='~'+(toLose>0.05?toLose.toFixed(1):'0')+'kg of fat to shift · about 0.5kg a week.';
+  var sf=fatMass(STATE.scans[0]),tf=tw*TBF/100,prog=(sf-fatMass(L))/(sf-tf)*100;prog=Math.max(0,Math.min(100,prog));
+  $('pgBar').style.width=prog.toFixed(0)+'%';var pr=$('pgRing');pr.style.strokeDasharray=RC;pr.style.strokeDashoffset=RC*(1-prog/100);
+  renderDaily();drawM(curM);renderVerdict();renderBreakdown();renderSHist();
 }
 function trend(){
-  if(DAILY.length<2) return null;
-  var t0=new Date(DAILY[0].date).getTime();
-  var xs=DAILY.map(function(e){return (new Date(e.date).getTime()-t0)/864e5;}), ys=DAILY.map(function(e){return e.weight;});
-  var n=xs.length,sx=0,sy=0,sxy=0,sxx=0,i;
-  for(i=0;i<n;i++){ sx+=xs[i]; sy+=ys[i]; sxy+=xs[i]*ys[i]; sxx+=xs[i]*xs[i]; }
-  var den=n*sxx-sx*sx; if(Math.abs(den)<1e-9) return null;
-  return ((n*sxy-sx*sy)/den)*7;
+  if(STATE.daily.length<2)return null;
+  var t0=new Date(STATE.daily[0].date).getTime();
+  var xs=STATE.daily.map(function(e){return(new Date(e.date).getTime()-t0)/864e5;}),ys=STATE.daily.map(function(e){return e.weight;});
+  var n=xs.length,sx=0,sy=0,sxy=0,sxx=0,i;for(i=0;i<n;i++){sx+=xs[i];sy+=ys[i];sxy+=xs[i]*ys[i];sxx+=xs[i]*xs[i];}
+  var den=n*sxx-sx*sx;if(Math.abs(den)<1e-9)return null;return((n*sxy-sx*sy)/den)*7;
 }
-function drawM(m){
-  curM=m; var c=document.querySelectorAll('#mchips .pill'); for(var i=0;i<c.length;i++) c[i].classList.toggle('active',c[i].getAttribute('data-m')===m);
-  var vals=SCANS.map(function(s){return m==='weight'?s.weight:m==='bf'?s.bf:m==='fat'?fatMass(s):(s.muscle!=null?s.muscle:null);});
-  lineChart('mChart',vals,SCANS.map(function(s){return shortD(s.date);}),false);
+function renderDaily(){
+  byDate(STATE.daily);var n=STATE.daily.length;
+  var last7=STATE.daily.slice(-7),avg=last7.length?last7.reduce(function(a,e){return a+e.weight;},0)/last7.length:0;
+  $('dAvg').innerHTML=n?avg.toFixed(1)+'<small> kg</small>':'&#8212;';
+  var tr=trend(),te=$('dTrend');if(tr===null)te.textContent='\u2014';else te.innerHTML=(tr>0?'+':'')+tr.toFixed(2)+'<small> kg</small>';
+  var eta=$('dEta');if(tr!==null&&tr<-0.05){var wk=(avg-tgtW())/Math.abs(tr);eta.innerHTML=Math.max(0,Math.round(wk))+'<small> wks</small>';}else eta.innerHTML='<small style="font-size:13px">log ~2 wks</small>';
+  $('dCount').textContent=n+(n===1?' day':' days');
+  lineChart('dChart',STATE.daily.map(function(e){return e.weight;}),STATE.daily.map(function(e){return shortD(e.date);}),true);
+  $('dHist').innerHTML=STATE.daily.slice().reverse().map(function(e,ri){var idx=n-1-ri;return '<div class="hist"><div class="hd"><b>'+shortD(e.date)+'</b><small>'+e.date.slice(8)+'/'+e.date.slice(5,7)+'</small></div><div class="hm"><span><b>'+e.weight.toFixed(1)+'</b> kg</span></div><button class="del" data-dd="'+idx+'">&times;</button></div>';}).join('')+(n?'<button class="reset" id="dReset">Clear daily log</button>':'');
 }
+function drawM(m){curM=m;var c=document.querySelectorAll('#mchips .pill');for(var i=0;i<c.length;i++)c[i].classList.toggle('active',c[i].getAttribute('data-m')===m);var vals=STATE.scans.map(function(s){return m==='weight'?s.weight:m==='bf'?s.bf:m==='fat'?fatMass(s):(s.muscle!=null?s.muscle:null);});lineChart('mChart',vals,STATE.scans.map(function(s){return shortD(s.date);}),false);}
 function lineChart(id,vals,labels,avgLine){
-  var el=document.getElementById(id), arr=[];
-  vals.forEach(function(v,i){ if(v!=null) arr.push({i:i,v:v}); });
-  if(!arr.length){ el.innerHTML='<div class="empty">No data yet.</div>'; return; }
+  var el=$(id),arr=[];vals.forEach(function(v,i){if(v!=null)arr.push({i:i,v:v});});
+  if(!arr.length){el.innerHTML='<div class="empty">No data yet.</div>';return;}
   var W=320,H=158,L=14,R=14,T=18,B=24,n=vals.length;
-  var vv=arr.map(function(a){return a.v;}), mn=Math.min.apply(null,vv), mx=Math.max.apply(null,vv);
-  var pad=(mx-mn)*0.22||Math.max(1,mx*0.04), lo=mn-pad, hi=mx+pad;
-  function X(i){ return n===1?W/2:L+i*(W-L-R)/(n-1); }
-  function Y(v){ return T+(1-(v-lo)/(hi-lo))*(H-T-B); }
-  var grid=''; [0,0.5,1].forEach(function(g){ var y=(T+g*(H-T-B)).toFixed(1); grid+='<line class="c-grid" x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'"/>'; });
+  var vv=arr.map(function(a){return a.v;}),mn=Math.min.apply(null,vv),mx=Math.max.apply(null,vv);
+  var pad=(mx-mn)*0.22||Math.max(1,mx*0.04),lo=mn-pad,hi=mx+pad;
+  function X(i){return n===1?W/2:L+i*(W-L-R)/(n-1);}function Y(v){return T+(1-(v-lo)/(hi-lo))*(H-T-B);}
+  var grid='';[0,0.5,1].forEach(function(g){var y=(T+g*(H-T-B)).toFixed(1);grid+='<line class="c-grid" x1="'+L+'" y1="'+y+'" x2="'+(W-R)+'" y2="'+y+'"/>';});
   var pts=arr.map(function(a){return X(a.i).toFixed(1)+','+Y(a.v).toFixed(1);});
-  var avg=''; if(avgLine){ var av=vv.reduce(function(a,b){return a+b;},0)/vv.length; var ay=Y(av).toFixed(1); avg='<line class="c-avg" x1="'+L+'" y1="'+ay+'" x2="'+(W-R)+'" y2="'+ay+'"/>'; }
+  var avg='';if(avgLine){var av=vv.reduce(function(a,b){return a+b;},0)/vv.length,ay=Y(av).toFixed(1);avg='<line class="c-avg" x1="'+L+'" y1="'+ay+'" x2="'+(W-R)+'" y2="'+ay+'"/>';}
   var area=arr.length>1?'<path class="c-area" d="M'+X(arr[0].i).toFixed(1)+','+(H-B)+' L'+pts.join(' L')+' L'+X(arr[arr.length-1].i).toFixed(1)+','+(H-B)+' Z"/>':'';
-  var line='<polyline class="c-line" points="'+pts.join(' ')+'"/>';
-  var circ='',lab='';
-  arr.forEach(function(a,k){ var last=k===arr.length-1;
-    circ+='<circle class="c-pt '+(last?'last':'')+'" cx="'+X(a.i).toFixed(1)+'" cy="'+Y(a.v).toFixed(1)+'" r="'+(last?4.5:3.5)+'"/>';
-    if(k===0||last) lab+='<text class="c-v" x="'+X(a.i).toFixed(1)+'" y="'+(Y(a.v)-8).toFixed(1)+'" text-anchor="middle">'+a.v.toFixed(1)+'</text>';
-  });
-  var xl=''; labels.forEach(function(s,i){ if(n<=6||i===0||i===n-1) xl+='<text class="c-x" x="'+X(i).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle">'+s+'</text>'; });
+  var line='<polyline class="c-line" points="'+pts.join(' ')+'"/>',circ='',lab='';
+  arr.forEach(function(a,k){var last=k===arr.length-1;circ+='<circle class="c-pt '+(last?'last':'')+'" cx="'+X(a.i).toFixed(1)+'" cy="'+Y(a.v).toFixed(1)+'" r="'+(last?4.5:3.5)+'"/>';if(k===0||last)lab+='<text class="c-v" x="'+X(a.i).toFixed(1)+'" y="'+(Y(a.v)-8).toFixed(1)+'" text-anchor="middle">'+a.v.toFixed(1)+'</text>';});
+  var xl='';labels.forEach(function(s,i){if(n<=6||i===0||i===n-1)xl+='<text class="c-x" x="'+X(i).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle">'+s+'</text>';});
   el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+grid+avg+area+line+circ+lab+xl+'</svg>';
 }
 function renderVerdict(){
-  var v=document.getElementById('verdict'), hint=document.getElementById('vHint'), dg=document.getElementById('dgrid');
-  if(SCANS.length<2){ v.className='verdict'; v.innerHTML='<div class="vh"><span class="vico">i</span>First scan logged</div><div class="vd">Add next month\'s scan and this compares fat, lean and rate automatically.</div>'; hint.textContent=''; dg.innerHTML=''; return; }
-  var L=SCANS[SCANS.length-1], P=SCANS[SCANS.length-2];
-  var dW=L.weight-P.weight, dF=fatMass(L)-fatMass(P), dM=(L.muscle!=null&&P.muscle!=null)?L.muscle-P.muscle:null;
-  var wk=wksBet(P.date,L.date), rate=wk>0?dW/wk:0;
+  var v=$('verdict'),hint=$('vHint'),dg=$('dgrid');
+  if(STATE.scans.length<2){v.className='verdict';v.innerHTML='<div class="vh"><span class="vico">i</span>First scan logged</div><div class="vd">Add next month\'s scan and this compares fat, lean and rate automatically.</div>';hint.textContent='';dg.innerHTML='';return;}
+  var L=STATE.scans[STATE.scans.length-1],P=STATE.scans[STATE.scans.length-2];
+  var dW=L.weight-P.weight,dF=fatMass(L)-fatMass(P),dM=(L.muscle!=null&&P.muscle!=null)?L.muscle-P.muscle:null,wk=wksBet(P.date,L.date),rate=wk>0?dW/wk:0;
   hint.textContent=wk>=1?('vs '+shortD(P.date)+' · '+Math.round(wk)+' wks'):'vs last scan';
   var cls='',ico='~',title='Holding',desc='Fat mass barely moved. A flat month mid-cut is normal, trust the weekly average.';
-  if(dF<-0.15){
-    if(dM!=null&&dM<-0.4){ cls='warn';ico='!';title='Fat down, muscle dropped'; desc='Lost '+Math.abs(dF).toFixed(1)+'kg fat but '+Math.abs(dM).toFixed(1)+'kg muscle. Ease the deficit ~150 kcal, push protein, keep loads heavy.'; }
-    else { cls='good';ico='\u2713';title='Clean fat loss'; desc='Down '+Math.abs(dF).toFixed(1)+'kg fat with lean held'+(dM!=null?' ('+(dM>=0?'+':'')+dM.toFixed(1)+'kg muscle)':'')+'. Exactly the goal.'+(rate<-0.9?' Pace is quick, consider +150 kcal.':''); }
-  } else if(dF>0.15){
-    if(dM!=null&&dM>=dF){ cls='good';ico='\u2713';title='Lean gain'; desc='Muscle up '+dM.toFixed(1)+'kg, fat up '+dF.toFixed(1)+'kg. Good for a bulk, tighten if you meant to cut.'; }
-    else { cls='warn';ico='!';title='Fat up this month'; desc='Fat rose '+dF.toFixed(1)+'kg. Recheck intake logging and steps before the next scan.'; }
-  }
-  v.className='verdict '+cls;
-  v.innerHTML='<div class="vh"><span class="vico">'+ico+'</span>'+title+'</div><div class="vd">'+desc+'</div>';
-  function sg(x){ return (x>0?'+':'')+x.toFixed(1); }
-  function cell(l,val,c){ return '<div class="dcl"><div class="l">'+l+'</div><div class="v '+c+'">'+val+'</div></div>'; }
-  dg.innerHTML=cell('Weight \u0394',sg(dW)+' kg',dW<0?'good':'up')+cell('Fat mass \u0394',sg(dF)+' kg',dF<0?'good':'up')
-    +(dM!=null?cell('Muscle \u0394',sg(dM)+' kg',dM>=0?'good':'up'):'')+cell('Rate',sg(rate)+' kg/wk',rate<0?'good':'up');
+  if(dF<-0.15){if(dM!=null&&dM<-0.4){cls='warn';ico='!';title='Fat down, muscle dropped';desc='Lost '+Math.abs(dF).toFixed(1)+'kg fat but '+Math.abs(dM).toFixed(1)+'kg muscle. Ease the deficit ~150 kcal, push protein, keep loads heavy.';}else{cls='good';ico='\u2713';title='Clean fat loss';desc='Down '+Math.abs(dF).toFixed(1)+'kg fat with lean held'+(dM!=null?' ('+(dM>=0?'+':'')+dM.toFixed(1)+'kg muscle)':'')+'. Exactly the goal.'+(rate<-0.9?' Pace is quick, consider +150 kcal.':'');}}
+  else if(dF>0.15){if(dM!=null&&dM>=dF){cls='good';ico='\u2713';title='Lean gain';desc='Muscle up '+dM.toFixed(1)+'kg, fat up '+dF.toFixed(1)+'kg. Good for a bulk, tighten if you meant to cut.';}else{cls='warn';ico='!';title='Fat up this month';desc='Fat rose '+dF.toFixed(1)+'kg. Recheck intake logging and steps before the next scan.';}}
+  v.className='verdict '+cls;v.innerHTML='<div class="vh"><span class="vico">'+ico+'</span>'+title+'</div><div class="vd">'+desc+'</div>';
+  function sg(x){return(x>0?'+':'')+x.toFixed(1);}function cell(l,val,c){return '<div class="dcl"><div class="l">'+l+'</div><div class="v '+c+'">'+val+'</div></div>';}
+  dg.innerHTML=cell('Weight \u0394',sg(dW)+' kg',dW<0?'good':'up')+cell('Fat mass \u0394',sg(dF)+' kg',dF<0?'good':'up')+(dM!=null?cell('Muscle \u0394',sg(dM)+' kg',dM>=0?'good':'up'):'')+cell('Rate',sg(rate)+' kg/wk',rate<0?'good':'up');
 }
-function renderBreakdown(){
-  var L=SCANS[SCANS.length-1];
-  document.getElementById('bDate').textContent=fullD(L.date);
-  function tile(k,val){ return '<div class="tile soft"><div class="ti">'+k+'</div><div class="tv">'+val+'<small> kg</small></div></div>'; }
-  document.getElementById('breakdown').innerHTML=tile('Fat mass',fatMass(L).toFixed(1))+tile('Lean / FFM',ffm(L).toFixed(1))
-    +(L.muscle!=null?tile('Muscle',L.muscle.toFixed(1)):'')+tile('Target',tgtW().toFixed(1));
-}
-function renderSHist(){
-  document.getElementById('sCount').textContent=SCANS.length+' logged';
-  document.getElementById('sHist').innerHTML=SCANS.slice().reverse().map(function(s,ri){
-    var idx=SCANS.length-1-ri;
-    return '<div class="hist"><div class="hd"><b>'+shortD(s.date)+'</b><small>'+s.date.slice(8)+'/'+s.date.slice(5,7)+'</small></div><div class="hm"><span><b>'+s.weight.toFixed(1)+'</b> kg</span><span><b>'+s.bf.toFixed(1)+'</b>%</span>'+(s.muscle!=null?'<span><b>'+s.muscle.toFixed(1)+'</b> mus</span>':'')+'</div><button class="del" data-sd="'+idx+'">&times;</button></div>';
-  }).join('')+'<button class="reset" id="sReset">Reset to Tanita history</button>';
-}
+function renderBreakdown(){var L=STATE.scans[STATE.scans.length-1];$('bDate').textContent=fullD(L.date);function tile(k,val){return '<div class="tile soft"><div class="ti">'+k+'</div><div class="tv">'+val+'<small> kg</small></div></div>';}$('breakdown').innerHTML=tile('Fat mass',fatMass(L).toFixed(1))+tile('Lean / FFM',ffm(L).toFixed(1))+(L.muscle!=null?tile('Muscle',L.muscle.toFixed(1)):'')+tile('Target',tgtW().toFixed(1));}
+function renderSHist(){$('sCount').textContent=STATE.scans.length+' logged';$('sHist').innerHTML=STATE.scans.slice().reverse().map(function(s,ri){var idx=STATE.scans.length-1-ri;return '<div class="hist"><div class="hd"><b>'+shortD(s.date)+'</b><small>'+s.date.slice(8)+'/'+s.date.slice(5,7)+'</small></div><div class="hm"><span><b>'+s.weight.toFixed(1)+'</b> kg</span><span><b>'+s.bf.toFixed(1)+'</b>%</span>'+(s.muscle!=null?'<span><b>'+s.muscle.toFixed(1)+'</b> mus</span>':'')+'</div><button class="del" data-sd="'+idx+'">&times;</button></div>';}).join('')+'<button class="reset" id="sReset">Reset to Tanita history</button>';}
 
+/* ---------- events ---------- */
 document.addEventListener('click',function(e){
-  var dt=e.target.closest('#dayTabs .pill'); if(dt){ selectDay(+dt.getAttribute('data-day')); return; }
-  var c=e.target.closest('.exchk'); if(c){ var i=+c.getAttribute('data-idx'),k=PROGRAM[curDay].key; if(done[k].has(i))done[k].delete(i);else done[k].add(i); c.closest('.exrow').classList.toggle('done',done[k].has(i)); updateRing(); return; }
-  var nav=e.target.closest('[data-v]'); if(nav){ showView(nav.getAttribute('data-v')); return; }
-  var sg=e.target.closest('#seg button'); if(sg){ var bb=document.querySelectorAll('#seg button'); for(var s=0;s<bb.length;s++) bb[s].classList.remove('on'); sg.classList.add('on'); document.getElementById('paneDaily').classList.toggle('on',sg.getAttribute('data-pane')==='daily'); document.getElementById('paneMonthly').classList.toggle('on',sg.getAttribute('data-pane')==='monthly'); return; }
-  var mc=e.target.closest('#mchips .pill'); if(mc){ drawM(mc.getAttribute('data-m')); return; }
-  var ts=e.target.closest('#themeSeg button'); if(ts){ applyTheme(ts.getAttribute('data-t')); return; }
-  var sw=e.target.closest('.sw'); if(sw){ applyAccent(+sw.getAttribute('data-acc')); return; }
-  if(e.target.id==='dReset'){ DAILY=[]; save('tc-daily',DAILY); renderProgress(); return; }
-  if(e.target.id==='sReset'){ SCANS=clone(SEED_S); save('tc-scans',SCANS); renderProgress(); initWeightCard(); return; }
-  var dd=e.target.closest('[data-dd]'); if(dd){ DAILY.splice(+dd.getAttribute('data-dd'),1); save('tc-daily',DAILY); renderProgress(); return; }
-  var sd=e.target.closest('[data-sd]'); if(sd){ if(SCANS.length>1){ SCANS.splice(+sd.getAttribute('data-sd'),1); save('tc-scans',SCANS); renderProgress(); initWeightCard(); } return; }
+  var dt=e.target.closest('#dayTabs .pill');if(dt){selectDay(+dt.getAttribute('data-day'));return;}
+  var c=e.target.closest('.exchk');if(c){var i=+c.getAttribute('data-idx'),arr=doneSet().slice(),p=arr.indexOf(i);if(p>=0)arr.splice(p,1);else arr.push(i);setDone(arr);c.closest('.exrow').classList.toggle('done',arr.indexOf(i)>=0);updateRing();renderCalendar();return;}
+  var nav=e.target.closest('[data-v]');if(nav){showView(nav.getAttribute('data-v'));return;}
+  var mm=e.target.closest('#mealMode button');if(mm){STATE.mode=mm.getAttribute('data-mode');saveState();renderMeals();return;}
+  if(e.target.id==='editMeals'){editMode=!editMode;renderMeals();return;}
+  if(e.target.id==='doneEdit'){editMode=false;saveState();renderMeals();toast('Meals saved');return;}
+  if(e.target.id==='addMeal'){STATE.meals[STATE.mode].push({name:'New meal',foods:'',p:0,c:0,f:0});saveState();renderMeals();return;}
+  var del=e.target.closest('[data-del]');if(del){STATE.meals[STATE.mode].splice(+del.getAttribute('data-del'),1);saveState();renderMeals();return;}
+  var macb=e.target.closest('[data-mac]');if(macb&&macb.hasAttribute('data-d')){var k=macb.getAttribute('data-mac'),d=+macb.getAttribute('data-d');if(k==='m')STATE.maint=Math.max(1500,STATE.maint+d);else STATE.macros[k]=Math.max(0,STATE.macros[k]+d);saveState();applyMacrosEverywhere();return;}
+  if(e.target.id==='macReset'){STATE.macros={p:240,c:250,f:45};STATE.maint=2900;saveState();applyMacrosEverywhere();toast('Reset to plan');return;}
+  var sg2=e.target.closest('#seg button');if(sg2){var bb=document.querySelectorAll('#seg button');for(var s=0;s<bb.length;s++)bb[s].classList.remove('on');sg2.classList.add('on');$('paneDaily').classList.toggle('on',sg2.getAttribute('data-pane')==='daily');$('paneMonthly').classList.toggle('on',sg2.getAttribute('data-pane')==='monthly');return;}
+  var mc=e.target.closest('#mchips .pill');if(mc){drawM(mc.getAttribute('data-m'));return;}
+  var ts=e.target.closest('#themeSeg button');if(ts){applyTheme(ts.getAttribute('data-t'),true);return;}
+  var sw=e.target.closest('.sw');if(sw){applyAccent(+sw.getAttribute('data-acc'),true);return;}
+  if(e.target.id==='dReset'){STATE.daily=[];saveState();renderProgress();return;}
+  if(e.target.id==='sReset'){STATE.scans=clone(SEED_S);saveState();renderProgress();initWeightCard();return;}
+  var dd2=e.target.closest('[data-dd]');if(dd2){STATE.daily.splice(+dd2.getAttribute('data-dd'),1);saveState();renderProgress();return;}
+  var sd=e.target.closest('[data-sd]');if(sd){if(STATE.scans.length>1){STATE.scans.splice(+sd.getAttribute('data-sd'),1);saveState();renderProgress();initWeightCard();}return;}
+  if(e.target.id==='copyBackup'){var code=btoa(unescape(encodeURIComponent(JSON.stringify(STATE))));var ta=$('restoreBox');ta.value=code;ta.select();try{document.execCommand('copy');}catch(_){}if(navigator.clipboard)navigator.clipboard.writeText(code).catch(function(){});toast('Backup code copied');return;}
+  if(e.target.id==='restoreBtn'){try{var o=JSON.parse(decodeURIComponent(escape(atob($('restoreBox').value.trim()))));localStorage.setItem(KEY,JSON.stringify(o));loadState();bootRender();toast('Data restored');}catch(err){toast('That code did not read');}return;}
+  if(e.target.id==='wipeBtn'){if(confirm('Reset all data to defaults? This clears your logs and edits.')){localStorage.removeItem(KEY);STATE=defState();bootRender();toast('All data reset');}return;}
 });
-document.getElementById('tgl').addEventListener('click',function(){ applyTheme(eff(themeMode)==='dark'?'light':'dark'); });
-document.getElementById('tglD').addEventListener('click',function(){ applyTheme(eff(themeMode)==='dark'?'light':'dark'); });
+document.addEventListener('input',function(e){
+  var t=e.target;
+  if(t.matches('.medit input')){var i=+t.getAttribute('data-i'),k=t.getAttribute('data-k'),x=STATE.meals[STATE.mode][i];if(!x)return;if(k==='p'||k==='c'||k==='f')x[k]=+t.value||0;else x[k]=t.value;renderMealTotals();STATE._dirty=true;return;}
+  if(t.id==='inP'||t.id==='inC'||t.id==='inF'||t.id==='inM'){var val=Math.max(0,parseInt(t.value||'0',10));if(t.id==='inM')STATE.maint=Math.max(1500,val);else STATE.macros[t.id==='inP'?'p':t.id==='inC'?'c':'f']=val;applyMacrosEverywhere();STATE._dirty=true;return;}
+});
+document.addEventListener('change',function(e){if(STATE._dirty){STATE._dirty=false;saveState();}});
+$('tgl').addEventListener('click',function(){applyTheme(eff(STATE.theme)==='dark'?'light':'dark',true);});
+$('tglD').addEventListener('click',function(){applyTheme(eff(STATE.theme)==='dark'?'light':'dark',true);});
 
-var dForm=document.getElementById('dForm');
-document.getElementById('dAdd').addEventListener('click',function(){ dForm.classList.toggle('open'); if(dForm.classList.contains('open')) document.getElementById('dDate').value=new Date().toISOString().slice(0,10); });
-document.getElementById('dCancel').addEventListener('click',function(){ dForm.classList.remove('open'); });
-document.getElementById('dSave').addEventListener('click',function(){
-  var dt=document.getElementById('dDate').value, w=parseFloat(document.getElementById('dWeight').value);
-  if(!dt||!(w>0)) return;
-  DAILY=DAILY.filter(function(x){return x.date!==dt;}); DAILY.push({date:dt,weight:w}); save('tc-daily',DAILY);
-  dForm.classList.remove('open'); document.getElementById('dWeight').value=''; renderProgress();
-});
-var sForm=document.getElementById('sForm');
-document.getElementById('sAdd').addEventListener('click',function(){ sForm.classList.toggle('open'); if(sForm.classList.contains('open')) document.getElementById('sDate').value=new Date().toISOString().slice(0,10); });
-document.getElementById('sCancel').addEventListener('click',function(){ sForm.classList.remove('open'); });
-document.getElementById('sSave').addEventListener('click',function(){
-  var dt=document.getElementById('sDate').value, w=parseFloat(document.getElementById('sWeight').value), bf=parseFloat(document.getElementById('sBf').value), mus=parseFloat(document.getElementById('sMus').value);
-  if(!dt||!(w>0)||!(bf>0)) return;
-  var o={date:dt,weight:w,bf:bf}; if(mus>0)o.muscle=mus;
-  SCANS=SCANS.filter(function(x){return x.date!==dt;}); SCANS.push(o); save('tc-scans',SCANS);
-  sForm.classList.remove('open'); ['sWeight','sBf','sMus'].forEach(function(id){document.getElementById(id).value='';}); renderProgress(); initWeightCard();
-});
+/* weigh-in + scan forms */
+var dForm=$('dForm');
+$('dAdd').addEventListener('click',function(){dForm.classList.toggle('open');if(dForm.classList.contains('open'))$('dDate').value=todayISO();});
+$('dCancel').addEventListener('click',function(){dForm.classList.remove('open');});
+$('dSave').addEventListener('click',function(){var dt=$('dDate').value,w=parseFloat($('dWeight').value);if(!dt||!(w>0))return;STATE.daily=STATE.daily.filter(function(x){return x.date!==dt;});STATE.daily.push({date:dt,weight:w});saveState();dForm.classList.remove('open');$('dWeight').value='';renderProgress();});
+var sForm=$('sForm');
+$('sAdd').addEventListener('click',function(){sForm.classList.toggle('open');if(sForm.classList.contains('open'))$('sDate').value=todayISO();});
+$('sCancel').addEventListener('click',function(){sForm.classList.remove('open');});
+$('sSave').addEventListener('click',function(){var dt=$('sDate').value,w=parseFloat($('sWeight').value),bf=parseFloat($('sBf').value),mus=parseFloat($('sMus').value);if(!dt||!(w>0)||!(bf>0))return;var o={date:dt,weight:w,bf:bf};if(mus>0)o.muscle=mus;STATE.scans=STATE.scans.filter(function(x){return x.date!==dt;});STATE.scans.push(o);saveState();sForm.classList.remove('open');['sWeight','sBf','sMus'].forEach(function(id){$(id).value='';});renderProgress();initWeightCard();});
 
-buildSwatches(); applyTheme(mq.matches?'system':'light');
-renderDayTabs(); renderWorkout(); renderCalendar(); initWeightCard();
+/* ---------- boot ---------- */
+function bootRender(){
+  applyTheme(STATE.theme==='system'?'system':STATE.theme,false);
+  applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);
+  renderDayTabs();renderWorkout();renderCalendar();initWeightCard();
+  applyMacrosEverywhere();renderMeals();
+}
+loadState();bootRender();
 </script>
 </body>
 </html>
