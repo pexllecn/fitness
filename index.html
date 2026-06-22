@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -12,7 +11,7 @@
 <title>The Cut</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 :root{
   --lime:#C9F24D; --lime-deep:#B6E52E; --on-lime:#16191A;
@@ -20,16 +19,16 @@
   --ink:#16191C; --on-ink:#F3F5EF;
   --bg:#ECEEF0; --card:#FFFFFF; --panel:#F0F1F4;
   --text:#16191C; --muted:#7B828C; --muted2:#AAB0BA; --line:#E6E8EC; --hair:rgba(20,24,30,.06);
-  --shadow:0 1px 2px rgba(22,26,34,.04),0 14px 32px rgba(22,26,34,.06);
-  --shadow-sm:0 1px 2px rgba(22,26,34,.04),0 5px 14px rgba(22,26,34,.04);
+  --shadow:none;
+  --shadow-sm:none;
   --ok:#2C9E5B; --warn:#D6604D;
-  --font:'Montserrat',system-ui,-apple-system,sans-serif;
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,sans-serif;
   --r:24px; --r-sm:18px;
 }
 [data-theme="dark"]{
   --ink:#1D2024; --bg:#0B0C0E; --card:#15181B; --panel:#1A1D20;
   --text:#EFF1EB; --muted:#969CA5; --muted2:#5A606A; --line:#262A2F; --hair:rgba(255,255,255,.06);
-  --shadow:0 2px 6px rgba(0,0,0,.42),0 18px 44px rgba(0,0,0,.55); --shadow-sm:0 1px 3px rgba(0,0,0,.4),0 8px 20px rgba(0,0,0,.4);
+  --shadow:none; --shadow-sm:none;
   --ok:#43C77E;
 }
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
@@ -114,7 +113,7 @@ button{cursor:pointer}
 .ring{position:relative;width:76px;height:76px;flex:0 0 auto}
 .ring svg{transform:rotate(-90deg)}
 .ring .fil{transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)}
-.ring .rt{position:absolute;inset:0;display:grid;place-items:center;text-align:center}
+.ring .rt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
 .ring .rt b{font-size:16px;font-weight:800;line-height:1;color:#fff}
 .ring .rt span{font-size:8.5px;color:rgba(255,255,255,.5);font-weight:700;text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
 .hchips{display:flex;gap:9px;margin-top:24px;flex-wrap:wrap}
@@ -279,8 +278,8 @@ button{cursor:pointer}
 .c-area{fill:rgba(182,229,46,.13);stroke:none}
 .c-pt{fill:var(--card);stroke:var(--lime-deep);stroke-width:3}
 .c-pt.last{fill:var(--lime-deep)}
-.c-v{fill:var(--text);font-size:10px;font-weight:800}
-.c-x{fill:var(--muted2);font-size:9px;font-weight:700}
+.c-v{fill:var(--text);font-size:9px;font-weight:800}
+.c-x{fill:var(--muted2);font-size:8px;font-weight:700}
 .empty{padding:30px 10px;text-align:center;color:var(--muted2);font-size:13px;font-weight:600}
 .mchips{display:flex;gap:7px;overflow-x:auto;-ms-overflow-style:none;scrollbar-width:none}
 .mchips::-webkit-scrollbar{display:none}
@@ -354,17 +353,19 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
 .foot p{font-size:11.5px;color:var(--muted);font-weight:500;margin-bottom:7px;line-height:1.5}
 .foot b{color:var(--text);font-weight:700}
 
-.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;justify-content:center;padding:0 16px calc(16px + env(safe-area-inset-bottom));pointer-events:none}
-.tabinner{pointer-events:auto;display:flex;gap:2px;background:var(--ink);border-radius:24px;padding:7px;box-shadow:0 10px 34px rgba(0,0,0,.3)}
-.tab{display:grid;place-items:center;width:48px;height:48px;border-radius:18px;color:rgba(255,255,255,.55);background:transparent;border:none;transition:.18s}
-.tab svg{width:21px;height:21px}
+.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:40;display:flex;justify-content:center;padding:0 14px calc(14px + env(safe-area-inset-bottom));pointer-events:none}
+.tabinner{pointer-events:auto;display:flex;gap:2px;background:var(--ink);border-radius:22px;padding:6px;width:100%;max-width:430px}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;height:47px;border-radius:14px;color:rgba(255,255,255,.55);background:transparent;border:none;transition:.18s}
+.tab svg{width:20px;height:20px}
+.tab .tl{font-size:7.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
 .tab.active{background:var(--lime);color:var(--on-lime)}
 
 @media(min-width:980px){
   .sidebar{display:flex;flex-direction:column;align-items:center;gap:6px;position:fixed;top:0;left:0;bottom:0;width:88px;padding:24px 0;background:var(--card);border-right:1px solid var(--line);z-index:50}
   .sidebar .logo{width:46px;height:46px;margin-bottom:18px}
-  .sb-item{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;color:var(--muted);background:transparent;border:none;transition:.18s}
-  .sb-item svg{width:22px;height:22px}
+  .sb-item{width:64px;padding:10px 0;border-radius:15px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted);background:transparent;border:none;transition:.18s}
+  .sb-item svg{width:21px;height:21px}
+  .sb-item .sl{font-size:8px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
   .sb-item:hover{background:var(--panel);color:var(--text)}
   .sb-item.active{background:var(--ink);color:var(--lime)}
   .sb-spacer{flex:1}
@@ -377,33 +378,50 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
   .tttext b{font-size:27px;font-weight:800;letter-spacing:-.02em;display:block;line-height:1}
   .tttext span{font-size:13px;color:var(--muted);font-weight:600}
   .ttools{display:none}
-  .view{max-width:1180px}.view.on{gap:32px}
+  .view{max-width:820px;margin:0 auto}.view.on{gap:32px}
   .shead h2{font-size:25px}
   .cols2{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:start}
   .mealwrap{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .span2{grid-column:1/3}
   .wlist{display:grid;grid-template-columns:1fr 1fr;gap:11px}
   .tilegrid.g3{gap:16px}
-  .dash{grid-template-columns:1fr 1fr 1fr;gap:18px;align-items:start}
+  .dash{grid-template-columns:1fr 1fr;gap:18px;align-items:start}
   .dash .hero{grid-column:1/3}
-  .dash .calendar{display:block;grid-column:3/4;grid-row:1/3;align-self:stretch}
   .dash .d-steps{grid-column:1/2}.dash .d-weight{grid-column:2/3}
   .hero .hday{font-size:38px}
+  .calendar{max-width:440px;margin-left:auto;margin-right:auto}
+  #v-progress .block{max-width:660px;margin-left:auto;margin-right:auto}
+  .fcol .mealwrap{grid-template-columns:1fr}
+  .chartcard svg{max-width:620px;margin-left:auto;margin-right:auto}
 }
+
+/* nutrition: desktop shows weekday + weekend side by side, mobile keeps the toggle */
+.fuel-desktop{display:none}
+.fcols{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start}
+.fcol{display:flex;flex-direction:column;gap:12px}
+.fcolcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.fcol-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:4px}
+.fcol-h .ft{font-size:16px;font-weight:800;letter-spacing:-.01em}
+.fcol-h .fd{font-size:11.5px;font-weight:700;color:var(--muted)}
+.fcol .bignum{font-size:38px}
+.fcol .meal{border-radius:var(--r-sm)}
+.fcoltot{display:flex;justify-content:space-between;align-items:center;border-radius:var(--r-sm);padding:13px 16px;font-size:12px;font-weight:700;border:1.5px solid var(--line);background:var(--panel)}
+.fcoltot.ok{border-color:var(--ok);background:color-mix(in srgb,var(--ok) 8%,var(--card))}
+.fcoltot .m{font-weight:800}.fcoltot.ok .m{color:var(--ok)}
+@media(min-width:980px){.fuel-mobile{display:none}.fuel-desktop{display:block}}
 </style>
 </head>
 <body>
 <div class="app">
   <aside class="sidebar">
     <div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div>
-    <button class="sb-item active" data-v="train" title="Train"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg></button>
-    <button class="sb-item" data-v="food" title="Food"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg></button>
-    <button class="sb-item" data-v="plan" title="Plan"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cal"/></svg></button>
-    <button class="sb-item" data-v="progress" title="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg></button>
-    <button class="sb-item" data-v="focus" title="Focus"><svg viewBox="0 0 24 24" class="ic"><use href="#i-target"/></svg></button>
+    <button class="sb-item active" data-v="dash" title="Dashboard"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg><span class="sl">Home</span></button>
+    <button class="sb-item" data-v="workout" title="Workout"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg><span class="sl">Workout</span></button>
+    <button class="sb-item" data-v="food" title="Nutrition"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg><span class="sl">Fuel</span></button>
+    <button class="sb-item" data-v="progress" title="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg><span class="sl">Progress</span></button>
     <div class="sb-spacer"></div>
-    <button class="sb-item" id="tglD" title="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg></button>
-    <button class="sb-item" data-v="you" title="Settings"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cog"/></svg></button>
+    <button class="sb-item" id="tglD" title="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg><span class="sl">Mode</span></button>
+    <button class="sb-item" data-v="you" title="Settings"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cog"/></svg><span class="sl">You</span></button>
     <div class="sb-avatar">K</div>
   </aside>
   <main class="main">
@@ -413,84 +431,131 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
     <div class="ttools"><div class="iconbtn" id="tgl" aria-label="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg></div></div>
   </div>
 
-  <!-- TRAIN -->
-  <section class="view on" id="v-train">
+  <!-- DASHBOARD -->
+  <section class="view on" id="v-dash">
     <div class="block"><div class="dash">
       <div class="hero">
         <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
-        <div class="htop">
-          <div><div class="hlab">Today's session</div><div class="hday" id="hDay">Lower A</div><div class="hsub" id="hSub">Quad lead · tap any move for its form video</div></div>
-          <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="ringFil" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="ringNum">0/7</b><span>Done</span></div></div>
-        </div>
-        <div class="hchips"><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-dumbbell"/></svg><b id="cMoves">7</b>&nbsp;moves</div><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-bars"/></svg><b id="cSets">20</b>&nbsp;sets</div><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clock"/></svg><b id="cTime">~76</b>&nbsp;min</div></div>
+        <div class="htop"><div><div class="hlab">The cut</div><div class="hday"><span id="pgWnow">92.6</span> <span style="color:rgba(255,255,255,.4)">&#8594;</span> 85.0</div><div class="hsub" id="pgToGo">~8kg of fat to shift &middot; about 0.5kg a week.</div></div>
+        <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="pgRing" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="pgBf">19.2%</b><span>Body fat</span></div></div></div>
+        <div class="herostats"><div class="hs"><div class="v">12%</div><div class="k">Target BF</div><div class="bar"><i id="pgBar" style="width:36%"></i></div></div><div class="hs"><div class="v" id="pgDef">~452</div><div class="k">Avg deficit</div><div class="bar"><i style="width:45%"></i></div></div><div class="hs"><div class="v" id="pgIntake">2,099</div><div class="k">Avg intake</div><div class="bar"><i style="width:82%"></i></div></div></div>
       </div>
+      <div class="tile d-steps" data-v="workout" style="cursor:pointer"><div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg>Today's session</div><div class="tv" id="dashDay">Lower A</div><div class="tk"><b id="dashDone">0/7</b> done &middot; tap to open</div></div>
+      <div class="tile forest d-weight"><div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg>Today's fuel</div><div class="tv"><span id="dashKcal">2,210</span><small> kcal</small></div><div class="tk" id="dashMacros">240P &middot; 200C &middot; 50F</div></div>
+    </div></div>
+    <div class="block">
+      <div class="shead"><h2>Your week</h2><span class="tagn">log lifts on Workout</span></div>
       <div class="calendar">
         <div class="calh"><b id="calMonth">June 2026</b><span class="pill">Sessions</span></div>
         <div class="caldow"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
         <div class="calgrid" id="calGrid"></div>
         <div class="callegend"><span><i style="background:var(--lime)"></i>Done</span><span><i style="border:2px solid var(--lime)"></i>Today</span><span><i style="background:rgba(255,255,255,.18)"></i>Scheduled</span></div>
       </div>
-      <div class="tile forest d-steps"><div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-walk"/></svg>Cardio this week</div><div class="tv">3&#215;<small> walks</small></div><div class="tk">15-min incline · Mon, Thu, Sat</div></div>
-      <div class="tile d-weight"><div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-trend"/></svg>Weight goal</div><div class="tv" id="dWeightV">92.6<small> &#8594; 85.0</small></div><div class="bar"><i id="dWeightBar" style="width:8%"></i></div><div class="tk" id="dWeightPct">on the way to 12%</div></div>
-    </div></div>
-    <div class="block">
-      <div class="shead"><h2>The workout</h2><span class="tagn">tick as you go</span></div>
-      <div class="pills" id="dayTabs"></div>
-      <div class="workout"><div class="whead" id="wHead"></div><div class="wlist" id="workoutBox"></div></div>
-      <div class="card outline"><div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-pulse"/></svg>Abs come last</div><p>Abs close the session, they don't open it. <b>Hanging Leg Raise</b> ends Monday, <b>Cable Crunch</b> ends Thursday. They show up when the fat drops, not from extra crunches.</p></div>
     </div>
     <div class="block">
-      <div class="shead"><h2>Warm up first</h2><span class="tagn">before the heavy work</span></div>
+      <div class="shead"><h2>The next 90 days</h2><span class="tagn">three levers</span></div>
       <div class="cols2">
-        <div class="card"><ul class="clist">
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>5 min easy</b> on the bike or treadmill to raise the temperature.</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Ramp the first big lift:</b> empty bar, ~50%, ~70%, ~85%. Never hit a top set cold.</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Lower:</b> leg swings, bodyweight squats, glute bridges, hip 90/90.</li>
-          <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Upper:</b> band pull-aparts, dislocates, scapular push-ups.</li>
-        </ul></div>
-        <div class="col">
-          <details class="fx" open><summary>Cramps · your leg-press one</summary><div class="fb">A lying leg press cramping your abs is the hip flexor and lower abs seizing fully shortened. A breath-hold and a deficit tip it over.<div class="eq">Knees out of your chest, pelvis <b>down</b></div>Breathe out as you press. Salt before training, 300&#8211;400mg magnesium at night, keep carbs on lifting days.</div></details>
-          <details class="fx"><summary>Bracing &amp; breathing</summary><div class="fb">Breathe into the belly and brace like you're taking a punch. Heavy low reps: hold at the top, exhale through the sticking point. A full breath-hold through long sets is what makes you light-headed.</div></details>
-          <details class="fx"><summary>Control &amp; range</summary><div class="fb">Most pulls are form breaking under fatigue, so keep 1&#8211;2 in the tank on compounds. Lower under control, full but pain-free range. Sharp pain stops, burn doesn't.</div></details>
-          <details class="fx"><summary>Straps &amp; gear</summary><div class="fb"><b>Straps</b> for RDLs, rows, pulldowns. <b>Belt</b> for top sets of squat, hip thrust, OHP. <b>Wrist wraps</b> for heavy press, <b>knee sleeves</b> for warmth.</div></details>
-        </div>
+        <div class="prio"><div class="pn">1</div><div><div class="pt">Priority</div><h3>Sleep</h3><p>Get to <b>7.5 hours</b>. The biggest weakness in the plan right now. Under-slept means hungrier, weaker and looser with food, it quietly undoes the deficit.</p></div></div>
+        <div class="prio"><div class="pn">2</div><div><div class="pt">Priority</div><h3>Consistency</h3><ul class="nlist"><li>No random cheat weekends.</li><li>No bulking.</li><li>No cutting harder.</li><li>No changing the plan.</li></ul><p style="margin-top:8px">It works if you run it, not if you tweak it every week.</p></div></div>
+        <div class="prio span2"><div class="pn">3</div><div><div class="pt">Priority</div><h3>Strength retention</h3><p>During a cut your job is not to get stronger. It's to <b>refuse to get weaker</b>. Hold your bench near 100kg for reps while bodyweight drops from 92.6 to 86, and you've run an excellent cut.</p></div></div>
       </div>
     </div>
     <div class="block">
-      <div class="shead"><h2>Progression</h2><span class="tagn">where muscle is built</span></div>
-      <div class="card"><p style="margin-bottom:14px">Add reps before weight. Take one set up a rep each week until every set sits at the top of the range, then add 2.5kg and start again. Bench, top of a 4&#215;5&#8211;6:</p>
+      <div class="shead"><h2 class="sm">Phases</h2><span class="tagn">to 12%</span></div>
+      <div class="tilegrid">
+        <div class="phase"><div class="pn">1</div><div class="pm"><div class="t">Establish &middot; June</div><div class="s">Lock the plan, fast initial drop</div></div><div class="pt">16&#8211;17%</div></div>
+        <div class="phase"><div class="pn">2</div><div class="pm"><div class="t">Grind &middot; July</div><div class="s">Hold intake, adherence tested</div></div><div class="pt">14&#8211;15%</div></div>
+        <div class="phase"><div class="pn">3</div><div class="pm"><div class="t">Shred &middot; Aug&#8211;Sep</div><div class="s">Abs sharpen, trunk fat goes</div></div><div class="pt">12%</div></div>
+      </div>
+    </div>
+    <div class="block">
+      <div class="shead"><h2 class="sm">Training reference</h2><span class="tagn">tap to open</span></div>
+      <details class="fx"><summary>Warm up first</summary><div class="fb"><ul class="clist" style="margin-top:2px"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>5 min easy</b> on the bike or treadmill to raise the temperature.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Ramp the first big lift:</b> empty bar, ~50%, ~70%, ~85%. Never hit a top set cold.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Lower:</b> leg swings, bodyweight squats, glute bridges, hip 90/90.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Upper:</b> band pull-aparts, dislocates, scapular push-ups.</li></ul></div></details>
+      <details class="fx"><summary>Progression &middot; reps then weight</summary><div class="fb">Add reps before weight. Take one set up a rep each week until every set sits at the top of the range, then add 2.5kg and start again. Bench, top of a 4&#215;5&#8211;6:<div style="margin-top:10px"></div>
         <div class="pweek"><div class="wk">Week 1</div><div class="sets"><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
         <div class="pweek"><div class="wk">Week 2</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
         <div class="pweek"><div class="wk">Week 3</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
         <div class="pweek"><div class="wk">Week 4</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span></div></div>
-        <div class="prule"><span class="arr">&#43;</span><div>All four at the top, so next week is <b>97.5kg &#215; 5</b> and it repeats. Same rule on your 3-set lifts.</div></div>
-      </div>
+        <div class="prule"><span class="arr">&#43;</span><div>All four at the top, so next week is <b>97.5kg &#215; 5</b> and it repeats. Same rule on your 3-set lifts.</div></div></div></details>
+      <details class="fx"><summary>Weekly split &middot; 5 train, 2 rest</summary><div class="fb"><div class="plist" style="margin-top:2px">
+        <div class="pc"><div class="pc-d"><b>Mon</b><small>D1</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower A</div><div class="s">Quad lead &middot; then a walk</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Tue</b><small>D2</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper A</div><div class="s">Push &amp; delts</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Wed</b><small>&ndash;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Rest</div><div class="s">Recover &middot; lower carbs</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Thu</b><small>D3</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower B</div><div class="s">Posterior chain &middot; then a walk</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Fri</b><small>D4</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper B</div><div class="s">Pull &amp; delts</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Sat</b><small>D5</small></div><div class="pc-bar h"></div><div class="pc-i"><div class="t">Arms &amp; Delts</div><div class="s">Delts, arms &middot; walk &middot; social</div></div></div>
+        <div class="pc"><div class="pc-d"><b>Sun</b><small>&ndash;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Checkpoint</div><div class="s">7-day average &middot; photo &middot; adjust</div></div></div>
+      </div></div></details>
+      <details class="fx"><summary>Cardio &amp; recovery</summary><div class="fb"><b>15-min incline walk &#215; 3</b>, straight after the weights on Mon, Thu and Sat. 5&#8211;6 km/h at 10&#8211;15% incline. That's the only cardio. If the scale stalls two weeks, add a fourth walk before touching the food.<ul class="clist" style="margin-top:10px"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sleep 7.5h</b>, fixed wake time. The biggest lever left.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Last caffeine early afternoon, screens down before bed.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Pre-log the day each morning, train the evening with Mufleh.</li></ul></div></details>
+      <details class="fx"><summary>Scale rules</summary><div class="fb"><ul class="clist" style="margin-top:2px"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Weigh daily</b>, first thing, same conditions. Act on the 7-day average only.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Around 0.5kg down</b> hold everything. Faster than 0.8, eat a little more.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Flat for two weeks</b>, drop midweek carbs or add the fourth walk.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sub-15%</b>, ease the deficit to protect muscle. Ignore the scale 2&#8211;3 days after Saturday.</li></ul></div></details>
+      <details class="fx"><summary>Abs &amp; cramps</summary><div class="fb"><b>Abs come last.</b> Hanging Leg Raise ends Monday, Cable Crunch ends Thursday. They show up when the fat drops, not from extra crunches.<div class="eq" style="margin-top:8px">Lying leg press cramp: knees out of your chest, pelvis <b>down</b></div>Breathe out as you press. Salt before training, 300&#8211;400mg magnesium at night, keep carbs on lifting days. Keep 1&#8211;2 reps in the tank on compounds, sharp pain stops, burn doesn't.</div></details>
+      <details class="fx"><summary>Straps &amp; gear</summary><div class="fb"><b>Straps</b> for RDLs, rows, pulldowns. <b>Belt</b> for top sets of squat, hip thrust, OHP. <b>Wrist wraps</b> for heavy press, <b>knee sleeves</b> for warmth.</div></details>
     </div>
   </section>
 
-  <!-- FOOD -->
-  <section class="view" id="v-food">
+  <!-- WORKOUT -->
+  <section class="view" id="v-workout">
     <div class="block">
-      <div class="shead"><h2>Nutrition</h2><span class="tagn" id="foodTag">weekday</span></div>
-      <div class="card">
-        <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-flame"/></svg>Daily target</div>
-        <div class="bignum"><span id="tKcal">2,365</span><small> kcal</small></div>
-        <div class="bigsub" id="tgtMode">Weekday target</div>
-        <div class="bigsub" style="margin-top:4px">Switch weekday and weekend below, the calories move with it. Protein holds, edit the numbers in Settings.</div>
-        <div class="macrobar">
-          <div class="mb"><div class="v" id="tP">240<small>g</small></div><div class="l">Protein</div></div>
-          <div class="mb"><div class="v" id="tC">250<small>g</small></div><div class="l">Carbs</div></div>
-          <div class="mb"><div class="v" id="tF">45<small>g</small></div><div class="l">Fat</div></div>
+      <div class="hero">
+        <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
+        <div class="htop">
+          <div><div class="hlab">Today's session</div><div class="hday" id="hDay">Lower A</div><div class="hsub" id="hSub">Quad lead &middot; tap any move for its form video</div></div>
+          <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="ringFil" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="ringNum">0/7</b><span>Done</span></div></div>
         </div>
+        <div class="hchips"><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-dumbbell"/></svg><b id="cMoves">7</b>&nbsp;moves</div><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-bars"/></svg><b id="cSets">20</b>&nbsp;sets</div><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clock"/></svg><b id="cTime">~76</b>&nbsp;min</div></div>
       </div>
-      <div class="modetog" id="mealMode"><button data-mode="weekday" class="on">Weekday plan</button><button data-mode="weekend">Weekend plan</button></div>
     </div>
     <div class="block">
-      <div class="shead"><h2 class="sm" id="planTitle">Weekday plate</h2><span class="tagn"><button class="reset" id="editMeals" style="text-decoration:none;color:var(--muted)">Edit meals</button></span></div>
-      <div class="mealwrap" id="mealList"></div>
-      <div class="addrow" id="mealAddRow" style="display:none"><button class="btn" id="addMeal">+ Add a meal</button><button class="btn solid" id="doneEdit" style="flex:0 0 auto;padding-left:22px;padding-right:22px">Done</button></div>
-      <div class="totbar" id="mealTot"></div>
-      <p style="font-size:12px;color:var(--muted);font-weight:500;line-height:1.5" id="planNote"></p>
+      <div class="shead"><h2>The workout</h2><span class="tagn">tick as you go</span></div>
+      <div class="pills" id="dayTabs"></div>
+      <div class="workout"><div class="whead" id="wHead"></div><div class="wlist" id="workoutBox"></div></div>
+    </div>
+  </section>
+
+  <!-- NUTRITION -->
+  <section class="view" id="v-food">
+    <div class="fuel-mobile">
+      <div class="block">
+        <div class="shead"><h2>Nutrition</h2><span class="tagn" id="foodTag">weekday</span></div>
+        <div class="card">
+          <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-flame"/></svg>Daily target</div>
+          <div class="bignum"><span id="tKcal">2,210</span><small> kcal</small></div>
+          <div class="bigsub" id="tgtMode">Weekday target</div>
+          <div class="bigsub" style="margin-top:4px">Switch weekday and weekend below, the calories move with it. Protein holds, edit the numbers in Settings.</div>
+          <div class="macrobar">
+            <div class="mb"><div class="v" id="tP">240<small>g</small></div><div class="l">Protein</div></div>
+            <div class="mb"><div class="v" id="tC">200<small>g</small></div><div class="l">Carbs</div></div>
+            <div class="mb"><div class="v" id="tF">50<small>g</small></div><div class="l">Fat</div></div>
+          </div>
+        </div>
+        <div class="modetog" id="mealMode"><button data-mode="weekday" class="on">Weekday plan</button><button data-mode="weekend">Weekend plan</button></div>
+      </div>
+      <div class="block">
+        <div class="shead"><h2 class="sm" id="planTitle">Weekday plate</h2><span class="tagn"><button class="reset" id="editMeals" style="text-decoration:none;color:var(--muted)">Edit meals</button></span></div>
+        <div class="mealwrap" id="mealList"></div>
+        <div class="addrow" id="mealAddRow" style="display:none"><button class="btn" id="addMeal">+ Add a meal</button><button class="btn solid" id="doneEdit" style="flex:0 0 auto;padding-left:22px;padding-right:22px">Done</button></div>
+        <div class="totbar" id="mealTot"></div>
+        <p style="font-size:12px;color:var(--muted);font-weight:500;line-height:1.5" id="planNote"></p>
+      </div>
+    </div>
+    <div class="fuel-desktop">
+      <div class="block">
+        <div class="shead"><h2>Nutrition</h2><span class="tagn">weekday &amp; weekend &middot; edit in Settings</span></div>
+        <div class="fcols">
+          <div class="fcol">
+            <div class="fcolcard"><div class="fcol-h"><div class="ft">Weekday</div><div class="fd" id="fwDef">~690 under</div></div><div class="bignum"><span id="fwKcal">2,210</span><small> kcal</small></div>
+              <div class="macrobar"><div class="mb"><div class="v" id="fwP">240<small>g</small></div><div class="l">Protein</div></div><div class="mb"><div class="v" id="fwC">200<small>g</small></div><div class="l">Carbs</div></div><div class="mb"><div class="v" id="fwF">50<small>g</small></div><div class="l">Fat</div></div></div></div>
+            <div class="mealwrap" id="fwMeals"></div>
+            <div class="fcoltot" id="fwTot"></div>
+          </div>
+          <div class="fcol">
+            <div class="fcolcard"><div class="fcol-h"><div class="ft">Weekend</div><div class="fd" id="feDef">~970 under</div></div><div class="bignum"><span id="feKcal">1,930</span><small> kcal</small></div>
+              <div class="macrobar"><div class="mb"><div class="v" id="feP">240<small>g</small></div><div class="l">Protein</div></div><div class="mb"><div class="v" id="feC">130<small>g</small></div><div class="l">Carbs</div></div><div class="mb"><div class="v" id="feF">50<small>g</small></div><div class="l">Fat</div></div></div></div>
+            <div class="mealwrap" id="feMeals"></div>
+            <div class="fcoltot" id="feTot"></div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="block">
       <div class="cols2">
@@ -500,61 +565,9 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
     </div>
   </section>
 
-  <!-- PLAN -->
-  <section class="view" id="v-plan">
-    <div class="block"><div class="shead"><h2>This week</h2><span class="tagn">5 train · 2 rest</span></div>
-      <div class="week">
-        <div class="wd"><div class="dn">Mon</div><div class="dd">1</div><div class="pip"></div></div>
-        <div class="wd"><div class="dn">Tue</div><div class="dd">2</div><div class="pip"></div></div>
-        <div class="wd"><div class="dn">Wed</div><div class="dd">3</div><div class="pip r"></div></div>
-        <div class="wd"><div class="dn">Thu</div><div class="dd">4</div><div class="pip"></div></div>
-        <div class="wd"><div class="dn">Fri</div><div class="dd">5</div><div class="pip"></div></div>
-        <div class="wd"><div class="dn">Sat</div><div class="dd">6</div><div class="pip h"></div></div>
-        <div class="wd"><div class="dn">Sun</div><div class="dd">7</div><div class="pip r"></div></div>
-      </div>
-    </div>
-    <div class="block"><div class="cols2">
-      <div class="col"><div class="shead"><h2 class="sm">Split</h2></div><div class="plist">
-        <div class="pc"><div class="pc-d"><b>Mon</b><small>D1</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower A</div><div class="s">Quad lead · then a walk</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Tue</b><small>D2</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper A</div><div class="s">Push &amp; delts</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Wed</b><small>&ndash;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Rest</div><div class="s">Recover · lower carbs</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Thu</b><small>D3</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower B</div><div class="s">Posterior chain · then a walk</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Fri</b><small>D4</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper B</div><div class="s">Pull &amp; delts</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Sat</b><small>D5</small></div><div class="pc-bar h"></div><div class="pc-i"><div class="t">Arms &amp; Delts</div><div class="s">Delts, arms · walk · social</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Sun</b><small>&ndash;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Checkpoint</div><div class="s">7-day average · photo · adjust</div></div></div>
-      </div></div>
-      <div class="col"><div class="shead"><h2 class="sm">Cardio</h2><span class="tagn">post-workout</span></div>
-        <div class="card forest"><div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime)"><use href="#i-walk"/></svg>15-min incline walk &#215; 3</div><p>Straight after the weights on <b>Mon, Thu and Sat</b>. Burns fat without denting recovery or appetite. That's the only cardio. If the scale stalls two weeks, add a fourth walk before touching the food.</p></div>
-        <div class="tilegrid g2"><div class="tile soft"><div class="ti">Speed</div><div class="tv">5&#8211;6<small> km/h</small></div></div><div class="tile soft"><div class="ti">Incline</div><div class="tv">10&#8211;15<small>%</small></div></div></div>
-        <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-check"/></svg>Recovery</div><ul class="clist"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sleep 7.5h</b>, fixed wake time. The biggest lever left.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Last caffeine early afternoon, screens down before bed.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Pre-log the day each morning, train the evening with Mufleh.</li></ul></div>
-      </div>
-    </div></div>
-    <div class="block"><div class="shead"><h2 class="sm">Scale rules</h2></div>
-      <div class="card ink"><ul class="clist">
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Weigh daily</b>, first thing, same conditions. Act on the 7-day average only.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Around 0.5kg down</b> hold everything. Faster than 0.8, eat a little more.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Flat for two weeks</b>, drop midweek carbs or add the fourth walk.</li>
-        <li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sub-15%</b>, ease the deficit to protect muscle. Ignore the scale 2&#8211;3 days after Saturday.</li>
-      </ul></div>
-    </div>
-    <div class="block"><div class="shead"><h2 class="sm">Phases</h2></div>
-      <div class="tilegrid">
-        <div class="phase"><div class="pn">1</div><div class="pm"><div class="t">Establish · June</div><div class="s">Lock the plan, fast initial drop</div></div><div class="pt">16&#8211;17%</div></div>
-        <div class="phase"><div class="pn">2</div><div class="pm"><div class="t">Grind · July</div><div class="s">Hold intake, adherence tested</div></div><div class="pt">14&#8211;15%</div></div>
-        <div class="phase"><div class="pn">3</div><div class="pm"><div class="t">Shred · Aug&#8211;Sep</div><div class="s">Abs sharpen, trunk fat goes</div></div><div class="pt">12%</div></div>
-      </div>
-    </div>
-  </section>
-
   <!-- PROGRESS -->
   <section class="view" id="v-progress">
-    <div class="block"><div class="cols2">
-      <div class="hero">
-        <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
-        <div class="htop"><div><div class="hlab">The Mission</div><div class="hday"><span id="pgWnow">92.6</span> <span style="color:rgba(255,255,255,.4)">&#8594;</span> 85.0</div><div class="hsub" id="pgToGo">~8kg of fat to shift · about 0.5kg a week.</div></div>
-        <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="pgRing" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="pgBf">19.2%</b><span>Body fat</span></div></div></div>
-        <div class="herostats"><div class="hs"><div class="v">12%</div><div class="k">Target BF</div><div class="bar"><i id="pgBar" style="width:36%"></i></div></div><div class="hs"><div class="v" id="pgDef">~535</div><div class="k">Avg deficit</div><div class="bar"><i style="width:45%"></i></div></div><div class="hs"><div class="v" id="pgIntake">2,365</div><div class="k">Avg intake</div><div class="bar"><i style="width:82%"></i></div></div></div>
-      </div>
+    <div class="block"><div class="shead"><h2>Progress</h2><span class="tagn">weigh-ins &amp; scans</span></div>
       <div class="trackwrap">
         <div class="seg" id="seg"><button data-pane="daily" class="on">Daily weigh-in</button><button data-pane="monthly">Monthly scan</button></div>
         <div class="pane on" id="paneDaily">
@@ -575,17 +588,7 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
           <div class="shead"><h2 class="sm">History</h2><span class="tagn" id="sCount"></span></div><div id="sHist"></div>
         </div>
       </div>
-    </div></div>
-  </section>
-
-  <!-- FOCUS -->
-  <section class="view" id="v-focus">
-    <div class="block"><div class="hero"><div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div><div class="hlab">The next 90 days</div><div class="hday" style="margin-top:9px">Three things<br>move the needle.</div><div class="hsub">Everything else is detail. Get these right and the rest looks after itself.</div></div></div>
-    <div class="block"><div class="cols2">
-      <div class="prio"><div class="pn">1</div><div><div class="pt">Priority</div><h3>Sleep</h3><p>Get to <b>7.5 hours</b>. The biggest weakness in the plan right now. Under-slept means hungrier, weaker and looser with food, it quietly undoes the deficit.</p></div></div>
-      <div class="prio"><div class="pn">2</div><div><div class="pt">Priority</div><h3>Consistency</h3><ul class="nlist"><li>No random cheat weekends.</li><li>No bulking.</li><li>No cutting harder.</li><li>No changing the plan.</li></ul><p style="margin-top:8px">It works if you run it, not if you tweak it every week.</p></div></div>
-      <div class="prio span2"><div class="pn">3</div><div><div class="pt">Priority</div><h3>Strength retention</h3><p>During a cut your job is not to get stronger. It's to <b>refuse to get weaker</b>. Hold your bench near 100kg for reps while bodyweight drops from 92.6 to 86, and you've run an excellent cut.</p></div></div>
-    </div></div>
+    </div>
   </section>
 
   <!-- SETTINGS -->
@@ -633,12 +636,11 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
 </div>
 
 <div class="tabbar"><div class="tabinner">
-  <button class="tab active" data-v="train" aria-label="Train"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg></button>
-  <button class="tab" data-v="food" aria-label="Food"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg></button>
-  <button class="tab" data-v="plan" aria-label="Plan"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cal"/></svg></button>
-  <button class="tab" data-v="progress" aria-label="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg></button>
-  <button class="tab" data-v="focus" aria-label="Focus"><svg viewBox="0 0 24 24" class="ic"><use href="#i-target"/></svg></button>
-  <button class="tab" data-v="you" aria-label="Settings"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cog"/></svg></button>
+  <button class="tab active" data-v="dash" aria-label="Home"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg><span class="tl">Home</span></button>
+  <button class="tab" data-v="workout" aria-label="Workout"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg><span class="tl">Workout</span></button>
+  <button class="tab" data-v="food" aria-label="Nutrition"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg><span class="tl">Fuel</span></button>
+  <button class="tab" data-v="progress" aria-label="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg><span class="tl">Progress</span></button>
+  <button class="tab" data-v="you" aria-label="Settings"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cog"/></svg><span class="tl">You</span></button>
 </div></div>
 <div class="toast" id="toast"></div>
 
@@ -725,24 +727,26 @@ var WEEKDAY_TO_KEY={1:'lowerA',2:'upperA',4:'lowerB',5:'upperB',6:'arms'};
 /* ---------- default meals (sum to 240/250/45) ---------- */
 var DEFAULT_MEALS={
   weekday:[
-    {name:'Breakfast',foods:'Protein pancakes 160g · 2 whole eggs · black coffee',p:40,c:48,f:13},
-    {name:'Mid-morning',foods:'Banana · whey 1 scoop',p:30,c:30,f:2},
-    {name:'Lunch',foods:'Chicken breast 250g · rice 80g dry · salad + veg',p:62,c:70,f:9},
-    {name:'Pre-gym',foods:'Oats 50g · whey 1 scoop',p:28,c:42,f:4},
-    {name:'Dinner / post-gym',foods:'5% beef mince 250g · 0% Greek yogurt 200g · potato 150g + veg',p:80,c:60,f:17}
+    {name:'Protein + creatine shake',foods:'Whey \u00b7 creatine 5g \u00b7 strawberries 30g',p:24,c:2,f:1},
+    {name:'Dessert Khuswa',foods:'0% Greek yogurt 250g \u00b7 porridge oats 50g \u00b7 strawberries \u00b7 chia 15g',p:58,c:52,f:9},
+    {name:'Chicken Khuswa \u00b7 lunch',foods:'Chicken breast 166g \u00b7 basmati rice 150g \u00b7 garlic, honey, soy',p:56,c:49,f:7},
+    {name:'Chicken Khuswa \u00b7 dinner',foods:'Chicken breast 166g \u00b7 basmati rice 150g \u00b7 garlic, honey, soy',p:56,c:49,f:7},
+    {name:'Cheese sandwich \u00b7 protein square',foods:'Protein tortilla wrap \u00b7 high-protein cheese 60g',p:31,c:32,f:9},
+    {name:'Cheese sandwich \u00b7 protein grated',foods:'Aldi protein wrap \u00b7 grated protein cheese 30g',p:20,c:32,f:6}
   ],
   weekend:[
-    {name:'Late breakfast',foods:'3 eggs · 0% Greek yogurt 250g · banana · coffee',p:50,c:40,f:18},
-    {name:'Lunch',foods:'Chicken 200g · rice 80g dry · veg',p:50,c:68,f:8},
-    {name:'Pre-social',foods:'Whey 1.5 scoop · oats 40g',p:42,c:52,f:5},
-    {name:'Meal out (social)',foods:'Mixed grill / shawarma plate · spend the carbs here',p:98,c:140,f:24}
+    {name:'Protein + creatine shake',foods:'Whey \u00b7 creatine 5g \u00b7 strawberries 30g',p:24,c:2,f:1},
+    {name:'Dessert Khuswa',foods:'0% Greek yogurt 250g \u00b7 porridge oats 50g \u00b7 strawberries \u00b7 chia 15g',p:58,c:52,f:9},
+    {name:'Chicken Khuswa',foods:'Chicken breast 166g \u00b7 basmati rice 150g \u00b7 garlic, honey, soy',p:56,c:49,f:7},
+    {name:'Minced beef tomato sauce',foods:'5% beef mince (1 of 5) \u00b7 smooth tomato \u00b7 red pepper',p:71,c:10,f:17},
+    {name:'Cheese sandwich \u00b7 protein square',foods:'Protein tortilla wrap \u00b7 high-protein cheese 60g',p:31,c:32,f:9}
   ]
 };
 var PLAN_NOTES={
-  weekday:'Weekday is the deficit engine. Five of these bank the room the weekend spends. Rest days (Wed): drop the pre-gym oats and lunch rice, hold both protein meals.',
-  weekend:'Weekend runs a higher target to cover the social meal. Protein holds, the extra goes to carbs spent on the meal out, not across the day. The week still averages a deficit, see the weekly bank in Settings.'
+  weekday:'Built from your own recipes. Two Chicken Khuswa carry it, with the dessert khuswa, a shake and two cheese sandwiches. Lands 2,195 kcal and 245g protein. Fat sits near 39g because your chicken food is lean, swap a Chicken Khuswa for the beef mince on beef weeks and pull a sandwich, and it climbs toward 50g.',
+  weekend:'Lower-carb day. The beef mince brings the fat up, one Chicken Khuswa plus the dessert khuswa, a shake and a cheese sandwich hold protein at 240g. Lands 1,927 kcal.'
 };
-var DEFAULT_TARGETS={weekday:{p:240,c:250,f:45},weekend:{p:240,c:300,f:55}};
+var DEFAULT_TARGETS={weekday:{p:240,c:200,f:50},weekend:{p:240,c:130,f:50}};
 
 /* ---------- body comp ---------- */
 var TBF=12;
@@ -781,6 +785,8 @@ function applyTargets(){
   if($('wkRate'))$('wkRate').innerHTML=(w.def>0?w.wk.toFixed(2):'0.00')+'<small> kg/wk</small>';
   $('pgDef').textContent=w.def>0?'~'+fmtK(w.def):'+'+fmtK(-w.def);
   $('pgIntake').textContent=fmtK(w.avg);
+  var _dk=$('dashKcal');if(_dk)_dk.textContent=fmtK(ck);var _dm=$('dashMacros');if(_dm)_dm.textContent=cur.p+'P · '+cur.c+'C · '+cur.f+'F';
+  renderFuelDesktop();
   renderMealTotals();
 }
 
@@ -799,10 +805,12 @@ function renderWorkout(){
     return '<div class="exrow'+(on?' done':'')+'"><div class="exbody"><div class="en"><span class="enum">'+(i+1)+'</span><a class="ename" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a></div><div class="exmeta">'+pills+'</div>'+(e.note?'<div class="exnote">'+e.note+'</div>':'')+'</div><button class="exchk" data-idx="'+i+'" aria-label="Done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button></div>';
   }).join('');
   $('hDay').textContent=d.name;$('hSub').innerHTML=d.sub;$('cMoves').textContent=d.ex.length;$('cSets').textContent=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);$('cTime').textContent=d.time;
+  var _dd=$('dashDay');if(_dd)_dd.textContent=d.name;
   updateRing();
 }
-function updateRing(){var d=PROGRAM[curDay],tot=d.ex.length,n=doneSet().length;$('ringNum').textContent=n+'/'+tot;var f=$('ringFil');f.style.strokeDasharray=RC;f.style.strokeDashoffset=RC*(1-n/tot);}
+function updateRing(){var d=PROGRAM[curDay],tot=d.ex.length,n=doneSet().length;$('ringNum').textContent=n+'/'+tot;var _dn=$('dashDone');if(_dn)_dn.textContent=n+'/'+tot;var f=$('ringFil');f.style.strokeDasharray=RC;f.style.strokeDashoffset=RC*(1-n/tot);}
 function selectDay(i){curDay=i;renderDayTabs();renderWorkout();}
+function initToday(){var k=WEEKDAY_TO_KEY[new Date().getDay()];if(k){for(var i=0;i<PROGRAM.length;i++){if(PROGRAM[i].key===k){curDay=i;return;}}}}
 
 /* ---------- calendar from real completion ---------- */
 function renderCalendar(){
@@ -846,7 +854,22 @@ function renderMeals(){
     }).join('');
     $('mealAddRow').style.display='none';$('editMeals').textContent='Edit meals';
   }
-  renderMealTotals();
+  renderFuelDesktop();renderMealTotals();
+}
+function renderFuelDesktop(){
+  function fill(px,tgt,meals){
+    if(!$(px+'Kcal'))return;
+    $(px+'Kcal').textContent=fmtK(kcalOf(tgt));
+    $(px+'P').innerHTML=tgt.p+'<small>g</small>';$(px+'C').innerHTML=tgt.c+'<small>g</small>';$(px+'F').innerHTML=tgt.f+'<small>g</small>';
+    $(px+'Meals').innerHTML=meals.map(function(x){return '<div class="meal"><div class="meal-h"><div class="t">'+esc(x.name)+'</div><div class="k">~'+mealKcal(x)+'</div></div><div class="fd">'+esc(x.foods)+'</div><div class="m2"><span>P <b>'+x.p+'</b></span><span>C <b>'+x.c+'</b></span><span>F <b>'+x.f+'</b></span></div></div>';}).join('');
+    var P=0,C=0,F=0;meals.forEach(function(x){P+=+x.p||0;C+=+x.c||0;F+=+x.f||0;});
+    var ok=Math.abs(P-tgt.p)<=8&&Math.abs(C-tgt.c)<=8&&Math.abs(F-tgt.f)<=8;
+    var el=$(px+'Tot');el.className='fcoltot'+(ok?' ok':'');
+    el.innerHTML='<span>Plan total</span><span class="m">'+Math.round(P*4+C*4+F*9)+' kcal "+M+" '+P+'P "+M+" '+C+'C "+M+" '+F+'F'+(ok?' \u2713':'')+'</span>';
+    var df=$(px+'Def'),def=STATE.maint-kcalOf(tgt);if(df)df.textContent=(def>=0?'~'+fmtK(def)+' under':fmtK(-def)+' over');
+  }
+  fill('fw',STATE.targets.weekday,STATE.meals.weekday);
+  fill('fe',STATE.targets.weekend,STATE.meals.weekend);
 }
 function renderMealTotals(){
   var list=STATE.meals[STATE.mode],m=T();
@@ -863,7 +886,7 @@ function showView(v){
   $('v-'+v).classList.add('on');
   var nav=document.querySelectorAll('[data-v]');for(var j=0;j<nav.length;j++)nav[j].classList.toggle('active',nav[j].getAttribute('data-v')===v);
   window.scrollTo({top:0,behavior:'smooth'});
-  if(v==='progress')renderProgress();
+  if(v==='progress'||v==='dash')renderProgress();
 }
 
 /* ---------- theme + accent ---------- */
@@ -896,12 +919,6 @@ function tgtW(){var l=STATE.scans[STATE.scans.length-1];return ffm(l)/(1-TBF/100
 function shortD(d){var p=d.split('-');return MM[(+p[1])-1]+" '"+p[0].slice(2);}
 function fullD(d){var p=d.split('-');return(+p[2])+' '+MM[(+p[1])-1]+' '+p[0];}
 function wksBet(a,b){return(new Date(b)-new Date(a))/6048e5;}
-function initWeightCard(){
-  byDate(STATE.scans);var L=STATE.scans[STATE.scans.length-1],tw=tgtW();
-  $('dWeightV').innerHTML=L.weight.toFixed(1)+'<small> &#8594; '+tw.toFixed(1)+'</small>';
-  var sf=fatMass(STATE.scans[0]),tf=tw*TBF/100,prog=(sf-fatMass(L))/(sf-tf)*100;prog=Math.max(0,Math.min(100,prog));
-  $('dWeightBar').style.width=prog.toFixed(0)+'%';$('dWeightPct').textContent=prog<3?'on the way to 12%':prog.toFixed(0)+'% of the way to 12%';
-}
 function renderProgress(){
   byDate(STATE.scans);byDate(STATE.daily);
   var L=STATE.scans[STATE.scans.length-1];
@@ -924,7 +941,7 @@ function renderDaily(){
   var last7=STATE.daily.slice(-7),avg=last7.length?last7.reduce(function(a,e){return a+e.weight;},0)/last7.length:0;
   $('dAvg').innerHTML=n?avg.toFixed(1)+'<small> kg</small>':'&ndash;';
   var tr=trend(),te=$('dTrend');if(tr===null)te.textContent='\u2014';else te.innerHTML=(tr>0?'+':'')+tr.toFixed(2)+'<small> kg</small>';
-  var eta=$('dEta');if(tr!==null&&tr<-0.05){var wk=(avg-tgtW())/Math.abs(tr);eta.innerHTML=Math.max(0,Math.round(wk))+'<small> wks</small>';}else eta.innerHTML='<small style="font-size:13px">log ~2 wks</small>';
+  var eta=$('dEta');if(tr!==null&&tr<-0.05){var wk=(avg-tgtW())/Math.abs(tr);eta.innerHTML=Math.max(0,Math.round(wk))+'<small> wks</small>';}else if(tr!==null&&tr>0.05){eta.innerHTML='<small style="font-size:13px">trending up</small>';}else eta.innerHTML='<small style="font-size:13px">log ~2 wks</small>';
   $('dCount').textContent=n+(n===1?' day':' days');
   lineChart('dChart',STATE.daily.map(function(e){return e.weight;}),STATE.daily.map(function(e){return shortD(e.date);}),true);
   $('dHist').innerHTML=STATE.daily.slice().reverse().map(function(e,ri){var idx=n-1-ri;return '<div class="hist"><div class="hd"><b>'+shortD(e.date)+'</b><small>'+e.date.slice(8)+'/'+e.date.slice(5,7)+'</small></div><div class="hm"><span><b>'+e.weight.toFixed(1)+'</b> kg</span></div><button class="del" data-dd="'+idx+'">&times;</button></div>';}).join('')+(n?'<button class="reset" id="dReset">Clear daily log</button>':'');
@@ -942,8 +959,8 @@ function lineChart(id,vals,labels,avgLine){
   var avg='';if(avgLine){var av=vv.reduce(function(a,b){return a+b;},0)/vv.length,ay=Y(av).toFixed(1);avg='<line class="c-avg" x1="'+L+'" y1="'+ay+'" x2="'+(W-R)+'" y2="'+ay+'"/>';}
   var area=arr.length>1?'<path class="c-area" d="M'+X(arr[0].i).toFixed(1)+','+(H-B)+' L'+pts.join(' L')+' L'+X(arr[arr.length-1].i).toFixed(1)+','+(H-B)+' Z"/>':'';
   var line='<polyline class="c-line" points="'+pts.join(' ')+'"/>',circ='',lab='';
-  arr.forEach(function(a,k){var last=k===arr.length-1;circ+='<circle class="c-pt '+(last?'last':'')+'" cx="'+X(a.i).toFixed(1)+'" cy="'+Y(a.v).toFixed(1)+'" r="'+(last?4.5:3.5)+'"/>';if(k===0||last)lab+='<text class="c-v" x="'+X(a.i).toFixed(1)+'" y="'+(Y(a.v)-8).toFixed(1)+'" text-anchor="middle">'+a.v.toFixed(1)+'</text>';});
-  var xl='';labels.forEach(function(s,i){if(n<=6||i===0||i===n-1)xl+='<text class="c-x" x="'+X(i).toFixed(1)+'" y="'+(H-7)+'" text-anchor="middle">'+s+'</text>';});
+  arr.forEach(function(a,k){var last=k===arr.length-1;circ+='<circle class="c-pt '+(last?'last':'')+'" cx="'+X(a.i).toFixed(1)+'" cy="'+Y(a.v).toFixed(1)+'" r="'+(last?4.5:3.5)+'"/>';if(k===0||last){var _an=(arr.length>1&&k===0)?'start':(arr.length>1&&last)?'end':'middle';var _lx=_an==='start'?X(a.i)+2:_an==='end'?X(a.i)-2:X(a.i);lab+='<text class="c-v" x="'+_lx.toFixed(1)+'" y="'+(Y(a.v)-8).toFixed(1)+'" text-anchor="'+_an+'">'+a.v.toFixed(1)+'</text>';}});
+  var xl='';labels.forEach(function(s,i){if(n<=6||i===0||i===n-1){var _ax=i===0?'start':i===n-1?'end':'middle';xl+='<text class="c-x" x="'+X(i).toFixed(1)+'" y="'+(H-7)+'" text-anchor="'+_ax+'">'+s+'</text>';}});
   el.innerHTML='<svg viewBox="0 0 '+W+' '+H+'" preserveAspectRatio="xMidYMid meet">'+grid+avg+area+line+circ+lab+xl+'</svg>';
 }
 function renderVerdict(){
@@ -980,9 +997,9 @@ document.addEventListener('click',function(e){
   var ts=e.target.closest('#themeSeg button');if(ts){applyTheme(ts.getAttribute('data-t'),true);return;}
   var sw=e.target.closest('.sw');if(sw){applyAccent(+sw.getAttribute('data-acc'),true);return;}
   if(e.target.id==='dReset'){STATE.daily=[];saveState();renderProgress();return;}
-  if(e.target.id==='sReset'){STATE.scans=clone(SEED_S);saveState();renderProgress();initWeightCard();return;}
+  if(e.target.id==='sReset'){STATE.scans=clone(SEED_S);saveState();renderProgress();return;}
   var dd2=e.target.closest('[data-dd]');if(dd2){STATE.daily.splice(+dd2.getAttribute('data-dd'),1);saveState();renderProgress();return;}
-  var sd=e.target.closest('[data-sd]');if(sd){if(STATE.scans.length>1){STATE.scans.splice(+sd.getAttribute('data-sd'),1);saveState();renderProgress();initWeightCard();}return;}
+  var sd=e.target.closest('[data-sd]');if(sd){if(STATE.scans.length>1){STATE.scans.splice(+sd.getAttribute('data-sd'),1);saveState();renderProgress();}return;}
   if(e.target.id==='copyBackup'){var code=btoa(unescape(encodeURIComponent(JSON.stringify(STATE))));var ta=$('restoreBox');ta.value=code;ta.select();try{document.execCommand('copy');}catch(_){}if(navigator.clipboard)navigator.clipboard.writeText(code).catch(function(){});toast('Backup code copied');return;}
   if(e.target.id==='restoreBtn'){try{var o=JSON.parse(decodeURIComponent(escape(atob($('restoreBox').value.trim()))));localStorage.setItem(KEY,JSON.stringify(o));loadState();bootRender();toast('Data restored');}catch(err){toast('That code did not read');}return;}
   if(e.target.id==='wipeBtn'){if(confirm('Reset all data to defaults? This clears your logs and edits.')){localStorage.removeItem(KEY);STATE=defState();bootRender();toast('All data reset');}return;}
@@ -1004,14 +1021,14 @@ $('dSave').addEventListener('click',function(){var dt=$('dDate').value,w=parseFl
 var sForm=$('sForm');
 $('sAdd').addEventListener('click',function(){sForm.classList.toggle('open');if(sForm.classList.contains('open'))$('sDate').value=todayISO();});
 $('sCancel').addEventListener('click',function(){sForm.classList.remove('open');});
-$('sSave').addEventListener('click',function(){var dt=$('sDate').value,w=parseFloat($('sWeight').value),bf=parseFloat($('sBf').value),mus=parseFloat($('sMus').value);if(!dt||!(w>0)||!(bf>0))return;var o={date:dt,weight:w,bf:bf};if(mus>0)o.muscle=mus;STATE.scans=STATE.scans.filter(function(x){return x.date!==dt;});STATE.scans.push(o);saveState();sForm.classList.remove('open');['sWeight','sBf','sMus'].forEach(function(id){$(id).value='';});renderProgress();initWeightCard();});
+$('sSave').addEventListener('click',function(){var dt=$('sDate').value,w=parseFloat($('sWeight').value),bf=parseFloat($('sBf').value),mus=parseFloat($('sMus').value);if(!dt||!(w>0)||!(bf>0))return;var o={date:dt,weight:w,bf:bf};if(mus>0)o.muscle=mus;STATE.scans=STATE.scans.filter(function(x){return x.date!==dt;});STATE.scans.push(o);saveState();sForm.classList.remove('open');['sWeight','sBf','sMus'].forEach(function(id){$(id).value='';});renderProgress();});
 
 /* ---------- boot ---------- */
 function bootRender(){
   applyTheme(STATE.theme==='system'?'system':STATE.theme,false);
   applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);
-  renderDayTabs();renderWorkout();renderCalendar();initWeightCard();
-  applyTargets();renderMeals();
+  initToday();renderDayTabs();renderWorkout();renderCalendar();
+  applyTargets();renderMeals();renderProgress();
 }
 loadState();bootRender();
 </script>
