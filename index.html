@@ -378,32 +378,41 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
 .proj-weeks{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));gap:9px}
 .pw{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:11px 13px;display:flex;flex-direction:column;gap:3px}
 .pw-n{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
+.pw-d{font-size:11.5px;font-weight:700;color:var(--text);letter-spacing:.01em}
 .pw-v{font-size:18px;font-weight:800;line-height:1}
 .pw-v::after{content:' kg';font-size:10px;color:var(--muted);font-weight:700}
 .pw.goal{background:color-mix(in srgb,var(--lime) 18%,var(--card));border-color:color-mix(in srgb,var(--lime) 34%,var(--line))}
 .proj-note{margin-top:16px;font-size:12.5px;font-weight:600;color:var(--muted)}
 
-.tabbar{position:fixed;bottom:0;left:0;right:0;z-index:50;display:flex;justify-content:center;padding:0 16px calc(16px + env(safe-area-inset-bottom));pointer-events:none}
-.tabinner{pointer-events:auto;display:flex;gap:4px;background:rgba(255,255,255,.4);-webkit-backdrop-filter:blur(48px) saturate(250%);backdrop-filter:blur(48px) saturate(250%);border:1px solid rgba(255,255,255,.6);border-radius:40px;padding:6px;width:100%;max-width:400px;box-shadow:0 24px 48px rgba(0,0,0,.15),inset 0 1px 1px rgba(255,255,255,.6),inset 0 -1px 1px rgba(0,0,0,.05)}
-[data-theme="dark"] .tabinner{background:rgba(20,20,22,.45);border-color:rgba(255,255,255,.15)}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:54px;border-radius:32px;color:rgba(22,26,30,.65);background:transparent;border:none;transition:all .4s cubic-bezier(.2,.8,.2,1);position:relative;overflow:hidden}
-[data-theme="dark"] .tab{color:rgba(255,255,255,.65)}
+.tabbar{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom));left:0;right:0;margin:0 auto;display:flex;gap:4px;padding:6px;width:calc(100% - 32px);max-width:400px;height:66px;border-radius:33px;z-index:50;background:rgba(255,255,255,.2);-webkit-backdrop-filter:blur(20px) saturate(225%) brightness(1.06);backdrop-filter:blur(20px) saturate(225%) brightness(1.06);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 44px rgba(0,0,0,.18),inset 0 1.5px 1px rgba(255,255,255,.85),inset 0 -2px 3px rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.08)}
+.tabbar::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(158deg,rgba(255,255,255,.62) 0%,rgba(255,255,255,.16) 12%,rgba(255,255,255,0) 30%,rgba(255,255,255,0) 72%,rgba(255,255,255,.09) 100%);pointer-events:none;z-index:0}
+[data-theme="dark"] .tabbar{background:rgba(38,40,46,.24);border-color:rgba(255,255,255,.18)}
+.tabpill{position:absolute;top:0;left:0;width:0;height:54px;border-radius:30px;z-index:1;pointer-events:none;background:color-mix(in srgb,var(--lime) 64%,transparent);border:1px solid rgba(255,255,255,.5);box-shadow:inset 0 1.5px 1px rgba(255,255,255,.6),inset 0 -1px 2px color-mix(in srgb,var(--lime) 45%,transparent),0 3px 12px color-mix(in srgb,var(--lime) 32%,transparent);transition:none}
+[data-theme="dark"] .tabpill{background:color-mix(in srgb,var(--lime) 30%,transparent);border-color:color-mix(in srgb,var(--lime) 38%,transparent);box-shadow:inset 0 1px 1px rgba(255,255,255,.22),0 2px 10px color-mix(in srgb,var(--lime) 20%,transparent)}
+body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),width .44s cubic-bezier(.34,1.32,.46,1),height .3s}
+@media (prefers-reduced-motion:reduce){body.nav-anim .tabpill,body.nav-anim .sbpill{transition:none}.tab,.tab svg{transition:none}}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:54px;border-radius:32px;color:rgba(22,26,30,.72);background:transparent;border:none;transition:all .4s cubic-bezier(.2,.8,.2,1);position:relative;z-index:2;overflow:hidden}
+[data-theme="dark"] .tab{color:rgba(255,255,255,.72)}
 .tab svg{width:22px;height:22px;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
 .tab .tl{font-size:9px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;opacity:.8;transition:opacity .3s}
 .tab:active{transform:scale(.88);opacity:.7}
-.tab.active{background:var(--lime);color:var(--on-lime);box-shadow:0 4px 14px color-mix(in srgb,var(--lime) 50%,transparent)}
-[data-theme="dark"] .tab.active{background:color-mix(in srgb,var(--lime) 20%,transparent);color:var(--lime);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--lime) 40%,transparent)}
+.tab.active{color:var(--on-lime)}
+[data-theme="dark"] .tab.active{color:var(--lime)}
 .tab.active svg{transform:translateY(-2px)}
 .tab.active .tl{opacity:1}
 
 @media(min-width:980px){
   .sidebar{display:flex;flex-direction:column;align-items:center;gap:6px;position:fixed;top:0;left:0;bottom:0;width:88px;padding:24px 0;background:var(--glass);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);border-right:1px solid var(--glass-brd);z-index:50;box-shadow:inset -1px 0 0 rgba(255,255,255,.06)}
   .sidebar .logo{width:46px;height:46px;margin-bottom:18px}
-  .sb-item{width:66px;padding:11px 0;border-radius:20px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted);background:transparent;border:none;transition:.2s}
+  .sb-item{width:66px;padding:11px 0;border-radius:20px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted);background:transparent;border:none;transition:color .2s;position:relative;z-index:2}
+  .sbpill{position:absolute;left:0;top:0;width:0;height:0;border-radius:20px;z-index:1;pointer-events:none;background:color-mix(in srgb,var(--lime) 64%,transparent);border:1px solid rgba(255,255,255,.5);box-shadow:inset 0 1.5px 1px rgba(255,255,255,.6),inset 0 -1px 2px color-mix(in srgb,var(--lime) 45%,transparent),0 3px 10px color-mix(in srgb,var(--lime) 32%,transparent);transition:none}
+  [data-theme="dark"] .sbpill{background:color-mix(in srgb,var(--lime) 30%,transparent);border-color:color-mix(in srgb,var(--lime) 38%,transparent);box-shadow:inset 0 1px 1px rgba(255,255,255,.22),0 2px 10px color-mix(in srgb,var(--lime) 20%,transparent)}
+  body.nav-anim .sbpill{transition:transform .42s cubic-bezier(.34,1.3,.46,1),width .3s,height .42s cubic-bezier(.34,1.3,.46,1)}
   .sb-item svg{width:21px;height:21px}
   .sb-item .sl{font-size:8.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
   .sb-item:hover{background:color-mix(in srgb,var(--text) 7%,transparent);color:var(--text)}
-  .sb-item.active{background:linear-gradient(180deg,color-mix(in srgb,var(--lime) 82%,#fff),var(--lime));color:var(--on-lime);box-shadow:inset 0 1px 1px rgba(255,255,255,.5),0 3px 10px color-mix(in srgb,var(--lime) 35%,transparent)}
+  .sb-item.active{color:var(--on-lime)}
+  [data-theme="dark"] .sb-item.active{color:var(--lime)}
   .sb-spacer{flex:1}
   .sb-avatar{width:44px;height:44px;border-radius:50%;background:var(--lime);color:var(--on-lime);display:grid;place-items:center;font-weight:800;font-size:16px;margin-top:8px}
   .tabbar{display:none}
@@ -457,6 +466,7 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
 <body>
 <div class="app">
   <aside class="sidebar">
+    <div class="sbpill" id="sbPill"></div>
     <div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div>
     <button class="sb-item active" data-v="dash" title="Dashboard"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg><span class="sl">Home</span></button>
     <button class="sb-item" data-v="workout" title="Workout"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg><span class="sl">Workout</span></button>
@@ -617,15 +627,15 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
         </div>
         <div class="proj-lbl">Expected scale</div>
         <div class="proj-weeks">
-          <div class="pw"><span class="pw-n">Week 1</span><span class="pw-v">92.1</span></div>
-          <div class="pw"><span class="pw-n">Week 2</span><span class="pw-v">91.4</span></div>
-          <div class="pw"><span class="pw-n">Week 3</span><span class="pw-v">90.7</span></div>
-          <div class="pw"><span class="pw-n">Week 4</span><span class="pw-v">90.0</span></div>
-          <div class="pw"><span class="pw-n">Week 5</span><span class="pw-v">89.3</span></div>
-          <div class="pw"><span class="pw-n">Week 6</span><span class="pw-v">88.6</span></div>
-          <div class="pw"><span class="pw-n">Week 7</span><span class="pw-v">87.9</span></div>
-          <div class="pw"><span class="pw-n">Week 8</span><span class="pw-v">87.2</span></div>
-          <div class="pw goal"><span class="pw-n">Week 9</span><span class="pw-v">86.5</span></div>
+          <div class="pw"><span class="pw-n">Week 1</span><span class="pw-d">2 Jul</span><span class="pw-v">92.1</span></div>
+          <div class="pw"><span class="pw-n">Week 2</span><span class="pw-d">9 Jul</span><span class="pw-v">91.4</span></div>
+          <div class="pw"><span class="pw-n">Week 3</span><span class="pw-d">16 Jul</span><span class="pw-v">90.7</span></div>
+          <div class="pw"><span class="pw-n">Week 4</span><span class="pw-d">23 Jul</span><span class="pw-v">90.0</span></div>
+          <div class="pw"><span class="pw-n">Week 5</span><span class="pw-d">30 Jul</span><span class="pw-v">89.3</span></div>
+          <div class="pw"><span class="pw-n">Week 6</span><span class="pw-d">6 Aug</span><span class="pw-v">88.6</span></div>
+          <div class="pw"><span class="pw-n">Week 7</span><span class="pw-d">13 Aug</span><span class="pw-v">87.9</span></div>
+          <div class="pw"><span class="pw-n">Week 8</span><span class="pw-d">20 Aug</span><span class="pw-v">87.2</span></div>
+          <div class="pw goal"><span class="pw-n">Week 9</span><span class="pw-d">27 Aug</span><span class="pw-v">86.5</span></div>
         </div>
         <div class="proj-note">Lands almost perfectly around 12% body fat.</div>
       </div>
@@ -701,13 +711,14 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
   </main>
 </div>
 
-<div class="tabbar"><div class="tabinner">
+<div class="tabbar">
+  <div class="tabpill" id="tabPill"></div>
   <button class="tab active" data-v="dash" aria-label="Home"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg><span class="tl">Home</span></button>
   <button class="tab" data-v="workout" aria-label="Workout"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg><span class="tl">Workout</span></button>
   <button class="tab" data-v="food" aria-label="Nutrition"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg><span class="tl">Fuel</span></button>
   <button class="tab" data-v="progress" aria-label="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg><span class="tl">Progress</span></button>
   <button class="tab" data-v="you" aria-label="Settings"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cog"/></svg><span class="tl">You</span></button>
-</div></div>
+</div>
 <div class="toast" id="toast"></div>
 
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -951,12 +962,15 @@ function renderMealTotals(){
 }
 
 /* ---------- views ---------- */
+function placePill(p,el){if(!p||!el||el.offsetParent===null)return;p.style.width=el.offsetWidth+'px';p.style.height=el.offsetHeight+'px';p.style.transform='translate('+el.offsetLeft+'px,'+el.offsetTop+'px)';}
+function syncPills(){placePill(document.getElementById('tabPill'),document.querySelector('.tabbar .tab.active'));placePill(document.getElementById('sbPill'),document.querySelector('.sidebar .sb-item.active'));}
 function showView(v){
   var s=document.querySelectorAll('.view');for(var i=0;i<s.length;i++)s[i].classList.remove('on');
   $('v-'+v).classList.add('on');
   var nav=document.querySelectorAll('[data-v]');for(var j=0;j<nav.length;j++)nav[j].classList.toggle('active',nav[j].getAttribute('data-v')===v);
   window.scrollTo({top:0,behavior:'smooth'});
   if(v==='progress'||v==='dash')renderProgress();
+  syncPills();
 }
 
 /* ---------- theme + accent ---------- */
@@ -1101,6 +1115,9 @@ function bootRender(){
   applyTargets();renderMeals();renderProgress();
 }
 loadState();bootRender();
+syncPills();
+requestAnimationFrame(function(){requestAnimationFrame(function(){document.body.classList.add('nav-anim');});});
+window.addEventListener('resize',syncPills);
 </script>
 </body>
 </html>
