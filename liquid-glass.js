@@ -1,236 +1,268 @@
 /**
- * Liquid Glass Tab Bar
- * Based on winaviation/liquid-glass-demo (port of kube.io Liquid Glass)
+ * Liquid Glass — Tab Bar + Pill
  *
- * 1. Computes a physics-accurate SVG displacement map (Snell's Law) for the
- *    tab bar background and feeds it to a feDisplacementMap SVG filter.
+ * Settings copied directly from the Interactive Magnifying Glass demo
+ * (winaviation/liquid-glass-demo, which ports kube.io/blog/liquid-glass-css-svg):
  *
- * 2. Adds Spring-based bounce to the tab pill on click — same spring physics
- *    as the Interactive Magnifying Glass element in the demo. Position uses
- *    CSS `translate` (animated by CSS transition), scale uses CSS `scale`
- *    (animated by JS spring) — the two compose independently.
+ *   bezelWidth      = 30
+ *   glassThickness  = 150
+ *   refractiveIndex = 1.5
+ *   refractionScale = 1.5    ← the `scale` on feDisplacementMap = maxDisp * 1.5
+ *   specularOpacity = 1.0
+ *   blur (SVG)      = 0.5    ← stdDeviation inside the filter, NOT backdrop blur
+ *
+ * No `blur()` is added to backdrop-filter — that's what makes it refractive
+ * rather than frosted. The SVG displacement map provides all the visual distortion.
+ *
+ * Springs:
+ *   - pillScaleSpring    (520/26)  — pill squish on click, same feel as MG drag
+ *   - tabRefractSpring   (300/18)  — tab bar refractionBoost, same as MG demo
+ *   - pillRefractSpring  (300/18)  — pill refractionBoost, same as MG demo
  */
 
 (function () {
   "use strict";
 
-  /* ─── Spring physics (from winaviation demo) ───────────────────────── */
+  /* ─── Spring (from winaviation / kube.io demo) ─────────────────────── */
   function Spring(value, stiffness, damping) {
-    this.value = value;
-    this.target = value;
+    this.value    = value;
+    this.target   = value;
     this.velocity = 0;
     this.stiffness = stiffness || 300;
-    this.damping = damping || 20;
+    this.damping   = damping   || 20;
   }
-
   Spring.prototype.setTarget = function (t) { this.target = t; };
-
   Spring.prototype.update = function (dt) {
-    var force = (this.target - this.value) * this.stiffness;
-    var damp  = this.velocity * this.damping;
-    this.velocity += (force - damp) * dt;
+    var f = (this.target - this.value) * this.stiffness;
+    var d = this.velocity * this.damping;
+    this.velocity += (f - d) * dt;
     this.value    += this.velocity * dt;
     return this.value;
   };
-
   Spring.prototype.isSettled = function () {
     return Math.abs(this.target - this.value) < 0.0005 &&
            Math.abs(this.velocity) < 0.0005;
   };
 
-  /* ─── Snell's Law — 1-D displacement along the bezel ──────────────── */
-  function calcDisplacement1D(glassThickness, bezelWidth, surfaceFn, refractiveIndex, samples) {
+  /* ─── Snell's Law 1-D displacement ─────────────────────────────────── */
+  function calc1D(glassThickness, bezelWidth, surfaceFn, n, samples) {
     samples = samples || 128;
-    var eta = 1 / refractiveIndex;
-
+    var eta = 1 / n;
     function refract(nx, ny) {
       var dot = ny, k = 1 - eta * eta * (1 - dot * dot);
       if (k < 0) return null;
       var sq = Math.sqrt(k);
       return [-(eta * dot + sq) * nx, eta - (eta * dot + sq) * ny];
     }
-
-    var result = [];
+    var out = [];
     for (var i = 0; i < samples; i++) {
-      var x = i / samples;
-      var y = surfaceFn(x);
+      var x = i / samples, y = surfaceFn(x);
       var dx = x < 1 ? 0.0001 : -0.0001;
       var y2 = surfaceFn(Math.max(0, Math.min(1, x + dx)));
-      var deriv = (y2 - y) / dx;
-      var mag = Math.sqrt(deriv * deriv + 1);
-      var normal = [-deriv / mag, -1 / mag];
-      var refracted = refract(normal[0], normal[1]);
-      if (!refracted) {
-        result.push(0);
-      } else {
-        var remHeight = y * bezelWidth + glassThickness;
-        result.push(refracted[0] * (remHeight / refracted[1]));
-      }
+      var deriv = (y2 - y) / dx, mag = Math.sqrt(deriv * deriv + 1);
+      var r = refract(-deriv / mag, -1 / mag);
+      if (!r) { out.push(0); continue; }
+      out.push(r[0] * ((y * bezelWidth + glassThickness) / r[1]));
     }
-    return result;
+    return out;
   }
 
-  /* ─── 2-D displacement map (ImageData) ────────────────────────────── */
-  function calcDisplacement2D(cW, cH, oW, oH, radius, bezelWidth, maxDisp, precomp) {
-    var imgData = new ImageData(cW, cH);
-    var d = imgData.data;
-    for (var i = 0; i < d.length; i += 4) { d[i] = 128; d[i+1] = 128; d[i+2] = 0; d[i+3] = 255; }
-
-    var r2  = radius * radius;
-    var r1sq = (radius + 1) * (radius + 1);
-    var rbsq = Math.max(0, (radius - bezelWidth) * (radius - bezelWidth));
-    var wB = oW - radius * 2, hB = oH - radius * 2;
-    var ox = (cW - oW) / 2, oy = (cH - oH) / 2;
-
-    for (var y1 = 0; y1 < oH; y1++) {
-      for (var x1 = 0; x1 < oW; x1++) {
-        var idx = ((oy + y1) * cW + ox + x1) * 4;
-        var isL = x1 < radius, isR = x1 >= oW - radius;
-        var isT = y1 < radius, isB = y1 >= oH - radius;
-        var cx = isL ? x1 - radius : isR ? x1 - radius - wB : 0;
-        var cy = isT ? y1 - radius : isB ? y1 - radius - hB : 0;
-        var dist2 = cx * cx + cy * cy;
-        if (dist2 <= r1sq && dist2 >= rbsq) {
-          var dist = Math.sqrt(dist2);
-          var opacity = dist2 < r2 ? 1 : 1 - (dist - Math.sqrt(r2)) / (Math.sqrt(r1sq) - Math.sqrt(r2));
-          var cosA = dist > 0 ? cx / dist : 0;
-          var sinA = dist > 0 ? cy / dist : 0;
-          var ratio = Math.max(0, Math.min(1, (radius - dist) / bezelWidth));
-          var bi = Math.floor(ratio * precomp.length);
-          var dd = precomp[Math.max(0, Math.min(bi, precomp.length - 1))] || 0;
-          var dX = maxDisp > 0 ? (-cosA * dd) / maxDisp : 0;
-          var dY = maxDisp > 0 ? (-sinA * dd) / maxDisp : 0;
-          d[idx]   = Math.max(0, Math.min(255, 128 + dX * 127 * opacity));
-          d[idx+1] = Math.max(0, Math.min(255, 128 + dY * 127 * opacity));
-          d[idx+2] = 0;
-          d[idx+3] = 255;
+  /* ─── 2-D displacement map ──────────────────────────────────────────── */
+  function calc2D(cW, cH, oW, oH, R, bw, maxD, pre) {
+    var img = new ImageData(cW, cH), d = img.data;
+    for (var i = 0; i < d.length; i += 4) { d[i]=128; d[i+1]=128; d[i+2]=0; d[i+3]=255; }
+    var r2=R*R, r1sq=(R+1)*(R+1), rbsq=Math.max(0,(R-bw)*(R-bw));
+    var wB=oW-R*2, hB=oH-R*2, ox=(cW-oW)/2, oy=(cH-oH)/2;
+    for (var y1=0; y1<oH; y1++) {
+      for (var x1=0; x1<oW; x1++) {
+        var idx=((oy+y1)*cW+ox+x1)*4;
+        var cx = x1<R ? x1-R : x1>=oW-R ? x1-R-wB : 0;
+        var cy = y1<R ? y1-R : y1>=oH-R ? y1-R-hB : 0;
+        var dist2=cx*cx+cy*cy;
+        if (dist2<=r1sq && dist2>=rbsq) {
+          var dist=Math.sqrt(dist2);
+          var op = dist2<r2 ? 1 : 1-(dist-Math.sqrt(r2))/(Math.sqrt(r1sq)-Math.sqrt(r2));
+          var ca=dist>0?cx/dist:0, sa=dist>0?cy/dist:0;
+          var ratio=Math.max(0,Math.min(1,(R-dist)/bw));
+          var bi=Math.floor(ratio*pre.length);
+          var dd=pre[Math.max(0,Math.min(bi,pre.length-1))]||0;
+          var dX=maxD>0?(-ca*dd)/maxD:0, dY=maxD>0?(-sa*dd)/maxD:0;
+          d[idx]  =Math.max(0,Math.min(255,128+dX*127*op));
+          d[idx+1]=Math.max(0,Math.min(255,128+dY*127*op));
+          d[idx+2]=0; d[idx+3]=255;
         }
       }
     }
-    return imgData;
+    return img;
   }
 
-  /* ─── Specular highlight (ImageData) ──────────────────────────────── */
-  function calcSpecular(oW, oH, radius, bezelWidth) {
-    var imgData = new ImageData(oW, oH);
-    var d = imgData.data;
-    var sv = [Math.cos(Math.PI / 3), Math.sin(Math.PI / 3)];
-    var st = 1.5;
-    var r2  = radius * radius;
-    var r1sq = (radius + 1) * (radius + 1);
-    var rstsq = Math.max(0, (radius - st) * (radius - st));
-    var wB = oW - radius * 2, hB = oH - radius * 2;
-
-    for (var y1 = 0; y1 < oH; y1++) {
-      for (var x1 = 0; x1 < oW; x1++) {
-        var idx = (y1 * oW + x1) * 4;
-        var isL = x1 < radius, isR = x1 >= oW - radius;
-        var isT = y1 < radius, isB = y1 >= oH - radius;
-        var cx = isL ? x1 - radius : isR ? x1 - radius - wB : 0;
-        var cy = isT ? y1 - radius : isB ? y1 - radius - hB : 0;
-        var dist2 = cx * cx + cy * cy;
-        if (dist2 <= r1sq && dist2 >= rstsq) {
-          var dist = Math.sqrt(dist2);
-          var opacity = dist2 < r2 ? 1 : 1 - (dist - Math.sqrt(r2)) / (Math.sqrt(r1sq) - Math.sqrt(r2));
-          var cosA = dist > 0 ? cx / dist : 0;
-          var sinA = dist > 0 ? -cy / dist : 0;
-          var dot = Math.abs(cosA * sv[0] + sinA * sv[1]);
-          var edgeRatio = Math.max(0, Math.min(1, (radius - dist) / st));
-          var falloff = Math.sqrt(1 - (1 - edgeRatio) * (1 - edgeRatio));
-          var coeff = dot * falloff;
-          var color = Math.min(255, 255 * coeff);
-          var alpha = Math.min(255, color * coeff * opacity);
-          d[idx] = d[idx+1] = d[idx+2] = color;
-          d[idx+3] = alpha;
+  /* ─── Specular highlight ────────────────────────────────────────────── */
+  function calcSpec(oW, oH, R, bw) {
+    var img = new ImageData(oW, oH), d = img.data;
+    var sv=[Math.cos(Math.PI/3), Math.sin(Math.PI/3)], st=1.5;
+    var r2=R*R, r1sq=(R+1)*(R+1), rstsq=Math.max(0,(R-st)*(R-st));
+    var wB=oW-R*2, hB=oH-R*2;
+    for (var y1=0; y1<oH; y1++) {
+      for (var x1=0; x1<oW; x1++) {
+        var idx=(y1*oW+x1)*4;
+        var cx=x1<R?x1-R:x1>=oW-R?x1-R-wB:0;
+        var cy=y1<R?y1-R:y1>=oH-R?y1-R-hB:0;
+        var dist2=cx*cx+cy*cy;
+        if (dist2<=r1sq && dist2>=rstsq) {
+          var dist=Math.sqrt(dist2);
+          var op=dist2<r2?1:1-(dist-Math.sqrt(r2))/(Math.sqrt(r1sq)-Math.sqrt(r2));
+          var ca=dist>0?cx/dist:0, sa=dist>0?-cy/dist:0;
+          var dot=Math.abs(ca*sv[0]+sa*sv[1]);
+          var er=Math.max(0,Math.min(1,(R-dist)/st));
+          var ff=Math.sqrt(1-(1-er)*(1-er));
+          var c=Math.min(255,255*dot*ff), al=Math.min(255,c*dot*ff*op);
+          d[idx]=d[idx+1]=d[idx+2]=c; d[idx+3]=al;
         }
       }
     }
-    return imgData;
+    return img;
   }
 
-  /* ─── ImageData → data URL ─────────────────────────────────────────── */
-  function toDataURL(imgData) {
-    var c = document.createElement("canvas");
-    c.width = imgData.width; c.height = imgData.height;
-    c.getContext("2d").putImageData(imgData, 0, 0);
-    return c.toDataURL();
+  function toURL(img) {
+    var c=document.createElement("canvas"); c.width=img.width; c.height=img.height;
+    c.getContext("2d").putImageData(img,0,0); return c.toDataURL();
   }
 
-  /* ─── Chrome backdrop-filter + SVG support detection ──────────────── */
-  function supportsBackdropFilterSVG() {
+  function supportsBackdropSVG() {
     if (!window.chrome) return false;
-    var el = document.createElement("div");
-    el.style.backdropFilter = "url(#x)";
-    return el.style.backdropFilter.indexOf("url") !== -1;
+    var el=document.createElement("div"); el.style.backdropFilter="url(#x)";
+    return el.style.backdropFilter.indexOf("url")!==-1;
   }
 
-  /* ─── Pill spring bounce ────────────────────────────────────────────
-   *
-   * Uses the same Spring class as the Interactive Magnifying Glass demo.
-   * Position (translate) is animated by CSS transition — bouncy scale is
-   * animated independently via CSS `scale` property so they don't fight.
-   */
-  var pillScaleSpring = new Spring(1, 520, 26);
-  var pillAnimId = null;
+  /* ─── Magnifying Glass settings (exact) ────────────────────────────── */
+  var MG = {
+    bezelWidth:      30,
+    glassThickness:  150,
+    n:               1.5,
+    refractionScale: 1.5,
+    specularOpacity: 1.0,
+    blur:            0.5   /* stdDeviation inside SVG — NOT backdrop blur */
+  };
 
-  function animatePill() {
+  /* convex squircle — Apple's preferred surface (from kube.io article) */
+  var squircle = function (x) { return Math.pow(1 - Math.pow(1 - x, 4), 0.25); };
+
+  /* Tab bar: 400×66 pill (R=33) */
+  var TB = { W: 400, H: 66, R: 33 };
+
+  /* Pill: ~80×54 pill (R=27, cap bezelWidth to R-1=26) */
+  var PL = { W: 80, H: 54, R: 27 };
+  var PL_BW = Math.min(MG.bezelWidth, PL.R - 1); /* = 26 */
+
+  /* ─── Springs ───────────────────────────────────────────────────────── */
+  /* Pill scale bounce — same feel as MG drag-start (instant compress → spring) */
+  var pillScaleSpring   = new Spring(1.0, 520, 26);
+
+  /* refractionBoost — from MG animation loop (stiffness=300, damping=18)
+     rest=0.8, active=1.0 → scale = maxDisp * refractionScale * boost */
+  var tabRefractSpring  = new Spring(0.8, 300, 18);
+  var pillRefractSpring = new Spring(0.8, 300, 18);
+
+  var tbMaxDisp = 0, plMaxDisp = 0;
+  var animId = null;
+
+  function animate() {
     var dt = 1 / 60;
     pillScaleSpring.update(dt);
+    tabRefractSpring.update(dt);
+    pillRefractSpring.update(dt);
+
+    /* Pill scale */
     var pill = document.getElementById("tabPill");
     if (pill) pill.style.scale = pillScaleSpring.value.toFixed(4);
-    if (!pillScaleSpring.isSettled()) {
-      pillAnimId = requestAnimationFrame(animatePill);
+
+    /* Tab bar refractionBoost → update feDisplacementMap scale */
+    var tbMap = document.getElementById("tgDisplacementMap");
+    if (tbMap) tbMap.setAttribute("scale",
+      (tbMaxDisp * MG.refractionScale * tabRefractSpring.value).toFixed(2));
+
+    /* Pill refractionBoost → update feDisplacementMap scale */
+    var plMap = document.getElementById("tgPillDisplacementMap");
+    if (plMap) plMap.setAttribute("scale",
+      (plMaxDisp * MG.refractionScale * pillRefractSpring.value).toFixed(2));
+
+    var settled = pillScaleSpring.isSettled() &&
+                  tabRefractSpring.isSettled() &&
+                  pillRefractSpring.isSettled();
+
+    if (!settled) {
+      animId = requestAnimationFrame(animate);
     } else {
-      pillAnimId = null;
+      animId = null;
       if (pill) pill.style.scale = "";
     }
   }
 
-  function startPillAnim() {
-    if (!pillAnimId) pillAnimId = requestAnimationFrame(animatePill);
-  }
+  function startAnim() { if (!animId) animId = requestAnimationFrame(animate); }
 
-  /* ─── SVG filter + tab bar glass init ──────────────────────────────── */
+  /* ─── Main init ─────────────────────────────────────────────────────── */
   function initTabbarGlass() {
     var tabbar = document.querySelector(".tabbar");
     if (!tabbar) return;
 
-    /* Tab bar is a pill: 400 × 66, radius 33 */
-    var W = 400, H = 66, R = 33;
-    var bezelWidth      = 22;
-    var glassThickness  = 90;
-    var refractiveIndex = 1.5;
-    var refractionScale = 1.3;
-    var surfaceFn = function (x) { return Math.pow(1 - Math.pow(1 - x, 4), 0.25); }; // convex_squircle
+    /* ── Tab bar displacement + specular maps ── */
+    var tbPre   = calc1D(MG.glassThickness, MG.bezelWidth, squircle, MG.n);
+    tbMaxDisp   = Math.max.apply(null, tbPre.map(Math.abs));
+    var tbDisp  = calc2D(TB.W, TB.H, TB.W, TB.H, TB.R, MG.bezelWidth, tbMaxDisp||1, tbPre);
+    var tbSpec  = calcSpec(TB.W, TB.H, TB.R, MG.bezelWidth);
 
-    var precomp  = calcDisplacement1D(glassThickness, bezelWidth, surfaceFn, refractiveIndex);
-    var maxDisp  = Math.max.apply(null, precomp.map(Math.abs));
+    document.getElementById("tgDisplacementImage").setAttribute("href", toURL(tbDisp));
+    document.getElementById("tgSpecularImage").setAttribute("href", toURL(tbSpec));
+    document.getElementById("tgSpecularAlpha").setAttribute("slope", MG.specularOpacity);
+    document.getElementById("tgFilterBlur").setAttribute("stdDeviation", MG.blur);
+    document.getElementById("tgDisplacementMap").setAttribute("scale",
+      (tbMaxDisp * MG.refractionScale * 0.8).toFixed(2)); /* 0.8 = rest refractionBoost */
 
-    var dispData = calcDisplacement2D(W, H, W, H, R, bezelWidth, maxDisp || 1, precomp);
-    var specData = calcSpecular(W, H, R, bezelWidth);
+    /* ── Pill displacement + specular maps ── */
+    var plPre   = calc1D(MG.glassThickness, PL_BW, squircle, MG.n);
+    plMaxDisp   = Math.max.apply(null, plPre.map(Math.abs));
+    var plDisp  = calc2D(PL.W, PL.H, PL.W, PL.H, PL.R, PL_BW, plMaxDisp||1, plPre);
+    var plSpec  = calcSpec(PL.W, PL.H, PL.R, PL_BW);
 
-    var dispImg = document.getElementById("tgDisplacementImage");
-    var specImg = document.getElementById("tgSpecularImage");
-    var dispMap = document.getElementById("tgDisplacementMap");
+    document.getElementById("tgPillDisplacementImage").setAttribute("href", toURL(plDisp));
+    document.getElementById("tgPillSpecularImage").setAttribute("href", toURL(plSpec));
+    document.getElementById("tgPillSpecularAlpha").setAttribute("slope", MG.specularOpacity);
+    document.getElementById("tgPillBlur").setAttribute("stdDeviation", MG.blur);
+    document.getElementById("tgPillDisplacementMap").setAttribute("scale",
+      (plMaxDisp * MG.refractionScale * 0.8).toFixed(2));
 
-    if (dispImg) dispImg.setAttribute("href", toDataURL(dispData));
-    if (specImg) specImg.setAttribute("href", toDataURL(specData));
-    if (dispMap) dispMap.setAttribute("scale", (maxDisp * refractionScale).toFixed(2));
+    /* ── Chrome vs fallback ── */
+    tabbar.classList.add(supportsBackdropSVG() ? "lg-backdrop" : "lg-fallback");
 
-    /* Apply class that activates the right CSS mode */
-    tabbar.classList.add(supportsBackdropFilterSVG() ? "lg-backdrop" : "lg-fallback");
-
-    /* ── Pill bounce: capture tab clicks before showView fires ──────── */
+    /* ── Pointer events — same trigger pattern as MG demo drag ── */
     tabbar.addEventListener("pointerdown", function (e) {
-      var tab = e.target.closest("[data-v]");
-      if (!tab) return;
-      /* Instant compress, then spring back — same feel as the glass demo's
-         scale spring (stiffness 400, damping 25) on drag-start */
+      if (!e.target.closest("[data-v]")) return;
+
+      /* Pill: instant compress → spring back (MG drag-start feel) */
       pillScaleSpring.value    = 0.86;
       pillScaleSpring.velocity = 0;
       pillScaleSpring.target   = 1.0;
-      startPillAnim();
-    }, true); /* capture so it fires before the click/showView handler */
+
+      /* refractionBoost: boost to 1.0 (MG dragging state) */
+      tabRefractSpring.setTarget(1.0);
+      pillRefractSpring.setTarget(1.0);
+
+      startAnim();
+    }, true);
+
+    /* On release: spring refractionBoost back to 0.8 (MG rest state) */
+    tabbar.addEventListener("pointerup", function (e) {
+      if (!e.target.closest("[data-v]")) return;
+      tabRefractSpring.setTarget(0.8);
+      pillRefractSpring.setTarget(0.8);
+      startAnim();
+    });
+
+    tabbar.addEventListener("pointercancel", function () {
+      tabRefractSpring.setTarget(0.8);
+      pillRefractSpring.setTarget(0.8);
+      startAnim();
+    });
   }
 
   if (document.readyState === "loading") {

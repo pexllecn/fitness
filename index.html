@@ -701,17 +701,30 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
   </main>
 </div>
 
-<!-- Liquid Glass SVG filter (physics-accurate Snell's Law refraction) -->
+<!-- Liquid Glass SVG filters — settings mirror the Interactive Magnifying Glass demo -->
 <svg class="tg-filter-svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
   <defs>
+    <!-- Tab bar filter: 400×66 pill -->
     <filter id="tabbarGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
       <feGaussianBlur id="tgFilterBlur" in="SourceGraphic" stdDeviation="0.5" result="blurred"/>
       <feImage id="tgDisplacementImage" href="" x="0" y="0" width="400" height="66" result="displacement_map" preserveAspectRatio="none"/>
-      <feDisplacementMap id="tgDisplacementMap" in="blurred" in2="displacement_map" scale="30" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+      <feDisplacementMap id="tgDisplacementMap" in="blurred" in2="displacement_map" scale="50" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
       <feColorMatrix in="displaced" type="saturate" values="1.3" result="displaced_saturated"/>
       <feImage id="tgSpecularImage" href="" x="0" y="0" width="400" height="66" result="specular_layer" preserveAspectRatio="none"/>
       <feComponentTransfer in="specular_layer" result="specular_faded">
-        <feFuncA id="tgSpecularAlpha" type="linear" slope="0.8"/>
+        <feFuncA id="tgSpecularAlpha" type="linear" slope="1.0"/>
+      </feComponentTransfer>
+      <feBlend in="specular_faded" in2="displaced_saturated" mode="screen"/>
+    </filter>
+    <!-- Pill filter: ~80×54 pill -->
+    <filter id="pillGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur id="tgPillBlur" in="SourceGraphic" stdDeviation="0.5" result="blurred"/>
+      <feImage id="tgPillDisplacementImage" href="" x="0" y="0" width="80" height="54" result="displacement_map" preserveAspectRatio="none"/>
+      <feDisplacementMap id="tgPillDisplacementMap" in="blurred" in2="displacement_map" scale="20" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+      <feColorMatrix in="displaced" type="saturate" values="1.3" result="displaced_saturated"/>
+      <feImage id="tgPillSpecularImage" href="" x="0" y="0" width="80" height="54" result="specular_layer" preserveAspectRatio="none"/>
+      <feComponentTransfer in="specular_layer" result="specular_faded">
+        <feFuncA id="tgPillSpecularAlpha" type="linear" slope="1.0"/>
       </feComponentTransfer>
       <feBlend in="specular_faded" in2="displaced_saturated" mode="screen"/>
     </filter>
