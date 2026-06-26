@@ -223,9 +223,10 @@
 
     function initPillSize() {
       if (!tabs.length || !tabs[0].offsetWidth) return;
-      itemWidth = tabs[0].offsetWidth + 4;
-      pill.style.width  = DC.W + "px";
-      pill.style.height = DC.H + "px"; /* 54px, matches tab button height */
+      var tabW = tabs[0].offsetWidth;
+      itemWidth = tabW + 4; /* tab width + gap */
+      pill.style.width  = tabW + "px"; /* match tab width exactly */
+      pill.style.height = DC.H + "px";
       activeIdx = 0;
       for (var i = 0; i < tabs.length; i++) if (tabs[i].classList.contains("active")) { activeIdx = i; break; }
       sp.x.value = sp.x.target = activeIdx * itemWidth;
