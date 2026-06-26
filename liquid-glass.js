@@ -123,7 +123,7 @@
 
   var squircle = function (x) { return Math.pow(1 - Math.pow(1 - x, 4), 0.25); };
 
-  var MG_TB = { bezelWidth: 30, glassThickness: 150, n: 1.5, refractionScale: 1.5, specularOpacity: 1.0, blur: 0.5 };
+  var MG_TB = { bezelWidth: 30, glassThickness: 150, n: 1.5, refractionScale: 1.5, specularOpacity: 1.0, blur: 1.0 };
   var TB = { W: 400, H: 66, R: 33 };
   var DC = { W: 70, H: 54, R: 27, bw: 26, gt: 120, n: 2.0, blur: 0.8 };
 
