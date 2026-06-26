@@ -790,10 +790,10 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
     <!-- Pill filter: 80×66 dock bubble (stdDeviation=0.8, saturate=1.2, specularAlpha=0.8) -->
     <filter id="pillGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
       <feGaussianBlur id="tgPillBlur" in="SourceGraphic" stdDeviation="0.8" result="blurred"/>
-      <feImage id="tgPillDisplacementImage" href="" x="0" y="0" width="80" height="54" result="displacement_map" preserveAspectRatio="none"/>
+      <feImage id="tgPillDisplacementImage" href="" x="0" y="0" width="70" height="54" result="displacement_map" preserveAspectRatio="none"/>
       <feDisplacementMap id="tgPillDisplacementMap" in="blurred" in2="displacement_map" scale="30" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
       <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated"/>
-      <feImage id="tgPillSpecularImage" href="" x="0" y="0" width="80" height="54" result="specular_layer" preserveAspectRatio="none"/>
+      <feImage id="tgPillSpecularImage" href="" x="0" y="0" width="70" height="54" result="specular_layer" preserveAspectRatio="none"/>
       <feComponentTransfer in="specular_layer" result="specular_faded">
         <feFuncA id="tgPillSpecularAlpha" type="linear" slope="0.8"/>
       </feComponentTransfer>

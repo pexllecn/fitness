@@ -125,7 +125,7 @@
 
   var MG_TB = { bezelWidth: 30, glassThickness: 150, n: 1.5, refractionScale: 1.5, specularOpacity: 1.0, blur: 0.5 };
   var TB = { W: 400, H: 66, R: 33 };
-  var DC = { W: 80, H: 54, R: 27, bw: 26, gt: 120, n: 2.0, blur: 0.8 };
+  var DC = { W: 70, H: 54, R: 27, bw: 26, gt: 120, n: 2.0, blur: 0.8 };
 
   var sp = {
     x:  new Spring(0, 450, 26),
