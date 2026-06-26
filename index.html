@@ -140,6 +140,7 @@ a{color:inherit;text-decoration:none}
 
 /* ── WORKOUT HERO ── */
 .workout-hero{position:relative;border-radius:var(--r-xl);overflow:hidden;min-height:220px;background:linear-gradient(145deg,#0d1a00 0%,#1a3a00 40%,#0a2200 100%)}
+[data-theme="light"] .workout-hero{background:linear-gradient(145deg,#1a4a00 0%,#2d7a00 40%,#1a5200 100%)}
 .wh-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;opacity:.55}
 .wh-overlay{position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.3) 60%,rgba(0,0,0,.1) 100%)}
 .wh-content{position:relative;z-index:1;padding:20px;display:flex;flex-direction:column;justify-content:flex-end;min-height:220px}
@@ -235,7 +236,8 @@ a{color:inherit;text-decoration:none}
 .btn.ghost{border:1px solid var(--border);background:transparent}
 
 /* ── Progress ── */
-.hero{position:relative;overflow:hidden;background:var(--card);border-radius:var(--r-xl);padding:24px;border:1px solid var(--border)}
+.hero{position:relative;overflow:hidden;background:linear-gradient(145deg,#0d1a00,#1a3a00);border-radius:var(--r-xl);padding:24px;border:1px solid var(--border)}
+[data-theme="light"] .hero{background:linear-gradient(145deg,#1a4500,#2d7a00)}
 .hero .blobs{position:absolute;inset:0;filter:blur(48px);opacity:.6;pointer-events:none}
 .blob{position:absolute;border-radius:50%}
 .blob.l{width:220px;height:220px;background:var(--lime);top:-40px;right:0;opacity:.3}
@@ -446,7 +448,11 @@ a{color:inherit;text-decoration:none}
   .stats-grid .sv{font-size:22px}
   .workout-hero{min-height:280px}
   .wh-content{min-height:280px}
+  .view{max-width:760px;margin:0 auto;width:100%}
+  .topbar{max-width:760px;margin-left:auto;margin-right:auto}
+  .tabbar{display:none!important}
 }
+.fuel-desktop{display:none}
 @media(min-width:980px){
   .main{padding:0 32px calc(40px + env(safe-area-inset-bottom))}
   .fuel-desktop{display:block}
@@ -470,7 +476,6 @@ a{color:inherit;text-decoration:none}
   .cols2 .prio.span2{grid-column:1/-1}
   .cols2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
 }
-.fuel-desktop{display:none}
 @media(prefers-reduced-motion:reduce){.view.on{animation:none}.ring .fil{transition:none}}
 
 
@@ -1040,7 +1045,7 @@ a{color:inherit;text-decoration:none}
 <div class="tabbar">
   <div class="tg-glass"></div>
   <div class="tg-border"></div>
-  <div class="tabpill" id="tabPill"></div>
+  <div class="tabpill" id="tabPill"><div class="tabpill-inner"></div></div>
   <button class="tab active" data-v="dash" aria-label="Home"><i class="hgi-stroke hgi-home-01 ic"></i><span class="tl">Home</span></button>
   <button class="tab" data-v="workout" aria-label="Workout"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><span class="tl">Workout</span></button>
   <button class="tab" data-v="food" aria-label="Nutrition"><i class="hgi-stroke hgi-fire ic"></i><span class="tl">Fuel</span></button>
@@ -1048,10 +1053,6 @@ a{color:inherit;text-decoration:none}
   <button class="tab" data-v="you" aria-label="Settings"><i class="hgi-stroke hgi-settings-01 ic"></i><span class="tl">You</span></button>
 </div>
 <div class="toast" id="toast"></div>
-
-
-<script>
-"u
 
 
 <script>
@@ -1503,10 +1504,6 @@ window.addEventListener('resize',syncPills);
   bootRender=function(){
     origBoot();
     renderWeekBars();
-    // Apply dark theme by default
-    if(!STATE.theme||STATE.theme==='light'){
-      STATE.theme='dark';applyTheme('dark',true);
-    }
   };
 
   // Hook updateRing to also refresh week bars
