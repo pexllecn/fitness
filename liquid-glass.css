@@ -1,0 +1,202 @@
+/*
+ * Liquid Glass Tab Bar (track) + Drag Dock Pill
+ *
+ * Track: Interactive Magnifying Glass settings (bezelWidth=30, blur=0.5, no CSS blur)
+ * Pill: Drag Dock from Pebble & Void (bezelWidth=26, blur=0.8, velocity squish springs)
+ */
+
+.tabbar {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  width: calc(100% - 32px);
+  max-width: 400px;
+  height: 66px;
+  border-radius: 33px;
+  z-index: 50;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.20), 0 1px 4px rgba(0, 0, 0, 0.10);
+}
+
+.tabbar::before { display: none; }
+
+/* Hidden SVG filter element */
+.tg-filter-svg {
+  position: absolute;
+  width: 0; height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* ── Track glass layer ──────────────────────────────────────────────────── */
+.tg-glass {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 0;
+  pointer-events: none;
+  box-shadow:
+    inset 0 1.6px 16px rgba(0, 0, 0, 0.09),
+    inset 0 -1.6px 16px rgba(255, 255, 255, 0.07);
+}
+
+.tabbar.lg-backdrop .tg-glass {
+  backdrop-filter: url(#tabbarGlassFilter);
+  -webkit-backdrop-filter: url(#tabbarGlassFilter);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .tabbar.lg-backdrop .tg-glass {
+  background: rgba(18, 18, 22, 0.18);
+  box-shadow:
+    inset 0 1.6px 16px rgba(0, 0, 0, 0.20),
+    inset 0 -1.6px 16px rgba(255, 255, 255, 0.04);
+}
+
+.tabbar.lg-fallback .tg-glass {
+  backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+[data-theme="dark"] .tabbar.lg-fallback .tg-glass {
+  background: rgba(28, 28, 34, 0.35);
+  backdrop-filter: blur(20px) saturate(160%) brightness(0.9);
+  -webkit-backdrop-filter: blur(20px) saturate(160%) brightness(0.9);
+}
+
+/* Track specular edge */
+.tg-border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.50) 0%,
+    rgba(255, 255, 255, 0.08) 38%,
+    rgba(255, 255, 255, 0.00) 100%
+  );
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.10);
+}
+
+[data-theme="dark"] .tg-border {
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.03) 38%,
+    rgba(255, 255, 255, 0.00) 100%
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
+}
+
+/* ── Dock pill ─────────────────────────────────────────────────────────── */
+.tabpill {
+  position: absolute;
+  top: 0; left: 6px;        /* matches tabbar padding */
+  width: 80px; height: 66px;
+  border-radius: 33px;
+  z-index: 3;
+  pointer-events: none;
+  overflow: hidden;
+  transform-origin: center center;
+  /* JS drives transform; no CSS transition on transform */
+}
+
+/* Pill inner — glass bubble visual */
+.tabpill-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 2px 5px rgba(255, 255, 255, 0.30),
+    inset 0 0 20px rgba(255, 255, 255, 0.10);
+  border: 1px solid rgba(255, 255, 255, 0.20);
+}
+
+/* Chrome: refraction via SVG filter */
+.tabbar.lg-backdrop .tabpill-inner {
+  backdrop-filter: url(#pillGlassFilter);
+  -webkit-backdrop-filter: url(#pillGlassFilter);
+  /* lime tint overlay on top of refraction */
+  background: color-mix(in srgb, var(--lime) 30%, rgba(255, 255, 255, 0.05));
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 2px 5px rgba(255, 255, 255, 0.30),
+    inset 0 0 20px rgba(255, 255, 255, 0.10),
+    0 3px 12px color-mix(in srgb, var(--lime) 28%, transparent);
+  border-color: color-mix(in srgb, var(--lime) 50%, rgba(255, 255, 255, 0.20));
+}
+
+[data-theme="dark"] .tabbar.lg-backdrop .tabpill-inner {
+  background: color-mix(in srgb, var(--lime) 15%, rgba(0, 0, 0, 0.15));
+  border-color: color-mix(in srgb, var(--lime) 30%, rgba(255, 255, 255, 0.10));
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.6),
+    inset 0 2px 5px rgba(255, 255, 255, 0.15),
+    inset 0 0 20px rgba(255, 255, 255, 0.05),
+    0 2px 10px color-mix(in srgb, var(--lime) 18%, transparent);
+}
+
+/* Fallback: solid lime bubble */
+.tabbar.lg-fallback .tabpill-inner {
+  background: color-mix(in srgb, var(--lime) 55%, rgba(255, 255, 255, 0.10));
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.4),
+    inset 0 2px 4px rgba(255, 255, 255, 0.60),
+    0 3px 12px color-mix(in srgb, var(--lime) 32%, transparent);
+}
+
+[data-theme="dark"] .tabbar.lg-fallback .tabpill-inner {
+  background: color-mix(in srgb, var(--lime) 28%, rgba(0, 0, 0, 0.10));
+  border-color: color-mix(in srgb, var(--lime) 38%, transparent);
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.5),
+    inset 0 1px 1px rgba(255, 255, 255, 0.22),
+    0 2px 10px color-mix(in srgb, var(--lime) 20%, transparent);
+}
+
+/* ── Tab buttons ──────────────────────────────────────────────────────── */
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 54px;
+  border-radius: 32px;
+  color: rgba(22, 26, 30, 0.72);
+  background: transparent;
+  border: none;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  z-index: 4;
+  overflow: hidden;
+  align-self: center;
+}
+
+[data-theme="dark"] .tab { color: rgba(255, 255, 255, 0.72); }
+.tab svg { width: 22px; height: 22px; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.tab .tl { font-size: 9px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; opacity: 0.8; transition: opacity 0.3s; }
+.tab:active { opacity: 0.7; }
+.tab.active { color: var(--on-lime); }
+[data-theme="dark"] .tab.active { color: var(--lime); }
+.tab.active svg { transform: translateY(-2px); }
+.tab.active .tl { opacity: 1; }

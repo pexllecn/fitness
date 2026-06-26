@@ -1,4 +1,5 @@
 
+
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -14,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" crossorigin="anonymous">
+<link rel="stylesheet" href="liquid-glass.css">
 <style>
 :root{
   --lime:#C9F24D; --lime-deep:#B6E52E; --on-lime:#16191A;
@@ -383,25 +385,11 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
 .pw-d{font-size:11.5px;font-weight:700;color:var(--text);letter-spacing:.01em}
 .pw-v{font-size:18px;font-weight:800;line-height:1}
 .pw-v::after{content:' kg';font-size:10px;color:var(--muted);font-weight:700}
+.pw-f{font-size:11px;font-weight:700;color:var(--muted)}
 .pw.goal{background:color-mix(in srgb,var(--lime) 18%,var(--card));border-color:color-mix(in srgb,var(--lime) 34%,var(--line))}
 .proj-note{margin-top:16px;font-size:12.5px;font-weight:600;color:var(--muted)}
 
-.tabbar{position:fixed;bottom:calc(16px + env(safe-area-inset-bottom));left:0;right:0;margin:0 auto;display:flex;gap:4px;padding:6px;width:calc(100% - 32px);max-width:400px;height:66px;border-radius:33px;z-index:50;background:rgba(255,255,255,.2);-webkit-backdrop-filter:blur(20px) saturate(225%) brightness(1.06);backdrop-filter:blur(20px) saturate(225%) brightness(1.06);border:1px solid rgba(255,255,255,.7);box-shadow:0 20px 44px rgba(0,0,0,.18),inset 0 1.5px 1px rgba(255,255,255,.85),inset 0 -2px 3px rgba(255,255,255,.2),inset 0 0 0 1px rgba(255,255,255,.08)}
-.tabbar::before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(158deg,rgba(255,255,255,.62) 0%,rgba(255,255,255,.16) 12%,rgba(255,255,255,0) 30%,rgba(255,255,255,0) 72%,rgba(255,255,255,.09) 100%);pointer-events:none;z-index:0}
-[data-theme="dark"] .tabbar{background:rgba(38,40,46,.24);border-color:rgba(255,255,255,.18)}
-.tabpill{position:absolute;top:0;left:0;width:0;height:54px;border-radius:30px;z-index:1;pointer-events:none;background:color-mix(in srgb,var(--lime) 64%,transparent);border:1px solid rgba(255,255,255,.5);box-shadow:inset 0 1.5px 1px rgba(255,255,255,.6),inset 0 -1px 2px color-mix(in srgb,var(--lime) 45%,transparent),0 3px 12px color-mix(in srgb,var(--lime) 32%,transparent);transition:none}
-[data-theme="dark"] .tabpill{background:color-mix(in srgb,var(--lime) 30%,transparent);border-color:color-mix(in srgb,var(--lime) 38%,transparent);box-shadow:inset 0 1px 1px rgba(255,255,255,.22),0 2px 10px color-mix(in srgb,var(--lime) 20%,transparent)}
-body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),width .44s cubic-bezier(.34,1.32,.46,1),height .3s}
 @media (prefers-reduced-motion:reduce){body.nav-anim .tabpill,body.nav-anim .sbpill{transition:none}.tab,.tab svg{transition:none}}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;height:54px;border-radius:32px;color:rgba(22,26,30,.72);background:transparent;border:none;transition:all .4s cubic-bezier(.2,.8,.2,1);position:relative;z-index:2;overflow:hidden}
-[data-theme="dark"] .tab{color:rgba(255,255,255,.72)}
-.tab svg{width:22px;height:22px;transition:transform .4s cubic-bezier(.2,.8,.2,1)}
-.tab .tl{font-size:9px;font-weight:700;letter-spacing:.03em;text-transform:uppercase;opacity:.8;transition:opacity .3s}
-.tab:active{transform:scale(.88);opacity:.7}
-.tab.active{color:var(--on-lime)}
-[data-theme="dark"] .tab.active{color:var(--lime)}
-.tab.active svg{transform:translateY(-2px)}
-.tab.active .tl{opacity:1}
 
 @media(min-width:980px){
   .sidebar{display:flex;flex-direction:column;align-items:center;gap:6px;position:fixed;top:0;left:0;bottom:0;width:88px;padding:24px 0;background:var(--glass);-webkit-backdrop-filter:blur(28px) saturate(180%);backdrop-filter:blur(28px) saturate(180%);border-right:1px solid var(--glass-brd);z-index:50;box-shadow:inset -1px 0 0 rgba(255,255,255,.06)}
@@ -409,7 +397,7 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
   .sb-item{width:66px;padding:11px 0;border-radius:20px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted);background:transparent;border:none;transition:color .2s;position:relative;z-index:2}
   .sbpill{position:absolute;left:0;top:0;width:0;height:0;border-radius:20px;z-index:1;pointer-events:none;background:color-mix(in srgb,var(--lime) 64%,transparent);border:1px solid rgba(255,255,255,.5);box-shadow:inset 0 1.5px 1px rgba(255,255,255,.6),inset 0 -1px 2px color-mix(in srgb,var(--lime) 45%,transparent),0 3px 10px color-mix(in srgb,var(--lime) 32%,transparent);transition:none}
   [data-theme="dark"] .sbpill{background:color-mix(in srgb,var(--lime) 30%,transparent);border-color:color-mix(in srgb,var(--lime) 38%,transparent);box-shadow:inset 0 1px 1px rgba(255,255,255,.22),0 2px 10px color-mix(in srgb,var(--lime) 20%,transparent)}
-  body.nav-anim .sbpill{transition:transform .42s cubic-bezier(.34,1.3,.46,1),width .3s,height .42s cubic-bezier(.34,1.3,.46,1)}
+  body.nav-anim .sbpill{transition:translate .42s cubic-bezier(.34,1.3,.46,1),width .3s,height .42s cubic-bezier(.34,1.3,.46,1)}
   .sb-item svg{width:21px;height:21px}
   .sb-item .sl{font-size:8.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
   .sb-item:hover{background:color-mix(in srgb,var(--text) 7%,transparent);color:var(--text)}
@@ -629,15 +617,15 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
         </div>
         <div class="proj-lbl">Expected scale</div>
         <div class="proj-weeks">
-          <div class="pw"><span class="pw-n">Week 1</span><span class="pw-d">2 Jul</span><span class="pw-v">92.1</span></div>
-          <div class="pw"><span class="pw-n">Week 2</span><span class="pw-d">9 Jul</span><span class="pw-v">91.4</span></div>
-          <div class="pw"><span class="pw-n">Week 3</span><span class="pw-d">16 Jul</span><span class="pw-v">90.7</span></div>
-          <div class="pw"><span class="pw-n">Week 4</span><span class="pw-d">23 Jul</span><span class="pw-v">90.0</span></div>
-          <div class="pw"><span class="pw-n">Week 5</span><span class="pw-d">30 Jul</span><span class="pw-v">89.3</span></div>
-          <div class="pw"><span class="pw-n">Week 6</span><span class="pw-d">6 Aug</span><span class="pw-v">88.6</span></div>
-          <div class="pw"><span class="pw-n">Week 7</span><span class="pw-d">13 Aug</span><span class="pw-v">87.9</span></div>
-          <div class="pw"><span class="pw-n">Week 8</span><span class="pw-d">20 Aug</span><span class="pw-v">87.2</span></div>
-          <div class="pw goal"><span class="pw-n">Week 9</span><span class="pw-d">27 Aug</span><span class="pw-v">86.5</span></div>
+          <div class="pw"><span class="pw-n">Week 1</span><span class="pw-d">2 Jul</span><span class="pw-v">92.1</span><span class="pw-f">18.4% fat</span></div>
+          <div class="pw"><span class="pw-n">Week 2</span><span class="pw-d">9 Jul</span><span class="pw-v">91.4</span><span class="pw-f">17.6% fat</span></div>
+          <div class="pw"><span class="pw-n">Week 3</span><span class="pw-d">16 Jul</span><span class="pw-v">90.7</span><span class="pw-f">16.8% fat</span></div>
+          <div class="pw"><span class="pw-n">Week 4</span><span class="pw-d">23 Jul</span><span class="pw-v">90.0</span><span class="pw-f">16.0% fat</span></div>
+          <div class="pw"><span class="pw-n">Week 5</span><span class="pw-d">30 Jul</span><span class="pw-v">89.3</span><span class="pw-f">15.2% fat</span></div>
+          <div class="pw"><span class="pw-n">Week 6</span><span class="pw-d">6 Aug</span><span class="pw-v">88.6</span><span class="pw-f">14.4% fat</span></div>
+          <div class="pw"><span class="pw-n">Week 7</span><span class="pw-d">13 Aug</span><span class="pw-v">87.9</span><span class="pw-f">13.6% fat</span></div>
+          <div class="pw"><span class="pw-n">Week 8</span><span class="pw-d">20 Aug</span><span class="pw-v">87.2</span><span class="pw-f">12.8% fat</span></div>
+          <div class="pw goal"><span class="pw-n">Week 9</span><span class="pw-d">27 Aug</span><span class="pw-v">86.5</span><span class="pw-f">12.0% fat</span></div>
         </div>
         <div class="proj-note">Lands almost perfectly around 12% body fat.</div>
       </div>
@@ -713,8 +701,39 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
   </main>
 </div>
 
+<!-- Liquid Glass SVG filters — settings mirror the Interactive Magnifying Glass demo -->
+<svg class="tg-filter-svg" aria-hidden="true" style="position:absolute;width:0;height:0;overflow:hidden">
+  <defs>
+    <!-- Tab bar filter: 400×66 pill -->
+    <filter id="tabbarGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur id="tgFilterBlur" in="SourceGraphic" stdDeviation="0.5" result="blurred"/>
+      <feImage id="tgDisplacementImage" href="" x="0" y="0" width="400" height="66" result="displacement_map" preserveAspectRatio="none"/>
+      <feDisplacementMap id="tgDisplacementMap" in="blurred" in2="displacement_map" scale="50" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+      <feColorMatrix in="displaced" type="saturate" values="1.3" result="displaced_saturated"/>
+      <feImage id="tgSpecularImage" href="" x="0" y="0" width="400" height="66" result="specular_layer" preserveAspectRatio="none"/>
+      <feComponentTransfer in="specular_layer" result="specular_faded">
+        <feFuncA id="tgSpecularAlpha" type="linear" slope="1.0"/>
+      </feComponentTransfer>
+      <feBlend in="specular_faded" in2="displaced_saturated" mode="screen"/>
+    </filter>
+    <!-- Pill filter: 80×66 dock bubble (stdDeviation=0.8, saturate=1.2, specularAlpha=0.8) -->
+    <filter id="pillGlassFilter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB">
+      <feGaussianBlur id="tgPillBlur" in="SourceGraphic" stdDeviation="0.8" result="blurred"/>
+      <feImage id="tgPillDisplacementImage" href="" x="0" y="0" width="80" height="66" result="displacement_map" preserveAspectRatio="none"/>
+      <feDisplacementMap id="tgPillDisplacementMap" in="blurred" in2="displacement_map" scale="30" xChannelSelector="R" yChannelSelector="G" result="displaced"/>
+      <feColorMatrix in="displaced" type="saturate" values="1.2" result="displaced_saturated"/>
+      <feImage id="tgPillSpecularImage" href="" x="0" y="0" width="80" height="66" result="specular_layer" preserveAspectRatio="none"/>
+      <feComponentTransfer in="specular_layer" result="specular_faded">
+        <feFuncA id="tgPillSpecularAlpha" type="linear" slope="0.8"/>
+      </feComponentTransfer>
+      <feBlend in="specular_faded" in2="displaced_saturated" mode="screen"/>
+    </filter>
+  </defs>
+</svg>
 <div class="tabbar">
-  <div class="tabpill" id="tabPill"></div>
+  <div class="tg-glass"></div>
+  <div class="tg-border"></div>
+  <div class="tabpill" id="tabPill"><div class="tabpill-inner"></div></div>
   <button class="tab active" data-v="dash" aria-label="Home"><i class="hgi-stroke hgi-home-01 ic"></i><span class="tl">Home</span></button>
   <button class="tab" data-v="workout" aria-label="Workout"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><span class="tl">Workout</span></button>
   <button class="tab" data-v="food" aria-label="Nutrition"><i class="hgi-stroke hgi-fire ic"></i><span class="tl">Fuel</span></button>
@@ -944,8 +963,8 @@ function renderMealTotals(){
 }
 
 /* ---------- views ---------- */
-function placePill(p,el){if(!p||!el||el.offsetParent===null)return;p.style.width=el.offsetWidth+'px';p.style.height=el.offsetHeight+'px';p.style.transform='translate('+el.offsetLeft+'px,'+el.offsetTop+'px)';}
-function syncPills(){placePill(document.getElementById('tabPill'),document.querySelector('.tabbar .tab.active'));placePill(document.getElementById('sbPill'),document.querySelector('.sidebar .sb-item.active'));}
+function placePill(p,el){if(!p||!el||el.offsetParent===null)return;p.style.width=el.offsetWidth+'px';p.style.height=el.offsetHeight+'px';p.style.translate=el.offsetLeft+'px '+el.offsetTop+'px';}
+function syncPills(){placePill(document.getElementById('sbPill'),document.querySelector('.sidebar .sb-item.active'));if(window._dockSnap)window._dockSnap();}
 function showView(v){
   var s=document.querySelectorAll('.view');for(var i=0;i<s.length;i++)s[i].classList.remove('on');
   $('v-'+v).classList.add('on');
@@ -1101,5 +1120,7 @@ syncPills();
 requestAnimationFrame(function(){requestAnimationFrame(function(){document.body.classList.add('nav-anim');});});
 window.addEventListener('resize',syncPills);
 </script>
+<script src="liquid-glass.js"></script>
 </body>
 </html>
+<script async data-explicit-opt-in="true" data-deployment-id="dpl_6Pz3XvchqkA8iFfQrd7MbpDnruat" src="https://vercel.live/_next-live/feedback/feedback.js"></script>
