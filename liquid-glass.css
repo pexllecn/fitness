@@ -1,0 +1,181 @@
+/*
+ * Liquid Glass Tab Bar
+ * Based on winaviation/liquid-glass-demo (port of kube.io Liquid Glass)
+ * Physics-accurate refraction via Snell's Law + SVG displacement maps
+ */
+
+.tabbar {
+  position: fixed;
+  bottom: calc(16px + env(safe-area-inset-bottom));
+  left: 0;
+  right: 0;
+  margin: 0 auto;
+  display: flex;
+  gap: 4px;
+  padding: 6px;
+  width: calc(100% - 32px);
+  max-width: 400px;
+  height: 66px;
+  border-radius: 33px;
+  z-index: 50;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tabbar::before {
+  display: none;
+}
+
+/* Hidden SVG filter definitions */
+.tg-filter-svg {
+  position: absolute;
+  width: 0;
+  height: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Glass layer — sits below tabs, applies refraction */
+.tg-glass {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Chrome/Chromium: native backdrop-filter with physics-accurate SVG displacement */
+.tabbar.lg-backdrop .tg-glass {
+  backdrop-filter: url(#tabbarGlassFilter) blur(14px) saturate(160%);
+  -webkit-backdrop-filter: url(#tabbarGlassFilter) blur(14px) saturate(160%);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+[data-theme="dark"] .tabbar.lg-backdrop .tg-glass {
+  background: rgba(20, 20, 24, 0.22);
+}
+
+/* Fallback (Firefox / Safari): simple frosted glass without displacement */
+.tabbar.lg-fallback .tg-glass {
+  backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
+  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.75);
+}
+
+[data-theme="dark"] .tabbar.lg-fallback .tg-glass {
+  background: rgba(30, 33, 38, 0.28);
+  border-color: rgba(255, 255, 255, 0.16);
+}
+
+/* Specular border highlight (both modes) */
+.tg-border {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(160deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.08) 40%, rgba(255,255,255,0) 100%);
+  box-shadow:
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+[data-theme="dark"] .tg-border {
+  background: linear-gradient(160deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.04) 40%, rgba(255,255,255,0) 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+}
+
+/* Tab pill and tab buttons sit above glass layers */
+.tabpill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 54px;
+  border-radius: 30px;
+  z-index: 3;
+  pointer-events: none;
+  background: color-mix(in srgb, var(--lime) 64%, transparent);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow:
+    inset 0 1.5px 1px rgba(255, 255, 255, 0.6),
+    inset 0 -1px 2px color-mix(in srgb, var(--lime) 45%, transparent),
+    0 3px 12px color-mix(in srgb, var(--lime) 32%, transparent);
+  transition: none;
+}
+
+[data-theme="dark"] .tabpill {
+  background: color-mix(in srgb, var(--lime) 30%, transparent);
+  border-color: color-mix(in srgb, var(--lime) 38%, transparent);
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.22),
+    0 2px 10px color-mix(in srgb, var(--lime) 20%, transparent);
+}
+
+body.nav-anim .tabpill {
+  transition: transform 0.44s cubic-bezier(0.34, 1.32, 0.46, 1), width 0.44s cubic-bezier(0.34, 1.32, 0.46, 1), height 0.3s;
+}
+
+.tab {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  height: 54px;
+  border-radius: 32px;
+  color: rgba(22, 26, 30, 0.72);
+  background: transparent;
+  border: none;
+  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  position: relative;
+  z-index: 4;
+  overflow: hidden;
+}
+
+[data-theme="dark"] .tab {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.tab svg {
+  width: 22px;
+  height: 22px;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.tab .tl {
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.tab:active {
+  transform: scale(0.88);
+  opacity: 0.7;
+}
+
+.tab.active {
+  color: var(--on-lime);
+}
+
+[data-theme="dark"] .tab.active {
+  color: var(--lime);
+}
+
+.tab.active svg {
+  transform: translateY(-2px);
+}
+
+.tab.active .tl {
+  opacity: 1;
+}
