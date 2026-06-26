@@ -103,9 +103,9 @@
 /* ── Dock pill ──────────────────────────────────────────────────────────── */
 .tabpill {
   position: absolute;
-  top: 0; left: 6px;
-  width: 80px; height: 66px;
-  border-radius: 33px;
+  top: 6px; left: 6px;
+  width: 80px; height: 54px;
+  border-radius: 27px;
   z-index: 3;
   pointer-events: none;
   overflow: hidden;

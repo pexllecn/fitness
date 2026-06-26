@@ -125,7 +125,7 @@
 
   var MG_TB = { bezelWidth: 30, glassThickness: 150, n: 1.5, refractionScale: 1.5, specularOpacity: 1.0, blur: 0.5 };
   var TB = { W: 400, H: 66, R: 33 };
-  var DC = { W: 80, H: 66, R: 33, bw: 26, gt: 120, n: 2.0, blur: 0.8 };
+  var DC = { W: 80, H: 54, R: 27, bw: 26, gt: 120, n: 2.0, blur: 0.8 };
 
   var sp = {
     x:  new Spring(0, 450, 26),
@@ -225,7 +225,7 @@
       if (!tabs.length || !tabs[0].offsetWidth) return;
       itemWidth = tabs[0].offsetWidth + 4;
       pill.style.width  = DC.W + "px";
-      pill.style.height = DC.H + "px";
+      pill.style.height = DC.H + "px"; /* 54px, matches tab button height */
       activeIdx = 0;
       for (var i = 0; i < tabs.length; i++) if (tabs[i].classList.contains("active")) { activeIdx = i; break; }
       sp.x.value = sp.x.target = activeIdx * itemWidth;
