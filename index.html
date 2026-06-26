@@ -13,6 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" crossorigin="anonymous">
 <style>
 :root{
   --lime:#C9F24D; --lime-deep:#B6E52E; --on-lime:#16191A;
@@ -37,7 +38,7 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;transition:background-color .4s,color .4s}
-svg.ic{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+i.ic{width:20px;height:20px;font-size:20px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center}
 input,button,textarea{font-family:var(--font)}
 input[type=number]{-moz-appearance:textfield}
 input[type=number]::-webkit-outer-spin-button,input[type=number]::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
@@ -173,7 +174,7 @@ button{cursor:pointer}
 .enum{font-size:11px;font-weight:800;color:var(--muted2);min-width:16px}
 .ename{font-size:15px;font-weight:700;letter-spacing:-.01em;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
 .ename .play{flex:0 0 auto;width:19px;height:19px;border-radius:6px;background:var(--lime);display:grid;place-items:center}
-.ename .play svg{width:9px;height:9px;fill:var(--on-lime)}
+.ename .play i{font-size:10px;color:var(--on-lime)}
 .exmeta{display:flex;flex-wrap:wrap;gap:6px;margin:11px 0 0 25px}
 .mp{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:8px;background:var(--panel);color:var(--text)}
 .mp.load{background:rgba(182,229,46,.2);color:color-mix(in srgb,var(--text) 50%,var(--lime-deep))}
@@ -181,7 +182,7 @@ button{cursor:pointer}
 [data-theme="dark"] .mp.rir{background:rgba(201,242,77,.12);color:var(--lime)}
 .exnote{font-size:12px;color:var(--muted);margin:9px 0 0 25px;font-weight:500;line-height:1.45}
 .exchk{flex:0 0 auto;width:32px;height:32px;border-radius:50%;border:2px solid var(--line);background:transparent;display:grid;place-items:center;color:transparent;transition:.2s;margin-top:1px}
-.exchk svg{width:16px;height:16px;stroke-width:3}
+.exchk i{font-size:16px}
 .exchk:active{transform:scale(.85)}
 .exrow.done{border-color:var(--lime);background:color-mix(in srgb,var(--lime) 7%,var(--card))}
 .exrow.done .exchk{background:var(--lime);border-color:var(--lime);color:var(--on-lime)}
@@ -193,7 +194,7 @@ button{cursor:pointer}
 .clist li:last-child{border-bottom:none;padding-bottom:0}.clist li:first-child{padding-top:0}
 .card.ink .clist li,.card.forest .clist li{border-color:rgba(255,255,255,.08);color:rgba(255,255,255,.85)}
 .clist li .ck{flex:0 0 auto;width:20px;height:20px;border-radius:50%;background:var(--lime);display:grid;place-items:center;color:var(--on-lime);margin-top:1px}
-.clist li .ck svg{width:12px;height:12px;stroke-width:3}
+.clist li .ck i{font-size:12px}
 .clist li b{font-weight:700}
 
 .pweek{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--hair)}
@@ -467,21 +468,21 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
 <div class="app">
   <aside class="sidebar">
     <div class="sbpill" id="sbPill"></div>
-    <div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div>
-    <button class="sb-item active" data-v="dash" title="Dashboard"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg><span class="sl">Home</span></button>
-    <button class="sb-item" data-v="workout" title="Workout"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg><span class="sl">Workout</span></button>
-    <button class="sb-item" data-v="food" title="Nutrition"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg><span class="sl">Fuel</span></button>
-    <button class="sb-item" data-v="progress" title="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg><span class="sl">Progress</span></button>
+    <div class="logo"><i class="hgi-stroke hgi-home-01 ic"></i></div>
+    <button class="sb-item active" data-v="dash" title="Dashboard"><i class="hgi-stroke hgi-home-01 ic"></i><span class="sl">Home</span></button>
+    <button class="sb-item" data-v="workout" title="Workout"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><span class="sl">Workout</span></button>
+    <button class="sb-item" data-v="food" title="Nutrition"><i class="hgi-stroke hgi-fire ic"></i><span class="sl">Fuel</span></button>
+    <button class="sb-item" data-v="progress" title="Progress"><i class="hgi-stroke hgi-bar-chart-01 ic"></i><span class="sl">Progress</span></button>
     <div class="sb-spacer"></div>
-    <button class="sb-item" id="tglD" title="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg><span class="sl">Mode</span></button>
-    <button class="sb-item" data-v="you" title="Settings"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cog"/></svg><span class="sl">You</span></button>
+    <button class="sb-item" id="tglD" title="Theme"><i class="hgi-stroke hgi-moon-02 ic i-moon"></i><i class="hgi-stroke hgi-sun-01 ic i-sun"></i><span class="sl">Mode</span></button>
+    <button class="sb-item" data-v="you" title="Settings"><i class="hgi-stroke hgi-settings-01 ic"></i><span class="sl">You</span></button>
     <div class="sb-avatar">K</div>
   </aside>
   <main class="main">
   <div class="topbar">
-    <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg></div><div class="bt"><b>THE CUT</b><span>Kay · 12% target</span></div></div>
+    <div class="brand"><div class="logo"><i class="hgi-stroke hgi-home-01 ic"></i></div><div class="bt"><b>THE CUT</b><span>Kay · 12% target</span></div></div>
     <div class="tttext"><b>Hi, Kay</b><span>Let's get the work in today</span></div>
-    <div class="ttools"><div class="iconbtn" id="tgl" aria-label="Theme"><svg viewBox="0 0 24 24" class="ic i-moon"><use href="#i-moon"/></svg><svg viewBox="0 0 24 24" class="ic i-sun"><use href="#i-sun"/></svg></div></div>
+    <div class="ttools"><div class="iconbtn" id="tgl" aria-label="Theme"><i class="hgi-stroke hgi-moon-02 ic i-moon"></i><i class="hgi-stroke hgi-sun-01 ic i-sun"></i></div></div>
   </div>
 
   <!-- DASHBOARD -->
@@ -493,8 +494,8 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
         <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="pgRing" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="pgBf">19.2%</b><span>Body fat</span></div></div></div>
         <div class="herostats"><div class="hs"><div class="v">12%</div><div class="k">Target BF</div><div class="bar"><i id="pgBar" style="width:36%"></i></div></div><div class="hs"><div class="v" id="pgDef">~452</div><div class="k">Avg deficit</div><div class="bar"><i style="width:45%"></i></div></div><div class="hs"><div class="v" id="pgIntake">2,099</div><div class="k">Avg intake</div><div class="bar"><i style="width:82%"></i></div></div></div>
       </div>
-      <div class="tile d-steps" data-v="workout" style="cursor:pointer"><div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg>Today's session</div><div class="tv" id="dashDay">Lower A</div><div class="tk"><b id="dashDone">0/7</b> done &middot; tap to open</div></div>
-      <div class="tile forest d-weight"><div class="ti"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg>Today's fuel</div><div class="tv"><span id="dashKcal">2,210</span><small> kcal</small></div><div class="tk" id="dashMacros">240P &middot; 200C &middot; 50F</div></div>
+      <div class="tile d-steps" data-v="workout" style="cursor:pointer"><div class="ti"><i class="hgi-stroke hgi-dumbbell-01 ic"></i>Today's session</div><div class="tv" id="dashDay">Lower A</div><div class="tk"><b id="dashDone">0/7</b> done &middot; tap to open</div></div>
+      <div class="tile forest d-weight"><div class="ti"><i class="hgi-stroke hgi-fire ic"></i>Today's fuel</div><div class="tv"><span id="dashKcal">2,210</span><small> kcal</small></div><div class="tk" id="dashMacros">240P &middot; 200C &middot; 50F</div></div>
       <div class="calendar">
         <div class="calh"><b id="calMonth">June 2026</b><span class="pill">Sessions</span></div>
         <div class="caldow"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
@@ -520,7 +521,7 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
     </div>
     <div class="block">
       <div class="shead"><h2 class="sm">Training reference</h2><span class="tagn">tap to open</span></div>
-      <details class="fx" open><summary>Warm up first</summary><div class="fb"><ul class="clist" style="margin-top:2px"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>5 min easy</b> on the bike or treadmill to raise the temperature.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Ramp the first big lift:</b> empty bar, ~50%, ~70%, ~85%. Never hit a top set cold.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Lower:</b> leg swings, bodyweight squats, glute bridges, hip 90/90.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Upper:</b> band pull-aparts, dislocates, scapular push-ups.</li></ul></div></details>
+      <details class="fx" open><summary>Warm up first</summary><div class="fb"><ul class="clist" style="margin-top:2px"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>5 min easy</b> on the bike or treadmill to raise the temperature.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Ramp the first big lift:</b> empty bar, ~50%, ~70%, ~85%. Never hit a top set cold.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Lower:</b> leg swings, bodyweight squats, glute bridges, hip 90/90.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Upper:</b> band pull-aparts, dislocates, scapular push-ups.</li></ul></div></details>
       <details class="fx" open><summary>Progression &middot; reps then weight</summary><div class="fb">Add reps before weight. Take one set up a rep each week until every set sits at the top of the range, then add 2.5kg and start again. Bench, top of a 4&#215;5&#8211;6:<div style="margin-top:10px"></div>
         <div class="pweek"><div class="wk">Week 1</div><div class="sets"><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
         <div class="pweek"><div class="wk">Week 2</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
@@ -536,8 +537,8 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
         <div class="pc"><div class="pc-d"><b>Sat</b><small>D5</small></div><div class="pc-bar h"></div><div class="pc-i"><div class="t">Arms &amp; Delts</div><div class="s">Delts, arms &middot; walk &middot; social</div></div></div>
         <div class="pc"><div class="pc-d"><b>Sun</b><small>&ndash;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Checkpoint</div><div class="s">7-day average &middot; photo &middot; adjust</div></div></div>
       </div></div></details>
-      <details class="fx" open><summary>Cardio &amp; recovery</summary><div class="fb"><b>15-min incline walk &#215; 3</b>, straight after the weights on Mon, Thu and Sat. 5&#8211;6 km/h at 10&#8211;15% incline. That's the only cardio. If the scale stalls two weeks, add a fourth walk before touching the food.<ul class="clist" style="margin-top:10px"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sleep 7.5h</b>, fixed wake time. The biggest lever left.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Last caffeine early afternoon, screens down before bed.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Pre-log the day each morning, train the evening with Mufleh.</li></ul></div></details>
-      <details class="fx" open><summary>Scale rules</summary><div class="fb"><ul class="clist" style="margin-top:2px"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Weigh daily</b>, first thing, same conditions. Act on the 7-day average only.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Around 0.5kg down</b> hold everything. Faster than 0.8, eat a little more.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Flat for two weeks</b>, drop midweek carbs or add the fourth walk.</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Sub-15%</b>, ease the deficit to protect muscle. Ignore the scale 2&#8211;3 days after Saturday.</li></ul></div></details>
+      <details class="fx" open><summary>Cardio &amp; recovery</summary><div class="fb"><b>15-min incline walk &#215; 3</b>, straight after the weights on Mon, Thu and Sat. 5&#8211;6 km/h at 10&#8211;15% incline. That's the only cardio. If the scale stalls two weeks, add a fourth walk before touching the food.<ul class="clist" style="margin-top:10px"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Sleep 7.5h</b>, fixed wake time. The biggest lever left.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Last caffeine early afternoon, screens down before bed.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Pre-log the day each morning, train the evening with Mufleh.</li></ul></div></details>
+      <details class="fx" open><summary>Scale rules</summary><div class="fb"><ul class="clist" style="margin-top:2px"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Weigh daily</b>, first thing, same conditions. Act on the 7-day average only.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Around 0.5kg down</b> hold everything. Faster than 0.8, eat a little more.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Flat for two weeks</b>, drop midweek carbs or add the fourth walk.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Sub-15%</b>, ease the deficit to protect muscle. Ignore the scale 2&#8211;3 days after Saturday.</li></ul></div></details>
       <details class="fx" open><summary>Abs &amp; cramps</summary><div class="fb"><b>Abs come last.</b> Hanging Leg Raise ends Monday, Cable Crunch ends Thursday. They show up when the fat drops, not from extra crunches.<div class="eq" style="margin-top:8px">Lying leg press cramp: knees out of your chest, pelvis <b>down</b></div>Breathe out as you press. Salt before training, 300&#8211;400mg magnesium at night, keep carbs on lifting days. Keep 1&#8211;2 reps in the tank on compounds, sharp pain stops, burn doesn't.</div></details>
       <details class="fx" open><summary>Straps &amp; gear</summary><div class="fb"><b>Straps</b> for RDLs, rows, pulldowns. <b>Belt</b> for top sets of squat, hip thrust, OHP. <b>Wrist wraps</b> for heavy press, <b>knee sleeves</b> for warmth.</div></details>
     </div>
@@ -552,7 +553,7 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
           <div><div class="hlab">Today's session</div><div class="hday" id="hDay">Lower A</div><div class="hsub" id="hSub">Quad lead &middot; tap any move for its form video</div></div>
           <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="ringFil" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="ringNum">0/7</b><span>Done</span></div></div>
         </div>
-        <div class="hchips"><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-dumbbell"/></svg><b id="cMoves">7</b>&nbsp;moves</div><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-bars"/></svg><b id="cSets">20</b>&nbsp;sets</div><div class="hchip"><svg class="ic" viewBox="0 0 24 24"><use href="#i-clock"/></svg><b id="cTime">~76</b>&nbsp;min</div></div>
+        <div class="hchips"><div class="hchip"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><b id="cMoves">7</b>&nbsp;moves</div><div class="hchip"><i class="hgi-stroke hgi-bar-chart-02 ic"></i><b id="cSets">20</b>&nbsp;sets</div><div class="hchip"><i class="hgi-stroke hgi-clock-01 ic"></i><b id="cTime">~76</b>&nbsp;min</div></div>
       </div>
     </div>
     <div class="block">
@@ -568,7 +569,7 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
       <div class="block">
         <div class="shead"><h2>Nutrition</h2><span class="tagn" id="foodTag">weekday</span></div>
         <div class="card">
-          <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-flame"/></svg>Daily target</div>
+          <div class="ch"><i class="hgi-stroke hgi-fire ic" style="color:var(--lime-deep)"></i>Daily target</div>
           <div class="bignum"><span id="tKcal">2,210</span><small> kcal</small></div>
           <div class="bigsub" id="tgtMode">Weekday target</div>
           <div class="bigsub" style="margin-top:4px">Switch weekday and weekend below, the calories move with it. Protein holds, edit the numbers in Settings.</div>
@@ -609,8 +610,8 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
     </div>
     <div class="block">
       <div class="cols2">
-        <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-drop"/></svg>Hydration</div><ul class="clist"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>4.0 L</b>&nbsp;train &amp; Sat</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>3.5 L</b>&nbsp;rest days</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Salt + electrolytes pre-train</li></ul></div>
-        <div class="card"><div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-plate"/></svg>Supps</div><ul class="clist"><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Whey &amp; Creatine 5g</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span><b>Magnesium</b> 300&#8211;400mg PM, cramps</li><li><span class="ck"><svg viewBox="0 0 24 24"><use href="#i-check"/></svg></span>Multivit &amp; Vit D, AM</li></ul></div>
+        <div class="card"><div class="ch"><i class="hgi-stroke hgi-droplet ic"></i>Hydration</div><ul class="clist"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>4.0 L</b>&nbsp;train &amp; Sat</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>3.5 L</b>&nbsp;rest days</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Salt + electrolytes pre-train</li></ul></div>
+        <div class="card"><div class="ch"><i class="hgi-stroke hgi-kitchen-utensils ic"></i>Supps</div><ul class="clist"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Whey &amp; Creatine 5g</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Magnesium</b> 300&#8211;400mg PM, cramps</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Multivit &amp; Vit D, AM</li></ul></div>
       </div>
     </div>
   </section>
@@ -672,7 +673,7 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
     <div class="block"><div class="setgrid">
       <div class="setcol">
       <div class="card">
-        <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-flame"/></svg>Macro targets</div>
+        <div class="ch"><i class="hgi-stroke hgi-fire ic" style="color:var(--lime-deep)"></i>Macro targets</div>
         <div class="modetog" id="setMode" style="margin-bottom:14px"><button data-sm="weekday" class="on">Weekday</button><button data-sm="weekend">Weekend</button></div>
         <div class="stepper"><div class="sl">Protein<small>4 kcal/g</small></div><div class="stepctl"><button data-mac="p" data-d="-5">&#8722;</button><input type="number" id="inP" inputmode="numeric"><button data-mac="p" data-d="5">+</button></div></div>
         <div class="stepper"><div class="sl">Carbs<small>4 kcal/g</small></div><div class="stepctl"><button data-mac="c" data-d="-5">&#8722;</button><input type="number" id="inC" inputmode="numeric"><button data-mac="c" data-d="5">+</button></div></div>
@@ -683,7 +684,7 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
         <div class="deficitrow"><button class="reset" id="macReset">Reset both to plan</button></div>
       </div>
       <div class="card">
-        <div class="ch"><svg viewBox="0 0 24 24" class="ic" style="color:var(--lime-deep)"><use href="#i-bars"/></svg>Weekly bank</div>
+        <div class="ch"><i class="hgi-stroke hgi-bar-chart-02 ic" style="color:var(--lime-deep)"></i>Weekly bank</div>
         <p style="margin-bottom:14px">Five weekdays bank the deficit, the weekend spends some of it. The rate comes from the weekly average, not any single day.</p>
         <div class="tilegrid g2"><div class="tile soft"><div class="ti">Weekday &#215; 5</div><div class="tv" id="wkWd" style="font-size:21px">11,825<small> kcal</small></div></div><div class="tile soft"><div class="ti">Weekend &#215; 2</div><div class="tv" id="wkWe" style="font-size:21px">5,310<small> kcal</small></div></div></div>
         <div class="kcalrow" style="margin-top:14px"><div class="kl">Daily average</div><div class="kn" id="wkAvg">2,448</div></div>
@@ -694,7 +695,7 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
         <div class="sgroup"><h3>Theme</h3><div class="seg2" id="themeSeg"><button data-t="light" class="on">Light</button><button data-t="dark">Dark</button><button data-t="system">System</button></div></div>
         <div class="sgroup"><h3>Accent</h3><div class="swatches" id="swatches"></div></div>
       <div class="card backup">
-        <div class="ch"><svg viewBox="0 0 24 24" class="ic"><use href="#i-save"/></svg>Backup &amp; restore</div>
+        <div class="ch"><i class="hgi-stroke hgi-floppy-disk ic"></i>Backup &amp; restore</div>
         <p style="color:var(--muted);margin-bottom:12px">Everything saves on this device automatically. To move it to another device or keep a copy, grab a backup code and paste it back later.</p>
         <div class="addrow"><button class="btn ghost" id="copyBackup">Copy backup code</button></div>
         <textarea id="restoreBox" placeholder="Paste a backup code here, then tap Restore" style="margin-top:10px"></textarea>
@@ -713,34 +714,14 @@ body.nav-anim .tabpill{transition:transform .44s cubic-bezier(.34,1.32,.46,1),wi
 
 <div class="tabbar">
   <div class="tabpill" id="tabPill"></div>
-  <button class="tab active" data-v="dash" aria-label="Home"><svg viewBox="0 0 24 24" class="ic"><use href="#i-bolt"/></svg><span class="tl">Home</span></button>
-  <button class="tab" data-v="workout" aria-label="Workout"><svg viewBox="0 0 24 24" class="ic"><use href="#i-dumbbell"/></svg><span class="tl">Workout</span></button>
-  <button class="tab" data-v="food" aria-label="Nutrition"><svg viewBox="0 0 24 24" class="ic"><use href="#i-flame"/></svg><span class="tl">Fuel</span></button>
-  <button class="tab" data-v="progress" aria-label="Progress"><svg viewBox="0 0 24 24" class="ic"><use href="#i-chart"/></svg><span class="tl">Progress</span></button>
-  <button class="tab" data-v="you" aria-label="Settings"><svg viewBox="0 0 24 24" class="ic"><use href="#i-cog"/></svg><span class="tl">You</span></button>
+  <button class="tab active" data-v="dash" aria-label="Home"><i class="hgi-stroke hgi-home-01 ic"></i><span class="tl">Home</span></button>
+  <button class="tab" data-v="workout" aria-label="Workout"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><span class="tl">Workout</span></button>
+  <button class="tab" data-v="food" aria-label="Nutrition"><i class="hgi-stroke hgi-fire ic"></i><span class="tl">Fuel</span></button>
+  <button class="tab" data-v="progress" aria-label="Progress"><i class="hgi-stroke hgi-bar-chart-01 ic"></i><span class="tl">Progress</span></button>
+  <button class="tab" data-v="you" aria-label="Settings"><i class="hgi-stroke hgi-settings-01 ic"></i><span class="tl">You</span></button>
 </div>
 <div class="toast" id="toast"></div>
 
-<svg width="0" height="0" style="position:absolute" aria-hidden="true">
-  <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></symbol>
-  <symbol id="i-flame" viewBox="0 0 24 24"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></symbol>
-  <symbol id="i-drop" viewBox="0 0 24 24"><path d="M12 22a7 7 0 0 0 7-7c0-2-1-3.9-3-5.5s-3.5-4-4-6.5c-.5 2.5-2 4.9-4 6.5C6 11.1 5 13 5 15a7 7 0 0 0 7 7z"/></symbol>
-  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
-  <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.6"/></symbol>
-  <symbol id="i-trend" viewBox="0 0 24 24"><path d="M22 7 13.5 15.5 8.5 10.5 2 17"/><path d="M16 7h6v6"/></symbol>
-  <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M6 8v8M4 9.5v5M18 8v8M20 9.5v5M6 12h12"/></symbol>
-  <symbol id="i-pulse" viewBox="0 0 24 24"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
-  <symbol id="i-plate" viewBox="0 0 24 24"><path d="M12 22a10 10 0 1 0 0-20 10 10 0 0 0 0 20z"/><path d="M12 16a4 4 0 1 0 0-8 4 4 0 0 0 0 8z"/></symbol>
-  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="16" rx="2.5"/><path d="M3.5 9.5h17M8 3v4M16 3v4"/></symbol>
-  <symbol id="i-chart" viewBox="0 0 24 24"><path d="M5 21V11M12 21V4M19 21v-7"/></symbol>
-  <symbol id="i-cog" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 13a7.7 7.7 0 0 0 0-2l2-1.5-2-3.5-2.4 1a7.6 7.6 0 0 0-1.7-1l-.4-2.5h-4l-.4 2.5a7.6 7.6 0 0 0-1.7 1l-2.4-1-2 3.5L4.6 11a7.7 7.7 0 0 0 0 2l-2 1.5 2 3.5 2.4-1a7.6 7.6 0 0 0 1.7 1l.4 2.5h4l.4-2.5a7.6 7.6 0 0 0 1.7-1l2.4 1 2-3.5z"/></symbol>
-  <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
-  <symbol id="i-bars" viewBox="0 0 24 24"><path d="M4 18V8M9 18V5M14 18v-8M19 18v-5"/></symbol>
-  <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="13" cy="4" r="2"/><path d="M13 22l-2-6-3-2 1.5-6 3 2 3 1M9 9l-2 4M11 16l-3 6"/></symbol>
-  <symbol id="i-save" viewBox="0 0 24 24"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8M7 3v5h8"/></symbol>
-  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2M12 20v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M2 12h2M20 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></symbol>
-  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z"/></symbol>
-</svg>
 
 <script>
 "use strict";
@@ -869,18 +850,18 @@ function applyTargets(){
 }
 
 /* ---------- workout render (per-date ticks) ---------- */
-var curDay=0,RC=2*Math.PI*32,play='<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+var curDay=0,RC=2*Math.PI*32,play='<i class="hgi-stroke hgi-play"></i>';
 function todayISO(){return new Date().toISOString().slice(0,10);}
 function doneSet(){var t=STATE.ticks[todayISO()];return(t&&t.key===PROGRAM[curDay].key&&Array.isArray(t.done))?t.done:[];}
 function setDone(arr){STATE.ticks[todayISO()]={key:PROGRAM[curDay].key,done:arr};saveState();}
 function renderDayTabs(){$('dayTabs').innerHTML=PROGRAM.map(function(d,i){return '<button class="pill '+(i===curDay?'active':'')+'" data-day="'+i+'">'+d.name+'</button>';}).join('');}
 function renderWorkout(){
   var d=PROGRAM[curDay],dn=doneSet();
-  $('wHead').innerHTML='<span class="tg">'+d.name+'</span><span class="wt">'+d.focus+'</span><span class="wm"><svg viewBox="0 0 24 24" class="ic" style="width:14px;height:14px"><use href="#i-dumbbell"/></svg>'+d.time+' min</span>';
+  $('wHead').innerHTML='<span class="tg">'+d.name+'</span><span class="wt">'+d.focus+'</span><span class="wm"><i class="hgi-stroke hgi-dumbbell-01 ic" style="font-size:14px;width:14px;height:14px"></i>'+d.time+' min</span>';
   $('workoutBox').innerHTML=d.ex.map(function(e,i){
     var on=dn.indexOf(i)>=0;
     var pills='<span class="mp">'+e.sr+'</span>'+(e.rir?'<span class="mp rir">'+e.rir+'</span>':'')+'<span class="mp load">'+e.ld+'</span>';
-    return '<div class="exrow'+(on?' done':'')+'"><div class="exbody"><div class="en"><span class="enum">'+(i+1)+'</span><a class="ename" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a></div><div class="exmeta">'+pills+'</div>'+(e.note?'<div class="exnote">'+e.note+'</div>':'')+'</div><button class="exchk" data-idx="'+i+'" aria-label="Done"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></button></div>';
+    return '<div class="exrow'+(on?' done':'')+'"><div class="exbody"><div class="en"><span class="enum">'+(i+1)+'</span><a class="ename" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a></div><div class="exmeta">'+pills+'</div>'+(e.note?'<div class="exnote">'+e.note+'</div>':'')+'</div><button class="exchk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
   }).join('');
   $('hDay').textContent=d.name;$('hSub').innerHTML=d.sub;$('cMoves').textContent=d.ex.length;$('cSets').textContent=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);$('cTime').textContent=d.time;
   var _dd=$('dashDay');if(_dd)_dd.textContent=d.name;
