@@ -1,20 +1,29 @@
 /**
- * Liquid Glass — Tab Bar (track) + Drag Dock Pill
+ * Liquid Glass — Tab Bar + Pill
  *
- * Tab bar track: Interactive Magnifying Glass settings from winaviation/liquid-glass-demo
- *   bezelWidth=30, glassThickness=150, n=1.5, refractionScale=1.5, blur=0.5
+ * Settings copied directly from the Interactive Magnifying Glass demo
+ * (winaviation/liquid-glass-demo, which ports kube.io/blog/liquid-glass-css-svg):
  *
- * Pill: Drag Dock (Pebble & Void) settings
- *   bezelWidth=26, glassThickness=120, n=2.0, blur=0.8
- *   Springs: x(450/26), sx(500/24), sy(500/24), sc(400/20)
- *   Velocity squish: st=|vx|/1200; sx=1+st; sy=max(0.6,1-st*0.3)
- *   Scale boost on grab: sc→1.25, release: sc→1
+ *   bezelWidth      = 30
+ *   glassThickness  = 150
+ *   refractiveIndex = 1.5
+ *   refractionScale = 1.5    ← the `scale` on feDisplacementMap = maxDisp * 1.5
+ *   specularOpacity = 1.0
+ *   blur (SVG)      = 0.5    ← stdDeviation inside the filter, NOT backdrop blur
+ *
+ * No `blur()` is added to backdrop-filter — that's what makes it refractive
+ * rather than frosted. The SVG displacement map provides all the visual distortion.
+ *
+ * Springs:
+ *   - pillScaleSpring    (520/26)  — pill squish on click, same feel as MG drag
+ *   - tabRefractSpring   (300/18)  — tab bar refractionBoost, same as MG demo
+ *   - pillRefractSpring  (300/18)  — pill refractionBoost, same as MG demo
  */
 
 (function () {
   "use strict";
 
-  /* ─── Spring ────────────────────────────────────────────────────────── */
+  /* ─── Spring (from winaviation / kube.io demo) ─────────────────────── */
   function Spring(value, stiffness, damping) {
     this.value    = value;
     this.target   = value;
@@ -125,220 +134,134 @@
     return el.style.backdropFilter.indexOf("url")!==-1;
   }
 
-  var squircle = function (x) { return Math.pow(1 - Math.pow(1 - x, 4), 0.25); };
-
-  /* ─── Tab bar track (MG settings) ──────────────────────────────────── */
-  var MG_TB = { bezelWidth: 30, glassThickness: 150, n: 1.5, refractionScale: 1.5, specularOpacity: 1.0, blur: 0.5 };
-  var TB = { W: 400, H: 66, R: 33 };
-
-  /* ─── Dock pill settings ────────────────────────────────────────────── */
-  var DC = { W: 80, H: 66, R: 33, bw: 26, gt: 120, n: 2.0, blur: 0.8 };
-
-  /* ─── Dock springs ──────────────────────────────────────────────────── */
-  var sp = {
-    x:  new Spring(0, 450, 26),   /* bubble position (translateX) */
-    sx: new Spring(1, 500, 24),   /* x-squish */
-    sy: new Spring(1, 500, 24),   /* y-squish */
-    sc: new Spring(1, 400, 20)    /* overall scale boost (1.25 on grab) */
+  /* ─── Magnifying Glass settings (exact) ────────────────────────────── */
+  var MG = {
+    bezelWidth:      30,
+    glassThickness:  150,
+    n:               1.5,
+    refractionScale: 1.5,
+    specularOpacity: 1.0,
+    blur:            0.5   /* stdDeviation inside SVG — NOT backdrop blur */
   };
 
-  /* ─── Tab bar refraction spring (rest=0.8 active=1.0) ──────────────── */
-  var tabRefractSpring = new Spring(0.8, 300, 18);
+  /* convex squircle — Apple's preferred surface (from kube.io article) */
+  var squircle = function (x) { return Math.pow(1 - Math.pow(1 - x, 4), 0.25); };
+
+  /* Tab bar: 400×66 pill (R=33) */
+  var TB = { W: 400, H: 66, R: 33 };
+
+  /* Pill: ~80×54 pill (R=27, cap bezelWidth to R-1=26) */
+  var PL = { W: 80, H: 54, R: 27 };
+  var PL_BW = Math.min(MG.bezelWidth, PL.R - 1); /* = 26 */
+
+  /* ─── Springs ───────────────────────────────────────────────────────── */
+  /* Pill scale bounce — same feel as MG drag-start (instant compress → spring) */
+  var pillScaleSpring   = new Spring(1.0, 520, 26);
+
+  /* refractionBoost — from MG animation loop (stiffness=300, damping=18)
+     rest=0.8, active=1.0 → scale = maxDisp * refractionScale * boost */
+  var tabRefractSpring  = new Spring(0.8, 300, 18);
+  var pillRefractSpring = new Spring(0.8, 300, 18);
 
   var tbMaxDisp = 0, plMaxDisp = 0;
   var animId = null;
-  var isDragging = false;
-  var activeIdx = 0;
-  var itemWidth = 0;
 
-  /* ─── Animation loop ────────────────────────────────────────────────── */
   function animate() {
     var dt = 1 / 60;
-    sp.x.update(dt);
-    sp.sx.update(dt);
-    sp.sy.update(dt);
-    sp.sc.update(dt);
+    pillScaleSpring.update(dt);
     tabRefractSpring.update(dt);
+    pillRefractSpring.update(dt);
 
+    /* Pill scale */
     var pill = document.getElementById("tabPill");
-    if (pill) {
-      var cx = sp.x.value;
-      var sxv = sp.sx.value * sp.sc.value;
-      var syv = sp.sy.value * sp.sc.value;
-      pill.style.transform = "translateX(" + cx.toFixed(2) + "px) scale(" + sxv.toFixed(4) + "," + syv.toFixed(4) + ")";
+    if (pill) pill.style.scale = pillScaleSpring.value.toFixed(4);
 
-      /* velocity-responsive squish */
-      if (isDragging) {
-        var vx = Math.abs(sp.x.velocity);
-        var st = vx / 1200;
-        sp.sx.setTarget(1 + st);
-        sp.sy.setTarget(Math.max(0.6, 1 - st * 0.3));
-      }
-
-      /* displacement scale = maxDisp * sx * 1.5 */
-      var plMap = document.getElementById("tgPillDisplacementMap");
-      if (plMap) plMap.setAttribute("scale", (plMaxDisp * sp.sx.value * 1.5).toFixed(2));
-    }
-
-    /* tab bar refractionBoost */
+    /* Tab bar refractionBoost → update feDisplacementMap scale */
     var tbMap = document.getElementById("tgDisplacementMap");
     if (tbMap) tbMap.setAttribute("scale",
-      (tbMaxDisp * MG_TB.refractionScale * tabRefractSpring.value).toFixed(2));
+      (tbMaxDisp * MG.refractionScale * tabRefractSpring.value).toFixed(2));
 
-    var settled = sp.x.isSettled() && sp.sx.isSettled() && sp.sy.isSettled() &&
-                  sp.sc.isSettled() && tabRefractSpring.isSettled();
+    /* Pill refractionBoost → update feDisplacementMap scale */
+    var plMap = document.getElementById("tgPillDisplacementMap");
+    if (plMap) plMap.setAttribute("scale",
+      (plMaxDisp * MG.refractionScale * pillRefractSpring.value).toFixed(2));
+
+    var settled = pillScaleSpring.isSettled() &&
+                  tabRefractSpring.isSettled() &&
+                  pillRefractSpring.isSettled();
+
     if (!settled) {
       animId = requestAnimationFrame(animate);
     } else {
       animId = null;
+      if (pill) pill.style.scale = "";
     }
   }
 
   function startAnim() { if (!animId) animId = requestAnimationFrame(animate); }
-
-  /* ─── Snap pill to tab index ────────────────────────────────────────── */
-  function snapToIndex(idx) {
-    activeIdx = idx;
-    if (!itemWidth) return;
-    sp.x.setTarget(idx * itemWidth);
-  }
 
   /* ─── Main init ─────────────────────────────────────────────────────── */
   function initTabbarGlass() {
     var tabbar = document.querySelector(".tabbar");
     if (!tabbar) return;
 
-    /* ── Tab bar displacement + specular ── */
-    var tbPre  = calc1D(MG_TB.glassThickness, MG_TB.bezelWidth, squircle, MG_TB.n);
-    tbMaxDisp  = Math.max.apply(null, tbPre.map(Math.abs));
-    var tbDisp = calc2D(TB.W, TB.H, TB.W, TB.H, TB.R, MG_TB.bezelWidth, tbMaxDisp||1, tbPre);
-    var tbSpec = calcSpec(TB.W, TB.H, TB.R, MG_TB.bezelWidth);
+    /* ── Tab bar displacement + specular maps ── */
+    var tbPre   = calc1D(MG.glassThickness, MG.bezelWidth, squircle, MG.n);
+    tbMaxDisp   = Math.max.apply(null, tbPre.map(Math.abs));
+    var tbDisp  = calc2D(TB.W, TB.H, TB.W, TB.H, TB.R, MG.bezelWidth, tbMaxDisp||1, tbPre);
+    var tbSpec  = calcSpec(TB.W, TB.H, TB.R, MG.bezelWidth);
 
     document.getElementById("tgDisplacementImage").setAttribute("href", toURL(tbDisp));
     document.getElementById("tgSpecularImage").setAttribute("href", toURL(tbSpec));
-    document.getElementById("tgSpecularAlpha").setAttribute("slope", MG_TB.specularOpacity);
-    document.getElementById("tgFilterBlur").setAttribute("stdDeviation", MG_TB.blur);
+    document.getElementById("tgSpecularAlpha").setAttribute("slope", MG.specularOpacity);
+    document.getElementById("tgFilterBlur").setAttribute("stdDeviation", MG.blur);
     document.getElementById("tgDisplacementMap").setAttribute("scale",
-      (tbMaxDisp * MG_TB.refractionScale * 0.8).toFixed(2));
+      (tbMaxDisp * MG.refractionScale * 0.8).toFixed(2)); /* 0.8 = rest refractionBoost */
 
-    /* ── Dock pill displacement + specular ── */
-    var plPre  = calc1D(DC.gt, DC.bw, squircle, DC.n);
-    plMaxDisp  = Math.max.apply(null, plPre.map(Math.abs));
-    var plDisp = calc2D(DC.W, DC.H, DC.W, DC.H, DC.R, DC.bw, plMaxDisp||1, plPre);
-    var plSpec = calcSpec(DC.W, DC.H, DC.R, DC.bw);
+    /* ── Pill displacement + specular maps ── */
+    var plPre   = calc1D(MG.glassThickness, PL_BW, squircle, MG.n);
+    plMaxDisp   = Math.max.apply(null, plPre.map(Math.abs));
+    var plDisp  = calc2D(PL.W, PL.H, PL.W, PL.H, PL.R, PL_BW, plMaxDisp||1, plPre);
+    var plSpec  = calcSpec(PL.W, PL.H, PL.R, PL_BW);
 
     document.getElementById("tgPillDisplacementImage").setAttribute("href", toURL(plDisp));
     document.getElementById("tgPillSpecularImage").setAttribute("href", toURL(plSpec));
-    document.getElementById("tgPillSpecularAlpha").setAttribute("slope", "0.8");
-    document.getElementById("tgPillBlur").setAttribute("stdDeviation", DC.blur);
+    document.getElementById("tgPillSpecularAlpha").setAttribute("slope", MG.specularOpacity);
+    document.getElementById("tgPillBlur").setAttribute("stdDeviation", MG.blur);
     document.getElementById("tgPillDisplacementMap").setAttribute("scale",
-      (plMaxDisp * 1.5).toFixed(2));
+      (plMaxDisp * MG.refractionScale * 0.8).toFixed(2));
 
     /* ── Chrome vs fallback ── */
-    var useBackdrop = supportsBackdropSVG();
-    tabbar.classList.add(useBackdrop ? "lg-backdrop" : "lg-fallback");
+    tabbar.classList.add(supportsBackdropSVG() ? "lg-backdrop" : "lg-fallback");
 
-    /* ── Set pill size (fixed 80×66) and init position ── */
-    var pill = document.getElementById("tabPill");
-    var tabs = tabbar.querySelectorAll(".tab");
-
-    function initPillSize() {
-      if (!tabs.length || !tabs[0].offsetWidth) return;
-      itemWidth = tabs[0].offsetWidth + 4; /* gap: 4px */
-      pill.style.width  = DC.W + "px";
-      pill.style.height = DC.H + "px";
-      /* position at active tab */
-      var activeTab = tabbar.querySelector(".tab.active");
-      activeIdx = 0;
-      for (var i = 0; i < tabs.length; i++) if (tabs[i].classList.contains("active")) { activeIdx = i; break; }
-      sp.x.value = sp.x.target = activeIdx * itemWidth;
-      sp.x.velocity = 0;
-      pill.style.transform = "translateX(" + sp.x.value.toFixed(2) + "px) scale(1,1)";
-    }
-
-    requestAnimationFrame(function() { requestAnimationFrame(initPillSize); });
-    window._dockSnap = function() {
-      var activeTab = tabbar.querySelector(".tab.active");
-      for (var i = 0; i < tabs.length; i++) if (tabs[i].classList.contains("active")) { activeIdx = i; break; }
-      snapToIndex(activeIdx);
-      startAnim();
-    };
-
-    /* ── Drag logic ── */
-    var startX = 0, startPillX = 0, pointerId = null;
-
+    /* ── Pointer events — same trigger pattern as MG demo drag ── */
     tabbar.addEventListener("pointerdown", function (e) {
-      if (!e.target.closest("[data-v]") && !e.target.closest("#tabPill")) return;
-      pointerId = e.pointerId;
-      startX = e.clientX;
-      startPillX = sp.x.value;
-      isDragging = true;
+      if (!e.target.closest("[data-v]")) return;
 
-      sp.sc.setTarget(1.25);
+      /* Pill: instant compress → spring back (MG drag-start feel) */
+      pillScaleSpring.value    = 0.86;
+      pillScaleSpring.velocity = 0;
+      pillScaleSpring.target   = 1.0;
+
+      /* refractionBoost: boost to 1.0 (MG dragging state) */
       tabRefractSpring.setTarget(1.0);
+      pillRefractSpring.setTarget(1.0);
 
-      /* snap position to clicked tab immediately */
-      var target = e.target.closest("[data-v]");
-      if (target) {
-        for (var i = 0; i < tabs.length; i++) {
-          if (tabs[i] === target) { activeIdx = i; break; }
-        }
-        sp.x.setTarget(activeIdx * itemWidth);
-      }
-
-      try { tabbar.setPointerCapture(e.pointerId); } catch(ex) {}
       startAnim();
     }, true);
 
-    tabbar.addEventListener("pointermove", function (e) {
-      if (!isDragging || e.pointerId !== pointerId) return;
-      var dx = e.clientX - startX;
-      var raw = startPillX + dx;
-      var maxX = (tabs.length - 1) * itemWidth;
-      sp.x.value = Math.max(0, Math.min(maxX, raw));
-      sp.x.velocity = (e.movementX || 0) * 60; /* approx px/s */
-      sp.x.target   = sp.x.value;
-      startAnim();
-    });
-
+    /* On release: spring refractionBoost back to 0.8 (MG rest state) */
     tabbar.addEventListener("pointerup", function (e) {
-      if (e.pointerId !== pointerId) return;
-      isDragging = false;
-      pointerId  = null;
-
-      /* snap to nearest tab */
-      var nearest = Math.round(sp.x.value / itemWidth);
-      nearest = Math.max(0, Math.min(tabs.length - 1, nearest));
-      snapToIndex(nearest);
-
-      /* activate tab */
-      var activating = tabs[nearest];
-      if (activating) {
-        var v = activating.getAttribute("data-v");
-        if (v && window.showView) window.showView(v);
-      }
-
-      sp.sx.setTarget(1);
-      sp.sy.setTarget(1);
-      sp.sc.setTarget(1);
+      if (!e.target.closest("[data-v]")) return;
       tabRefractSpring.setTarget(0.8);
+      pillRefractSpring.setTarget(0.8);
       startAnim();
     });
 
     tabbar.addEventListener("pointercancel", function () {
-      if (!isDragging) return;
-      isDragging = false;
-      pointerId  = null;
-      snapToIndex(activeIdx);
-      sp.sx.setTarget(1);
-      sp.sy.setTarget(1);
-      sp.sc.setTarget(1);
       tabRefractSpring.setTarget(0.8);
+      pillRefractSpring.setTarget(0.8);
       startAnim();
-    });
-
-    window.addEventListener("resize", function () {
-      initPillSize();
     });
   }
 
