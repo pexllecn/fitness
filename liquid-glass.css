@@ -1,7 +1,7 @@
 /*
  * Liquid Glass Tab Bar
- * Based on winaviation/liquid-glass-demo (port of kube.io Liquid Glass)
- * Physics-accurate refraction via Snell's Law + SVG displacement maps
+ * Visual: mirrors the Interactive Magnifying Glass from winaviation/liquid-glass-demo
+ * Physics: Spring-based pill bounce (liquid-glass.js), CSS translate slide
  */
 
 .tabbar {
@@ -21,7 +21,8 @@
   overflow: hidden;
   background: transparent;
   border: none;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18), 0 2px 8px rgba(0, 0, 0, 0.1);
+  /* Outer drop shadow — matches glass-inner at rest in the magnifying glass demo */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18), 0 1px 4px rgba(0, 0, 0, 0.10);
 }
 
 .tabbar::before {
@@ -37,61 +38,90 @@
   pointer-events: none;
 }
 
-/* Glass layer — sits below tabs, applies refraction */
+/*
+ * .tg-glass — the refraction + blur layer
+ * Mirrors what backdrop-filter: url(#liquidGlassFilter) does in the demo's
+ * Chrome backdrop mode. Also carries the inset glows from glass-inner.
+ */
 .tg-glass {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   z-index: 0;
   pointer-events: none;
+  /* Inset glow: dark at top-inside, white at bottom-inside — same as glass-inner */
+  box-shadow:
+    inset 0 1.6px 16px rgba(0, 0, 0, 0.09),
+    inset 0 -1.6px 16px rgba(255, 255, 255, 0.07);
 }
 
-/* Chrome/Chromium: native backdrop-filter with physics-accurate SVG displacement */
+/* Chrome/Chromium: physics-accurate SVG displacement via backdrop-filter */
 .tabbar.lg-backdrop .tg-glass {
-  backdrop-filter: url(#tabbarGlassFilter) blur(14px) saturate(160%);
-  -webkit-backdrop-filter: url(#tabbarGlassFilter) blur(14px) saturate(160%);
-  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: url(#tabbarGlassFilter) blur(14px) saturate(150%);
+  -webkit-backdrop-filter: url(#tabbarGlassFilter) blur(14px) saturate(150%);
+  background: rgba(255, 255, 255, 0.14);
 }
 
 [data-theme="dark"] .tabbar.lg-backdrop .tg-glass {
-  background: rgba(20, 20, 24, 0.22);
+  background: rgba(18, 18, 22, 0.30);
+  box-shadow:
+    inset 0 1.6px 16px rgba(0, 0, 0, 0.18),
+    inset 0 -1.6px 16px rgba(255, 255, 255, 0.04);
 }
 
-/* Fallback (Firefox / Safari): simple frosted glass without displacement */
+/* Firefox / Safari: simple frosted glass */
 .tabbar.lg-fallback .tg-glass {
   backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
   -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
   background: rgba(255, 255, 255, 0.18);
-  border: 1px solid rgba(255, 255, 255, 0.75);
 }
 
 [data-theme="dark"] .tabbar.lg-fallback .tg-glass {
-  background: rgba(30, 33, 38, 0.28);
-  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(28, 28, 34, 0.35);
+  backdrop-filter: blur(20px) saturate(160%) brightness(0.9);
+  -webkit-backdrop-filter: blur(20px) saturate(160%) brightness(0.9);
 }
 
-/* Specular border highlight (both modes) */
+/*
+ * .tg-border — specular edge highlight ring
+ * Simulates the bright rim of a glass capsule catching light.
+ */
 .tg-border {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   z-index: 1;
   pointer-events: none;
-  background: linear-gradient(160deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.08) 40%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.50) 0%,
+    rgba(255, 255, 255, 0.08) 38%,
+    rgba(255, 255, 255, 0.00) 100%
+  );
   box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 0.9),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.25),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    inset 0 1.5px 0 rgba(255, 255, 255, 0.85),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.10);
 }
 
 [data-theme="dark"] .tg-border {
-  background: linear-gradient(160deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.04) 40%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.03) 38%,
+    rgba(255, 255, 255, 0.00) 100%
+  );
   box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 0.12),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.07);
+    inset 0 1px 0 rgba(255, 255, 255, 0.10),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
-/* Tab pill and tab buttons sit above glass layers */
+/* ── Tab pill ───────────────────────────────────────────────────────────── */
+/*
+ * Uses CSS `translate` (individual transform property) for position so that
+ * CSS transition handles the slide and JS Spring can animate `scale` without
+ * the two fighting over `transform`.
+ */
 .tabpill {
   position: absolute;
   top: 0;
@@ -108,6 +138,7 @@
     inset 0 -1px 2px color-mix(in srgb, var(--lime) 45%, transparent),
     0 3px 12px color-mix(in srgb, var(--lime) 32%, transparent);
   transition: none;
+  transform-origin: center center;
 }
 
 [data-theme="dark"] .tabpill {
@@ -118,10 +149,15 @@
     0 2px 10px color-mix(in srgb, var(--lime) 20%, transparent);
 }
 
+/* Slide transition on translate property only — scale is spring-animated by JS */
 body.nav-anim .tabpill {
-  transition: transform 0.44s cubic-bezier(0.34, 1.32, 0.46, 1), width 0.44s cubic-bezier(0.34, 1.32, 0.46, 1), height 0.3s;
+  transition:
+    translate 0.44s cubic-bezier(0.34, 1.32, 0.46, 1),
+    width 0.44s cubic-bezier(0.34, 1.32, 0.46, 1),
+    height 0.3s;
 }
 
+/* ── Tab buttons ────────────────────────────────────────────────────────── */
 .tab {
   flex: 1;
   display: flex;

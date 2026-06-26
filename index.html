@@ -397,7 +397,7 @@ details.fx .eq{background:var(--bg);border:1px solid var(--line);border-radius:1
   .sb-item{width:66px;padding:11px 0;border-radius:20px;display:flex;flex-direction:column;align-items:center;gap:5px;color:var(--muted);background:transparent;border:none;transition:color .2s;position:relative;z-index:2}
   .sbpill{position:absolute;left:0;top:0;width:0;height:0;border-radius:20px;z-index:1;pointer-events:none;background:color-mix(in srgb,var(--lime) 64%,transparent);border:1px solid rgba(255,255,255,.5);box-shadow:inset 0 1.5px 1px rgba(255,255,255,.6),inset 0 -1px 2px color-mix(in srgb,var(--lime) 45%,transparent),0 3px 10px color-mix(in srgb,var(--lime) 32%,transparent);transition:none}
   [data-theme="dark"] .sbpill{background:color-mix(in srgb,var(--lime) 30%,transparent);border-color:color-mix(in srgb,var(--lime) 38%,transparent);box-shadow:inset 0 1px 1px rgba(255,255,255,.22),0 2px 10px color-mix(in srgb,var(--lime) 20%,transparent)}
-  body.nav-anim .sbpill{transition:transform .42s cubic-bezier(.34,1.3,.46,1),width .3s,height .42s cubic-bezier(.34,1.3,.46,1)}
+  body.nav-anim .sbpill{transition:translate .42s cubic-bezier(.34,1.3,.46,1),width .3s,height .42s cubic-bezier(.34,1.3,.46,1)}
   .sb-item svg{width:21px;height:21px}
   .sb-item .sl{font-size:8.5px;font-weight:700;letter-spacing:.03em;text-transform:uppercase}
   .sb-item:hover{background:color-mix(in srgb,var(--text) 7%,transparent);color:var(--text)}
@@ -950,7 +950,7 @@ function renderMealTotals(){
 }
 
 /* ---------- views ---------- */
-function placePill(p,el){if(!p||!el||el.offsetParent===null)return;p.style.width=el.offsetWidth+'px';p.style.height=el.offsetHeight+'px';p.style.transform='translate('+el.offsetLeft+'px,'+el.offsetTop+'px)';}
+function placePill(p,el){if(!p||!el||el.offsetParent===null)return;p.style.width=el.offsetWidth+'px';p.style.height=el.offsetHeight+'px';p.style.translate=el.offsetLeft+'px '+el.offsetTop+'px';}
 function syncPills(){placePill(document.getElementById('tabPill'),document.querySelector('.tabbar .tab.active'));placePill(document.getElementById('sbPill'),document.querySelector('.sidebar .sb-item.active'));}
 function showView(v){
   var s=document.querySelectorAll('.view');for(var i=0;i<s.length;i++)s[i].classList.remove('on');
