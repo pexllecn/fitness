@@ -20,6 +20,7 @@
 /* ── Apple design tokens ── */
 :root{
   --lime:#C9F24D; --lime-deep:#B6E52E; --on-lime:#16191A;
+  --lime-text:#3E7200; /* accessible lime for text on light bg — 5.2:1 on white */
   --forest:#11402E; --forest-2:#17563C; --on-forest:#E4F5EA;
   --ink:#1C1C1E; --on-ink:#F2F2F7;
 
@@ -28,11 +29,14 @@
   --card2:#F2F2F7; --grouped-hdr:#6C6C70;
 
   /* iOS semantic labels */
-  --text:#000000; --muted:rgba(60,60,67,.6); --muted2:rgba(60,60,67,.45);
+  --text:#000000; --muted:rgba(60,60,67,.78); --muted2:rgba(60,60,67,.58);
   --line:rgba(60,60,67,.18); --hair:rgba(60,60,67,.1);
 
   /* Functional */
   --ok:#34C759; --warn:#FF3B30; --blue:#007AFF;
+  /* Accessible text versions of semantic colors (meet 4.5:1 on --bg) */
+  --ok-text:#1A7A30; --warn-text:#C0000A; --ok-bg:rgba(52,199,89,.13); --warn-bg:rgba(255,59,48,.10);
+  --lime-text:#3E7200;
   --shadow:0 1px 3px rgba(0,0,0,.08),0 4px 16px rgba(0,0,0,.06);
   --shadow-sm:0 1px 2px rgba(0,0,0,.07),0 2px 8px rgba(0,0,0,.05);
   --shadow-card:0 1px 1px rgba(0,0,0,.06);
@@ -54,6 +58,7 @@
   --line:rgba(84,84,88,.65); --hair:rgba(84,84,88,.3);
   --ink:#2C2C2E; --on-ink:#F2F2F7;
   --ok:#30D158; --warn:#FF453A; --blue:#0A84FF;
+  --ok-text:#30D158; --warn-text:#FF453A; --ok-bg:rgba(48,209,88,.15); --warn-bg:rgba(255,69,58,.14);
   --shadow:0 2px 8px rgba(0,0,0,.4),0 8px 24px rgba(0,0,0,.28);
   --shadow-sm:0 1px 3px rgba(0,0,0,.3),0 2px 8px rgba(0,0,0,.2);
   --shadow-card:0 1px 2px rgba(0,0,0,.25);
@@ -87,7 +92,7 @@ button{cursor:pointer}
 .brand .bt span{font-size:13px;color:var(--muted);font-weight:400}
 .tttext{display:none}
 .ttools{margin-left:auto;display:flex;gap:6px}
-.iconbtn{width:36px;height:36px;border-radius:50%;background:var(--panel);display:grid;place-items:center;color:var(--text);border:none;transition:transform .12s,opacity .12s}
+.iconbtn{width:44px;height:44px;border-radius:50%;background:var(--panel);display:grid;place-items:center;color:var(--text);border:none;transition:transform .12s,opacity .12s}
 .iconbtn:active{transform:scale(.9);opacity:.7}
 [data-theme="light"] .i-sun{display:none}
 [data-theme="dark"] .i-moon{display:none}
@@ -218,7 +223,7 @@ button{cursor:pointer}
 .mp.rir{background:color-mix(in srgb,var(--forest) 12%,var(--panel));color:var(--forest)}
 [data-theme="dark"] .mp.rir{background:color-mix(in srgb,var(--lime) 12%,var(--panel));color:var(--lime)}
 .exnote{font-size:12px;color:var(--muted);margin:7px 0 0 24px;font-weight:400;line-height:1.5}
-.exchk{flex:0 0 auto;width:30px;height:30px;border-radius:50%;border:1.5px solid var(--line);background:transparent;display:grid;place-items:center;color:transparent;transition:.18s;margin-top:1px}
+.exchk{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:transparent;display:grid;place-items:center;color:transparent;transition:.18s;margin-top:1px}
 .exchk i{font-size:15px}
 .exchk:active{transform:scale(.82)}
 .exrow.done{background:color-mix(in srgb,var(--lime) 8%,var(--card))}
@@ -355,10 +360,13 @@ button{cursor:pointer}
 .verdict.warn .vico{background:var(--warn)}
 .verdict .vd{font-size:13px;color:var(--muted);font-weight:400;margin-top:7px;line-height:1.55}
 .dgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
-.dcl{background:var(--card);border-radius:var(--r-sm);padding:12px;box-shadow:var(--shadow-card)}
-.dcl .l{font-size:11px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.04em}
-.dcl .v{font-size:17px;font-weight:700;margin-top:3px}
-.dcl .v.up{color:var(--warn)}.dcl .v.good{color:var(--ok)}
+.dcl{background:var(--card);border-radius:var(--r-sm);padding:12px 12px 12px 14px;box-shadow:var(--shadow-card);border-left:3px solid var(--line)}
+.dcl.dcl-good{border-left-color:var(--ok);background:var(--ok-bg)}
+.dcl.dcl-up{border-left-color:var(--warn);background:var(--warn-bg)}
+.dcl .l{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.dcl .v{font-size:18px;font-weight:700;margin-top:4px;display:flex;align-items:baseline;gap:3px}
+.dcl .v.up{color:var(--warn-text)}.dcl .v.good{color:var(--ok-text)}
+.dcl .v.up::before{content:'↑ '}.dcl .v.good::before{content:'↓ '}
 #dHist,#sHist{display:flex;flex-direction:column;gap:1px;background:var(--line);border-radius:var(--r-sm);overflow:hidden}
 .hist{display:flex;align-items:center;gap:12px;background:var(--card);padding:12px 14px}
 .hist:first-child{border-radius:var(--r-sm) var(--r-sm) 0 0}
@@ -367,7 +375,7 @@ button{cursor:pointer}
 .hist .hm{flex:1;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
 .hist .hm span{font-size:12px;color:var(--muted);font-weight:500}
 .hist .hm b{color:var(--text);font-weight:600}
-.hist .del{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:none;background:var(--panel);color:var(--muted);font-size:15px}
+.hist .del{flex:0 0 auto;width:44px;height:44px;border-radius:50%;border:none;background:var(--panel);color:var(--muted);font-size:15px;display:grid;place-items:center}
 .addbtn{width:100%;border:none;background:var(--panel);color:var(--blue);font-weight:600;font-size:14px;padding:14px;border-radius:var(--r-sm)}
 .addbtn:active{opacity:.7}
 
@@ -400,7 +408,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .stepper .sl{font-size:15px;font-weight:500}
 .stepper .sl small{display:block;font-size:12px;color:var(--muted);font-weight:400}
 .stepctl{display:flex;align-items:center;gap:8px}
-.stepctl button{width:32px;height:32px;border-radius:50%;border:none;background:var(--panel);color:var(--text);font-size:20px;font-weight:600;display:grid;place-items:center;line-height:1}
+.stepctl button{width:44px;height:44px;border-radius:50%;border:none;background:var(--panel);color:var(--text);font-size:20px;font-weight:600;display:grid;place-items:center;line-height:1}
 .stepctl input{width:64px;text-align:center;border:1px solid var(--line);background:var(--bg);color:var(--text);font-size:17px;font-weight:600;padding:7px 4px;border-radius:10px}
 .kcalrow{display:flex;justify-content:space-between;align-items:center;margin-top:14px;background:var(--ink);color:var(--on-ink);border-radius:12px;padding:13px 16px}
 .kcalrow .kn{font-size:22px;font-weight:700;color:var(--lime)}
@@ -592,6 +600,16 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .macro-ring .ringwrap .rt b{font-size:13px;font-weight:700;line-height:1;color:var(--text)}
 .macro-ring .ringwrap .rt small{font-size:8px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.03em;margin-top:2px}
 .macro-ring .rl{font-size:11px;font-weight:600;color:var(--muted)}
+
+/* ── Accessibility: lime text overrides for light mode ── */
+:root .kcalrow .kn{color:var(--lime-text)}
+:root .actcard-label{color:var(--lime-text)}
+:root .excard-tag.rir{color:var(--lime-text);background:color-mix(in srgb,var(--lime) 16%,var(--panel))}
+:root .phase .pt{color:var(--lime-text)}
+:root .eq b{color:var(--lime-text)}
+[data-theme="dark"] .kcalrow .kn{color:var(--lime)}
+[data-theme="dark"] .actcard-label{color:var(--lime)}
+[data-theme="dark"] .excard-tag.rir{color:var(--lime);background:color-mix(in srgb,var(--lime) 12%,var(--panel))}
 
 /* ── Enhanced workout hero ── */
 .wday-head{font-size:32px;font-weight:800;letter-spacing:-.04em;color:#fff;line-height:1.05;margin-top:6px}
@@ -1315,7 +1333,7 @@ function renderVerdict(){
   if(dF<-0.15){if(dM!=null&&dM<-0.4){cls='warn';ico='!';title='Fat down, muscle dropped';desc='Lost '+Math.abs(dF).toFixed(1)+'kg fat but '+Math.abs(dM).toFixed(1)+'kg muscle. Ease the deficit ~150 kcal, push protein, keep loads heavy.';}else{cls='good';ico='\u2713';title='Clean fat loss';desc='Down '+Math.abs(dF).toFixed(1)+'kg fat with lean held'+(dM!=null?' ('+(dM>=0?'+':'')+dM.toFixed(1)+'kg muscle)':'')+'. Exactly the goal.'+(rate<-0.9?' Pace is quick, consider +150 kcal.':'');}}
   else if(dF>0.15){if(dM!=null&&dM>=dF){cls='good';ico='\u2713';title='Lean gain';desc='Muscle up '+dM.toFixed(1)+'kg, fat up '+dF.toFixed(1)+'kg. Good for a bulk, tighten if you meant to cut.';}else{cls='warn';ico='!';title='Fat up this month';desc='Fat rose '+dF.toFixed(1)+'kg. Recheck intake logging and steps before the next scan.';}}
   v.className='verdict '+cls;v.innerHTML='<div class="vh"><span class="vico">'+ico+'</span>'+title+'</div><div class="vd">'+desc+'</div>';
-  function sg(x){return(x>0?'+':'')+x.toFixed(1);}function cell(l,val,c){return '<div class="dcl"><div class="l">'+l+'</div><div class="v '+c+'">'+val+'</div></div>';}
+  function sg(x){return(x>0?'+':'')+x.toFixed(1);}function cell(l,val,c){return '<div class="dcl dcl-'+c+'"><div class="l">'+l+'</div><div class="v '+c+'">'+val+'</div></div>';}
   dg.innerHTML=cell('Weight \u0394',sg(dW)+' kg',dW<0?'good':'up')+cell('Fat mass \u0394',sg(dF)+' kg',dF<0?'good':'up')+(dM!=null?cell('Muscle \u0394',sg(dM)+' kg',dM>=0?'good':'up'):'')+cell('Rate',sg(rate)+' kg/wk',rate<0?'good':'up');
 }
 function renderBreakdown(){var L=STATE.scans[STATE.scans.length-1];$('bDate').textContent=fullD(L.date);function tile(k,val){return '<div class="tile soft"><div class="ti">'+k+'</div><div class="tv">'+val+'<small> kg</small></div></div>';}$('breakdown').innerHTML=tile('Fat mass',fatMass(L).toFixed(1))+tile('Lean / FFM',ffm(L).toFixed(1))+(L.muscle!=null?tile('Muscle',L.muscle.toFixed(1)):'')+tile('Target',tgtW().toFixed(1));}
