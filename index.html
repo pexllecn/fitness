@@ -1457,6 +1457,12 @@ function syncPull(onDone){
 document.addEventListener('click',function(e){if(e.target.closest('[data-v="you"]'))setTimeout(syncLoadInputs,50);});
 syncLoadInputs();
 
+/* Auto-pull on page load if credentials are set */
+(function(){
+  var c=syncGetCreds();
+  if(c.key&&c.bin){syncPull();}
+})();
+
 /* ── Pull-to-refresh ── */
 (function(){
   var PTR_THRESHOLD=72;
