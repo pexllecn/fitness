@@ -1400,10 +1400,10 @@ function syncGetCreds(){
   return{key:k,bin:b};
 }
 
-function syncPush(){
+function syncPush(silent){
   var c=syncGetCreds();
-  if(!c.key){syncSetStatus('⚠ Paste your JSONBin Master Key first.');return;}
-  syncSetStatus('Pushing…');
+  if(!c.key){if(!silent)syncSetStatus('⚠ Paste your JSONBin Master Key first.');return;}
+  if(!silent)syncSetStatus('Pushing…');
   var method=c.bin?'PUT':'POST';
   var url=c.bin?'https://api.jsonbin.io/v3/b/'+c.bin:'https://api.jsonbin.io/v3/b';
   var headers={'Content-Type':'application/json','X-Master-Key':c.key};
@@ -1415,10 +1415,22 @@ function syncPush(){
       if(binId){localStorage.setItem(SYNC_BIN_LS,binId);var bi=document.getElementById('syncBin');if(bi)bi.value=binId;}
       localStorage.setItem(SYNC_KEY_LS,c.key);
       var t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
-      syncSetStatus('✓ Pushed at '+t+'. Copy the Bin ID to your other device.');
+      syncSetStatus('✓ Synced at '+t);
     })
-    .catch(function(err){syncSetStatus('✗ Push failed: '+err.message+'. Check your key.');});
+    .catch(function(err){if(!silent)syncSetStatus('✗ Push failed: '+err.message+'. Check your key.');});
 }
+
+/* Auto-push on every saveState (debounced 2s) */
+var _autoSyncTimer=null;
+var _origSaveState=saveState;
+saveState=function(){
+  _origSaveState();
+  var c=syncGetCreds();
+  if(c.key&&c.bin){
+    clearTimeout(_autoSyncTimer);
+    _autoSyncTimer=setTimeout(function(){syncPush(true);},2000);
+  }
+};
 
 function syncPull(){
   var c=syncGetCreds();
