@@ -1432,9 +1432,9 @@ saveState=function(){
   }
 };
 
-function syncPull(){
+function syncPull(onDone){
   var c=syncGetCreds();
-  if(!c.key||!c.bin){syncSetStatus('⚠ Need both Master Key and Bin ID to pull.');return;}
+  if(!c.key||!c.bin){syncSetStatus('⚠ Need both Master Key and Bin ID to pull.');if(onDone)onDone(false);return;}
   syncSetStatus('Pulling…');
   fetch('https://api.jsonbin.io/v3/b/'+c.bin+'/latest',{headers:{'X-Master-Key':c.key}})
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
@@ -1449,8 +1449,9 @@ function syncPull(){
       var t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
       syncSetStatus('✓ Pulled at '+t+'. Data loaded from cloud.');
       toast('Synced from cloud');
+      if(onDone)onDone(true);
     })
-    .catch(function(err){syncSetStatus('✗ Pull failed: '+err.message);});
+    .catch(function(err){syncSetStatus('✗ Pull failed: '+err.message);if(onDone)onDone(false);});
 }
 
 document.addEventListener('click',function(e){if(e.target.closest('[data-v="you"]'))setTimeout(syncLoadInputs,50);});
@@ -1502,8 +1503,10 @@ syncLoadInputs();
       label.textContent='Syncing…';
       var c=syncGetCreds();
       if(c.key&&c.bin){
-        syncPull();
-        setTimeout(function(){reset();},3500);
+        syncPull(function(ok){
+          label.textContent=ok?'✓ Synced':'✗ Sync failed';
+          setTimeout(reset,1000);
+        });
       } else {
         bootRender();
         label.textContent='Refreshed';
