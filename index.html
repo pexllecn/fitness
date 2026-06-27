@@ -848,28 +848,19 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
         <div class="proj-note">Lands almost perfectly around 12% body fat.</div>
       </div>
     </div>
-    <div class="block"><div class="shead"><h2>Progress</h2><span class="tagn">weigh-ins &amp; scans</span></div>
+    <div class="block"><div class="shead"><h2>Monthly scans</h2><span class="tagn">body composition</span></div>
       <div class="trackwrap">
-        <div class="seg" id="seg"><button data-pane="daily" class="on">Daily weigh-in</button><button data-pane="monthly">Monthly scan</button></div>
-        <div class="pane on" id="paneDaily"><div class="prog-cols"><div class="prog-main">
-          <div class="tilegrid g3"><div class="tile soft"><div class="ti">7-day avg</div><div class="tv" id="dAvg" style="font-size:23px">&ndash;</div></div><div class="tile soft"><div class="ti">Trend</div><div class="tv" id="dTrend" style="font-size:23px">&ndash;</div></div><div class="tile soft"><div class="ti">Goal ETA</div><div class="tv" id="dEta" style="font-size:23px">&ndash;</div></div></div>
-          <div class="chartcard"><div id="dChart"></div></div>
-          </div><div class="prog-side">
-          <button class="addbtn" id="dAdd">+ Add a daily weigh-in</button>
-          <div class="form" id="dForm"><div class="frow"><div class="field"><label>Date</label><input type="date" id="dDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="dWeight" placeholder="93.8"></div></div><div class="calc">Weigh first thing, after the toilet, before food.</div><div class="formbtns"><button class="ghost" id="dCancel">Cancel</button><button class="save" id="dSave">Save</button></div></div>
-          <div class="shead"><h2 class="sm">Recent days</h2><span class="tagn" id="dCount"></span></div><div id="dHist"></div></div></div>
-        </div>
-        <div class="pane" id="paneMonthly"><div class="prog-cols"><div class="prog-main">
+        <div class="prog-cols"><div class="prog-main">
           <div class="mchips" id="mchips"><button class="pill active" data-m="weight">Weight</button><button class="pill" data-m="bf">Fat %</button><button class="pill" data-m="fat">Fat mass</button><button class="pill" data-m="muscle">Muscle</button></div>
           <div class="chartcard"><div id="mChart"></div></div>
           <div class="shead"><h2 class="sm">This month's read</h2><span class="tagn" id="vHint"></span></div>
           <div id="verdict" class="verdict"></div><div class="dgrid" id="dgrid"></div>
-          </div><div class="prog-side">
+        </div><div class="prog-side">
           <div class="shead"><h2 class="sm">Latest breakdown</h2><span class="tagn" id="bDate"></span></div><div class="tilegrid g2" id="breakdown"></div>
           <button class="addbtn" id="sAdd">+ Add this month's scan</button>
           <div class="form" id="sForm"><div class="frow"><div class="field"><label>Date</label><input type="date" id="sDate"></div><div class="field"><label>Weight (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sWeight" placeholder="92.6"></div></div><div class="frow"><div class="field"><label>Body fat %</label><input type="number" step="0.1" inputmode="decimal" id="sBf" placeholder="19.2"></div><div class="field"><label>Muscle (kg)</label><input type="number" step="0.1" inputmode="decimal" id="sMus" placeholder="opt."></div></div><div class="calc">Enter weight and body fat, the rest computes.</div><div class="formbtns"><button class="ghost" id="sCancel">Cancel</button><button class="save" id="sSave">Analyse &amp; save</button></div></div>
-          <div class="shead"><h2 class="sm">History</h2><span class="tagn" id="sCount"></span></div><div id="sHist"></div></div></div>
-        </div>
+          <div class="shead"><h2 class="sm">History</h2><span class="tagn" id="sCount"></span></div><div id="sHist"></div>
+        </div></div>
       </div>
     </div>
   </section>
@@ -1285,31 +1276,14 @@ function shortD(d){var p=d.split('-');return MM[(+p[1])-1]+" '"+p[0].slice(2);}
 function fullD(d){var p=d.split('-');return(+p[2])+' '+MM[(+p[1])-1]+' '+p[0];}
 function wksBet(a,b){return(new Date(b)-new Date(a))/6048e5;}
 function renderProgress(){
-  byDate(STATE.scans);byDate(STATE.daily);
+  byDate(STATE.scans);
   var L=STATE.scans[STATE.scans.length-1];
   $('pgBf').textContent=L.bf.toFixed(1)+'%';$('pgWnow').textContent=L.weight.toFixed(1);
   var tw=tgtW(),toLose=L.weight-tw;
   $('pgToGo').textContent='~'+(toLose>0.05?toLose.toFixed(1):'0')+'kg of fat to shift · about 0.5kg a week.';
   var sf=fatMass(STATE.scans[0]),tf=tw*TBF/100,prog=(sf-fatMass(L))/(sf-tf)*100;prog=Math.max(0,Math.min(100,prog));
   $('pgBar').style.width=prog.toFixed(0)+'%';var pr=$('pgRing');pr.style.strokeDasharray=RC;pr.style.strokeDashoffset=RC*(1-prog/100);
-  renderDaily();drawM(curM);renderVerdict();renderBreakdown();renderSHist();
-}
-function trend(){
-  if(STATE.daily.length<2)return null;
-  var t0=new Date(STATE.daily[0].date).getTime();
-  var xs=STATE.daily.map(function(e){return(new Date(e.date).getTime()-t0)/864e5;}),ys=STATE.daily.map(function(e){return e.weight;});
-  var n=xs.length,sx=0,sy=0,sxy=0,sxx=0,i;for(i=0;i<n;i++){sx+=xs[i];sy+=ys[i];sxy+=xs[i]*ys[i];sxx+=xs[i]*xs[i];}
-  var den=n*sxx-sx*sx;if(Math.abs(den)<1e-9)return null;return((n*sxy-sx*sy)/den)*7;
-}
-function renderDaily(){
-  byDate(STATE.daily);var n=STATE.daily.length;
-  var last7=STATE.daily.slice(-7),avg=last7.length?last7.reduce(function(a,e){return a+e.weight;},0)/last7.length:0;
-  $('dAvg').innerHTML=n?avg.toFixed(1)+'<small> kg</small>':'&ndash;';
-  var tr=trend(),te=$('dTrend');if(tr===null)te.textContent='\u2014';else te.innerHTML=(tr>0?'+':'')+tr.toFixed(2)+'<small> kg</small>';
-  var eta=$('dEta');if(tr!==null&&tr<-0.05){var wk=(avg-tgtW())/Math.abs(tr);eta.innerHTML=Math.max(0,Math.round(wk))+'<small> wks</small>';}else if(tr!==null&&tr>0.05){eta.innerHTML='<small style="font-size:13px">trending up</small>';}else eta.innerHTML='<small style="font-size:13px">log ~2 wks</small>';
-  $('dCount').textContent=n+(n===1?' day':' days');
-  lineChart('dChart',STATE.daily.map(function(e){return e.weight;}),STATE.daily.map(function(e){return shortD(e.date);}),true);
-  $('dHist').innerHTML=STATE.daily.slice().reverse().map(function(e,ri){var idx=n-1-ri;return '<div class="hist"><div class="hd"><b>'+shortD(e.date)+'</b><small>'+e.date.slice(8)+'/'+e.date.slice(5,7)+'</small></div><div class="hm"><span><b>'+e.weight.toFixed(1)+'</b> kg</span></div><button class="del" data-dd="'+idx+'">&times;</button></div>';}).join('')+(n?'<button class="reset" id="dReset">Clear daily log</button>':'');
+  drawM(curM);renderVerdict();renderBreakdown();renderSHist();
 }
 function drawM(m){curM=m;var c=document.querySelectorAll('#mchips .pill');for(var i=0;i<c.length;i++)c[i].classList.toggle('active',c[i].getAttribute('data-m')===m);var vals=STATE.scans.map(function(s){return m==='weight'?s.weight:m==='bf'?s.bf:m==='fat'?fatMass(s):(s.muscle!=null?s.muscle:null);});lineChart('mChart',vals,STATE.scans.map(function(s){return shortD(s.date);}),false);}
 function lineChart(id,vals,labels,avgLine){
@@ -1357,13 +1331,10 @@ document.addEventListener('click',function(e){
   var del=e.target.closest('[data-del]');if(del){STATE.meals[STATE.mode].splice(+del.getAttribute('data-del'),1);saveState();renderMeals();return;}
   var macb=e.target.closest('[data-mac]');if(macb&&macb.hasAttribute('data-d')){var k=macb.getAttribute('data-mac'),d=+macb.getAttribute('data-d');if(k==='m')STATE.maint=Math.max(1500,STATE.maint+d);else STATE.targets[setMode][k]=Math.max(0,STATE.targets[setMode][k]+d);saveState();applyTargets();return;}
   if(e.target.id==='macReset'){STATE.targets=clone(DEFAULT_TARGETS);STATE.maint=2900;saveState();applyTargets();toast('Reset to plan');return;}
-  var sg2=e.target.closest('#seg button');if(sg2){var bb=document.querySelectorAll('#seg button');for(var s=0;s<bb.length;s++)bb[s].classList.remove('on');sg2.classList.add('on');$('paneDaily').classList.toggle('on',sg2.getAttribute('data-pane')==='daily');$('paneMonthly').classList.toggle('on',sg2.getAttribute('data-pane')==='monthly');return;}
   var mc=e.target.closest('#mchips .pill');if(mc){drawM(mc.getAttribute('data-m'));return;}
   var ts=e.target.closest('#themeSeg button');if(ts){applyTheme(ts.getAttribute('data-t'),true);return;}
   var sw=e.target.closest('.sw');if(sw){applyAccent(+sw.getAttribute('data-acc'),true);return;}
-  if(e.target.id==='dReset'){STATE.daily=[];saveState();renderProgress();return;}
   if(e.target.id==='sReset'){STATE.scans=clone(SEED_S);saveState();renderProgress();return;}
-  var dd2=e.target.closest('[data-dd]');if(dd2){STATE.daily.splice(+dd2.getAttribute('data-dd'),1);saveState();renderProgress();return;}
   var sd=e.target.closest('[data-sd]');if(sd){if(STATE.scans.length>1){STATE.scans.splice(+sd.getAttribute('data-sd'),1);saveState();renderProgress();}return;}
   if(e.target.id==='copyBackup'){var code=btoa(unescape(encodeURIComponent(JSON.stringify(STATE))));var ta=$('restoreBox');ta.value=code;ta.select();try{document.execCommand('copy');}catch(_){}if(navigator.clipboard)navigator.clipboard.writeText(code).catch(function(){});toast('Backup code copied');return;}
   if(e.target.id==='restoreBtn'){try{var o=JSON.parse(decodeURIComponent(escape(atob($('restoreBox').value.trim()))));localStorage.setItem(KEY,JSON.stringify(o));loadState();bootRender();toast('Data restored');}catch(err){toast('That code did not read');}return;}
@@ -1381,10 +1352,7 @@ $('tgl').addEventListener('click',function(){applyTheme(eff(STATE.theme)==='dark
 $('tglD').addEventListener('click',function(){applyTheme(eff(STATE.theme)==='dark'?'light':'dark',true);});
 
 /* weigh-in + scan forms */
-var dForm=$('dForm');
-$('dAdd').addEventListener('click',function(){dForm.classList.toggle('open');if(dForm.classList.contains('open'))$('dDate').value=todayISO();});
-$('dCancel').addEventListener('click',function(){dForm.classList.remove('open');});
-$('dSave').addEventListener('click',function(){var dt=$('dDate').value,w=parseFloat($('dWeight').value);if(!dt||!(w>0))return;STATE.daily=STATE.daily.filter(function(x){return x.date!==dt;});STATE.daily.push({date:dt,weight:w});saveState();dForm.classList.remove('open');$('dWeight').value='';renderProgress();});
+
 var sForm=$('sForm');
 $('sAdd').addEventListener('click',function(){sForm.classList.toggle('open');if(sForm.classList.contains('open'))$('sDate').value=todayISO();});
 $('sCancel').addEventListener('click',function(){sForm.classList.remove('open');});
