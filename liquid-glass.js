@@ -249,7 +249,7 @@
       startAnim();
     };
 
-    var startX = 0, startPillX = 0, pointerId = null;
+    var startX = 0, startPillX = 0, pointerId = null, hasDragged = false;
 
     tabbar.addEventListener("pointerdown", function (e) {
       if (!e.target.closest("[data-v]") && !e.target.closest("#tabPill")) return;
@@ -257,6 +257,7 @@
       startX = e.clientX;
       startPillX = sp.x.value;
       isDragging = true;
+      hasDragged = false;
 
       sp.sc.setTarget(1.25);
       tabRefractSpring.setTarget(1.0);
@@ -276,6 +277,7 @@
     tabbar.addEventListener("pointermove", function (e) {
       if (!isDragging || e.pointerId !== pointerId) return;
       var dx = e.clientX - startX;
+      if (Math.abs(dx) > 6) hasDragged = true;
       var raw = startPillX + dx;
       var maxX = (tabs.length - 1) * itemWidth;
       sp.x.value = Math.max(0, Math.min(maxX, raw));
@@ -289,8 +291,17 @@
       isDragging = false;
       pointerId  = null;
 
-      var nearest = Math.round(sp.x.value / itemWidth);
-      nearest = Math.max(0, Math.min(tabs.length - 1, nearest));
+      /* For a simple tap, use activeIdx (set on pointerdown to tapped tab).
+         setPointerCapture redirects click events to tabbar so we can't rely
+         on the document click handler finding data-v — use nearest only when
+         the user actually dragged. */
+      var nearest;
+      if (hasDragged && itemWidth > 0) {
+        nearest = Math.round(sp.x.value / itemWidth);
+        nearest = Math.max(0, Math.min(tabs.length - 1, nearest));
+      } else {
+        nearest = activeIdx;
+      }
       snapToIndex(nearest);
 
       var activating = tabs[nearest];
