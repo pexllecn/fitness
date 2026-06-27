@@ -885,6 +885,22 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
         <textarea id="restoreBox" placeholder="Paste a backup code here, then tap Restore" style="margin-top:10px"></textarea>
         <div class="addrow" style="margin-top:10px"><button class="btn ghost" id="restoreBtn">Restore</button><button class="reset" id="wipeBtn" style="align-self:center">Reset all data</button></div>
       </div>
+      <div class="card backup">
+        <div class="ch"><i class="hgi-stroke hgi-cloud-upload ic"></i>Cloud sync</div>
+        <p style="color:var(--muted);margin-bottom:12px">Push your data to the cloud and pull it on any device. Uses <b>JSONBin</b> — free, no account needed on this end.</p>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:12px">
+          <input id="syncKey" placeholder="JSONBin Master Key (starts with $2b$…)" style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:14px;width:100%;box-sizing:border-box" />
+          <input id="syncBin" placeholder="Bin ID (auto-filled after first Push)" style="background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:10px 12px;color:var(--text);font-size:14px;width:100%;box-sizing:border-box" />
+        </div>
+        <div class="addrow">
+          <button class="btn ghost" id="syncPush">☁ Push (save to cloud)</button>
+          <button class="btn ghost" id="syncPull">⬇ Pull (load from cloud)</button>
+        </div>
+        <p id="syncStatus" style="font-size:12px;color:var(--muted);margin-top:8px"></p>
+        <details style="margin-top:10px"><summary style="font-size:12px;color:var(--muted);cursor:pointer">How to get a free JSONBin key</summary>
+          <p style="font-size:12px;color:var(--muted);margin-top:6px;line-height:1.6">1. Go to <b>jsonbin.io</b> and sign up free.<br>2. Go to API Keys → click <b>+ CREATE KEY</b> → copy the Master Key.<br>3. Paste it above and tap Push. The Bin ID is auto-saved.<br>4. On your other device, enter the same key + Bin ID and tap Pull.</p>
+        </details>
+      </div>
       </div>
     </div></div>
     <div class="block"><div class="foot">
@@ -1329,6 +1345,8 @@ document.addEventListener('click',function(e){
   if(e.target.id==='copyBackup'){var code=btoa(unescape(encodeURIComponent(JSON.stringify(STATE))));var ta=$('restoreBox');ta.value=code;ta.select();try{document.execCommand('copy');}catch(_){}if(navigator.clipboard)navigator.clipboard.writeText(code).catch(function(){});toast('Backup code copied');return;}
   if(e.target.id==='restoreBtn'){try{var o=JSON.parse(decodeURIComponent(escape(atob($('restoreBox').value.trim()))));localStorage.setItem(KEY,JSON.stringify(o));loadState();bootRender();toast('Data restored');}catch(err){toast('That code did not read');}return;}
   if(e.target.id==='wipeBtn'){if(confirm('Reset all data to defaults? This clears your logs and edits.')){localStorage.removeItem(KEY);STATE=defState();bootRender();toast('All data reset');}return;}
+  if(e.target.id==='syncPush'){syncPush();return;}
+  if(e.target.id==='syncPull'){syncPull();return;}
 });
 document.addEventListener('input',function(e){
   var t=e.target;
@@ -1360,6 +1378,70 @@ loadState();bootRender();
 syncPills();
 requestAnimationFrame(function(){requestAnimationFrame(function(){document.body.classList.add('nav-anim');});});
 window.addEventListener('resize',syncPills);
+
+/* ── Cloud Sync (JSONBin) ── */
+var SYNC_KEY_LS='tcSync-key';
+var SYNC_BIN_LS='tcSync-bin';
+
+function syncSetStatus(msg){var el=document.getElementById('syncStatus');if(el)el.textContent=msg;}
+
+function syncLoadInputs(){
+  var k=localStorage.getItem(SYNC_KEY_LS)||'';
+  var b=localStorage.getItem(SYNC_BIN_LS)||'';
+  var ki=document.getElementById('syncKey');var bi=document.getElementById('syncBin');
+  if(ki&&k)ki.value=k;
+  if(bi&&b)bi.value=b;
+}
+
+function syncGetCreds(){
+  var ki=document.getElementById('syncKey');var bi=document.getElementById('syncBin');
+  var k=(ki?ki.value.trim():'')||localStorage.getItem(SYNC_KEY_LS)||'';
+  var b=(bi?bi.value.trim():'')||localStorage.getItem(SYNC_BIN_LS)||'';
+  return{key:k,bin:b};
+}
+
+function syncPush(){
+  var c=syncGetCreds();
+  if(!c.key){syncSetStatus('⚠ Paste your JSONBin Master Key first.');return;}
+  syncSetStatus('Pushing…');
+  var method=c.bin?'PUT':'POST';
+  var url=c.bin?'https://api.jsonbin.io/v3/b/'+c.bin:'https://api.jsonbin.io/v3/b';
+  var headers={'Content-Type':'application/json','X-Master-Key':c.key};
+  if(!c.bin)headers['X-Bin-Name']='kayfitness';
+  fetch(url,{method:method,headers:headers,body:JSON.stringify({record:STATE})})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(function(d){
+      var binId=d.metadata&&d.metadata.id?d.metadata.id:c.bin;
+      if(binId){localStorage.setItem(SYNC_BIN_LS,binId);var bi=document.getElementById('syncBin');if(bi)bi.value=binId;}
+      localStorage.setItem(SYNC_KEY_LS,c.key);
+      var t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      syncSetStatus('✓ Pushed at '+t+'. Copy the Bin ID to your other device.');
+    })
+    .catch(function(err){syncSetStatus('✗ Push failed: '+err.message+'. Check your key.');});
+}
+
+function syncPull(){
+  var c=syncGetCreds();
+  if(!c.key||!c.bin){syncSetStatus('⚠ Need both Master Key and Bin ID to pull.');return;}
+  syncSetStatus('Pulling…');
+  fetch('https://api.jsonbin.io/v3/b/'+c.bin+'/latest',{headers:{'X-Master-Key':c.key}})
+    .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
+    .then(function(d){
+      var o=d.record;
+      if(!o||!o.targets)throw new Error('No valid data in bin');
+      localStorage.setItem(SYNC_KEY_LS,c.key);
+      localStorage.setItem(SYNC_BIN_LS,c.bin);
+      localStorage.setItem(KEY,JSON.stringify(o));
+      loadState();bootRender();
+      var t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
+      syncSetStatus('✓ Pulled at '+t+'. Data loaded from cloud.');
+      toast('Synced from cloud');
+    })
+    .catch(function(err){syncSetStatus('✗ Pull failed: '+err.message);});
+}
+
+document.addEventListener('click',function(e){if(e.target.closest('[data-v="you"]'))setTimeout(syncLoadInputs,50);});
+syncLoadInputs();
 </script>
 <script src="liquid-glass.js"></script>
 </body>
