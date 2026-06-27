@@ -1236,6 +1236,7 @@ function showView(v){
   window.scrollTo({top:0,behavior:'smooth'});
   if(v==='progress'||v==='dash')renderProgress();
   syncPills();
+  localStorage.setItem('tcView',v);
 }
 
 /* ---------- theme + accent ---------- */
@@ -1357,6 +1358,8 @@ function bootRender(){
   applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);
   initToday();renderDayTabs();renderWorkout();renderCalendar();
   applyTargets();renderMeals();renderProgress();
+  var savedView=localStorage.getItem('tcView');
+  if(savedView&&$('v-'+savedView))showView(savedView);
 }
 loadState();bootRender();
 syncPills();
