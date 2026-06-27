@@ -1445,7 +1445,7 @@ function syncPull(onDone){
       localStorage.setItem(SYNC_KEY_LS,c.key);
       localStorage.setItem(SYNC_BIN_LS,c.bin);
       localStorage.setItem(KEY,JSON.stringify(o));
-      loadState();bootRender();
+      loadState();bootRender();syncPills();syncLoadInputs();
       var t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
       syncSetStatus('✓ Pulled at '+t+'. Data loaded from cloud.');
       toast('Synced from cloud');
