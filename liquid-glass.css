@@ -1,11 +1,8 @@
 /*
- * Liquid Glass Tab Bar + Pill
- * Settings mirror the Interactive Magnifying Glass from winaviation/liquid-glass-demo
- * (bezelWidth=30, glassThickness=150, refractionScale=1.5, specularOpacity=1, blur=0.5)
+ * Liquid Glass Tab Bar (track) + Drag Dock Pill
  *
- * Key difference from frosted glass: NO heavy blur() in backdrop-filter.
- * The SVG displacement map provides the visual distortion; the blur inside the
- * SVG filter is only stdDeviation=0.5 (matching the magnifying glass demo exactly).
+ * Track: Interactive Magnifying Glass settings (bezelWidth=30, blur=1.0, no CSS blur)
+ * Pill: Drag Dock from Pebble & Void (bezelWidth=26, blur=0.8, velocity squish springs)
  */
 
 .tabbar {
@@ -23,15 +20,36 @@
   border-radius: 33px;
   z-index: 50;
   overflow: hidden;
-  background: transparent;
-  border: none;
-  /* Outer shadow — matches glass-inner at rest in the magnifying glass demo */
+  /* iOS Safari: backdrop-filter on the element itself works; child doesn't due to overflow:hidden */
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.65);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.20), 0 1px 4px rgba(0, 0, 0, 0.10);
+}
+
+[data-theme="dark"] .tabbar {
+  background: rgba(18, 18, 22, 0.30);
+  border-color: rgba(255,255,255,0.12);
+  -webkit-backdrop-filter: blur(24px) saturate(160%) brightness(0.9);
+  backdrop-filter: blur(24px) saturate(160%) brightness(0.9);
+}
+
+/* Chrome: SVG refraction handles the effect — disable the CSS blur to avoid doubling */
+.tabbar.lg-backdrop {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+[data-theme="dark"] .tabbar.lg-backdrop {
+  background: rgba(18, 18, 22, 0.18);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
 }
 
 .tabbar::before { display: none; }
 
-/* Hidden SVG filter element */
 .tg-filter-svg {
   position: absolute;
   width: 0; height: 0;
@@ -39,31 +57,31 @@
   pointer-events: none;
 }
 
-/*
- * .tg-glass — the refraction layer
- *
- * Chrome: backdrop-filter url() with NO additional blur — the displacement
- * map distorts the background, matching the magnifying glass visual.
- * Very slight white tint (same as the glass clone in the demo).
- *
- * Fallback: simple backdrop blur (Safari / Firefox).
- */
+/* Glass layer — frosted by default (iOS), SVG refraction on Chrome */
 .tg-glass {
   position: absolute;
   inset: 0;
   border-radius: inherit;
   z-index: 0;
   pointer-events: none;
-  /* Inset glow — matches glass-inner box-shadow at rest in the demo */
+  -webkit-backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
+  backdrop-filter: blur(24px) saturate(180%) brightness(1.05);
+  background: rgba(255, 255, 255, 0.18);
   box-shadow:
     inset 0 1.6px 16px rgba(0, 0, 0, 0.09),
     inset 0 -1.6px 16px rgba(255, 255, 255, 0.07);
 }
 
+[data-theme="dark"] .tg-glass {
+  background: rgba(28, 28, 34, 0.35);
+  -webkit-backdrop-filter: blur(24px) saturate(160%) brightness(0.9);
+  backdrop-filter: blur(24px) saturate(160%) brightness(0.9);
+}
+
+/* Chrome: override with SVG displacement (refractive, not frosted) */
 .tabbar.lg-backdrop .tg-glass {
-  /* SVG displacement only — no blur(), that's what makes it refractive not frosted */
-  backdrop-filter: url(#tabbarGlassFilter);
   -webkit-backdrop-filter: url(#tabbarGlassFilter);
+  backdrop-filter: url(#tabbarGlassFilter);
   background: rgba(255, 255, 255, 0.08);
 }
 
@@ -74,19 +92,7 @@
     inset 0 -1.6px 16px rgba(255, 255, 255, 0.04);
 }
 
-.tabbar.lg-fallback .tg-glass {
-  backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
-  -webkit-backdrop-filter: blur(20px) saturate(180%) brightness(1.05);
-  background: rgba(255, 255, 255, 0.18);
-}
-
-[data-theme="dark"] .tabbar.lg-fallback .tg-glass {
-  background: rgba(28, 28, 34, 0.35);
-  backdrop-filter: blur(20px) saturate(160%) brightness(0.9);
-  -webkit-backdrop-filter: blur(20px) saturate(160%) brightness(0.9);
-}
-
-/* Specular edge highlight — bright rim like real glass catching light */
+/* Specular edge highlight */
 .tg-border {
   position: absolute;
   inset: 0;
@@ -117,97 +123,79 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.06);
 }
 
-/* ── Tab pill ─────────────────────────────────────────────────────────────
- *
- * Chrome: the pill itself becomes a liquid glass element via backdrop-filter,
- * with the lime color as a semi-transparent tint overlay on top of the refraction.
- * Fallback: solid lime pill (unchanged from before).
- *
- * Uses CSS `translate` for slide (CSS transition) and CSS `scale` for bounce
- * (JS spring) — the two compose independently.
- */
+/* ── Dock pill ──────────────────────────────────────────────────────────── */
 .tabpill {
   position: absolute;
-  top: 0; left: 0;
-  width: 0; height: 54px;
-  border-radius: 30px;
+  top: 6px; left: 6px;
+  height: 54px;
+  border-radius: 27px;
   z-index: 3;
   pointer-events: none;
-  overflow: hidden; /* required for backdrop-filter clipping */
-  transition: none;
+  overflow: hidden;
   transform-origin: center center;
 }
 
-/* Chrome: glass pill with lime tint overlay */
-.tabbar.lg-backdrop .tabpill {
-  backdrop-filter: url(#pillGlassFilter);
-  -webkit-backdrop-filter: url(#pillGlassFilter);
-  background: color-mix(in srgb, var(--lime) 40%, rgba(255, 255, 255, 0.15));
-  border: 1px solid rgba(255, 255, 255, 0.55);
-  box-shadow:
-    inset 0 1.5px 1px rgba(255, 255, 255, 0.65),
-    inset 0 -1px 2px color-mix(in srgb, var(--lime) 35%, transparent),
-    0 3px 12px color-mix(in srgb, var(--lime) 28%, transparent);
-}
-
-[data-theme="dark"] .tabbar.lg-backdrop .tabpill {
-  background: color-mix(in srgb, var(--lime) 22%, rgba(0, 0, 0, 0.15));
-  border-color: color-mix(in srgb, var(--lime) 38%, transparent);
-  box-shadow:
-    inset 0 1px 1px rgba(255, 255, 255, 0.22),
-    0 2px 10px color-mix(in srgb, var(--lime) 18%, transparent);
-}
-
-/* Fallback: original solid lime pill */
-.tabbar.lg-fallback .tabpill {
-  background: color-mix(in srgb, var(--lime) 64%, transparent);
+.tabpill-inner {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: color-mix(in srgb, var(--lime) 55%, rgba(255, 255, 255, 0.10));
   border: 1px solid rgba(255, 255, 255, 0.5);
   box-shadow:
-    inset 0 1.5px 1px rgba(255, 255, 255, 0.6),
-    inset 0 -1px 2px color-mix(in srgb, var(--lime) 45%, transparent),
+    0 6px 20px rgba(0, 0, 0, 0.3),
+    inset 0 2px 4px rgba(255, 255, 255, 0.55),
     0 3px 12px color-mix(in srgb, var(--lime) 32%, transparent);
 }
 
-[data-theme="dark"] .tabbar.lg-fallback .tabpill {
-  background: color-mix(in srgb, var(--lime) 30%, transparent);
+[data-theme="dark"] .tabpill-inner {
+  background: color-mix(in srgb, var(--lime) 28%, rgba(0, 0, 0, 0.10));
   border-color: color-mix(in srgb, var(--lime) 38%, transparent);
   box-shadow:
+    0 4px 16px rgba(0, 0, 0, 0.35),
     inset 0 1px 1px rgba(255, 255, 255, 0.22),
     0 2px 10px color-mix(in srgb, var(--lime) 20%, transparent);
 }
 
-/* Slide: CSS translate transition; bounce: JS spring on CSS scale */
-body.nav-anim .tabpill {
-  transition:
-    translate 0.44s cubic-bezier(0.34, 1.32, 0.46, 1),
-    width 0.44s cubic-bezier(0.34, 1.32, 0.46, 1),
-    height 0.3s;
+.tabbar.lg-backdrop .tabpill-inner {
+  -webkit-backdrop-filter: url(#pillGlassFilter);
+  backdrop-filter: url(#pillGlassFilter);
+  background: color-mix(in srgb, var(--lime) 38%, rgba(255, 255, 255, 0.08));
+  border-color: color-mix(in srgb, var(--lime) 50%, rgba(255, 255, 255, 0.20));
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.3),
+    inset 0 2px 5px rgba(255, 255, 255, 0.30),
+    0 3px 12px color-mix(in srgb, var(--lime) 28%, transparent);
 }
 
-/* ── Tab buttons ──────────────────────────────────────────────────────── */
+[data-theme="dark"] .tabbar.lg-backdrop .tabpill-inner {
+  background: color-mix(in srgb, var(--lime) 18%, rgba(0, 0, 0, 0.12));
+  border-color: color-mix(in srgb, var(--lime) 30%, rgba(255, 255, 255, 0.10));
+}
+
+/* ── Tab buttons ────────────────────────────────────────────────────────── */
 .tab {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 4px;
+  gap: 3px;
   height: 54px;
-  border-radius: 32px;
-  color: rgba(22, 26, 30, 0.72);
+  border-radius: 27px;
+  color: rgba(22, 26, 30, 0.55);
   background: transparent;
   border: none;
-  transition: all 0.4s cubic-bezier(0.2, 0.8, 0.2, 1);
+  transition: color 0.3s, opacity 0.3s;
   position: relative;
   z-index: 4;
-  overflow: hidden;
+  align-self: center;
+  cursor: pointer;
 }
 
-[data-theme="dark"] .tab { color: rgba(255, 255, 255, 0.72); }
-.tab svg { width: 22px; height: 22px; transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.2, 1); }
-.tab .tl { font-size: 9px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; opacity: 0.8; transition: opacity 0.3s; }
-.tab:active { transform: scale(0.88); opacity: 0.7; }
+[data-theme="dark"] .tab { color: rgba(255, 255, 255, 0.55); }
+.tab svg { width: 22px; height: 22px; }
+.tab .tl { font-size: 9px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; opacity: 0.85; }
+.tab:active { opacity: 0.6; }
 .tab.active { color: var(--on-lime); }
 [data-theme="dark"] .tab.active { color: var(--lime); }
-.tab.active svg { transform: translateY(-2px); }
 .tab.active .tl { opacity: 1; }
