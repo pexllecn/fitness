@@ -1408,7 +1408,7 @@ function syncPush(silent){
   var url=c.bin?'https://api.jsonbin.io/v3/b/'+c.bin:'https://api.jsonbin.io/v3/b';
   var headers={'Content-Type':'application/json','X-Master-Key':c.key};
   if(!c.bin)headers['X-Bin-Name']='kayfitness';
-  fetch(url,{method:method,headers:headers,body:JSON.stringify({record:STATE})})
+  fetch(url,{method:method,headers:headers,body:JSON.stringify(STATE)})
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
     .then(function(d){
       var binId=d.metadata&&d.metadata.id?d.metadata.id:c.bin;
@@ -1440,6 +1440,7 @@ function syncPull(){
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
     .then(function(d){
       var o=d.record;
+      if(o&&o.record)o=o.record;
       if(!o||!o.targets)throw new Error('No valid data in bin');
       localStorage.setItem(SYNC_KEY_LS,c.key);
       localStorage.setItem(SYNC_BIN_LS,c.bin);
