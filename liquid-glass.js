@@ -116,9 +116,16 @@
   }
 
   function supportsBackdropSVG() {
-    if (!window.chrome) return false;
-    var el=document.createElement("div"); el.style.backdropFilter="url(#x)";
-    return el.style.backdropFilter.indexOf("url")!==-1;
+    /* Exclude iOS — all iOS browsers use WebKit which blocks backdrop-filter
+       on children of overflow:hidden elements, breaking the SVG refraction */
+    var isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (isIOS) return false;
+    /* Feature-detect SVG backdrop-filter support (Chrome + Safari 15.4+) */
+    var el = document.createElement("div");
+    el.style.cssText = "-webkit-backdrop-filter:url(#x);backdrop-filter:url(#x)";
+    return el.style.backdropFilter.indexOf("url") !== -1 ||
+           el.style.webkitBackdropFilter.indexOf("url") !== -1;
   }
 
   var squircle = function (x) { return Math.pow(1 - Math.pow(1 - x, 4), 0.25); };
