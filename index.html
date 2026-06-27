@@ -63,7 +63,7 @@
 vercel-live-feedback,#__vercel_toolbar_wrapper{display:none!important}
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html{-webkit-text-size-adjust:100%}
-body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transition:background-color .3s,color .3s}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transition:background-color .3s,color .3s;overscroll-behavior-y:none}
 i.ic{width:20px;height:20px;font-size:20px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center}
 input,button,textarea{font-family:var(--font)}
 input[type=number]{-moz-appearance:textfield}
@@ -1442,6 +1442,72 @@ function syncPull(){
 
 document.addEventListener('click',function(e){if(e.target.closest('[data-v="you"]'))setTimeout(syncLoadInputs,50);});
 syncLoadInputs();
+
+/* ── Pull-to-refresh ── */
+(function(){
+  var PTR_THRESHOLD=72;
+  var indicator=document.createElement('div');
+  indicator.id='ptr';
+  indicator.innerHTML='<svg viewBox="0 0 24 24" width="22" height="22"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="28 56" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.8s" repeatCount="indefinite"/></circle></svg><span id="ptrLabel">Pull to sync</span>';
+  Object.assign(indicator.style,{
+    position:'fixed',top:'-64px',left:'0',right:'0',height:'64px',
+    display:'flex',alignItems:'center',justifyContent:'center',gap:'8px',
+    color:'var(--lime-deep)',fontSize:'13px',fontWeight:'600',
+    transition:'top .2s ease',zIndex:'9999',pointerEvents:'none',
+    background:'transparent'
+  });
+  document.body.appendChild(indicator);
+
+  var startY=0,pulling=false,dist=0,refreshing=false;
+  var label=indicator.querySelector('#ptrLabel');
+
+  function canPull(){return(document.scrollingElement||document.documentElement).scrollTop<=0;}
+
+  document.addEventListener('touchstart',function(e){
+    if(!canPull())return;
+    startY=e.touches[0].clientY;
+    pulling=true;dist=0;
+  },{passive:true});
+
+  document.addEventListener('touchmove',function(e){
+    if(!pulling||refreshing)return;
+    dist=Math.max(0,e.touches[0].clientY-startY);
+    if(dist>0){
+      var progress=Math.min(dist/PTR_THRESHOLD,1);
+      var show=Math.min(dist*0.5,PTR_THRESHOLD*0.5);
+      indicator.style.top=(show-64)+'px';
+      label.textContent=progress>=1?'Release to sync':'Pull to sync';
+    }
+  },{passive:true});
+
+  document.addEventListener('touchend',function(){
+    if(!pulling)return;
+    pulling=false;
+    if(dist>=PTR_THRESHOLD&&!refreshing){
+      refreshing=true;
+      indicator.style.top='0px';
+      label.textContent='Syncing…';
+      var c=syncGetCreds();
+      if(c.key&&c.bin){
+        syncPull();
+        setTimeout(function(){reset();},3500);
+      } else {
+        bootRender();
+        label.textContent='Refreshed';
+        setTimeout(reset,1200);
+      }
+    } else {
+      reset();
+    }
+    dist=0;
+  },{passive:true});
+
+  function reset(){
+    refreshing=false;
+    indicator.style.top='-64px';
+    label.textContent='Pull to sync';
+  }
+})();
 </script>
 <script src="liquid-glass.js"></script>
 </body>
