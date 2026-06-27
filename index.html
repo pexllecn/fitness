@@ -1404,11 +1404,13 @@ function syncPush(silent){
   var c=syncGetCreds();
   if(!c.key){if(!silent)syncSetStatus('⚠ Paste your JSONBin Master Key first.');return;}
   if(!silent)syncSetStatus('Pushing…');
+  /* snapshot STATE at call time so late debounce fires carry the right data */
+  var snapshot=JSON.stringify(STATE);
   var method=c.bin?'PUT':'POST';
   var url=c.bin?'https://api.jsonbin.io/v3/b/'+c.bin:'https://api.jsonbin.io/v3/b';
   var headers={'Content-Type':'application/json','X-Master-Key':c.key};
   if(!c.bin)headers['X-Bin-Name']='kayfitness';
-  fetch(url,{method:method,headers:headers,body:JSON.stringify(STATE)})
+  fetch(url,{method:method,headers:headers,body:snapshot})
     .then(function(r){if(!r.ok)throw new Error('HTTP '+r.status);return r.json();})
     .then(function(d){
       var binId=d.metadata&&d.metadata.id?d.metadata.id:c.bin;
@@ -1416,11 +1418,15 @@ function syncPush(silent){
       localStorage.setItem(SYNC_KEY_LS,c.key);
       var t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
       syncSetStatus('✓ Synced at '+t);
+      if(silent)toast('☁ Saved to cloud');
     })
-    .catch(function(err){if(!silent)syncSetStatus('✗ Push failed: '+err.message+'. Check your key.');});
+    .catch(function(err){
+      syncSetStatus('✗ Sync failed: '+err.message);
+      if(silent)toast('☁ Sync failed — check connection');
+    });
 }
 
-/* Auto-push on every saveState (debounced 2s) */
+/* Auto-push on every saveState (debounced 800ms) */
 var _autoSyncTimer=null;
 var _origSaveState=saveState;
 saveState=function(){
@@ -1428,7 +1434,7 @@ saveState=function(){
   var c=syncGetCreds();
   if(c.key&&c.bin){
     clearTimeout(_autoSyncTimer);
-    _autoSyncTimer=setTimeout(function(){syncPush(true);},2000);
+    _autoSyncTimer=setTimeout(function(){syncPush(true);},800);
   }
 };
 
