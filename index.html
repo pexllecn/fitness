@@ -795,6 +795,7 @@ var PROGRAM=[
   ]}
 ];
 var WEEKDAY_TO_KEY={1:'upperA',2:'lowerA',4:'upperB',5:'lowerB',6:'arms'};
+function todayDayKey(){var wd=new Date().getDay();return WEEKDAY_TO_KEY[wd]||null;}
 
 /* ── exercise media ── */
 var _B='https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/';
@@ -841,6 +842,7 @@ var EXDB={
 };
 
 /* ── state ── */
+var PAGE='home';
 var KEY='tcA-v1';
 function clone(o){return JSON.parse(JSON.stringify(o));}
 var DEFAULT_TARGETS={weekday:{p:240,c:200,f:50},weekend:{p:240,c:130,f:50}};
@@ -1274,12 +1276,11 @@ $('sSave').addEventListener('click',function(){var dt=$('sDate').value,w=parseFl
 
 /* ---------- boot ---------- */
 function bootRender(){
-  applyTheme(STATE.theme==='system'?'system':STATE.theme,false);
-  applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);
-  initToday();renderDayTabs();renderWorkout();renderDashToday();renderCalendar();
-  applyTargets();renderMeals();renderProgress();
-  var savedView=localStorage.getItem('tcView');
-  if(savedView&&$('v-'+savedView))showView(savedView);
+  /* new design: apply theme/accent then build nav + render current page */
+  applyTheme();
+  applyAccent();
+  buildNav();
+  renderPage();
 }
 loadState();bootRender();
 syncPills();
@@ -1631,7 +1632,6 @@ function renderTrain(){
     var idx=document.createElement('span');idx.className='exidx';idx.textContent=String(i+1).padStart(2,'0');
     var thumb=document.createElement('div');thumb.className='exthumb '+thumbCycle[i%3];
     if(ex){var img=document.createElement('img');img.src=ex.img;img.alt='';img.loading='lazy';img.onerror=function(){this.style.display='none';};thumb.appendChild(img);}
-    var pl=document.createElement('span');pl.className='explay';pl.appendChild(icon('play'));thumb.appendChild(pl);
     var xt=document.createElement('div');xt.className='extext';
     xt.innerHTML='<div class="exname">'+e.n+'</div><div class="exsub">'+(e.note||'')+'</div>';
     var sch=document.createElement('span');sch.className='exscheme';sch.textContent=e.sr;
