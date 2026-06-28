@@ -1236,13 +1236,19 @@ function showExModal(name,note){
   $('exModalNote').textContent=note||'';
   img.src=entry.img;
   img.onload=null;
-  media.classList.remove('playing');
   /* remove any previously injected gif */
   var old=media.querySelector('.ex-gif');if(old)old.remove();
-  _exGifLoaded=false;
+  media.classList.remove('playing');
   media._gif=entry.gif;
   modal.classList.add('open');
   document.body.style.overflow='hidden';
+  /* auto-play the gif */
+  var gif=document.createElement('img');
+  gif.className='ex-gif';
+  gif.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:contain;display:block;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;';
+  gif.src=entry.gif+'?t='+Date.now();
+  media.appendChild(gif);
+  media.classList.add('playing');
 }
 function closeExModal(){
   var modal=$('exModal');
