@@ -558,6 +558,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .ex-modal-box{width:100%;max-width:480px;background:var(--card);border-radius:28px 28px 0 0;padding:0 0 env(safe-area-inset-bottom);overflow:hidden;transform:translateY(60px);transition:transform .28s cubic-bezier(.32,1,.5,1)}
 .ex-modal.open .ex-modal-box{transform:translateY(0)}
 .ex-modal-media{width:100%;height:260px;background:#fff;position:relative;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center}
+[data-theme="dark"] .ex-modal-media{background:#000}
 .ex-modal-media>#exModalImg{position:relative;z-index:1;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges}
 .ex-modal-media .play-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);transition:opacity .2s}
 .ex-modal-media .play-hint i{font-size:48px;color:#fff;opacity:.9}
@@ -1229,51 +1230,6 @@ function selectDay(i){curDay=i;renderDayTabs();renderWorkout();}
 
 /* ── Exercise media modal ── */
 var _exGifLoaded=false;
-var _gifRafId=null;
-function playGif2x(url, media) {
-  $('exModalImg').style.display='none';
-  media.classList.add('playing');
-  /* remove old canvas */
-  var old=media.querySelector('.ex-gif');if(old)old.remove();
-  if(_gifRafId){cancelAnimationFrame(_gifRafId);_gifRafId=null;}
-
-  var canvas=document.createElement('canvas');
-  canvas.className='ex-gif';
-  canvas.style.cssText='max-width:100%;max-height:100%;display:block;';
-  media.appendChild(canvas);
-  var ctx=canvas.getContext('2d');
-
-  fetch(url).then(function(r){return r.arrayBuffer();}).then(function(buf){
-    /* gifuct-js globals: parseGIF, decompressFrames */
-    var parsed=window.parseGIF(new Uint8Array(buf).buffer);
-    var frames=window.decompressFrames(parsed,true);
-    if(!frames||!frames.length)return;
-    canvas.width=frames[0].dims.width;
-    canvas.height=frames[0].dims.height;
-    var frameIdx=0, lastTime=null;
-    var patch=document.createElement('canvas');
-    var pctx=patch.getContext('2d');
-    function drawFrame(ts){
-      if(!media.contains(canvas)){return;} /* stopped */
-      if(lastTime===null)lastTime=ts;
-      var f=frames[frameIdx];
-      /* delay in ms halved for 2x speed */
-      var delay=Math.max(20,(f.delay||100)/2);
-      if(ts-lastTime>=delay){
-        patch.width=f.dims.width; patch.height=f.dims.height;
-        var id=pctx.createImageData(f.dims.width,f.dims.height);
-        id.data.set(f.patch);
-        pctx.putImageData(id,0,0);
-        if(f.disposalType===2)ctx.clearRect(0,0,canvas.width,canvas.height);
-        ctx.drawImage(patch,f.dims.left,f.dims.top);
-        lastTime=ts;
-        frameIdx=(frameIdx+1)%frames.length;
-      }
-      _gifRafId=requestAnimationFrame(drawFrame);
-    }
-    _gifRafId=requestAnimationFrame(drawFrame);
-  });
-}
 function showExModal(name,note){
   var entry=EXDB[name];if(!entry)return;
   var modal=$('exModal'),media=$('exModalMedia'),img=$('exModalImg');
@@ -1286,16 +1242,24 @@ function showExModal(name,note){
   var oldbg=media.querySelector('.ex-modal-bg');if(oldbg)oldbg.remove();
   media.classList.remove('playing');
   media._gif=entry.gif;
+  /* kick off GIF fetch early so browser starts caching it */
+  (new Image()).src=entry.gif;
   modal.classList.add('open');
   document.body.style.overflow='hidden';
-  playGif2x(entry.gif, media);
+  /* auto-play the gif */
+  var gif=document.createElement('img');
+  gif.className='ex-gif';
+  gif.style.cssText='max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;';
+  gif.src=entry.gif;
+  media.appendChild(gif);
+  media.classList.add('playing');
+  $('exModalImg').style.display='none';
 }
 function closeExModal(){
   var modal=$('exModal');
   modal.classList.remove('open');
   document.body.style.overflow='';
   /* stop gif on close */
-  if(_gifRafId){cancelAnimationFrame(_gifRafId);_gifRafId=null;}
   var gif=$('exModal').querySelector('.ex-gif');if(gif)gif.remove();
   $('exModalMedia').classList.remove('playing');
   $('exModalImg').style.display='';
@@ -1687,7 +1651,6 @@ syncLoadInputs();
   }
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/gifuct-js@2.1.2/dist/gifuct-js.min.js"></script>
 <script src="liquid-glass.js"></script>
 </body>
 </html>
