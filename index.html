@@ -1194,10 +1194,10 @@ function renderWorkout(){
     var img=thumbSrc?'<img src="'+thumbSrc+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'';
     /* If in EXDB: open in-app modal. If not in EXDB: open YouTube */
     var nameEl=dbEntry
-      ?'<button class="excard-name" data-exn="'+e.n.replace(/"/g,'&quot;')+'"><span class="play">'+play+'</span>'+e.n+'</button>'
+      ?'<span class="excard-name"><span class="play">'+play+'</span>'+e.n+'</span>'
       :'<a class="excard-name" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a>';
-    var thumbAttr=dbEntry?' data-exn="'+e.n.replace(/"/g,'&quot;')+'" style="cursor:pointer"':'';
-    return '<div class="excard'+(on?' done':'')+'"><div class="excard-thumb '+cat+'"'+thumbAttr+'>'+img+'<span class="excard-tnum">'+(i+1)+'</span></div><div class="excard-body">'+nameEl+'<div class="excard-tags">'+tags+'</div>'+(e.note?'<div class="excard-enote">'+e.note+'</div>':'')+'</div><button class="excard-chk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
+    var cardAttr=dbEntry?' data-exn="'+e.n.replace(/"/g,'&quot;')+'" style="cursor:pointer"':'';
+    return '<div class="excard'+(on?' done':'')+'"'+cardAttr+'><div class="excard-thumb '+cat+'">'+img+'<span class="excard-tnum">'+(i+1)+'</span></div><div class="excard-body">'+nameEl+'<div class="excard-tags">'+tags+'</div>'+(e.note?'<div class="excard-enote">'+e.note+'</div>':'')+'</div><button class="excard-chk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
   }).join('');
   $('hDay').textContent=d.name;$('hSub').innerHTML=d.sub;$('cMoves').textContent=d.ex.length;$('cSets').textContent=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);$('cTime').textContent=d.time;
   var _dd=$('dashDay');if(_dd)_dd.textContent=d.name;
@@ -1441,7 +1441,7 @@ function renderSHist(){$('sCount').textContent=STATE.scans.length+' logged';$('s
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
   var dt=e.target.closest('#dayTabs .pill');if(dt){selectDay(+dt.getAttribute('data-day'));return;}
-  var exn=e.target.closest('[data-exn]');if(exn){var ename=exn.getAttribute('data-exn');var d=PROGRAM[curDay],ex=d.ex.find(function(x){return x.n===ename;});showExModal(ename,ex&&ex.note);return;}
+  var exn=e.target.closest('[data-exn]');if(exn&&!e.target.closest('.excard-chk')){var ename=exn.getAttribute('data-exn');var d=PROGRAM[curDay],ex=d.ex.find(function(x){return x.n===ename;});showExModal(ename,ex&&ex.note);return;}
   var c=e.target.closest('.exchk,.excard-chk');if(c){var i=+c.getAttribute('data-idx'),arr=doneSet().slice(),p=arr.indexOf(i);if(p>=0)arr.splice(p,1);else arr.push(i);setDone(arr);var row=c.closest('.exrow,.excard');if(row)row.classList.toggle('done',arr.indexOf(i)>=0);updateRing();renderCalendar();return;}
   var nav=e.target.closest('[data-v]');if(nav){showView(nav.getAttribute('data-v'));return;}
   var mm=e.target.closest('#mealMode button');if(mm){STATE.mode=mm.getAttribute('data-mode');saveState();applyTargets();renderMeals();return;}
