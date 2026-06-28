@@ -271,6 +271,7 @@ body{margin:0;background:var(--body-bg)}
         </div>
       </div>
       <div id="pages"></div>
+      <div id="bottomNav" style="display:none"></div>
     </div>
   </div>
   <!-- Liquid Glass SVG filters -->
@@ -588,21 +589,30 @@ function orangeTicksHTML(){
 }
 
 /* ── orb helpers ── */
-function orbGreen(titleTxt,numEl,subTxt,extra){
-  var d=document.createElement('div');
-  d.className='orb orbgreen';
-  d.innerHTML='<div class="mesh"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div><div class="orbinner"><div class="orbtitle wht">'+titleTxt+'</div><div class="orbnumwrap"><div class="orbnum wht" id="'+extra+'"></div></div><div class="orbsub wht">'+subTxt+'</div><div class="gbars">'+greenBarsHTML()+'</div></div>';
-  var wrap=d.querySelector('#'+extra);
-  if(numEl)wrap.appendChild(numEl);
+function makeOrb(cls,titleTxt,numEl,subTxt,vizEl){
+  var d=document.createElement('div');d.className='orb '+cls;
+  var mesh=document.createElement('div');mesh.className='mesh';
+  mesh.innerHTML='<span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span>';
+  d.appendChild(mesh);
+  var inner=document.createElement('div');inner.className='orbinner';
+  var title=document.createElement('div');title.className='orbtitle wht';title.textContent=titleTxt;
+  var numwrap=document.createElement('div');numwrap.className='orbnumwrap';
+  var numDiv=document.createElement('div');numDiv.className='orbnum wht';
+  if(numEl)numDiv.appendChild(numEl);
+  numwrap.appendChild(numDiv);
+  var sub=document.createElement('div');sub.className='orbsub wht';sub.textContent=subTxt;
+  inner.appendChild(title);inner.appendChild(numwrap);inner.appendChild(sub);
+  if(vizEl)inner.appendChild(vizEl);
+  d.appendChild(inner);
   return d;
 }
-function orbOrange(titleTxt,numEl,subTxt,extra){
-  var d=document.createElement('div');
-  d.className='orb orborange';
-  d.innerHTML='<div class="mesh"><span class="blob b1"></span><span class="blob b2"></span><span class="blob b3"></span></div><div class="orbinner"><div class="orbtitle wht">'+titleTxt+'</div><div class="orbnumwrap"><div class="orbnum wht" id="'+extra+'"></div></div><div class="orbsub wht">'+subTxt+'</div><div class="oticks">'+orangeTicksHTML()+'</div></div>';
-  var wrap=d.querySelector('#'+extra);
-  if(numEl)wrap.appendChild(numEl);
-  return d;
+function orbGreen(titleTxt,numEl,subTxt){
+  var viz=document.createElement('div');viz.className='gbars';viz.innerHTML=greenBarsHTML();
+  return makeOrb('orbgreen',titleTxt,numEl,subTxt,viz);
+}
+function orbOrange(titleTxt,numEl,subTxt){
+  var viz=document.createElement('div');viz.className='oticks';viz.innerHTML=orangeTicksHTML();
+  return makeOrb('orborange',titleTxt,numEl,subTxt,viz);
 }
 
 /* ── ACCENT colors ── */
@@ -628,14 +638,19 @@ function makeChart(){
 /* ── pages ── */
 function renderPage(){
   var p=$('pages');
+  if(!p)return;
   p.innerHTML='';
-  switch(PAGE){
-    case 'home': p.appendChild(renderHome());break;
-    case 'train': p.appendChild(renderTrain());break;
-    case 'nutrition': p.appendChild(renderNutrition());break;
-    case 'progress': p.appendChild(renderProgress());break;
-    case 'plan': p.appendChild(renderPlan());break;
-    case 'profile': p.appendChild(renderProfile());break;
+  try{
+    switch(PAGE){
+      case 'home': p.appendChild(renderHome());break;
+      case 'train': p.appendChild(renderTrain());break;
+      case 'nutrition': p.appendChild(renderNutrition());break;
+      case 'progress': p.appendChild(renderProgress());break;
+      case 'plan': p.appendChild(renderPlan());break;
+      case 'profile': p.appendChild(renderProfile());break;
+    }
+  }catch(err){
+    p.innerHTML='<div style="padding:24px;color:#d4574a;font-family:monospace;font-size:13px;background:#fff2f2;border-radius:16px;margin:16px 0"><b>Render error ('+PAGE+'):</b><br>'+err.message+'<br><pre>'+err.stack+'</pre></div>';
   }
 }
 
@@ -689,11 +704,11 @@ function renderHome(){
   /* orb row */
   var orbrow=document.createElement('div');orbrow.className='orbrow';
   /* green orb */
-  var gor=orbGreen('Today · '+tprog.name,dots(String(doneEx),8,3.4),'of '+totEx+' moves done','_ghome');
+  var gor=orbGreen('Today · '+tprog.name,dots(String(doneEx),8,3.4),'of '+totEx+' moves done');
   orbrow.appendChild(gor);
   /* orange orb */
   var kcalT=kcalOf(STATE.targets[STATE.mode]);
-  var oor=orbOrange("Today's fuel",dots(String(fmtK(kcalT)),6,2.8),'kcal · '+STATE.targets[STATE.mode].p+'P '+STATE.targets[STATE.mode].c+'C '+STATE.targets[STATE.mode].f+'F','_ohome');
+  var oor=orbOrange("Today's fuel",dots(String(fmtK(kcalT)),6,2.8),'kcal · '+STATE.targets[STATE.mode].p+'P '+STATE.targets[STATE.mode].c+'C '+STATE.targets[STATE.mode].f+'F');
   orbrow.appendChild(oor);
   /* calendar card */
   var cal=document.createElement('div');cal.className='calcard';
@@ -835,7 +850,7 @@ function renderNutrition(){
   root.innerHTML='<div class="pagehead"><div><div class="greet">Nutrition</div><div class="subtitle">Weekday target — protein holds, carbs move with the day.</div></div><span class="badge pillb" style="height:30px;font-size:13px">~'+fmtK(w.def)+' under maintenance</span></div>';
   /* fuel hero */
   var fh=document.createElement('div');fh.className='fuelhero';
-  var oor=orbOrange('Daily target',dots(String(fmtK(kcalWd)),8,3.4),'kcal · weekday','_onut');
+  var oor=orbOrange('Daily target',dots(String(fmtK(kcalWd)),8,3.4),'kcal · weekday');
   fh.appendChild(oor);
   var ml=document.createElement('div');ml.className='macrolist';
   var macros=[{label:'Protein',val:tgWd.p,unit:'g',pct:Math.round(tgWd.p/350*100),fill:'mf-p'},{label:'Carbs',val:tgWd.c,unit:'g',pct:Math.round(tgWd.c/350*100),fill:'mf-c'},{label:'Fat',val:tgWd.f,unit:'g',pct:Math.round(tgWd.f/120*100),fill:'mf-f'}];
@@ -884,7 +899,7 @@ function renderProgress(){
   var chartCard=document.createElement('div');chartCard.className='progchartcard';
   chartCard.innerHTML='<div class="sectionhead" style="margin-bottom:14px"><div style="font-size:16px;font-weight:600">Expected scale</div><span class="mono fs10 mut2">0.6–0.7 KG / WK</span></div>'+makeChart()+'<div style="display:flex;justify-content:space-between;font-size:11px;color:#b3b6bc;margin-top:8px" class="mono"><span>Now</span><span>Jul</span><span>Aug</span><span>87.5</span></div>';
   fh.appendChild(chartCard);
-  var gor=orbGreen('Body fat',dots(scan.bf.toFixed(1),8,3.4),'% · target 12','_gprog');
+  var gor=orbGreen('Body fat',dots(scan.bf.toFixed(1),8,3.4),'% · target 12');
   fh.appendChild(gor);
   root.appendChild(fh);
   /* metric cards */
