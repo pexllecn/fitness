@@ -1000,54 +1000,57 @@ function toast(m){var t=$('toast');t.textContent=m;t.classList.add('show');clear
 var S='https://www.youtube.com/results?search_query=';
 function q(s){return S+encodeURIComponent(s+' proper form');}
 var PROGRAM=[
-  {key:'lowerA',name:'Lower A',focus:'Quad lead',sub:'Quad lead · tap any move for its form video',time:'~76',ex:[
-    {n:'Back Squat',sr:'3 × 5-8',rir:'2 RIR',ld:'80 → 100kg',q:q('barbell back squat'),note:'Most room to grow. Build the pattern, add weight only when 8 is clean across all sets.'},
-    {n:'Romanian Deadlift',sr:'3 × 8-10',rir:'1-2 RIR',ld:'80 → 100kg',q:q('romanian deadlift'),note:"Controlled hinge, slow stretch. If it makes you dizzy, swap to a back extension."},
-    {n:'Leg Press (lying)',sr:'3 × 10-12',rir:'1-2 RIR',ld:'160 → 220kg',q:q('lying leg press'),note:'Keep the knees out of your chest and the pelvis down at the bottom, that deep tuck is what cramped your abs. Breathe out as you press.'},
-    {n:'Seated Leg Curl',sr:'3 × 10-12',rir:'1 RIR',ld:'by feel · add load',q:q('seated leg curl'),note:'Isolates the hamstrings. Slow on the way down — the stretch is where the growth is.'},
-    {n:'Walking Lunge',sr:'2 × 10-12/leg',ld:'DB 12 → 20kg',q:q('dumbbell walking lunge'),note:'Evens out left and right, chases the glutes.'},
-    {n:'Standing Calf Raise',sr:'3 × 10-15',ld:'by feel · add load',q:q('standing calf raise'),note:'Full range — pause at the bottom stretch, squeeze hard at the top. Calves respond to slow reps.'},
-    {n:'Hanging Leg Raise',sr:'3 × 12-15',ld:'BW → ankle weight',q:q('hanging leg raise'),note:'Abs close the session, after the main work.'}
-  ]},
-  {key:'upperA',name:'Upper A',focus:'Push · delts',sub:'Push &amp; delts · tap any move for its form video',time:'~76',ex:[
-    {n:'Barbell Bench Press',sr:'3 × 6-8',rir:'2 RIR',ld:'85 → 100kg',q:q('barbell bench press'),note:'From your 100 × 5-6. Holding this through the cut is the win.'},
-    {n:'Overhead Press',sr:'3 × 8-10',rir:'1-2 RIR',ld:'50 → 60kg',q:q('standing overhead press barbell'),note:'Strict press — no leg drive. Brace hard, keep ribs down. Your shoulders are a priority this block.'},
-    {n:'Weighted Pull-up / Pulldown',sr:'3 × 8-10',ld:'BW → +10kg',q:q('weighted pull up'),note:'You do 10 bodyweight for 3, so start adding small weight.'},
-    {n:'Chest-Supported Row',sr:'3 × 8-10',rir:'1-2 RIR',ld:'50 → 65kg',q:q('chest supported row'),note:'Drive elbows back and squeeze the shoulder blades together at the top. Chest stays on the pad throughout.'},
+  {key:'upperA',name:'Upper A',focus:'Heavy push · full chest',sub:'Heavy push &amp; full chest · all 2-set compounds = top set then −10% to failure',time:'~75',ex:[
+    {n:'Barbell Bench Press',sr:'2 × 6-8',rir:'2 RIR',ld:'85 → 100kg',q:q('barbell bench press'),note:'Top set at target weight, 1 rep in reserve. Back-off: drop 10%, push to failure. Holding strength through the cut is the win.'},
+    {n:'Overhead Press',sr:'2 × 8-10',rir:'1-2 RIR',ld:'50 → 60kg',q:q('standing overhead press barbell'),note:'Strict — no leg drive. Brace hard, ribs down. Top set then −10% back-off.'},
+    {n:'Weighted Pull-up / Pulldown',sr:'2 × 8-10',ld:'BW → +10kg',q:q('weighted pull up'),note:'Vertical pull anchor. Top set bodyweight, add load as reps become easy.'},
+    {n:'Barbell Bent Over Row',sr:'2 × 8-10',rir:'1-2 RIR',ld:'50 → 65kg',q:q('barbell bent over row'),note:'Hinge to 45°, pull to your sternum, squeeze the shoulder blades together. Horizontal pull anchor of the week.'},
+    {n:'Cable Crossovers',sr:'3 × 12-15',ld:'by feel',q:q('high to low cable crossover chest'),note:'Set cables high, cross hands at the bottom. The stretch at the top is what grows the lower chest — do not rush it.'},
     {n:'Lateral Raise',sr:'3 × 12-15',rir:'0-1 RIR',ld:'10 → 16kg',q:q('dumbbell lateral raise'),note:'Delt width is a goal. Strict, lead with the elbow.'},
-    {n:'Triceps Pushdown',sr:'3 × 10-12',ld:'by feel · add a plate',q:q('rope triceps pushdown'),note:'Elbows stay pinned at your sides. Full lockout at the bottom, controlled return.'},
-    {n:'Cable Biceps Curl',sr:'3 × 10-12',ld:'by feel · add a plate',q:q('cable biceps curl'),note:'Constant tension from the cable beats dumbbells at the top. Squeeze hard at the top, resist on the way down.'}
+    {n:'Triceps Pushdown',sr:'2 × 10-12',ld:'by feel · add a plate',q:q('rope triceps pushdown'),note:'Elbows pinned at sides. Full lockout at the bottom, controlled return. Top set then back-off.'},
+    {n:'Cable Biceps Curl',sr:'2 × 10-12',ld:'by feel · add a plate',q:q('cable biceps curl'),note:'Constant cable tension beats dumbbells at the top. Squeeze hard, slow negative.'}
   ]},
-  {key:'lowerB',name:'Lower B',focus:'Posterior chain',sub:'Posterior chain · tap any move for its form video',time:'~76',ex:[
-    {n:'Hip Thrust',sr:'3 × 6-10',rir:'2 RIR',ld:'90 → 130kg',q:q('barbell hip thrust'),note:'Deadlift is out by your call, so the hip thrust is your heavy posterior anchor. Pause and squeeze at the top.'},
-    {n:'Hack Squat',sr:'3 × 8-12',rir:'1-2 RIR',ld:'by feel · add load',q:q('hack squat machine'),note:'A different angle from Monday to hit quads fresh.'},
-    {n:'45° Back Extension',sr:'3 × 10-12',ld:'BW → hold a plate',q:q('45 degree back extension'),note:'Trains the same chain a deadlift would, without the head rush.'},
-    {n:'Lying Leg Curl',sr:'3 × 10-12',rir:'1 RIR',ld:'by feel · add load',q:q('lying leg curl'),note:'Hamstring isolation. Curl slowly, pause at peak contraction, slow negative.'},
-    {n:'Leg Extension',sr:'3 × 12-15',rir:'0-1 RIR',ld:'by feel · drop-set last',q:q('leg extension machine'),note:'Quad finisher. Drop-set the last set to flush out the quads fully.'},
-    {n:'DB Standing Calf Raise',sr:'3 × 12-15',ld:'by feel · add load',q:q('dumbbell standing calf raise'),note:'Full range — pause at the bottom stretch, squeeze hard at the top. Calves grow with slow controlled reps.'},
-    {n:'Cable Crunch',sr:'3 × 12-15',ld:'moderate · add load',q:q('cable crunch abs'),note:'Abs close the session, after the main work.'}
+  {key:'lowerA',name:'Lower A',focus:'Quad lead · calves · core',sub:'Quad lead &amp; calves · all 2-set compounds = top set then −10% to failure',time:'~75',ex:[
+    {n:'Back Squat',sr:'2 × 5-8',rir:'2 RIR',ld:'80 → 100kg',q:q('barbell back squat'),note:'Top set heavy, 1 rep in reserve. Back-off −10%, push for extra reps. Add weight only when 8 is clean.'},
+    {n:'Romanian Deadlift',sr:'2 × 8-10',rir:'1-2 RIR',ld:'80 → 100kg',q:q('romanian deadlift'),note:'Controlled hinge, slow stretch down. Top set then −10% back-off.'},
+    {n:'Leg Press (lying)',sr:'2 × 10-12',rir:'1-2 RIR',ld:'160 → 220kg',q:q('lying leg press'),note:'Knees out, pelvis down at the bottom. Breathe out as you press. Top set then back-off.'},
+    {n:'Seated Leg Curl',sr:'2 × 10-12',rir:'1 RIR',ld:'by feel · add load',q:q('seated leg curl'),note:'Hamstring isolation. Slow negative — the stretch is where the growth is.'},
+    {n:'Standing Calf Raise',sr:'3 × 10-15',ld:'by feel · add load',q:q('standing calf raise'),note:'Gastrocnemius (the outer calf). Full range — pause the bottom stretch, squeeze hard at the top.'},
+    {n:'Tibialis Raise',sr:'2 × 15-20',ld:'BW',q:q('tibialis anterior raise exercise'),note:'Stand with heels on a step, pull toes up as high as possible. The front-shin muscle — makes the lower leg look 3D from every angle.'},
+    {n:'Hanging Leg Raise',sr:'2 × 12-15',ld:'BW → ankle weight',q:q('hanging leg raise'),note:'Lower abs anchor. Control the descent — the negative is the work.'},
+    {n:'Ab Wheel Rollout',sr:'3 × 8-12',ld:'BW',q:q('ab wheel rollout'),note:'Roll forward until hips nearly drop, pull back with lats and abs. Hits upper abs, serratus, and deep transverse in one movement.'}
   ]},
-  {key:'upperB',name:'Upper B',focus:'Pull · delts',sub:'Pull &amp; delts · tap any move for its form video',time:'~76',ex:[
-    {n:'Incline DB Press',sr:'3 × 8-10',rir:'2 RIR',ld:'32 → 40kg each',q:q('incline dumbbell press'),note:'From your flat press. Upper-chest focus.'},
-    {n:'Lat Pulldown (machine)',sr:'3 × 8-10',ld:'60 → 80kg',q:q('reverse grip machine lat pulldown'),note:'Reverse grip hits the lats through a longer range. Drive elbows down and back, squeeze at the bottom.'},
-    {n:'Lever Seated Row',sr:'3 × 8-10',rir:'1-2 RIR',ld:'by feel · add a plate',q:q('lever seated row machine'),note:'Machine row — chest against pad, pull handles to your sides, squeeze shoulder blades. No cable machine needed.'},
-    {n:'Seated DB Shoulder Press',sr:'3 × 8-10',ld:'25 → 32kg each',q:q('seated dumbbell shoulder press'),note:'Second delt hit of the week.'},
+  {key:'upperB',name:'Upper B',focus:'Heavy pull · lower chest · traps',sub:'Heavy pull &amp; lower chest · all 2-set compounds = top set then −10% to failure',time:'~75',ex:[
+    {n:'Incline DB Press',sr:'2 × 8-10',rir:'2 RIR',ld:'32 → 40kg each',q:q('incline dumbbell press'),note:'Upper chest anchor. Top set then −10% back-off.'},
+    {n:'Lat Pulldown (machine)',sr:'2 × 8-10',ld:'60 → 80kg',q:q('reverse grip machine lat pulldown'),note:'Reverse grip extends lat range of motion. Drive elbows down and back, squeeze at the bottom. Top set then back-off.'},
+    {n:'Lever Seated Row',sr:'2 × 8-10',rir:'1-2 RIR',ld:'by feel · add a plate',q:q('lever seated row machine'),note:'Chest against pad, pull handles to your sides, shoulder blades together. Top set then back-off.'},
+    {n:'Seated DB Shoulder Press',sr:'2 × 8-10',ld:'25 → 32kg each',q:q('seated dumbbell shoulder press'),note:'Second heavy delt hit of the week. Top set then −10% back-off.'},
+    {n:'Chest-Biased Dips',sr:'2 × failure',ld:'BW → add weight belt',q:q('chest dip forward lean technique'),note:'Lean forward 30°, elbows slightly flared. That lean shifts load from triceps to lower chest and hits the medial tricep head as a bonus.'},
     {n:'Lateral Raise',sr:'3 × 12-15',rir:'0-1 RIR',ld:'10 → 16kg',q:q('dumbbell lateral raise'),note:'Second delt hit of the week. Lead with the elbow, controlled on the way down.'},
-    {n:'DB Shrug',sr:'3 × 12-15',ld:'by feel · add load',q:q('dumbbell shrug'),note:'Upper traps. Shrug straight up, hold a beat at the top, slow lower. No rolling.'},
-    {n:'DB Curl + Triceps Ext',sr:'2 × 10-12 superset',ld:'by feel',q:q('dumbbell curl triceps extension superset'),note:'Superset: curl first, then overhead extension back to back. Short rest between pairs.'}
+    {n:'DB Shrug',sr:'2 × 12-15',ld:'by feel · add load',q:q('dumbbell shrug'),note:'Upper traps. Shrug straight up, hold a beat at the top, slow lower. No rolling.'}
   ]},
-  {key:'arms',name:'Arms & Delts',focus:'Delts · arms · forearms',sub:'Delts, arms &amp; forearms · your Saturday pump',time:'~55',ex:[
-    {n:'DB Lateral Raise',sr:'4 × 12-15',rir:'0-1 RIR',ld:'10 → 16kg',q:q('dumbbell lateral raise'),note:'Width is the goal. Strict, lead with the elbow, no swing.'},
+  {key:'lowerB',name:'Lower B',focus:'Posterior chain · soleus · core',sub:'Posterior chain &amp; glutes · all 2-set compounds = top set then −10% to failure',time:'~75',ex:[
+    {n:'Hip Thrust',sr:'2 × 6-10',rir:'2 RIR',ld:'90 → 130kg',q:q('barbell hip thrust'),note:'Heavy glute anchor. Top set with a full pause and squeeze at the top, then −10% back-off to failure.'},
+    {n:'Hack Squat',sr:'2 × 8-12',rir:'1-2 RIR',ld:'by feel · add load',q:q('hack squat machine'),note:'Different quad angle from Tuesday. Top set then back-off.'},
+    {n:'45° Back Extension',sr:'2 × 10-12',ld:'BW → hold a plate',q:q('45 degree back extension'),note:'Trains the same chain a deadlift would. Add a plate when bodyweight gets easy.'},
+    {n:'Lying Leg Curl',sr:'2 × 10-12',rir:'1 RIR',ld:'by feel · add load',q:q('lying leg curl'),note:'Hamstring isolation. Slow curl, pause at peak contraction, slow negative.'},
+    {n:'Leg Extension',sr:'2 × 12-15',rir:'0-1 RIR',ld:'by feel · drop-set last',q:q('leg extension machine'),note:'Quad finisher. Drop-set the back-off set to fully flush the quads.'},
+    {n:'Seated DB Calf Raise',sr:'3 × 12-15',ld:'by feel · add load',q:q('seated dumbbell calf raise'),note:'Knee bent isolates the soleus — the muscle underneath the gastroc that gives calves width from every angle.'},
+    {n:'Cable Crunch',sr:'3 × 12-15',ld:'moderate · add load',q:q('cable crunch abs'),note:'Upper abs. Pull from the sternum down, not the neck.'},
+    {n:'Cable Woodchop',sr:'2 × 12-15 each side',ld:'light',q:q('cable woodchop obliques'),note:'High cable, pull diagonally to the opposite hip. Rotate from the core, not the arms. Obliques only show when they are actually trained.'}
+  ]},
+  {key:'arms',name:'Arms & Delts',focus:'3D symmetry · all heads',sub:'Delts, arms &amp; forearms · your Saturday pump',time:'~55',ex:[
+    {n:'DB Lateral Raise',sr:'3 × 12-15',rir:'0-1 RIR',ld:'10 → 16kg',q:q('dumbbell lateral raise'),note:'Width is the goal. Strict, lead with the elbow, no swing.'},
     {n:'Rear Delt Fly',sr:'3 × 15',rir:'1 RIR',ld:'by feel',q:q('rear delt fly'),note:'Pull with the rear delt, not the traps.'},
-    {n:'Cable Lateral Raise',sr:'3 × 15',rir:'0 RIR',ld:'light · constant tension',q:q('cable lateral raise'),note:'Burns the side delt out top to bottom.'},
-    {n:'EZ-Bar Curl',sr:'3 × 8-12',rir:'1-2 RIR',ld:'by feel · add load',q:q('ez bar curl'),note:'Heaviest curl of the day.'},
+    {n:'Cable Lateral Raise',sr:'2 × 15',rir:'0 RIR',ld:'light · constant tension',q:q('cable lateral raise'),note:'Burns the side delt from top to bottom.'},
+    {n:'EZ-Bar Curl',sr:'3 × 8-12',rir:'1-2 RIR',ld:'by feel · add load',q:q('ez bar curl'),note:'Heaviest curl of the day. Outer head and brachialis emphasis.'},
+    {n:'Incline DB Curl',sr:'2 × 10-12',rir:'1 RIR',ld:'by feel',q:q('incline dumbbell curl'),note:'Long head from a full stretch — the peak builder.'},
     {n:'Overhead Triceps Extension',sr:'3 × 10-12',rir:'1 RIR',ld:'by feel',q:q('overhead cable triceps extension'),note:'Long head, full stretch overhead.'},
-    {n:'Incline DB Curl',sr:'3 × 10-12',rir:'1 RIR',ld:'by feel',q:q('incline dumbbell curl'),note:'Curls from a stretch.'},
-    {n:'Triceps Pushdown',sr:'3 × 12-15',rir:'0-1 RIR',ld:'by feel',q:q('rope triceps pushdown'),note:'Pump finisher. Elbows glued to your sides, full extension each rep.'},
-    {n:'Hammer Curl + Wrist Curl',sr:'3 × 12-15 superset',ld:'by feel',q:q('hammer curl wrist curl forearm'),note:'Forearms and brachialis.'}
+    {n:'Triceps Pushdown',sr:'2 × 12-15',rir:'0-1 RIR',ld:'by feel',q:q('rope triceps pushdown'),note:'Lateral head pump finisher. Elbows glued, full extension each rep.'},
+    {n:'Hammer Curl + Wrist Curl',sr:'2 × 12-15 superset',ld:'by feel',q:q('hammer curl wrist curl forearm'),note:'Brachialis and forearms. Superset back to back.'}
   ]}
 ];
-var WEEKDAY_TO_KEY={1:'lowerA',2:'upperA',4:'lowerB',5:'upperB',6:'arms'};
+var WEEKDAY_TO_KEY={1:'upperA',2:'lowerA',4:'upperB',5:'lowerB',6:'arms'};
 
 /* ---------- default meals (sum to 240/250/45) ---------- */
 var DEFAULT_MEALS={
@@ -1130,13 +1133,15 @@ var EXDB={
   'Romanian Deadlift':           _ex('images/0085-wQ2c4XD.jpg','videos/0085-wQ2c4XD.gif'),
   'Leg Press (lying)':           _ex('images/0739-10Z2DXU.jpg','videos/0739-10Z2DXU.gif'),
   'Seated Leg Curl':             _ex('images/0599-Zg3XY7P.jpg','videos/0599-Zg3XY7P.gif'),
-  'Walking Lunge':               _ex('images/0054-t8iSghb.jpg','videos/0054-t8iSghb.gif'),
   'Standing Calf Raise':         _ex('images/1490-6HmFgmx.jpg','videos/1490-6HmFgmx.gif'),
+  'Tibialis Raise':              _ex('images/0763-ywaNfuh.jpg','videos/0763-ywaNfuh.gif'),
   'Hanging Leg Raise':           _ex('images/0472-I3tsCnC.jpg','videos/0472-I3tsCnC.gif'),
+  'Ab Wheel Rollout':            _ex('images/0857-NAgVB3t.jpg','videos/0857-NAgVB3t.gif'),
   'Barbell Bench Press':         _ex('images/0025-EIeI8Vf.jpg','videos/0025-EIeI8Vf.gif'),
   'Overhead Press':              _ex('images/0091-kTbSH9h.jpg','videos/0091-kTbSH9h.gif'),
   'Weighted Pull-up / Pulldown': _ex('images/0652-lBDjFxJ.jpg','videos/0652-lBDjFxJ.gif'),
-  'Chest-Supported Row':         _ex('images/0027-eZyBC3j.jpg','videos/0027-eZyBC3j.gif'),
+  'Barbell Bent Over Row':       _ex('images/0027-eZyBC3j.jpg','videos/0027-eZyBC3j.gif'),
+  'Cable Crossovers':            _ex('images/0155-0CXGHya.jpg','videos/0155-0CXGHya.gif'),
   'Lateral Raise':               _ex('images/0334-DsgkuIt.jpg','videos/0334-DsgkuIt.gif'),
   'Triceps Pushdown':            _ex('images/0241-gAwDzB3.jpg','videos/0241-gAwDzB3.gif'),
   'Cable Biceps Curl':           _ex('images/0868-G08RZcQ.jpg','videos/0868-G08RZcQ.gif'),
@@ -1145,21 +1150,22 @@ var EXDB={
   '45° Back Extension':          _ex('images/0489-zhMwOwE.jpg','videos/0489-zhMwOwE.gif'),
   'Lying Leg Curl':              _ex('images/0586-17lJ1kr.jpg','videos/0586-17lJ1kr.gif'),
   'Leg Extension':               _ex('images/0585-my33uHU.jpg','videos/0585-my33uHU.gif'),
-  'DB Standing Calf Raise':      _ex('images/0417-dPmaUaU.jpg','videos/0417-dPmaUaU.gif'),
+  'Seated DB Calf Raise':        _ex('images/1379-r29jP7S.jpg','videos/1379-r29jP7S.gif'),
   'Cable Crunch':                _ex('images/0175-WW95auq.jpg','videos/0175-WW95auq.gif'),
+  'Cable Woodchop':              _ex('images/0243-aVs3BR3.jpg','videos/0243-aVs3BR3.gif'),
   'Incline DB Press':            _ex('images/0314-ns0SIbU.jpg','videos/0314-ns0SIbU.gif'),
   'Lat Pulldown (machine)':      _ex('images/0673-ecpY0rH.jpg','videos/0673-ecpY0rH.gif'),
+  'Lever Seated Row':            _ex('images/1350-7I6LNUG.jpg','videos/1350-7I6LNUG.gif'),
   'Seated DB Shoulder Press':    _ex('images/0405-znQUdHY.jpg','videos/0405-znQUdHY.gif'),
+  'Chest-Biased Dips':           _ex('images/1430-XgWyAiA.jpg','videos/1430-XgWyAiA.gif'),
+  'DB Shrug':                    _ex('images/0406-NJzBsGJ.jpg','videos/0406-NJzBsGJ.gif'),
   'Rear Delt Fly':               _ex('images/0215-x825CZm.jpg','videos/0215-x825CZm.gif'),
   'Cable Lateral Raise':         _ex('images/0178-goJ6ezq.jpg','videos/0178-goJ6ezq.gif'),
   'EZ-Bar Curl':                 _ex('images/0447-6TG6x2w.jpg','videos/0447-6TG6x2w.gif'),
   'Overhead Triceps Extension':  _ex('images/0092-5uFK1xr.jpg','videos/0092-5uFK1xr.gif'),
   'Incline DB Curl':             _ex('images/0318-ae9UoXQ.jpg','videos/0318-ae9UoXQ.gif'),
   'DB Lateral Raise':            _ex('images/0334-DsgkuIt.jpg','videos/0334-DsgkuIt.gif'),
-  'Hammer Curl + Wrist Curl':    _ex('images/0313-slDvUAU.jpg','videos/0313-slDvUAU.gif'),
-  'DB Curl + Triceps Ext':       _ex('images/0868-G08RZcQ.jpg','videos/0868-G08RZcQ.gif'),
-  'Lever Seated Row':            _ex('images/1350-7I6LNUG.jpg','videos/1350-7I6LNUG.gif'),
-  'DB Shrug':                    _ex('images/0406-NJzBsGJ.jpg','videos/0406-NJzBsGJ.gif')
+  'Hammer Curl + Wrist Curl':    _ex('images/0313-slDvUAU.jpg','videos/0313-slDvUAU.gif')
 };
 var EX_IMGS={
   'cat-legs':'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=300&q=70&fit=crop',
@@ -1181,13 +1187,13 @@ function renderWorkout(){
   $('workoutBox').innerHTML=d.ex.map(function(e,i){
     var on=dn.indexOf(i)>=0;
     var n2=e.n.toLowerCase();
-    var cat=(/squat|leg press|lunge|calf|leg curl|leg ext|hack/.test(n2))?'cat-legs':
+    var cat=(/squat|leg press|lunge|calf|leg curl|leg ext|hack|tibialis/.test(n2))?'cat-legs':
             (/romanian|hip thrust|back ext|rdl/.test(n2))?'cat-hinge':
-            (/bench|incline db press|overhead|pushdown|tricep ext/.test(n2))?'cat-push':
+            (/bench|incline db press|overhead|pushdown|tricep ext|crossover|dip/.test(n2))?'cat-push':
             (/pull|row|pulldown|lat /.test(n2))?'cat-pull':
-            (/lateral|rear delt|face pull|delt fly/.test(n2))?'cat-delts':
+            (/lateral|rear delt|face pull|delt fly|shrug/.test(n2))?'cat-delts':
             (/curl|hammer|ez.bar|incline db curl|cable bic/.test(n2))?'cat-arms':
-            (/hanging|cable crunch|ab/.test(n2))?'cat-core':'cat-pull';
+            (/hanging|cable crunch|ab|wheel|woodchop/.test(n2))?'cat-core':'cat-pull';
     var tags='<span class="excard-tag lime">'+e.sr+'</span>'+(e.rir?'<span class="excard-tag rir">'+e.rir+'</span>':'')+'<span class="excard-tag">'+e.ld+'</span>';
     var dbEntry=EXDB[e.n];
     var thumbSrc=dbEntry?dbEntry.img:EX_IMGS[cat];
