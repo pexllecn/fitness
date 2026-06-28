@@ -878,7 +878,7 @@ function renderNutrition(){
     {name:'Evening',desc:'Greek yogurt · casein if needed',macro:'44P · 33C · 11F',kcal:380,blob:'sb-blue'}
   ];
   function buildMealSection(title,sub,meals){
-    var sec=document.createElement('div');
+    var sec=document.createElement('div');sec.className='plancard';sec.style.flex='1';
     sec.innerHTML='<div class="sectionhead" style="margin-bottom:12px"><div><div class="sectiontitle">'+title+'</div><div class="sectionsub">'+sub+'</div></div></div>';
     var ml2=document.createElement('div');ml2.className='meallist';
     meals.forEach(function(m){
@@ -889,8 +889,10 @@ function renderNutrition(){
     sec.appendChild(ml2);
     return sec;
   }
-  root.appendChild(buildMealSection('Weekday plate','Six feeds · protein anchors every one.',mealsWd));
-  root.appendChild(buildMealSection('Weekend plate','Carbs come down · protein stays high.',mealsWe));
+  var mealPair=document.createElement('div');mealPair.className='planpair';mealPair.style.alignItems='flex-start';
+  mealPair.appendChild(buildMealSection('Weekday plate','Six feeds · protein anchors every one.',mealsWd));
+  mealPair.appendChild(buildMealSection('Weekend plate','Carbs come down · protein stays high.',mealsWe));
+  root.appendChild(mealPair);
   return root;
 }
 
