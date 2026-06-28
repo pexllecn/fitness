@@ -1177,7 +1177,8 @@ var EX_IMGS={
   'cat-arms':'https://images.unsplash.com/photo-1540497077202-7c8a3999166f?w=300&q=70&fit=crop',
   'cat-core':'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=300&q=70&fit=crop'
 };
-var curDay=0,RC=2*Math.PI*32,play='<i class="hgi-stroke hgi-play"></i>';
+var curDay=0,todayProgramIdx=-1,RC=2*Math.PI*32,play='<i class="hgi-stroke hgi-play"></i>';
+var WD_NAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 function todayISO(){return new Date().toISOString().slice(0,10);}
 function doneSet(){var t=STATE.ticks[todayISO()];return(t&&t.key===PROGRAM[curDay].key&&Array.isArray(t.done))?t.done:[];}
 function setDone(arr){STATE.ticks[todayISO()]={key:PROGRAM[curDay].key,done:arr};saveState();}
@@ -1207,11 +1208,13 @@ function renderWorkout(){
     return '<div class="excard'+(on?' done':'')+'"'+cardAttr+'><div class="excard-thumb '+cat+'">'+img+'<span class="excard-tnum">'+(i+1)+'</span></div><div class="excard-body">'+nameEl+'<div class="excard-tags">'+tags+'</div>'+(e.note?'<div class="excard-enote">'+e.note+'</div>':'')+'</div><button class="excard-chk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
   }).join('');
   $('hDay').textContent=d.name;$('hSub').innerHTML=d.sub;$('cMoves').textContent=d.ex.length;$('cSets').textContent=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);$('cTime').textContent=d.time;
-  var _dd=$('dashDay');if(_dd)_dd.textContent=d.name;
   updateRing();
 }
 function updateActRings(){
-  var d=PROGRAM[curDay],tot=d.ex.length,n=doneSet().length;
+  // Dashboard rings always reflect today, not the selected tab
+  var idx=todayProgramIdx>=0?todayProgramIdx:curDay;
+  var d=PROGRAM[idx],tot=d.ex.length;
+  var t=STATE.ticks[todayISO()],n=(t&&t.key===d.key&&Array.isArray(t.done))?t.done.length:0;
   var MRC=2*Math.PI*60,sRC=2*Math.PI*29;
   var el=document.getElementById('actMainRing');
   if(el){el.style.strokeDasharray=MRC;el.style.strokeDashoffset=MRC*(1-n/tot);}
@@ -1221,7 +1224,7 @@ function updateActRings(){
   if(mv)mv.textContent=n+'/'+tot;
   var sEl=document.getElementById('actSets');
   var totSets=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);
-  var doneSets=doneSet().reduce(function(a,i){return a+parseInt(d.ex[i].sr,10);},0);
+  var doneSets=(t&&t.key===d.key&&Array.isArray(t.done))?t.done.reduce(function(a,i){return a+parseInt(d.ex[i]&&d.ex[i].sr||'0',10);},0):0;
   document.getElementById('actSetsTot').textContent=totSets;
   document.getElementById('actSetsVal').textContent=doneSets;
   if(sEl){sEl.style.strokeDasharray=sRC;sEl.style.strokeDashoffset=sRC*(1-doneSets/Math.max(1,totSets));}
@@ -1232,7 +1235,7 @@ function updateActRings(){
   var dEl=document.getElementById('actDefRing');
   if(dEl){dEl.style.strokeDasharray=sRC;dEl.style.strokeDashoffset=sRC*(1-452/700);}
 }
-function updateRing(){var d=PROGRAM[curDay],tot=d.ex.length,n=doneSet().length;$('ringNum').textContent=n+'/'+tot;var _dn=$('dashDone');if(_dn)_dn.textContent=n+'/'+tot;var f=$('ringFil');f.style.strokeDasharray=RC;f.style.strokeDashoffset=RC*(1-n/tot);updateActRings();}
+function updateRing(){var d=PROGRAM[curDay],tot=d.ex.length,n=doneSet().length;$('ringNum').textContent=n+'/'+tot;var f=$('ringFil');f.style.strokeDasharray=RC;f.style.strokeDashoffset=RC*(1-n/tot);updateActRings();renderDashToday();}
 function selectDay(i){curDay=i;renderDayTabs();renderWorkout();}
 
 /* ── Exercise media modal ── */
@@ -1286,7 +1289,27 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 });
 
-function initToday(){var k=WEEKDAY_TO_KEY[new Date().getDay()];if(k){for(var i=0;i<PROGRAM.length;i++){if(PROGRAM[i].key===k){curDay=i;return;}}}}
+function initToday(){
+  var wd=new Date().getDay(),k=WEEKDAY_TO_KEY[wd];
+  if(k){for(var i=0;i<PROGRAM.length;i++){if(PROGRAM[i].key===k){curDay=i;todayProgramIdx=i;return;}}}
+  todayProgramIdx=-1;
+  // rest day — point curDay at next scheduled session
+  for(var off=1;off<=7;off++){var nw=(wd+off)%7,nk=WEEKDAY_TO_KEY[nw];if(nk){for(var i=0;i<PROGRAM.length;i++){if(PROGRAM[i].key===nk){curDay=i;return;}}}}
+}
+function renderDashToday(){
+  var dd=$('dashDay'),dk=$('dashDone');
+  if(todayProgramIdx>=0){
+    var d=PROGRAM[todayProgramIdx],t=STATE.ticks[todayISO()];
+    var done=(t&&t.key===d.key&&Array.isArray(t.done))?t.done.length:0;
+    if(dd)dd.textContent=d.name;
+    if(dk)dk.innerHTML='<b>'+done+'/'+d.ex.length+'</b> done &middot; tap to open';
+  } else {
+    var wd=new Date().getDay(),nextText='';
+    for(var off=1;off<=7;off++){var nw=(wd+off)%7,nk=WEEKDAY_TO_KEY[nw];if(nk){var p=PROGRAM.filter(function(x){return x.key===nk;})[0];nextText='Next: '+(p?p.name:nk)+' &middot; '+WD_NAMES[nw];break;}}
+    if(dd)dd.textContent='Rest Day';
+    if(dk)dk.innerHTML=nextText;
+  }
+}
 
 /* ---------- calendar from real completion ---------- */
 function renderCalendar(){
@@ -1301,7 +1324,9 @@ function renderCalendar(){
     else if(sched&&dd<today)cls+=' cal-sched';
     else if(sched)cls+=' cal-sched';
     if(dd===today&&!(rec&&rec.done&&rec.done.length))cls='cal-d cal-today';
-    html+='<span class="'+cls+'">'+dd+'</span>';
+    var pdayAttr='';
+    if(sched){var pi=PROGRAM.findIndex(function(p){return p.key===sched;});if(pi>=0)pdayAttr=' data-pday="'+pi+'" style="cursor:pointer"';}
+    html+='<span class="'+cls+'"'+pdayAttr+'>'+dd+'</span>';
   }
   $('calGrid').innerHTML=html;
   var MN=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -1448,6 +1473,7 @@ function renderSHist(){$('sCount').textContent=STATE.scans.length+' logged';$('s
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
   var dt=e.target.closest('#dayTabs .pill');if(dt){selectDay(+dt.getAttribute('data-day'));return;}
+  var calDay=e.target.closest('[data-pday]');if(calDay&&e.target.closest('#calGrid')){curDay=+calDay.getAttribute('data-pday');renderDayTabs();renderWorkout();showView('workout');return;}
   var exn=e.target.closest('[data-exn]');if(exn&&!e.target.closest('.excard-chk')){var ename=exn.getAttribute('data-exn');var d=PROGRAM[curDay],ex=d.ex.find(function(x){return x.n===ename;});showExModal(ename,ex&&ex.note);return;}
   var c=e.target.closest('.exchk,.excard-chk');if(c){var i=+c.getAttribute('data-idx'),arr=doneSet().slice(),p=arr.indexOf(i);if(p>=0)arr.splice(p,1);else arr.push(i);setDone(arr);var row=c.closest('.exrow,.excard');if(row)row.classList.toggle('done',arr.indexOf(i)>=0);updateRing();renderCalendar();return;}
   var nav=e.target.closest('[data-v]');if(nav){showView(nav.getAttribute('data-v'));return;}
@@ -1490,7 +1516,7 @@ $('sSave').addEventListener('click',function(){var dt=$('sDate').value,w=parseFl
 function bootRender(){
   applyTheme(STATE.theme==='system'?'system':STATE.theme,false);
   applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);
-  initToday();renderDayTabs();renderWorkout();renderCalendar();
+  initToday();renderDayTabs();renderWorkout();renderDashToday();renderCalendar();
   applyTargets();renderMeals();renderProgress();
   var savedView=localStorage.getItem('tcView');
   if(savedView&&$('v-'+savedView))showView(savedView);
