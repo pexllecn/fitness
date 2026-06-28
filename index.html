@@ -1029,11 +1029,11 @@ var PROGRAM=[
   ]},
   {key:'upperB',name:'Upper B',focus:'Pull · delts',sub:'Pull &amp; delts · tap any move for its form video',time:'~76',ex:[
     {n:'Incline DB Press',sr:'3 × 8-10',rir:'2 RIR',ld:'32 → 40kg each',q:q('incline dumbbell press'),note:'From your flat press. Upper-chest focus.'},
-    {n:'Lat Pulldown (neutral)',sr:'3 × 8-10',ld:'60 → 80kg',q:q('neutral grip lat pulldown'),note:'Neutral grip is easier on the shoulders. Drive elbows down to your hips, lean back slightly.'},
-    {n:'Seated Cable Row',sr:'3 × 8-10',rir:'1-2 RIR',ld:'by feel · add a plate',q:q('seated cable row'),note:'Sit tall, pull the handle to your sternum, squeeze shoulder blades together. No rounding forward.'},
+    {n:'Lat Pulldown (machine)',sr:'3 × 8-10',ld:'60 → 80kg',q:q('reverse grip machine lat pulldown'),note:'Reverse grip hits the lats through a longer range. Drive elbows down and back, squeeze at the bottom.'},
+    {n:'Lever Seated Row',sr:'3 × 8-10',rir:'1-2 RIR',ld:'by feel · add a plate',q:q('lever seated row machine'),note:'Machine row — chest against pad, pull handles to your sides, squeeze shoulder blades. No cable machine needed.'},
     {n:'Seated DB Shoulder Press',sr:'3 × 8-10',ld:'25 → 32kg each',q:q('seated dumbbell shoulder press'),note:'Second delt hit of the week.'},
     {n:'Lateral Raise',sr:'3 × 12-15',rir:'0-1 RIR',ld:'10 → 16kg',q:q('dumbbell lateral raise'),note:'Second delt hit of the week. Lead with the elbow, controlled on the way down.'},
-    {n:'Face Pull',sr:'3 × 12-15',ld:'light · add when easy',q:q('cable face pull'),note:'Rear delts and shoulder health.'},
+    {n:'DB Shrug',sr:'3 × 12-15',ld:'by feel · add load',q:q('dumbbell shrug'),note:'Upper traps. Shrug straight up, hold a beat at the top, slow lower. No rolling.'},
     {n:'DB Curl + Triceps Ext',sr:'2 × 10-12 superset',ld:'by feel',q:q('dumbbell curl triceps extension superset'),note:'Superset: curl first, then overhead extension back to back. Short rest between pairs.'}
   ]},
   {key:'arms',name:'Arms & Delts',focus:'Delts · arms · forearms',sub:'Delts, arms &amp; forearms · your Saturday pump',time:'~55',ex:[
@@ -1148,7 +1148,7 @@ var EXDB={
   'DB Standing Calf Raise':      _ex('images/0417-dPmaUaU.jpg','videos/0417-dPmaUaU.gif'),
   'Cable Crunch':                _ex('images/0175-WW95auq.jpg','videos/0175-WW95auq.gif'),
   'Incline DB Press':            _ex('images/0314-ns0SIbU.jpg','videos/0314-ns0SIbU.gif'),
-  'Lat Pulldown (neutral)':      _ex('images/0818-rkg41Fb.jpg','videos/0818-rkg41Fb.gif'),
+  'Lat Pulldown (machine)':      _ex('images/0673-ecpY0rH.jpg','videos/0673-ecpY0rH.gif'),
   'Seated DB Shoulder Press':    _ex('images/0405-znQUdHY.jpg','videos/0405-znQUdHY.gif'),
   'Rear Delt Fly':               _ex('images/0215-x825CZm.jpg','videos/0215-x825CZm.gif'),
   'Cable Lateral Raise':         _ex('images/0178-goJ6ezq.jpg','videos/0178-goJ6ezq.gif'),
@@ -1158,8 +1158,8 @@ var EXDB={
   'DB Lateral Raise':            _ex('images/0334-DsgkuIt.jpg','videos/0334-DsgkuIt.gif'),
   'Hammer Curl + Wrist Curl':    _ex('images/0313-slDvUAU.jpg','videos/0313-slDvUAU.gif'),
   'DB Curl + Triceps Ext':       _ex('images/0868-G08RZcQ.jpg','videos/0868-G08RZcQ.gif'),
-  'Seated Cable Row':            _ex('images/0861-fUBheHs.jpg','videos/0861-fUBheHs.gif'),
-  'Face Pull':                   _ex('images/0203-wqNPGCg.jpg','videos/0203-wqNPGCg.gif')
+  'Lever Seated Row':            _ex('images/1350-7I6LNUG.jpg','videos/1350-7I6LNUG.gif'),
+  'DB Shrug':                    _ex('images/0406-NJzBsGJ.jpg','videos/0406-NJzBsGJ.gif')
 };
 var EX_IMGS={
   'cat-legs':'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=300&q=70&fit=crop',
@@ -1192,7 +1192,7 @@ function renderWorkout(){
     var dbEntry=EXDB[e.n];
     var thumbSrc=dbEntry?dbEntry.img:EX_IMGS[cat];
     var img=thumbSrc?'<img src="'+thumbSrc+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'';
-    /* If in EXDB: open in-app modal. If not (Face Pull, Seated Cable Row): open YouTube */
+    /* If in EXDB: open in-app modal. If not in EXDB: open YouTube */
     var nameEl=dbEntry
       ?'<button class="excard-name" data-exn="'+e.n.replace(/"/g,'&quot;')+'"><span class="play">'+play+'</span>'+e.n+'</button>'
       :'<a class="excard-name" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a>';
@@ -1565,7 +1565,7 @@ function syncPull(onDone){
       localStorage.setItem(SYNC_KEY_LS,c.key);
       localStorage.setItem(SYNC_BIN_LS,c.bin);
       localStorage.setItem(KEY,JSON.stringify(o));
-      loadState();bootRender();syncPills();syncLoadInputs();
+      var _savedDay=curDay;loadState();bootRender();curDay=_savedDay;renderDayTabs();renderWorkout();syncPills();syncLoadInputs();
       var t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
       syncSetStatus('✓ Pulled at '+t+'. Data loaded from cloud.');
       toast('Synced from cloud');
@@ -1634,7 +1634,7 @@ syncLoadInputs();
           setTimeout(reset,1000);
         });
       } else {
-        bootRender();
+        var _sd=curDay;bootRender();curDay=_sd;renderDayTabs();renderWorkout();
         label.textContent='Refreshed';
         setTimeout(reset,1200);
       }
