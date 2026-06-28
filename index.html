@@ -1121,50 +1121,67 @@ function cloudSetStatus(msg){
   var el=$('cloudStatus');
   if(el)el.textContent=(STATE.cloud.lastSync?'Last sync: '+STATE.cloud.lastSync+' · ':'')+msg;
 }
+function cloudReadInputs(){
+  /* reads directly from DOM inputs regardless of blur state */
+  var ki=$('cloudKeyInput'),bi=$('cloudBinInput');
+  var key=(ki?ki.value.trim():'')||STATE.cloud.key||'';
+  var bid=(bi?bi.value.trim():'')||STATE.cloud.binId||'';
+  if(key)STATE.cloud.key=key;
+  if(bid)STATE.cloud.binId=bid;
+  saveState();
+  return{key:key,bid:bid};
+}
+function cloudPayload(){
+  /* strip transient device fields before sending */
+  var s=JSON.parse(JSON.stringify(STATE));
+  s.cloud={key:'',binId:'',lastSync:'',status:''};
+  return JSON.stringify(s);
+}
 function cloudPush(){
-  cloudSaveInputs();
-  var key=STATE.cloud.key,bid=STATE.cloud.binId;
-  if(!key||!bid){alert('Enter your API key first, then click "Create New Bin" to generate a Bin ID.');return;}
+  var c=cloudReadInputs();
+  if(!c.key||!c.bid){alert('Enter your API key first, then click "Create New Bin" to generate a Bin ID.');return;}
   cloudSetStatus('Pushing…');
-  fetch('https://api.jsonbin.io/v3/b/'+bid,{
+  fetch('https://api.jsonbin.io/v3/b/'+c.bid,{
     method:'PUT',
-    headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Versioning':'false'},
-    body:JSON.stringify(STATE)
+    headers:{'Content-Type':'application/json','X-Master-Key':c.key,'X-Bin-Versioning':'false'},
+    body:cloudPayload()
   }).then(function(r){
     if(!r.ok)throw new Error('HTTP '+r.status);
     var now=new Date().toLocaleString();
     STATE.cloud.lastSync=now;saveState();
     cloudSetStatus('Pushed OK · '+now);
-    var el=$('cloudBinInput');if(el)el.value=STATE.cloud.binId;
   }).catch(function(e){cloudSetStatus('Push failed: '+e.message);});
 }
 function cloudPull(){
-  cloudSaveInputs();
-  var key=STATE.cloud.key,bid=STATE.cloud.binId;
-  if(!key||!bid){alert('Enter your API key first, then click "Create New Bin" or enter an existing Bin ID.');return;}
+  var c=cloudReadInputs();
+  if(!c.key||!c.bid){alert('Enter your API key and Bin ID first.');return;}
   cloudSetStatus('Pulling…');
-  fetch('https://api.jsonbin.io/v3/b/'+bid+'/latest',{
-    headers:{'X-Master-Key':key}
+  fetch('https://api.jsonbin.io/v3/b/'+c.bid+'/latest',{
+    headers:{'X-Master-Key':c.key}
   }).then(function(r){
     if(!r.ok)throw new Error('HTTP '+r.status);
     return r.json();
   }).then(function(data){
     var o=data.record||data;
-    if(!o||!o.targets)throw new Error('Invalid backup data in bin');
-    var cloud={key:key,binId:bid,lastSync:new Date().toLocaleString(),status:''};
-    STATE=Object.assign(o,{cloud:cloud});
-    saveState();applyTheme();applyAccent();go('profile');
+    /* accept records even if some keys are missing — merge over defaults */
+    if(!o||typeof o!=='object')throw new Error('Empty or invalid bin');
+    var base=defState();
+    Object.assign(base,o);
+    base.cloud={key:c.key,binId:c.bid,lastSync:new Date().toLocaleString(),status:'Pulled OK'};
+    STATE=base;
+    saveState();applyTheme();applyAccent();
+    go('home');
+    cloudSetStatus('Pulled OK · '+base.cloud.lastSync);
   }).catch(function(e){cloudSetStatus('Pull failed: '+e.message);});
 }
 function cloudCreateBin(){
-  cloudSaveInputs();
-  var key=STATE.cloud.key;
-  if(!key){alert('Enter your JSONBin API key first.');return;}
+  var c=cloudReadInputs();
+  if(!c.key){alert('Enter your JSONBin API key first.');return;}
   cloudSetStatus('Creating new bin…');
   fetch('https://api.jsonbin.io/v3/b',{
     method:'POST',
-    headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Name':'the-cut-backup','X-Bin-Private':'true'},
-    body:JSON.stringify(STATE)
+    headers:{'Content-Type':'application/json','X-Master-Key':c.key,'X-Bin-Name':'the-cut-backup','X-Bin-Private':'true'},
+    body:cloudPayload()
   }).then(function(r){
     if(!r.ok)throw new Error('HTTP '+r.status);
     return r.json();
