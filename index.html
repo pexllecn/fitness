@@ -510,9 +510,9 @@ function clone(o){return JSON.parse(JSON.stringify(o));}
 var DEFAULT_TARGETS={weekday:{p:240,c:200,f:50},weekend:{p:240,c:130,f:50}};
 var SEED_S=[{date:'2025-09-27',weight:88.9,bf:18.9,muscle:68.5},{date:'2026-05-17',weight:92.6,bf:19.2,muscle:71.1}];
 var SEED_D=[{date:'2026-05-17',weight:92.6},{date:'2026-06-06',weight:93.8}];
-function defState(){return{targets:clone(DEFAULT_TARGETS),maint:2900,theme:'light',accent:0,mode:'weekday',scans:clone(SEED_S),daily:clone(SEED_D),ticks:{}};}
+function defState(){return{targets:clone(DEFAULT_TARGETS),maint:2900,theme:'light',accent:0,mode:'weekday',scans:clone(SEED_S),daily:clone(SEED_D),ticks:{},cloud:{key:'',binId:'',lastSync:'',status:''}};}
 var STATE=defState();
-function loadState(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);var d=defState();STATE={targets:o.targets&&o.targets.weekday?o.targets:d.targets,maint:o.maint||d.maint,theme:o.theme||'light',accent:o.accent||0,mode:o.mode||'weekday',scans:Array.isArray(o.scans)&&o.scans.length?o.scans:d.scans,daily:Array.isArray(o.daily)?o.daily:d.daily,ticks:o.ticks||{}};}}catch(e){STATE=defState();}}
+function loadState(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);var d=defState();STATE={targets:o.targets&&o.targets.weekday?o.targets:d.targets,maint:o.maint||d.maint,theme:o.theme||'light',accent:o.accent||0,mode:o.mode||'weekday',scans:Array.isArray(o.scans)&&o.scans.length?o.scans:d.scans,daily:Array.isArray(o.daily)?o.daily:d.daily,ticks:o.ticks||{},cloud:o.cloud||d.cloud};}}catch(e){STATE=defState();}}
 function saveState(){try{localStorage.setItem(KEY,JSON.stringify(STATE));}catch(e){}}
 
 /* ── helpers ── */
@@ -528,14 +528,6 @@ function setTick(progIdx,arr){STATE.ticks[todayISO()]={key:PROGRAM[progIdx].key,
 /* ── navigation state ── */
 var PAGE='home';
 var PAGES=['home','train','nutrition','progress','plan','profile'];
-var NAV_DEFS=[
-  {key:'home',icon:'home',label:'Home',meta:'Today'},
-  {key:'train',icon:'dumbbell',label:'Training',meta:'Lower A'},
-  {key:'nutrition',icon:'fork',label:'Nutrition',meta:'2,210'},
-  {key:'progress',icon:'chart',label:'Progress',meta:'19.2%'},
-  {key:'plan',icon:'plan',label:'Plan',meta:'90 days'},
-  {key:'profile',icon:'user',label:'Profile',meta:'Kay'}
-];
 var BOT_DEFS=[
   {key:'home',icon:'home',label:'Home'},
   {key:'train',icon:'dumbbell',label:'Train'},
@@ -544,11 +536,25 @@ var BOT_DEFS=[
   {key:'plan',icon:'plan',label:'Plan'},
   {key:'profile',icon:'user',label:'You'}
 ];
+function getNavDefs(){
+  var latestScan=STATE.scans[STATE.scans.length-1]||{};
+  var todayKey=todayDayKey();
+  var todayProg=null;for(var _i=0;_i<PROGRAM.length;_i++){if(PROGRAM[_i].key===todayKey){todayProg=PROGRAM[_i];break;}}
+  var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  return [
+    {key:'home',icon:'home',label:'Home',meta:days[new Date().getDay()]},
+    {key:'train',icon:'dumbbell',label:'Training',meta:todayProg?todayProg.name:'Rest'},
+    {key:'nutrition',icon:'fork',label:'Nutrition',meta:fmtK(kcalOf(STATE.targets[STATE.mode||'weekday']))},
+    {key:'progress',icon:'chart',label:'Progress',meta:latestScan.bf?latestScan.bf.toFixed(1)+'%':'–'},
+    {key:'plan',icon:'plan',label:'Plan',meta:'Establish'},
+    {key:'profile',icon:'user',label:'Profile',meta:'Kay'}
+  ];
+}
 
 function buildNav(){
   var sn=$('sideNav'),bn=$('bottomNav');
   sn.innerHTML='';if(bn)bn.innerHTML='';
-  NAV_DEFS.forEach(function(d){
+  getNavDefs().forEach(function(d){
     var el=document.createElement('div');
     el.className='navitem'+(PAGE===d.key?' on':'');
     el.innerHTML='<div class="ngrp"><span class="nicon">'+iconHTML(d.icon)+'</span><span class="nlabel">'+d.label+'</span></div><span class="nmeta">'+d.meta+'</span>';
@@ -725,32 +731,12 @@ function renderHome(){
     var isTraining=[1,2,4,5,6].indexOf(wd)>=0;
     var iso=now2.getFullYear()+'-'+String(now2.getMonth()+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
     var cls='';
-    var skipped=STATE.ticks[iso]&&STATE.ticks[iso].skipped;
+    var tick=STATE.ticks[iso];
+    var hasDone=tick&&Array.isArray(tick.done)&&tick.done.length>0;
     if(d===today2)cls='today';
-    else if(isTraining&&d<today2)cls=skipped?'rest':'done';
+    else if(isTraining&&d<today2)cls=hasDone?'done':'';
     else if(!isTraining)cls='rest';
-    var el=document.createElement('div');el.className='calcell '+cls;el.textContent=d;
-    if(isTraining&&d<today2){
-      (function(isoDate,cell){
-        cell.style.cursor='pointer';
-        cell.title='Click to mark as missed / completed';
-        cell.onclick=function(){
-          var isSkipped=STATE.ticks[isoDate]&&STATE.ticks[isoDate].skipped;
-          if(isSkipped){
-            /* restore to done */
-            delete STATE.ticks[isoDate];
-            cell.classList.remove('rest');
-            cell.classList.add('done');
-          } else {
-            /* mark as skipped/missed */
-            STATE.ticks[isoDate]={skipped:true};
-            cell.classList.remove('done');
-            cell.classList.add('rest');
-          }
-          saveState();
-        };
-      })(iso,el);
-    }
+    var el=document.createElement('div');el.className='calcell'+(cls?' '+cls:'');el.textContent=d;
     cg.appendChild(el);
   }
   orbrow.appendChild(cal);
@@ -876,7 +862,7 @@ function renderNutrition(){
   /* hydration + supps */
   root.insertAdjacentHTML('beforeend','<div class="planpair"><div class="infocard"><div class="infottl">Hydration<span class="mono fs10 mut2">DAILY</span></div><div class="bullet"><span class="bdot"></span><b style="color:#232427;font-weight:600">4.0 L</b>&nbsp;on training days &amp; Saturday.</div><div class="bullet"><span class="bdot"></span><b style="color:#232427;font-weight:600">3.5 L</b>&nbsp;on rest days.</div><div class="bullet"><span class="bdot"></span>Salt + electrolytes before training.</div></div><div class="infocard"><div class="infottl">Supplements<span class="mono fs10 mut2">PROTECT MUSCLE</span></div><div class="bullet"><span class="bdot"></span>Whey &amp; Creatine 5 g — daily, post-train.</div><div class="bullet"><span class="bdot"></span>Magnesium 300–400 mg — PM, for cramps.</div><div class="bullet"><span class="bdot"></span>Multivit &amp; Vitamin D — AM.</div></div></div>');
   /* meals */
-  var meals=[
+  var mealsWd=[
     {name:'Breakfast',desc:'Dessert Khuswa — yogurt, oats, whey, berries',macro:'58P · 52C · 9F',kcal:540,blob:'sb-green'},
     {name:'Lunch',desc:'Chicken Khuswa — rice, greens, olive oil',macro:'56P · 49C · 7F',kcal:483,blob:'sb-blue'},
     {name:'Snack',desc:'Cheese sandwich · protein square',macro:'31P · 32C · 9F',kcal:337,blob:'sb-orange'},
@@ -884,16 +870,27 @@ function renderNutrition(){
     {name:'Post-gym',desc:'Protein + creatine shake',macro:'24P · 2C · 1F',kcal:109,blob:'sb-blue'},
     {name:'Dinner',desc:'4 eggs + tuna',macro:'50P · 2C · 21F',kcal:389,blob:'sb-orange'}
   ];
-  var mealSection=document.createElement('div');
-  mealSection.innerHTML='<div class="sectionhead" style="margin-bottom:12px"><div><div class="sectiontitle">Weekday plate</div><div class="sectionsub">Six feeds · protein anchors every one.</div></div></div>';
-  var ml2=document.createElement('div');ml2.className='meallist';
-  meals.forEach(function(m){
-    var row=document.createElement('div');row.className='mealrow';
-    row.innerHTML='<div class="mealblob '+m.blob+'"></div><div class="mealtext"><div class="mealname">'+m.name+'</div><div class="mealdesc">'+m.desc+'</div></div><div class="mealright"><div class="mealkcal">'+m.kcal+'</div><div class="mealmac">'+m.macro+'</div></div>';
-    ml2.appendChild(row);
-  });
-  mealSection.appendChild(ml2);
-  root.appendChild(mealSection);
+  var mealsWe=[
+    {name:'Breakfast',desc:'Dessert Khuswa — yogurt, oats, whey, berries',macro:'58P · 52C · 9F',kcal:540,blob:'sb-green'},
+    {name:'Lunch',desc:'Grilled chicken + salad · no rice',macro:'56P · 15C · 8F',kcal:360,blob:'sb-blue'},
+    {name:'Snack',desc:'Protein shake · handful of nuts',macro:'30P · 5C · 10F',kcal:230,blob:'sb-orange'},
+    {name:'Dinner',desc:'Lean beef or fish · roasted veg',macro:'52P · 25C · 12F',kcal:420,blob:'sb-green'},
+    {name:'Evening',desc:'Greek yogurt · casein if needed',macro:'44P · 33C · 11F',kcal:380,blob:'sb-blue'}
+  ];
+  function buildMealSection(title,sub,meals){
+    var sec=document.createElement('div');
+    sec.innerHTML='<div class="sectionhead" style="margin-bottom:12px"><div><div class="sectiontitle">'+title+'</div><div class="sectionsub">'+sub+'</div></div></div>';
+    var ml2=document.createElement('div');ml2.className='meallist';
+    meals.forEach(function(m){
+      var row=document.createElement('div');row.className='mealrow';
+      row.innerHTML='<div class="mealblob '+m.blob+'"></div><div class="mealtext"><div class="mealname">'+m.name+'</div><div class="mealdesc">'+m.desc+'</div></div><div class="mealright"><div class="mealkcal">'+m.kcal+'</div><div class="mealmac">'+m.macro+'</div></div>';
+      ml2.appendChild(row);
+    });
+    sec.appendChild(ml2);
+    return sec;
+  }
+  root.appendChild(buildMealSection('Weekday plate','Six feeds · protein anchors every one.',mealsWd));
+  root.appendChild(buildMealSection('Weekend plate','Carbs come down · protein stays high.',mealsWe));
   return root;
 }
 
@@ -1039,7 +1036,7 @@ function renderProfile(){
   acCard.innerHTML='<div class="infottl">Accent</div><div class="swatchrow" id="swatchRow"></div><div class="infottl" style="margin:20px 0 12px">Theme</div><div class="swatchrow"><span class="badge pillb" style="height:34px;padding:0 18px;cursor:pointer" id="thLight">Light</span><span class="badge" style="height:34px;padding:0 18px;cursor:pointer;margin-left:8px" id="thDark">Dark</span></div>';
   pp2.appendChild(acCard);
   var bkCard=document.createElement('div');bkCard.className='infocard';
-  bkCard.innerHTML='<div class="infottl">Backup &amp; cloud<span class="mono fs10 mut2">THIS DEVICE</span></div><div class="levertxt" style="margin-bottom:14px">Everything saves on this device automatically. Push to the cloud to pull it on any other device.</div><div style="display:flex;gap:10px;flex-wrap:wrap"><button class="startbtn" onclick="exportData()">⬆ Export</button><button class="seeall" style="height:44px;border-radius:22px;border:1px solid #ececef" onclick="importData()">⬇ Import</button></div>';
+  bkCard.innerHTML='<div class="infottl">Cloud sync<span class="mono fs10 mut2">JSONBIN.IO</span></div><div class="levertxt" style="margin-bottom:14px">Enter your JSONBin API key and Bin ID to push or pull your data from any device.</div><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase">API Key<input id="cloudKeyInput" type="password" placeholder="$2a$10$…" value="'+escHtml(STATE.cloud.key||'')+'" style="display:block;width:100%;margin-top:5px;padding:10px 14px;border-radius:14px;border:1px solid var(--surface-soft);background:var(--surface-soft);color:var(--ink);font-size:13px;font-family:\'JetBrains Mono\',monospace;box-sizing:border-box" /></label><label style="font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase">Bin ID<input id="cloudBinInput" type="text" placeholder="64a3f…" value="'+escHtml(STATE.cloud.binId||'')+'" style="display:block;width:100%;margin-top:5px;padding:10px 14px;border-radius:14px;border:1px solid var(--surface-soft);background:var(--surface-soft);color:var(--ink);font-size:13px;font-family:\'JetBrains Mono\',monospace;box-sizing:border-box" /></label></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px"><button class="startbtn" onclick="cloudPush()">⬆ Push</button><button class="seeall" style="height:44px;border-radius:22px;border:1px solid #ececef" onclick="cloudPull()">⬇ Pull</button></div><div id="cloudStatus" style="font-size:12px;color:var(--muted);min-height:18px">'+(STATE.cloud.lastSync?'Last sync: '+STATE.cloud.lastSync:'')+' '+(STATE.cloud.status||'')+'</div><details style="margin-top:14px"><summary style="font-size:12px;font-weight:600;color:var(--muted);cursor:pointer">How to get a free JSONBin key</summary><div class="levertxt" style="margin-top:10px">1. Go to <b>jsonbin.io</b> and create a free account.<br>2. In your dashboard, go to <b>API Keys</b> and create a new key.<br>3. Click <b>New Bin</b>, save an empty JSON — copy the Bin ID from the URL.<br>4. Paste both here and hit Push.</div></details><div style="border-top:1px solid var(--surface-soft);margin-top:14px;padding-top:12px"><button class="startbtn" style="background:transparent;color:var(--ink);border:1px solid var(--surface-soft);font-size:12px;height:36px;padding:0 16px" onclick="exportData()">⬆ Export file</button>&nbsp;<button class="seeall" style="height:36px;font-size:12px;padding:0 16px;border:1px solid #ececef;border-radius:18px" onclick="importData()">⬇ Import file</button></div>';
   pp2.appendChild(bkCard);
   root.appendChild(pp2);
   /* reset */
@@ -1057,11 +1054,62 @@ function renderProfile(){
   root.querySelector('#thLight').onclick=function(){STATE.theme='light';saveState();applyTheme();};
   root.querySelector('#thDark').onclick=function(){STATE.theme='dark';saveState();applyTheme();};
   root.querySelector('#resetBtn').onclick=function(){if(confirm('Reset all data? This cannot be undone.')){localStorage.removeItem(KEY);STATE=defState();go('home');}};
+  var ki=root.querySelector('#cloudKeyInput'),bi=root.querySelector('#cloudBinInput');
+  if(ki)ki.addEventListener('blur',cloudSaveInputs);
+  if(bi)bi.addEventListener('blur',cloudSaveInputs);
   return root;
 }
 
 function applyTheme(){
   document.documentElement.setAttribute('data-theme', STATE.theme==='dark'?'dark':'light');
+}
+
+function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;');}
+
+function cloudSaveInputs(){
+  var ki=$('cloudKeyInput'),bi=$('cloudBinInput');
+  if(ki)STATE.cloud.key=ki.value.trim();
+  if(bi)STATE.cloud.binId=bi.value.trim();
+  saveState();
+}
+function cloudSetStatus(msg){
+  STATE.cloud.status=msg;saveState();
+  var el=$('cloudStatus');
+  if(el)el.textContent=(STATE.cloud.lastSync?'Last sync: '+STATE.cloud.lastSync+' · ':'')+msg;
+}
+function cloudPush(){
+  cloudSaveInputs();
+  var key=STATE.cloud.key,bid=STATE.cloud.binId;
+  if(!key||!bid){alert('Enter your API key and Bin ID first.');return;}
+  cloudSetStatus('Pushing…');
+  fetch('https://api.jsonbin.io/v3/b/'+encodeURIComponent(bid),{
+    method:'PUT',
+    headers:{'Content-Type':'application/json','X-Access-Key':key,'X-Bin-Versioning':'false'},
+    body:JSON.stringify(STATE)
+  }).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    var now=new Date().toLocaleString();
+    STATE.cloud.lastSync=now;
+    cloudSetStatus('Pushed OK · '+now);
+  }).catch(function(e){cloudSetStatus('Push failed: '+e.message);});
+}
+function cloudPull(){
+  cloudSaveInputs();
+  var key=STATE.cloud.key,bid=STATE.cloud.binId;
+  if(!key||!bid){alert('Enter your API key and Bin ID first.');return;}
+  cloudSetStatus('Pulling…');
+  fetch('https://api.jsonbin.io/v3/b/'+encodeURIComponent(bid)+'/latest',{
+    headers:{'X-Access-Key':key}
+  }).then(function(r){
+    if(!r.ok)throw new Error('HTTP '+r.status);
+    return r.json();
+  }).then(function(data){
+    var o=data.record||data;
+    if(!o||!o.targets)throw new Error('Invalid data');
+    var cloud={key:key,binId:bid,lastSync:new Date().toLocaleString(),status:''};
+    STATE=Object.assign(o,{cloud:cloud});
+    saveState();applyTheme();applyAccent();go('profile');
+  }).catch(function(e){cloudSetStatus('Pull failed: '+e.message);});
 }
 
 function exportData(){
