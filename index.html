@@ -558,6 +558,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .ex-modal-box{width:100%;max-width:480px;background:var(--card);border-radius:28px 28px 0 0;padding:0 0 env(safe-area-inset-bottom);overflow:hidden;transform:translateY(60px);transition:transform .28s cubic-bezier(.32,1,.5,1)}
 .ex-modal.open .ex-modal-box{transform:translateY(0)}
 .ex-modal-media{width:100%;height:260px;background:#fff;position:relative;overflow:hidden;cursor:pointer;display:flex;align-items:center;justify-content:center}
+[data-theme="dark"] .ex-modal-media{background:#000}
 .ex-modal-media>#exModalImg{position:relative;z-index:1;max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges}
 .ex-modal-media .play-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);transition:opacity .2s}
 .ex-modal-media .play-hint i{font-size:48px;color:#fff;opacity:.9}
@@ -1241,13 +1242,15 @@ function showExModal(name,note){
   var oldbg=media.querySelector('.ex-modal-bg');if(oldbg)oldbg.remove();
   media.classList.remove('playing');
   media._gif=entry.gif;
+  /* kick off GIF fetch early so browser starts caching it */
+  (new Image()).src=entry.gif;
   modal.classList.add('open');
   document.body.style.overflow='hidden';
   /* auto-play the gif */
   var gif=document.createElement('img');
   gif.className='ex-gif';
   gif.style.cssText='max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;display:block;image-rendering:-webkit-optimize-contrast;image-rendering:crisp-edges;';
-  gif.src=entry.gif+'?t='+Date.now();
+  gif.src=entry.gif;
   media.appendChild(gif);
   media.classList.add('playing');
   $('exModalImg').style.display='none';
