@@ -690,7 +690,8 @@ function renderHome(){
   /* progress card */
   var pc=document.createElement('div');pc.className='progcard';
   var bf=scan.bf||19.2;
-  var startW=STATE.scans[0]?STATE.scans[0].weight:92.8;
+  /* cut start = heaviest scan (peak weight before cut) */
+  var startW=STATE.scans.reduce(function(mx,s){return(s.weight&&s.weight>mx)?s.weight:mx;},85.1);
   var curW=scan.weight||92.6;
   var prog=Math.max(0,Math.min(100,((startW-curW)/(startW-85))*100));
   pc.innerHTML='<div class="progtop"><div><div class="mut fs13">The cut</div><div class="progbig">'+curW+' <span class="progarrow">→</span> 85.0 <span class="progunit">kg</span></div><div class="mut" style="font-size:13px">~'+((curW-85).toFixed(1))+' kg to shift · about 0.5 kg a week.</div></div><span class="badge lime" style="height:26px">On track</span></div><div class="progbar"><div class="progfill" style="width:'+prog+'%"></div><div class="proghandle" style="left:'+prog+'%"></div></div><div class="progstats" id="progStats"></div>';
@@ -724,19 +725,28 @@ function renderHome(){
     var isTraining=[1,2,4,5,6].indexOf(wd)>=0;
     var iso=now2.getFullYear()+'-'+String(now2.getMonth()+1).padStart(2,'0')+'-'+String(d).padStart(2,'0');
     var cls='';
+    var skipped=STATE.ticks[iso]&&STATE.ticks[iso].skipped;
     if(d===today2)cls='today';
-    else if(isTraining&&d<today2)cls='done';
+    else if(isTraining&&d<today2)cls=skipped?'rest':'done';
     else if(!isTraining)cls='rest';
     var el=document.createElement('div');el.className='calcell '+cls;el.textContent=d;
     if(isTraining&&d<today2){
       (function(isoDate,cell){
         cell.style.cursor='pointer';
-        cell.title='Toggle day';
+        cell.title='Click to mark as missed / completed';
         cell.onclick=function(){
-          if(!STATE.ticks[isoDate])STATE.ticks[isoDate]={skipped:true};
-          else delete STATE.ticks[isoDate];
-          cell.classList.toggle('done');
-          cell.classList.toggle('rest');
+          var isSkipped=STATE.ticks[isoDate]&&STATE.ticks[isoDate].skipped;
+          if(isSkipped){
+            /* restore to done */
+            delete STATE.ticks[isoDate];
+            cell.classList.remove('rest');
+            cell.classList.add('done');
+          } else {
+            /* mark as skipped/missed */
+            STATE.ticks[isoDate]={skipped:true};
+            cell.classList.remove('done');
+            cell.classList.add('rest');
+          }
           saveState();
         };
       })(iso,el);
