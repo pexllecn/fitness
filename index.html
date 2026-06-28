@@ -1190,7 +1190,7 @@ function renderWorkout(){
     var tags='<span class="excard-tag lime">'+e.sr+'</span>'+(e.rir?'<span class="excard-tag rir">'+e.rir+'</span>':'')+'<span class="excard-tag">'+e.ld+'</span>';
     var dbEntry=EXDB[e.n];
     var thumbSrc=dbEntry?dbEntry.img:EX_IMGS[cat];
-    var img=thumbSrc?'<img src="'+thumbSrc+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"><div class="excard-thumb-ov"></div>':'';
+    var img=thumbSrc?'<img src="'+thumbSrc+'" alt="" loading="lazy" onerror="this.style.display=\'none\'">':'';
     /* If in EXDB: open in-app modal. If not (Face Pull, Seated Cable Row): open YouTube */
     var nameEl=dbEntry
       ?'<button class="excard-name" data-exn="'+e.n.replace(/"/g,'&quot;')+'"><span class="play">'+play+'</span>'+e.n+'</button>'
