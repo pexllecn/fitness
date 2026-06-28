@@ -1157,9 +1157,8 @@ var EXDB={
   'DB Lateral Raise':            _ex('images/0334-DsgkuIt.jpg','videos/0334-DsgkuIt.gif'),
   'Hammer Curl + Wrist Curl':    _ex('images/0313-slDvUAU.jpg','videos/0313-slDvUAU.gif'),
   'DB Curl + Triceps Ext':       _ex('images/0868-G08RZcQ.jpg','videos/0868-G08RZcQ.gif'),
-  /* Seated Cable Row and Face Pull not in dataset — keep YouTube fallback */
-  'Seated Cable Row':            null,
-  'Face Pull':                   null
+  'Seated Cable Row':            _ex('images/0861-fUBheHs.jpg','videos/0861-fUBheHs.gif'),
+  'Face Pull':                   _ex('images/0203-wqNPGCg.jpg','videos/0203-wqNPGCg.gif')
 };
 var EX_IMGS={
   'cat-legs':'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=300&q=70&fit=crop',
@@ -1196,7 +1195,7 @@ function renderWorkout(){
     var nameEl=dbEntry
       ?'<button class="excard-name" data-exn="'+e.n.replace(/"/g,'&quot;')+'"><span class="play">'+play+'</span>'+e.n+'</button>'
       :'<a class="excard-name" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a>';
-    return '<div class="excard'+(on?' done':'')+'"><div class="excard-thumb '+cat+'">'+img+'<i class="hgi-stroke hgi-dumbbell-01"></i><span class="excard-tnum">'+(i+1)+'</span></div><div class="excard-body">'+nameEl+'<div class="excard-tags">'+tags+'</div>'+(e.note?'<div class="excard-enote">'+e.note+'</div>':'')+'</div><button class="excard-chk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
+    return '<div class="excard'+(on?' done':'')+'"><div class="excard-thumb '+cat+'">'+img+'<span class="excard-tnum">'+(i+1)+'</span></div><div class="excard-body">'+nameEl+'<div class="excard-tags">'+tags+'</div>'+(e.note?'<div class="excard-enote">'+e.note+'</div>':'')+'</div><button class="excard-chk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
   }).join('');
   $('hDay').textContent=d.name;$('hSub').innerHTML=d.sub;$('cMoves').textContent=d.ex.length;$('cSets').textContent=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);$('cTime').textContent=d.time;
   var _dd=$('dashDay');if(_dd)_dd.textContent=d.name;
