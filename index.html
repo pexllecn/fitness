@@ -1256,6 +1256,7 @@ function showExModal(name,note){
   gif.src=entry.gif+'?t='+Date.now();
   media.appendChild(gif);
   media.classList.add('playing');
+  $('exModalImg').style.display='none';
 }
 function closeExModal(){
   var modal=$('exModal');
@@ -1264,6 +1265,7 @@ function closeExModal(){
   /* stop gif on close */
   var gif=$('exModal').querySelector('.ex-gif');if(gif)gif.remove();
   $('exModalMedia').classList.remove('playing');
+  $('exModalImg').style.display='';
 }
 document.addEventListener('DOMContentLoaded',function(){
   $('exModalClose').addEventListener('click',closeExModal);
