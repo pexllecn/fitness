@@ -546,7 +546,7 @@ var BOT_DEFS=[
 
 function buildNav(){
   var sn=$('sideNav'),bn=$('bottomNav');
-  sn.innerHTML='';bn.innerHTML='';
+  sn.innerHTML='';if(bn)bn.innerHTML='';
   NAV_DEFS.forEach(function(d){
     var el=document.createElement('div');
     el.className='navitem'+(PAGE===d.key?' on':'');
