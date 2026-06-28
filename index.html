@@ -1161,10 +1161,10 @@ function cloudPayload(){
   s.cloud={key:'',binId:'',lastSync:'',status:''};
   return JSON.stringify(s);
 }
-function cloudPush(){
+function cloudPush(silent){
   var c=cloudReadInputs();
-  if(!c.key||!c.bid){alert('Enter your API key first, then click "Create New Bin" to generate a Bin ID.');return;}
-  cloudSetStatus('Pushing…');
+  if(!c.key||!c.bid){if(!silent)alert('Enter your API key first, then click "Create New Bin" to generate a Bin ID.');return;}
+  if(!silent)cloudSetStatus('Pushing…');
   fetch('https://api.jsonbin.io/v3/b/'+c.bid,{
     method:'PUT',
     headers:{'Content-Type':'application/json','X-Master-Key':c.key,'X-Bin-Versioning':'false'},
@@ -1172,14 +1172,16 @@ function cloudPush(){
   }).then(function(r){
     if(!r.ok)throw new Error('HTTP '+r.status);
     var now=new Date().toLocaleString();
-    STATE.cloud.lastSync=now;saveState();
-    cloudSetStatus('Pushed OK · '+now);
-  }).catch(function(e){cloudSetStatus('Push failed: '+e.message);});
+    STATE.cloud.lastSync=now;
+    try{localStorage.setItem(KEY,JSON.stringify(STATE));}catch(e){}
+    if(!silent)cloudSetStatus('Pushed OK · '+now);
+    else{var el=$('cloudStatus');if(el)el.textContent='Last sync: '+now;}
+  }).catch(function(e){if(!silent)cloudSetStatus('Push failed: '+e.message);});
 }
-function cloudPull(){
+function cloudPull(silent,onDone){
   var c=cloudReadInputs();
-  if(!c.key||!c.bid){alert('Enter your API key and Bin ID first.');return;}
-  cloudSetStatus('Pulling…');
+  if(!c.key||!c.bid){if(!silent)alert('Enter your API key and Bin ID first.');if(onDone)onDone(false);return;}
+  if(!silent)cloudSetStatus('Pulling…');
   fetch('https://api.jsonbin.io/v3/b/'+c.bid+'/latest',{
     headers:{'X-Master-Key':c.key}
   }).then(function(r){
@@ -1187,16 +1189,20 @@ function cloudPull(){
     return r.json();
   }).then(function(data){
     var o=data.record||data;
-    /* accept records even if some keys are missing — merge over defaults */
     if(!o||typeof o!=='object')throw new Error('Empty or invalid bin');
     var base=defState();
     Object.assign(base,o);
-    base.cloud={key:c.key,binId:c.bid,lastSync:new Date().toLocaleString(),status:'Pulled OK'};
+    base.cloud={key:c.key,binId:c.bid,lastSync:new Date().toLocaleString(),status:''};
     STATE=base;
-    saveState();applyTheme();applyAccent();
-    go('home');
-    cloudSetStatus('Pulled OK · '+base.cloud.lastSync);
-  }).catch(function(e){cloudSetStatus('Pull failed: '+e.message);});
+    try{localStorage.setItem(KEY,JSON.stringify(STATE));}catch(e){}
+    applyTheme();applyAccent();
+    if(!silent){go('home');cloudSetStatus('Pulled OK · '+base.cloud.lastSync);}
+    else{buildNav();renderPage();}
+    if(onDone)onDone(true);
+  }).catch(function(e){
+    if(!silent)cloudSetStatus('Pull failed: '+e.message);
+    if(onDone)onDone(false);
+  });
 }
 function cloudCreateBin(){
   var c=cloudReadInputs();
@@ -1295,6 +1301,68 @@ window.addEventListener('DOMContentLoaded',function(){
   var tabs=document.querySelectorAll('.tabbar .tab');
   tabs.forEach(function(t){t.classList.toggle('active',t.getAttribute('data-v')===PAGE);});
 });
+
+/* ── auto-push: wrap saveState so every local change syncs after 1 s ── */
+(function(){
+  var _save=saveState,_timer=null;
+  saveState=function(){
+    _save();
+    if(STATE.cloud.key&&STATE.cloud.binId){
+      clearTimeout(_timer);
+      _timer=setTimeout(function(){cloudPush(true);},1000);
+    }
+  };
+})();
+
+/* ── auto-pull on load if creds are set ── */
+(function(){
+  if(STATE.cloud.key&&STATE.cloud.binId){
+    cloudPull(true);
+  }
+})();
+
+/* ── pull-to-refresh ── */
+(function(){
+  var PTR_THRESHOLD=72;
+  var ind=document.createElement('div');
+  ind.innerHTML='<svg viewBox="0 0 24 24" width="20" height="20"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.5" stroke-dasharray="28 56" stroke-linecap="round"><animateTransform attributeName="transform" type="rotate" from="0 12 12" to="360 12 12" dur="0.8s" repeatCount="indefinite"/></circle></svg><span id="ptrLabel">Pull to sync</span>';
+  Object.assign(ind.style,{position:'fixed',top:'-60px',left:'0',right:'0',height:'60px',
+    display:'flex',alignItems:'center',justifyContent:'center',gap:'8px',
+    color:'var(--muted)',fontSize:'13px',fontWeight:'600',
+    transition:'top .2s ease',zIndex:'9999',pointerEvents:'none'});
+  document.body.appendChild(ind);
+  var label=ind.querySelector('#ptrLabel');
+  var startY=0,pulling=false,dist=0,busy=false;
+  function atTop(){return(document.scrollingElement||document.documentElement).scrollTop<=0;}
+  document.addEventListener('touchstart',function(e){
+    if(!atTop())return;
+    startY=e.touches[0].clientY;pulling=true;dist=0;
+  },{passive:true});
+  document.addEventListener('touchmove',function(e){
+    if(!pulling||busy)return;
+    dist=Math.max(0,e.touches[0].clientY-startY);
+    if(dist>0){
+      ind.style.top=(Math.min(dist*0.5,30)-60)+'px';
+      label.textContent=dist>=PTR_THRESHOLD?'Release to sync':'Pull to sync';
+    }
+  },{passive:true});
+  document.addEventListener('touchend',function(){
+    if(!pulling)return;pulling=false;
+    if(dist>=PTR_THRESHOLD&&!busy){
+      busy=true;ind.style.top='0px';label.textContent='Syncing…';
+      if(STATE.cloud.key&&STATE.cloud.binId){
+        cloudPull(true,function(ok){
+          label.textContent=ok?'✓ Synced':'✗ Failed';
+          setTimeout(reset,1200);
+        });
+      } else {
+        label.textContent='No cloud set up';setTimeout(reset,1200);
+      }
+    } else {reset();}
+    dist=0;
+  },{passive:true});
+  function reset(){busy=false;ind.style.top='-60px';label.textContent='Pull to sync';}
+})();
 </script>
 <script src="liquid-glass.js"></script>
 </body>
