@@ -1195,7 +1195,8 @@ function renderWorkout(){
     var nameEl=dbEntry
       ?'<button class="excard-name" data-exn="'+e.n.replace(/"/g,'&quot;')+'"><span class="play">'+play+'</span>'+e.n+'</button>'
       :'<a class="excard-name" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a>';
-    return '<div class="excard'+(on?' done':'')+'"><div class="excard-thumb '+cat+'">'+img+'<span class="excard-tnum">'+(i+1)+'</span></div><div class="excard-body">'+nameEl+'<div class="excard-tags">'+tags+'</div>'+(e.note?'<div class="excard-enote">'+e.note+'</div>':'')+'</div><button class="excard-chk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
+    var thumbAttr=dbEntry?' data-exn="'+e.n.replace(/"/g,'&quot;')+'" style="cursor:pointer"':'';
+    return '<div class="excard'+(on?' done':'')+'"><div class="excard-thumb '+cat+'"'+thumbAttr+'>'+img+'<span class="excard-tnum">'+(i+1)+'</span></div><div class="excard-body">'+nameEl+'<div class="excard-tags">'+tags+'</div>'+(e.note?'<div class="excard-enote">'+e.note+'</div>':'')+'</div><button class="excard-chk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
   }).join('');
   $('hDay').textContent=d.name;$('hSub').innerHTML=d.sub;$('cMoves').textContent=d.ex.length;$('cSets').textContent=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);$('cTime').textContent=d.time;
   var _dd=$('dashDay');if(_dd)_dd.textContent=d.name;
