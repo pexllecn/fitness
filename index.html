@@ -630,15 +630,38 @@ function applyAccent(){
 
 /* ── chart SVG ── */
 function makeChart(){
-  var weeks=[[0,92.8],[1,92.29],[2,91.68],[3,91.07],[4,90.45],[5,89.84],[6,89.23],[7,88.62],[8,88.0],[9,87.5]];
-  var W=600,H=210,padx=16,top=20,bot=H-24,minW=87,maxW=93.2;
-  function xs(i){return padx+(i/9)*(W-2*padx);}
+  var scans=STATE.scans.filter(function(s){return s.weight;});
+  if(scans.length<2){
+    /* single point — show a flat line */
+    scans=scans.length?[scans[0],scans[0]]:[{weight:92.6},{weight:92.6}];
+  }
+  var W=600,H=210,padx=16,top=20,bot=H-24;
+  var weights=scans.map(function(s){return s.weight;});
+  var minW=Math.min.apply(null,weights)-1;
+  var maxW=Math.max.apply(null,weights)+1;
+  var n=scans.length-1;
+  function xs(i){return padx+(i/n)*(W-2*padx);}
   function ys(w){return top+(1-((w-minW)/(maxW-minW)))*(bot-top);}
-  var line='',area='M'+xs(0).toFixed(1)+' '+ys(weeks[0][1]).toFixed(1)+' ';
-  weeks.forEach(function(p,i){line+=(i?'L':'M')+xs(i).toFixed(1)+' '+ys(p[1]).toFixed(1)+' ';if(i)area+='L'+xs(i).toFixed(1)+' '+ys(p[1]).toFixed(1)+' ';});
-  area+='L'+xs(9).toFixed(1)+' '+bot+' L'+xs(0).toFixed(1)+' '+bot+' Z';
-  var dots='';weeks.forEach(function(p,i){dots+='<circle cx="'+xs(i).toFixed(1)+'" cy="'+ys(p[1]).toFixed(1)+'" r="'+(i===9?5:3.2)+'" fill="'+(i===9?'#5fbf45':'#fff')+'" stroke="#5fbf45" stroke-width="2"/>';});
-  return '<svg viewBox="0 0 600 210" style="width:100%;height:auto;display:block"><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5fbf45" stop-opacity="0.22"/><stop offset="100%" stop-color="#5fbf45" stop-opacity="0"/></linearGradient></defs><path d="'+area+'" fill="url(#cg)"/><path d="'+line+'" fill="none" stroke="#5fbf45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'+dots+'</svg>';
+  var line='',area='M'+xs(0).toFixed(1)+' '+ys(scans[0].weight).toFixed(1)+' ';
+  scans.forEach(function(s,i){
+    line+=(i?'L':'M')+xs(i).toFixed(1)+' '+ys(s.weight).toFixed(1)+' ';
+    if(i)area+='L'+xs(i).toFixed(1)+' '+ys(s.weight).toFixed(1)+' ';
+  });
+  area+='L'+xs(n).toFixed(1)+' '+bot+' L'+xs(0).toFixed(1)+' '+bot+' Z';
+  var dots='';
+  scans.forEach(function(s,i){
+    var isLast=i===scans.length-1;
+    dots+='<circle cx="'+xs(i).toFixed(1)+'" cy="'+ys(s.weight).toFixed(1)+'" r="'+(isLast?5:3.2)+'" fill="'+(isLast?'#5fbf45':'#fff')+'" stroke="#5fbf45" stroke-width="2"/>';
+    if(s.date){
+      var label=s.date.slice(5).replace('-','/');
+      dots+='<text x="'+xs(i).toFixed(1)+'" y="'+(ys(s.weight)-9).toFixed(1)+'" text-anchor="middle" font-size="11" fill="#9a9da3" font-family="JetBrains Mono,monospace">'+label+'</text>';
+    }
+  });
+  var firstDate=scans[0].date?scans[0].date.slice(5).replace('-','/'):'start';
+  var lastDate=scans[scans.length-1].date?scans[scans.length-1].date.slice(5).replace('-','/'):'now';
+  var firstW=scans[0].weight.toFixed(1),lastW=scans[scans.length-1].weight.toFixed(1);
+  return '<svg viewBox="0 0 600 210" style="width:100%;height:auto;display:block"><defs><linearGradient id="cg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#5fbf45" stop-opacity="0.22"/><stop offset="100%" stop-color="#5fbf45" stop-opacity="0"/></linearGradient></defs><path d="'+area+'" fill="url(#cg)"/><path d="'+line+'" fill="none" stroke="#5fbf45" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>'+dots+'</svg>'
+    +'<div style="display:flex;justify-content:space-between;font-size:11px;color:#b3b6bc;margin-top:8px" class="mono"><span>'+firstDate+' · '+firstW+' kg</span><span>'+lastDate+' · '+lastW+' kg</span></div>';
 }
 
 /* ── pages ── */
@@ -907,7 +930,7 @@ function renderProgress(){
   /* chart + orb */
   var fh=document.createElement('div');fh.className='fuelhero';
   var chartCard=document.createElement('div');chartCard.className='progchartcard';
-  chartCard.innerHTML='<div class="sectionhead" style="margin-bottom:14px"><div style="font-size:16px;font-weight:600">Expected scale</div><span class="mono fs10 mut2">0.6–0.7 KG / WK</span></div>'+makeChart()+'<div style="display:flex;justify-content:space-between;font-size:11px;color:#b3b6bc;margin-top:8px" class="mono"><span>Now</span><span>Jul</span><span>Aug</span><span>87.5</span></div>';
+  chartCard.innerHTML='<div class="sectionhead" style="margin-bottom:14px"><div style="font-size:16px;font-weight:600">Scale history</div><span class="mono fs10 mut2">'+STATE.scans.length+' SCANS</span></div>'+makeChart();
   fh.appendChild(chartCard);
   var gor=orbGreen('Body fat',dots(scan.bf.toFixed(1),8,3.4),'% · target 12');
   fh.appendChild(gor);
