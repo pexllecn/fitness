@@ -508,7 +508,7 @@ var EXDB={
 var KEY='tcA-v1';
 function clone(o){return JSON.parse(JSON.stringify(o));}
 var DEFAULT_TARGETS={weekday:{p:240,c:200,f:50},weekend:{p:240,c:130,f:50}};
-var SEED_S=[{date:'2025-09-27',weight:88.9,bf:18.9,muscle:68.5},{date:'2026-05-17',weight:92.6,bf:19.2,muscle:71.1}];
+var SEED_S=[{date:'2025-09-25',weight:88.9,bf:18.9,muscle:68.5},{date:'2026-05-17',weight:92.6,bf:19.2,muscle:71.1}];
 var SEED_D=[{date:'2026-05-17',weight:92.6},{date:'2026-06-06',weight:93.8}];
 function defState(){return{targets:clone(DEFAULT_TARGETS),maint:2900,theme:'light',accent:0,mode:'weekday',scans:clone(SEED_S),daily:clone(SEED_D),ticks:{},cloud:{key:'',binId:'',lastSync:'',status:''}};}
 var STATE=defState();
@@ -1121,7 +1121,7 @@ function cloudPush(){
   cloudSetStatus('Pushing…');
   fetch('https://api.jsonbin.io/v3/b/'+bid,{
     method:'PUT',
-    headers:{'Content-Type':'application/json','X-Access-Key':key,'X-Bin-Versioning':'false'},
+    headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Versioning':'false'},
     body:JSON.stringify(STATE)
   }).then(function(r){
     if(!r.ok)throw new Error('HTTP '+r.status);
@@ -1137,7 +1137,7 @@ function cloudPull(){
   if(!key||!bid){alert('Enter your API key first, then click "Create New Bin" or enter an existing Bin ID.');return;}
   cloudSetStatus('Pulling…');
   fetch('https://api.jsonbin.io/v3/b/'+bid+'/latest',{
-    headers:{'X-Access-Key':key,'X-Bin-Meta':false}
+    headers:{'X-Master-Key':key}
   }).then(function(r){
     if(!r.ok)throw new Error('HTTP '+r.status);
     return r.json();
@@ -1156,7 +1156,7 @@ function cloudCreateBin(){
   cloudSetStatus('Creating new bin…');
   fetch('https://api.jsonbin.io/v3/b',{
     method:'POST',
-    headers:{'Content-Type':'application/json','X-Access-Key':key,'X-Bin-Name':'the-cut-backup','X-Bin-Private':'true'},
+    headers:{'Content-Type':'application/json','X-Master-Key':key,'X-Bin-Name':'the-cut-backup','X-Bin-Private':'true'},
     body:JSON.stringify(STATE)
   }).then(function(r){
     if(!r.ok)throw new Error('HTTP '+r.status);
