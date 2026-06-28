@@ -551,7 +551,21 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .excard:active{transform:scale(.98);opacity:.8}
 .excard.done{opacity:.55}
 .excard-thumb{flex:0 0 86px;width:86px;display:flex;flex-direction:column;align-items:center;justify-content:center;position:relative;overflow:hidden}
-.excard-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top}
+.excard-thumb img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center top;transition:opacity .2s}
+/* Exercise GIF modal */
+.ex-modal{position:fixed;inset:0;z-index:200;display:flex;align-items:flex-end;justify-content:center;background:rgba(0,0,0,.55);opacity:0;pointer-events:none;transition:opacity .22s;-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px)}
+.ex-modal.open{opacity:1;pointer-events:auto}
+.ex-modal-box{width:100%;max-width:480px;background:var(--card);border-radius:28px 28px 0 0;padding:0 0 env(safe-area-inset-bottom);overflow:hidden;transform:translateY(60px);transition:transform .28s cubic-bezier(.32,1,.5,1)}
+.ex-modal.open .ex-modal-box{transform:translateY(0)}
+.ex-modal-media{width:100%;aspect-ratio:4/3;background:#111;position:relative;overflow:hidden;cursor:pointer}
+.ex-modal-media img{width:100%;height:100%;object-fit:cover;display:block}
+.ex-modal-media .play-hint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.25);transition:opacity .2s}
+.ex-modal-media .play-hint i{font-size:48px;color:#fff;opacity:.9}
+.ex-modal-media.playing .play-hint{opacity:0;pointer-events:none}
+.ex-modal-info{padding:18px 20px 22px}
+.ex-modal-title{font-size:19px;font-weight:800;letter-spacing:-.025em;margin-bottom:4px}
+.ex-modal-note{font-size:13px;color:var(--muted);line-height:1.5;margin-top:8px}
+.ex-modal-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.45);border:none;color:#fff;font-size:16px;display:grid;place-items:center;z-index:10;cursor:pointer}
 .excard-thumb-ov{position:absolute;inset:0;background:rgba(0,0,0,.38)}
 .excard-thumb i{position:relative;z-index:1;font-size:26px;width:26px;height:26px;color:rgba(255,255,255,.85)}
 .excard-tnum{position:relative;z-index:1;font-size:9px;font-weight:700;color:rgba(255,255,255,.4);letter-spacing:.04em;margin-top:5px;text-transform:uppercase}
@@ -563,7 +577,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .cat-arms{background:linear-gradient(145deg,#1a0020 0%,#7d0077 100%)}
 .cat-core{background:linear-gradient(145deg,#00180a 0%,#005a20 100%)}
 .excard-body{flex:1;min-width:0;padding:12px 10px 12px 14px;display:flex;flex-direction:column;justify-content:center;gap:5px}
-.excard-name{font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:7px;line-height:1.2}
+.excard-name{font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:7px;line-height:1.2;background:none;border:none;padding:0;text-align:left;cursor:pointer;width:100%}
 .excard-name .play{flex:0 0 auto;width:18px;height:18px;border-radius:6px;background:var(--lime);display:grid;place-items:center}
 .excard-name .play i{font-size:9px;color:var(--on-lime)}
 .excard-tags{display:flex;flex-wrap:wrap;gap:5px}
@@ -948,6 +962,20 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
     </filter>
   </defs>
 </svg>
+<!-- Exercise media modal -->
+<div class="ex-modal" id="exModal" role="dialog" aria-modal="true">
+  <div class="ex-modal-box">
+    <div class="ex-modal-media" id="exModalMedia">
+      <img id="exModalImg" src="" alt="">
+      <div class="play-hint"><i class="hgi-stroke hgi-play-circle-02"></i></div>
+    </div>
+    <button class="ex-modal-close" id="exModalClose" aria-label="Close"><i class="hgi-stroke hgi-cancel-01"></i></button>
+    <div class="ex-modal-info">
+      <div class="ex-modal-title" id="exModalTitle"></div>
+      <div class="ex-modal-note" id="exModalNote"></div>
+    </div>
+  </div>
+</div>
 <div class="tabbar">
   <div class="tg-glass"></div>
   <div class="tg-border"></div>
@@ -1094,6 +1122,45 @@ function updateMacroRings(p,c,f){
   function upd(id,val,max){var el=document.getElementById(id);if(el){el.style.strokeDasharray=MRC;el.style.strokeDashoffset=MRC*(1-Math.min(1,val/max));}}
   upd('mrP',p,maxP);upd('mrC',c,maxC);upd('mrF',f,maxF);
 }
+var _B='https://raw.githubusercontent.com/hasaneyldrm/exercises-dataset/main/';
+function _ex(img,gif){return{img:_B+img,gif:_B+gif};}
+var EXDB={
+  'Back Squat':                  _ex('images/0043-qXTaZnJ.jpg','videos/0043-qXTaZnJ.gif'),
+  'Romanian Deadlift':           _ex('images/0085-wQ2c4XD.jpg','videos/0085-wQ2c4XD.gif'),
+  'Leg Press (lying)':           _ex('images/0760-7zdxRTl.jpg','videos/0760-7zdxRTl.gif'),
+  'Seated Leg Curl':             _ex('images/0599-Zg3XY7P.jpg','videos/0599-Zg3XY7P.gif'),
+  'Walking Lunge':               _ex('images/1460-IZVHb27.jpg','videos/1460-IZVHb27.gif'),
+  'Standing Calf Raise':         _ex('images/1490-6HmFgmx.jpg','videos/1490-6HmFgmx.gif'),
+  'Hanging Leg Raise':           _ex('images/0472-I3tsCnC.jpg','videos/0472-I3tsCnC.gif'),
+  'Barbell Bench Press':         _ex('images/0025-EIeI8Vf.jpg','videos/0025-EIeI8Vf.gif'),
+  'Overhead Press':              _ex('images/0091-kTbSH9h.jpg','videos/0091-kTbSH9h.gif'),
+  'Weighted Pull-up / Pulldown': _ex('images/0652-lBDjFxJ.jpg','videos/0652-lBDjFxJ.gif'),
+  'Chest-Supported Row':         _ex('images/1349-BgljGjd.jpg','videos/1349-BgljGjd.gif'),
+  'Lateral Raise':               _ex('images/0334-DsgkuIt.jpg','videos/0334-DsgkuIt.gif'),
+  'Triceps Pushdown':            _ex('images/0241-gAwDzB3.jpg','videos/0241-gAwDzB3.gif'),
+  'Cable Biceps Curl':           _ex('images/0868-G08RZcQ.jpg','videos/0868-G08RZcQ.gif'),
+  'Hip Thrust':                  _ex('images/3236-Pjbc0Kt.jpg','videos/3236-Pjbc0Kt.gif'),
+  'Hack Squat':                  _ex('images/0046-5VCj6iH.jpg','videos/0046-5VCj6iH.gif'),
+  '45° Back Extension':          _ex('images/0489-zhMwOwE.jpg','videos/0489-zhMwOwE.gif'),
+  'Lying Leg Curl':              _ex('images/0586-17lJ1kr.jpg','videos/0586-17lJ1kr.gif'),
+  'Leg Extension':               _ex('images/0585-my33uHU.jpg','videos/0585-my33uHU.gif'),
+  'Seated Calf Raise':           _ex('images/0594-bOOdeyc.jpg','videos/0594-bOOdeyc.gif'),
+  'Cable Crunch':                _ex('images/0175-WW95auq.jpg','videos/0175-WW95auq.gif'),
+  'Incline DB Press':            _ex('images/0314-ns0SIbU.jpg','videos/0314-ns0SIbU.gif'),
+  'Lat Pulldown (neutral)':      _ex('images/0818-rkg41Fb.jpg','videos/0818-rkg41Fb.gif'),
+  'Seated DB Shoulder Press':    _ex('images/0405-znQUdHY.jpg','videos/0405-znQUdHY.gif'),
+  'Rear Delt Fly':               _ex('images/0203-wqNPGCg.jpg','videos/0203-wqNPGCg.gif'),
+  'Cable Lateral Raise':         _ex('images/0178-goJ6ezq.jpg','videos/0178-goJ6ezq.gif'),
+  'EZ-Bar Curl':                 _ex('images/0447-6TG6x2w.jpg','videos/0447-6TG6x2w.gif'),
+  'Overhead Triceps Extension':  _ex('images/0092-5uFK1xr.jpg','videos/0092-5uFK1xr.gif'),
+  'Incline DB Curl':             _ex('images/0318-ae9UoXQ.jpg','videos/0318-ae9UoXQ.gif'),
+  'DB Lateral Raise':            _ex('images/0334-DsgkuIt.jpg','videos/0334-DsgkuIt.gif'),
+  'Hammer Curl + Wrist Curl':    _ex('images/0313-slDvUAU.jpg','videos/0313-slDvUAU.gif'),
+  'DB Curl + Triceps Ext':       _ex('images/0868-G08RZcQ.jpg','videos/0868-G08RZcQ.gif'),
+  /* Seated Cable Row and Face Pull not in dataset — keep YouTube fallback */
+  'Seated Cable Row':            null,
+  'Face Pull':                   null
+};
 var EX_IMGS={
   'cat-legs':'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=300&q=70&fit=crop',
   'cat-hinge':'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=300&q=70&fit=crop',
@@ -1122,8 +1189,14 @@ function renderWorkout(){
             (/curl|hammer|ez.bar|incline db curl|cable bic/.test(n2))?'cat-arms':
             (/hanging|cable crunch|ab/.test(n2))?'cat-core':'cat-pull';
     var tags='<span class="excard-tag lime">'+e.sr+'</span>'+(e.rir?'<span class="excard-tag rir">'+e.rir+'</span>':'')+'<span class="excard-tag">'+e.ld+'</span>';
-    var img=EX_IMGS[cat]?'<img src="'+EX_IMGS[cat]+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"><div class="excard-thumb-ov"></div>':'';
-    return '<div class="excard'+(on?' done':'')+'"><div class="excard-thumb '+cat+'">'+img+'<i class="hgi-stroke hgi-dumbbell-01"></i><span class="excard-tnum">'+(i+1)+'</span></div><div class="excard-body"><a class="excard-name" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a><div class="excard-tags">'+tags+'</div>'+(e.note?'<div class="excard-enote">'+e.note+'</div>':'')+'</div><button class="excard-chk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
+    var dbEntry=EXDB[e.n];
+    var thumbSrc=dbEntry?dbEntry.img:EX_IMGS[cat];
+    var img=thumbSrc?'<img src="'+thumbSrc+'" alt="" loading="lazy" onerror="this.style.display=\'none\'"><div class="excard-thumb-ov"></div>':'';
+    /* If in EXDB: open in-app modal. If not (Face Pull, Seated Cable Row): open YouTube */
+    var nameEl=dbEntry
+      ?'<button class="excard-name" data-exn="'+e.n.replace(/"/g,'&quot;')+'"><span class="play">'+play+'</span>'+e.n+'</button>'
+      :'<a class="excard-name" href="'+e.q+'" target="_blank" rel="noopener"><span class="play">'+play+'</span>'+e.n+'</a>';
+    return '<div class="excard'+(on?' done':'')+'"><div class="excard-thumb '+cat+'">'+img+'<i class="hgi-stroke hgi-dumbbell-01"></i><span class="excard-tnum">'+(i+1)+'</span></div><div class="excard-body">'+nameEl+'<div class="excard-tags">'+tags+'</div>'+(e.note?'<div class="excard-enote">'+e.note+'</div>':'')+'</div><button class="excard-chk" data-idx="'+i+'" aria-label="Done"><i class="hgi-stroke hgi-checkmark-01"></i></button></div>';
   }).join('');
   $('hDay').textContent=d.name;$('hSub').innerHTML=d.sub;$('cMoves').textContent=d.ex.length;$('cSets').textContent=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);$('cTime').textContent=d.time;
   var _dd=$('dashDay');if(_dd)_dd.textContent=d.name;
@@ -1153,6 +1226,47 @@ function updateActRings(){
 }
 function updateRing(){var d=PROGRAM[curDay],tot=d.ex.length,n=doneSet().length;$('ringNum').textContent=n+'/'+tot;var _dn=$('dashDone');if(_dn)_dn.textContent=n+'/'+tot;var f=$('ringFil');f.style.strokeDasharray=RC;f.style.strokeDashoffset=RC*(1-n/tot);updateActRings();}
 function selectDay(i){curDay=i;renderDayTabs();renderWorkout();}
+
+/* ── Exercise media modal ── */
+var _exGifLoaded=false;
+function showExModal(name,note){
+  var entry=EXDB[name];if(!entry)return;
+  var modal=$('exModal'),media=$('exModalMedia'),img=$('exModalImg');
+  $('exModalTitle').textContent=name;
+  $('exModalNote').textContent=note||'';
+  img.src=entry.img;
+  img.onload=null;
+  media.classList.remove('playing');
+  /* remove any previously injected gif */
+  var old=media.querySelector('.ex-gif');if(old)old.remove();
+  _exGifLoaded=false;
+  media._gif=entry.gif;
+  modal.classList.add('open');
+  document.body.style.overflow='hidden';
+}
+function closeExModal(){
+  var modal=$('exModal');
+  modal.classList.remove('open');
+  document.body.style.overflow='';
+  /* stop gif on close */
+  var gif=$('exModal').querySelector('.ex-gif');if(gif)gif.remove();
+  $('exModalMedia').classList.remove('playing');
+}
+document.addEventListener('DOMContentLoaded',function(){
+  $('exModalClose').addEventListener('click',closeExModal);
+  $('exModal').addEventListener('click',function(e){if(e.target===$('exModal'))closeExModal();});
+  $('exModalMedia').addEventListener('click',function(){
+    var media=$('exModalMedia');
+    if(media.classList.contains('playing'))return;
+    media.classList.add('playing');
+    var gif=document.createElement('img');
+    gif.className='ex-gif';
+    gif.style.cssText='position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;';
+    gif.src=media._gif+'?t='+Date.now(); /* cache-bust to force replay */
+    media.appendChild(gif);
+  });
+});
+
 function initToday(){var k=WEEKDAY_TO_KEY[new Date().getDay()];if(k){for(var i=0;i<PROGRAM.length;i++){if(PROGRAM[i].key===k){curDay=i;return;}}}}
 
 /* ---------- calendar from real completion ---------- */
@@ -1315,6 +1429,7 @@ function renderSHist(){$('sCount').textContent=STATE.scans.length+' logged';$('s
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
   var dt=e.target.closest('#dayTabs .pill');if(dt){selectDay(+dt.getAttribute('data-day'));return;}
+  var exn=e.target.closest('[data-exn]');if(exn){var ename=exn.getAttribute('data-exn');var d=PROGRAM[curDay],ex=d.ex.find(function(x){return x.n===ename;});showExModal(ename,ex&&ex.note);return;}
   var c=e.target.closest('.exchk,.excard-chk');if(c){var i=+c.getAttribute('data-idx'),arr=doneSet().slice(),p=arr.indexOf(i);if(p>=0)arr.splice(p,1);else arr.push(i);setDone(arr);var row=c.closest('.exrow,.excard');if(row)row.classList.toggle('done',arr.indexOf(i)>=0);updateRing();renderCalendar();return;}
   var nav=e.target.closest('[data-v]');if(nav){showView(nav.getAttribute('data-v'));return;}
   var mm=e.target.closest('#mealMode button');if(mm){STATE.mode=mm.getAttribute('data-mode');saveState();applyTargets();renderMeals();return;}
