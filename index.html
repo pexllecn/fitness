@@ -109,15 +109,16 @@ body{margin:0;background:var(--body-bg)}
 .splitname{font-size:14px;font-weight:600}
 .splitsub{font-size:12px;color:var(--muted)}
 .sectiontitle{font-size:25px;font-weight:600;letter-spacing:-.6px;line-height:1.05}
-.sectionsub{font-size:13.5px;color:#9a9da3;margin-top:5px}
+.sectionsub{font-size:13.5px;color:var(--muted);margin-top:5px}
 .sectionhead{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:2px}
 .seeall{height:34px;padding:0 16px;border-radius:17px;background:var(--surface);display:inline-flex;align-items:center;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);border:1px solid var(--border)}
-.startbtn{height:44px;padding:0 22px;border-radius:22px;background:var(--ink);color:#fff;display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;cursor:pointer;border:none}
+.startbtn{height:44px;padding:0 22px;border-radius:22px;background:#232427;color:#f0f1f3;display:inline-flex;align-items:center;gap:9px;font-size:14px;font-weight:600;cursor:pointer;border:none}
+[data-theme="dark"] .startbtn{background:#e8e9ec;color:#1a1b1e}
 .twocol{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 .exlist{display:flex;flex-direction:column;gap:10px}
 .exrow{display:flex;align-items:center;gap:15px;background:var(--surface);border-radius:20px;padding:13px 16px;cursor:pointer;transition:background .12s}
 .exrow:hover{background:var(--surface-soft)}
-.exidx{font-size:11px;color:#bfc3c9;font-weight:700;flex:none;font-family:'JetBrains Mono',monospace;min-width:18px}
+.exidx{font-size:11px;color:var(--muted2);font-weight:700;flex:none;font-family:'JetBrains Mono',monospace;min-width:18px}
 .exthumb{width:66px;height:50px;border-radius:11px;flex:none;position:relative;overflow:hidden}
 .exthumb img{width:100%;height:100%;object-fit:cover;display:block}
 .exthumb.t1{background:radial-gradient(circle at 40% 32%,#bfe07a,#5fbf45)}
@@ -221,6 +222,7 @@ body{margin:0;background:var(--body-bg)}
 .scanlabel{font-size:10px;font-weight:700;color:var(--muted);margin-bottom:6px;display:block;text-transform:uppercase;letter-spacing:.4px;font-family:'JetBrains Mono',monospace}
 .scaninput{width:100%;height:48px;border-radius:13px;border:1.5px solid var(--border);background:var(--surface-soft);font-size:17px;font-family:'Hanken Grotesk',sans-serif;padding:0 14px;color:var(--ink);outline:none;transition:border-color .15s}
 .scaninput:focus{border-color:var(--ac)}
+#cloudKeyInput:focus,#cloudBinInput:focus{border-color:var(--ac)!important}
 .scanbtnrow{display:flex;gap:10px;margin-top:8px}
 /* liquid glass tabbar overrides for this design */
 .tabbar{z-index:60}
@@ -234,7 +236,7 @@ body{margin:0;background:var(--body-bg)}
 @keyframes slideup{from{transform:translateY(100%)}to{transform:translateY(0)}}
 .exmodal-head{display:flex;align-items:center;justify-content:space-between;padding:18px 20px 14px;border-bottom:1px solid var(--border)}
 .exmodal-title{font-size:16px;font-weight:600}
-.exmodal-note{font-size:13px;color:#8d9097;margin-top:3px;font-family:'Hanken Grotesk',system-ui,sans-serif;line-height:1.5}
+.exmodal-note{font-size:13px;color:var(--muted);margin-top:3px;font-family:'Hanken Grotesk',system-ui,sans-serif;line-height:1.5}
 .exmodal-close{width:32px;height:32px;border-radius:50%;background:var(--surface-soft);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:16px;color:var(--muted);flex:none}
 .exmodal-media{position:relative;background:#ffffff;display:flex;align-items:center;justify-content:center;min-height:280px;overflow:hidden}
 .exmodal-media img.ex-static{max-width:100%;max-height:320px;object-fit:contain;display:block}
@@ -1077,10 +1079,32 @@ function renderProfile(){
   /* accent + theme */
   var pp2=document.createElement('div');pp2.className='planpair';
   var acCard=document.createElement('div');acCard.className='infocard';
-  acCard.innerHTML='<div class="infottl">Accent</div><div class="swatchrow" id="swatchRow"></div><div class="infottl" style="margin:20px 0 12px">Theme</div><div class="swatchrow"><span class="badge pillb" style="height:34px;padding:0 18px;cursor:pointer" id="thLight">Light</span><span class="badge pillb" style="height:34px;padding:0 18px;cursor:pointer;margin-left:8px" id="thDark">Dark</span></div>';
+  var isLight=STATE.theme!=='dark';
+  acCard.innerHTML='<div class="infottl">Accent</div><div class="swatchrow" id="swatchRow"></div>'
+    +'<div class="infottl" style="margin:20px 0 12px">Theme</div>'
+    +'<div style="display:flex;gap:8px">'
+    +'<button id="thLight" style="flex:1;height:38px;border-radius:19px;border:2px solid '+(isLight?'var(--ink)':'var(--border)')+';background:'+(isLight?'var(--ink)':'var(--surface-soft)')+';color:'+(isLight?'#f0f1f3':'var(--muted)')+';font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s">Light</button>'
+    +'<button id="thDark" style="flex:1;height:38px;border-radius:19px;border:2px solid '+(!isLight?'var(--ink)':'var(--border)')+';background:'+(!isLight?'var(--ink)':'var(--surface-soft)')+';color:'+(!isLight?'#f0f1f3':'var(--muted)')+';font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;transition:.15s">Dark</button>'
+    +'</div>';
   pp2.appendChild(acCard);
   var bkCard=document.createElement('div');bkCard.className='infocard';
-  bkCard.innerHTML='<div class="infottl">Cloud sync<span class="mono fs10 mut2">JSONBIN.IO</span></div><div class="levertxt" style="margin-bottom:14px">Enter your JSONBin API key and Bin ID to push or pull your data from any device.</div><div style="display:flex;flex-direction:column;gap:10px;margin-bottom:14px"><label style="font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase">API Key<input id="cloudKeyInput" type="password" placeholder="$2a$10$…" value="'+escHtml(STATE.cloud.key||'')+'" style="display:block;width:100%;margin-top:5px;padding:10px 14px;border-radius:14px;border:1px solid var(--border);background:var(--surface-soft);color:var(--ink);font-size:13px;font-family:\'JetBrains Mono\',monospace;box-sizing:border-box" /></label><label style="font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.04em;text-transform:uppercase">Bin ID<input id="cloudBinInput" type="text" placeholder="64a3f…" value="'+escHtml(STATE.cloud.binId||'')+'" style="display:block;width:100%;margin-top:5px;padding:10px 14px;border-radius:14px;border:1px solid var(--border);background:var(--surface-soft);color:var(--ink);font-size:13px;font-family:\'JetBrains Mono\',monospace;box-sizing:border-box" /></label></div><div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:12px"><button class="startbtn" style="flex:1;min-width:130px" onclick="cloudCreateBin()">✦ Create New Bin</button><button class="seeall" style="height:44px;border-radius:22px;border:1px solid #ececef;flex:1;min-width:90px" onclick="cloudPush()">⬆ Push</button><button class="seeall" style="height:44px;border-radius:22px;border:1px solid #ececef;flex:1;min-width:90px" onclick="cloudPull()">⬇ Pull</button></div><div id="cloudStatus" style="font-size:12px;color:var(--muted);min-height:18px">'+(STATE.cloud.lastSync?'Last sync: '+STATE.cloud.lastSync:'')+' '+(STATE.cloud.status||'')+'</div><details style="margin-top:14px"><summary style="font-size:12px;font-weight:600;color:var(--muted);cursor:pointer">How to get a free JSONBin key</summary><div class="levertxt" style="margin-top:10px">1. Go to <b>jsonbin.io</b> and create a free account.<br>2. In your dashboard go to <b>API Keys</b> → create a new key → paste it above.<br>3. Click <b>Create New Bin</b> — it creates a private bin and saves your data automatically. The Bin ID is filled in for you.<br>4. On another device: enter the same API key + Bin ID, then hit <b>Pull</b>.</div></details>';
+  var hasSync=!!(STATE.cloud.key&&STATE.cloud.binId);
+  var inputStyle='display:block;width:100%;margin-top:5px;padding:10px 14px;border-radius:14px;border:1.5px solid var(--border);background:var(--surface-soft);color:var(--ink);font-size:13px;font-family:\'JetBrains Mono\',monospace;box-sizing:border-box;outline:none';
+  bkCard.innerHTML='<div class="infottl">Cloud sync <span class="mono fs10 mut2">JSONBIN.IO</span></div>'
+    +(hasSync?'':'<div class="levertxt" style="margin-bottom:14px">Paste your JSONBin Master Key to sync data across devices. <a href="https://jsonbin.io" target="_blank" style="color:var(--ink);font-weight:600">jsonbin.io</a> → API Keys → copy your key.</div>')
+    +'<div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">'
+    +'<label style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">API Key<input id="cloudKeyInput" type="password" placeholder="$2a$10$…" value="'+escHtml(STATE.cloud.key||'')+'" style="'+inputStyle+'" /></label>'
+    +'<label style="font-size:11px;font-weight:700;color:var(--muted);letter-spacing:.06em;text-transform:uppercase">Bin ID<input id="cloudBinInput" type="text" placeholder="6a41a9b4da…" value="'+escHtml(STATE.cloud.binId||'')+'" style="'+inputStyle+'" /></label>'
+    +'</div>'
+    +'<button class="startbtn" style="width:100%;justify-content:center;margin-bottom:10px" onclick="cloudCreateBin()">✦ Create New Bin &amp; Push</button>'
+    +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px">'
+    +'<button class="seeall" style="height:42px;border-radius:21px;justify-content:center;width:100%" onclick="cloudPush()">⬆ Push</button>'
+    +'<button class="seeall" style="height:42px;border-radius:21px;justify-content:center;width:100%" onclick="cloudPull()">⬇ Pull</button>'
+    +'</div>'
+    +'<div id="cloudStatus" style="font-size:12px;color:var(--muted);min-height:18px">'+(STATE.cloud.lastSync?'Last sync: '+STATE.cloud.lastSync:'No sync yet')+'</div>'
+    +'<details style="margin-top:14px"><summary style="font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;user-select:none">Setup guide</summary>'
+    +'<div class="levertxt" style="margin-top:10px">1. Go to <b>jsonbin.io</b>, create a free account.<br>2. Dashboard → <b>API Keys</b> → copy your Master Key → paste above.<br>3. Tap <b>Create New Bin &amp; Push</b> — bin is created, Bin ID fills in automatically.<br>4. On another device: paste same Master Key + Bin ID → tap <b>Pull</b>.</div>'
+    +'</details>';
   pp2.appendChild(bkCard);
   root.appendChild(pp2);
   /* reset */
@@ -1095,8 +1119,8 @@ function renderProfile(){
     s.onclick=function(){STATE.accent=i;saveState();applyAccent();go('profile');};
     sr.appendChild(s);
   });
-  root.querySelector('#thLight').onclick=function(){STATE.theme='light';saveState();applyTheme();};
-  root.querySelector('#thDark').onclick=function(){STATE.theme='dark';saveState();applyTheme();};
+  root.querySelector('#thLight').onclick=function(){STATE.theme='light';saveState();applyTheme();go('profile');};
+  root.querySelector('#thDark').onclick=function(){STATE.theme='dark';saveState();applyTheme();go('profile');};
   root.querySelector('#resetBtn').onclick=function(){if(confirm('Reset all data? This cannot be undone.')){localStorage.removeItem(KEY);STATE=defState();go('home');}};
   var ki=root.querySelector('#cloudKeyInput'),bi=root.querySelector('#cloudBinInput');
   if(ki)ki.addEventListener('blur',cloudSaveInputs);
