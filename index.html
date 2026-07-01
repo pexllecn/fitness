@@ -54,7 +54,7 @@
 [data-theme="dark"]{
   --bg:#000000; --card:#1C1C1E; --panel:#2C2C2E; --card2:#1C1C1E;
   --grouped-hdr:rgba(235,235,245,.6);
-  --text:#FFFFFF; --muted:rgba(235,235,245,.6); --muted2:rgba(235,235,245,.4);
+  --text:#FFFFFF; --muted:rgba(235,235,245,.72); --muted2:rgba(235,235,245,.55);
   --line:rgba(84,84,88,.65); --hair:rgba(84,84,88,.3);
   --ink:#2C2C2E; --on-ink:#F2F2F7;
   --ok:#30D158; --warn:#FF453A; --blue:#0A84FF;
@@ -146,26 +146,22 @@ button{cursor:pointer}
 .chip.lime{background:var(--lime);color:var(--on-lime)}
 
 /* ── Hero card ── */
-.hero{position:relative;overflow:hidden;background:var(--ink);color:var(--on-ink);border-radius:var(--r-xl);padding:24px;box-shadow:var(--shadow)}
-.hero .blobs{position:absolute;inset:0;filter:blur(48px);opacity:.75;pointer-events:none}
-.blob{position:absolute;border-radius:50%}
-.blob.l{width:220px;height:220px;background:var(--lime);top:-40px;right:0;opacity:.5}
-.blob.f{width:180px;height:180px;background:var(--forest-2);bottom:-60px;right:120px;opacity:.65}
-.blob.k{width:140px;height:140px;background:#2f7d59;top:50px;right:200px;opacity:.3}
+.hero{position:relative;overflow:hidden;background:var(--card);color:var(--text);border-radius:var(--r-xl);padding:20px;box-shadow:var(--shadow)}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 85% 40%,color-mix(in srgb,var(--lime) 30%,transparent) 0%,transparent 60%);pointer-events:none;z-index:0}
 .hero>*{position:relative;z-index:1}
 .hero .htop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
-.hlab{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45)}
-.hero .hday{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:7px;line-height:1.06;color:#fff}
-.hero .hsub{font-size:13px;color:rgba(255,255,255,.6);font-weight:400;margin-top:7px;max-width:80%;line-height:1.5}
+.hlab{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.hero .hday{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:7px;line-height:1.06;color:var(--text)}
+.hero .hsub{font-size:13px;color:var(--muted);font-weight:400;margin-top:7px;max-width:80%;line-height:1.5}
 .ring{position:relative;width:72px;height:72px;flex:0 0 auto}
 .ring svg{transform:rotate(-90deg)}
 .ring .fil{transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)}
 .ring .rt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.ring .rt b{font-size:15px;font-weight:700;line-height:1;color:#fff}
-.ring .rt span{font-size:8px;color:rgba(255,255,255,.45);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.ring .rt b{font-size:15px;font-weight:700;line-height:1;color:var(--text)}
+.ring .rt span{font-size:8px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
 .hchips{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
-.hchip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:8px 13px;border-radius:12px;font-size:12px;font-weight:500;color:rgba(255,255,255,.8)}
-.hchip b{font-weight:700;font-size:13px;color:#fff}
+.hchip{display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--hair);padding:8px 13px;border-radius:12px;font-size:12px;font-weight:500;color:var(--muted)}
+.hchip b{font-weight:700;font-size:13px;color:var(--text)}
 .herostats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
 .hs .v{font-size:18px;font-weight:700;letter-spacing:-.02em;color:#fff}
 .hs .k{font-size:10px;color:rgba(255,255,255,.45);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
@@ -709,6 +705,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 @media(min-width:600px){.hm-row3{grid-template-columns:1fr 1fr}}
 
 .hm-scale-card{background:var(--card);border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow-card)}
+[data-theme="dark"] .hm-scale-card{background:#232325}
 .hm-scale-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
 .hm-scale-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .hm-scale-title{font-size:17px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
@@ -747,6 +744,15 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .hm-macro-bar{height:4px;border-radius:4px;background:var(--panel);overflow:hidden}
 .hm-macro-bar i{display:block;height:100%;border-radius:4px;background:var(--lime)}
 .hm-macro-bar i.c{opacity:.65}.hm-macro-bar i.f{opacity:.4}
+
+/* Macro targets 3-col */
+.hm-macro-targets{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:6px}
+.hm-macro-tgt{text-align:center;padding:10px 4px}
+.hm-macro-tgt-val{font-size:28px;font-weight:800;letter-spacing:-.04em;line-height:1;color:var(--text)}
+.hm-macro-tgt-val small{font-size:14px;font-weight:600;color:var(--muted);letter-spacing:0}
+.hm-macro-tgt-lbl{font-size:9px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.hm-macro-tgt-p .hm-macro-tgt-val{color:var(--lime-text)}
+[data-theme="dark"] .hm-macro-tgt-p .hm-macro-tgt-val{color:var(--lime)}
 
 /* Week pills */
 .hm-week-pills{display:flex;gap:5px;margin:10px 0}
@@ -918,22 +924,33 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
     <div class="hm-row4">
       <div class="hm-fuel-card">
         <div class="hm-card-lbl">
-          <span>FUEL &middot; WEEKDAY</span>
+          <span id="hmFuelMode">FUEL &middot; WEEKDAY</span>
           <span id="hmFuelLeft" class="hm-lime-text">690 kcal left</span>
         </div>
-        <div class="hm-fuel-big"><span id="hmFuelEaten">1,520</span> / <span id="hmFuelTarget">2,210</span><small> kcal</small></div>
-        <div class="hm-macro-row">
-          <div class="hm-macro">
-            <div class="hm-macro-head"><span>Protein</span><span><span id="hmMP">165</span>/<span id="hmTP">240</span>g</span></div>
-            <div class="hm-macro-bar"><i class="p" id="hmMPBar" style="width:69%"></i></div>
+        <!-- Hidden elements JS still writes to -->
+        <div class="hm-hidden">
+          <span id="hmFuelEaten">1,520</span>
+          <span id="hmFuelTarget">2,210</span>
+          <span id="hmMP">165</span>
+          <span id="hmMC">130</span>
+          <span id="hmMF">38</span>
+          <i id="hmMPBar" style="width:69%"></i>
+          <i id="hmMCBar" style="width:65%"></i>
+          <i id="hmMFBar" style="width:76%"></i>
+        </div>
+        <!-- Macro targets display -->
+        <div class="hm-macro-targets">
+          <div class="hm-macro-tgt hm-macro-tgt-p">
+            <div class="hm-macro-tgt-val"><span id="hmTP">240</span><small>g</small></div>
+            <div class="hm-macro-tgt-lbl">PROTEIN</div>
           </div>
-          <div class="hm-macro">
-            <div class="hm-macro-head"><span>Carbs</span><span><span id="hmMC">130</span>/<span id="hmTC">200</span>g</span></div>
-            <div class="hm-macro-bar"><i class="c" id="hmMCBar" style="width:65%"></i></div>
+          <div class="hm-macro-tgt">
+            <div class="hm-macro-tgt-val"><span id="hmTC">200</span><small>g</small></div>
+            <div class="hm-macro-tgt-lbl">CARBS</div>
           </div>
-          <div class="hm-macro">
-            <div class="hm-macro-head"><span>Fat</span><span><span id="hmMF">38</span>/<span id="hmTF">50</span>g</span></div>
-            <div class="hm-macro-bar"><i class="f" id="hmMFBar" style="width:76%"></i></div>
+          <div class="hm-macro-tgt">
+            <div class="hm-macro-tgt-val"><span id="hmTF">50</span><small>g</small></div>
+            <div class="hm-macro-tgt-lbl">FAT</div>
           </div>
         </div>
       </div>
@@ -977,10 +994,9 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
   <section class="view" id="v-workout">
     <div class="block">
       <div class="hero">
-        <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
         <div class="htop">
           <div><div class="hlab">Today's session</div><div class="hday" id="hDay">Lower A</div><div class="hsub" id="hSub">Quad lead &middot; tap any move for its form video</div></div>
-          <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="ringFil" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="ringNum">0/7</b><span>Done</span></div></div>
+          <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="var(--panel)" stroke-width="7" fill="none"/><circle class="fil" id="ringFil" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="ringNum">0/7</b><span>Done</span></div></div>
         </div>
         <div class="hchips"><div class="hchip"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><b id="cMoves">7</b>&nbsp;moves</div><div class="hchip"><i class="hgi-stroke hgi-bar-chart-02 ic"></i><b id="cSets">20</b>&nbsp;sets</div><div class="hchip"><i class="hgi-stroke hgi-clock-01 ic"></i><b id="cTime">~76</b>&nbsp;min</div></div>
       </div>
@@ -1940,13 +1956,13 @@ function renderScalePath(){
   /* Current dot */
   var xc=sx(wksNow),yc=sy(cW);
   var bot=H-PB;
-  var svg='<defs><linearGradient id="scaleGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.28"/><stop offset="100%" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>';
+  var svg='<defs><linearGradient id="scaleGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.35"/><stop offset="100%" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>';
   /* Area fill under trajectory */
   svg+='<path d="M '+x0+','+y0+' L '+x9+','+y9+' L '+x9+','+bot+' L '+x0+','+bot+' Z" fill="url(#scaleGrad)"/>';
   /* Dashed trajectory line on top of fill */
   svg+='<line x1="'+x0+'" y1="'+y0+'" x2="'+x9+'" y2="'+y9+'" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.5"/>';
   /* Current position dot with glow ring */
-  svg+='<circle cx="'+xc+'" cy="'+yc+'" r="8" fill="currentColor" fill-opacity="0.18"/>';
+  svg+='<circle cx="'+xc+'" cy="'+yc+'" r="8" fill="currentColor" fill-opacity="0.25"/>';
   svg+='<circle cx="'+xc+'" cy="'+yc+'" r="4.5" fill="currentColor" stroke="var(--card)" stroke-width="2"/>';
   svg+='<text x="'+(xc+11)+'" y="'+(yc+4)+'" font-size="9" font-weight="700" fill="currentColor">you · '+cW.toFixed(1)+'</text>';
   var svgEl=document.getElementById('hmScaleSvg');if(svgEl)svgEl.innerHTML=svg;
