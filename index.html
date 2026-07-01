@@ -186,6 +186,14 @@ button{cursor:pointer}
 .pill{flex:0 0 auto;border:none;background:var(--card);color:var(--muted);font-size:13px;font-weight:500;padding:8px 16px;border-radius:20px;transition:.15s;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.08),0 0 0 1px var(--hair)}
 .pill:active{transform:scale(.95)}
 .pill.active{background:var(--lime);color:var(--on-lime);font-weight:600}
+.daypill{display:flex;flex-direction:column;align-items:center;gap:2px;padding:10px 14px;min-width:72px;border-radius:16px;cursor:pointer;border:none;transition:.15s;background:var(--card);color:var(--muted);box-shadow:0 1px 3px rgba(0,0,0,.08),0 0 0 1px var(--hair)}
+.daypill:active{transform:scale(.95)}
+.daypill.active{background:var(--lime);color:var(--on-lime)}
+.daypill .dp-day{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;opacity:.7}
+.daypill.active .dp-day{opacity:.75}
+.daypill .dp-date{font-size:18px;font-weight:700;line-height:1}
+.daypill .dp-name{font-size:11px;font-weight:500;white-space:nowrap;opacity:.75}
+.daypill.active .dp-name{opacity:.9}
 
 /* ── Calendar ── */
 .calendar{background:var(--ink);color:var(--on-ink);border-radius:var(--r-xl);padding:20px;box-shadow:var(--shadow)}
@@ -1182,7 +1190,27 @@ var WD_NAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 function todayISO(){return new Date().toISOString().slice(0,10);}
 function doneSet(){var t=STATE.ticks[todayISO()];return(t&&t.key===PROGRAM[curDay].key&&Array.isArray(t.done))?t.done:[];}
 function setDone(arr){STATE.ticks[todayISO()]={key:PROGRAM[curDay].key,done:arr};saveState();}
-function renderDayTabs(){$('dayTabs').innerHTML=PROGRAM.map(function(d,i){return '<button class="pill '+(i===curDay?'active':'')+'" data-day="'+i+'">'+d.name+'</button>';}).join('');}
+function renderDayTabs(){
+  /* Map each PROGRAM entry to its weekday index (0=Sun…6=Sat) */
+  var keyToWd={};
+  Object.keys(WEEKDAY_TO_KEY).forEach(function(wd){keyToWd[WEEKDAY_TO_KEY[wd]]=+wd;});
+  /* Start of this week (Monday) */
+  var now=new Date(),todayWd=now.getDay();
+  /* offset so week starts Monday */
+  var monday=new Date(now);monday.setDate(now.getDate()-(todayWd===0?6:todayWd-1));
+  $('dayTabs').innerHTML=PROGRAM.map(function(d,i){
+    var wd=keyToWd[d.key];
+    var dayDate=new Date(monday);dayDate.setDate(monday.getDate()+(wd-1));/* wd 1=Mon…6=Sat, offset from Monday */
+    var dayNum=dayDate.getDate();
+    var dayName=WD_NAMES[wd];
+    var isActive=i===curDay;
+    return '<button class="daypill'+(isActive?' active':'')+'" data-day="'+i+'">'+
+      '<span class="dp-day">'+dayName+'</span>'+
+      '<span class="dp-date">'+dayNum+'</span>'+
+      '<span class="dp-name">'+d.name+'</span>'+
+    '</button>';
+  }).join('');
+}
 function renderWorkout(){
   var d=PROGRAM[curDay],dn=doneSet();
   $('wHead').innerHTML='<span class="tg">'+d.name+'</span><span class="wt">'+d.focus+'</span><span class="wm"><i class="hgi-stroke hgi-dumbbell-01 ic" style="font-size:14px;width:14px;height:14px"></i>'+d.time+' min</span>';
@@ -1472,7 +1500,7 @@ function renderSHist(){$('sCount').textContent=STATE.scans.length+' logged';$('s
 
 /* ---------- events ---------- */
 document.addEventListener('click',function(e){
-  var dt=e.target.closest('#dayTabs .pill');if(dt){selectDay(+dt.getAttribute('data-day'));return;}
+  var dt=e.target.closest('#dayTabs .daypill');if(dt){selectDay(+dt.getAttribute('data-day'));return;}
   var calDay=e.target.closest('[data-pday]');if(calDay&&e.target.closest('#calGrid')){curDay=+calDay.getAttribute('data-pday');renderDayTabs();renderWorkout();showView('workout');return;}
   var exn=e.target.closest('[data-exn]');if(exn&&!e.target.closest('.excard-chk')){var ename=exn.getAttribute('data-exn');var d=PROGRAM[curDay],ex=d.ex.find(function(x){return x.n===ename;});showExModal(ename,ex&&ex.note);return;}
   var c=e.target.closest('.exchk,.excard-chk');if(c){var i=+c.getAttribute('data-idx'),arr=doneSet().slice(),p=arr.indexOf(i);if(p>=0)arr.splice(p,1);else arr.push(i);setDone(arr);var row=c.closest('.exrow,.excard');if(row)row.classList.toggle('done',arr.indexOf(i)>=0);updateRing();renderCalendar();return;}
