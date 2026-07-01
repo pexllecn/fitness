@@ -662,10 +662,14 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 
 /* Hero weight card */
 .hm-hero{background:var(--card);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-card)}
+.hm-section-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.hm-lime-text{color:var(--lime-text)}
+[data-theme="dark"] .hm-lime-text{color:var(--lime)}
 .hm-weight-main{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .hm-weight-big{font-size:52px;font-weight:800;letter-spacing:-.05em;line-height:.95;color:var(--text)}
 .hm-weight-arrow{font-size:28px;color:var(--muted);font-weight:300}
-.hm-weight-goal{font-size:28px;font-weight:700;color:var(--muted);letter-spacing:-.03em}
+.hm-weight-goal{font-size:28px;font-weight:700;color:var(--lime-text);letter-spacing:-.03em}
+[data-theme="dark"] .hm-weight-goal{color:var(--lime)}
 .hm-weight-sub{font-size:13px;color:var(--muted);font-weight:400;margin-top:8px;line-height:1.5}
 .hm-weight-accent{color:var(--lime-text)}
 [data-theme="dark"] .hm-weight-accent{color:var(--lime)}
@@ -709,7 +713,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .hm-scale-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .hm-scale-title{font-size:17px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
 .hm-scale-badge{display:inline-flex;align-items:center;background:var(--panel);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--text);letter-spacing:.03em;margin-bottom:12px}
-.hm-scale-svg{width:100%;display:block;margin:4px 0}
+.hm-scale-svg{width:100%;display:block;margin:4px 0;color:var(--lime)}
 .hm-scale-xlabels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-weight:500;padding:0 2px;margin-bottom:10px}
 .hm-scale-status{font-size:12px;color:var(--muted);line-height:1.5;font-weight:400;padding-top:8px;border-top:1px solid var(--hair)}
 
@@ -741,8 +745,8 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .hm-macro{display:flex;flex-direction:column;gap:3px}
 .hm-macro-head{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--muted)}
 .hm-macro-bar{height:4px;border-radius:4px;background:var(--panel);overflow:hidden}
-.hm-macro-bar i{display:block;height:100%;border-radius:4px}
-.hm-macro-bar i.p{background:#0A84FF}.hm-macro-bar i.c{background:#FF9500}.hm-macro-bar i.f{background:#FF3B30}
+.hm-macro-bar i{display:block;height:100%;border-radius:4px;background:var(--lime)}
+.hm-macro-bar i.c{opacity:.65}.hm-macro-bar i.f{opacity:.4}
 
 /* Week pills */
 .hm-week-pills{display:flex;gap:5px;margin:10px 0}
@@ -828,6 +832,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
     <!-- ROW 1: Weight hero + BF ring -->
     <div class="hm-row1">
       <div class="hm-hero">
+        <div class="hm-section-lbl">THE GOAL</div>
         <div class="hm-weight-main">
           <div class="hm-weight-big" id="hmWeightNow">92.6</div>
           <div class="hm-weight-arrow">&#8594;</div>
@@ -914,7 +919,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
       <div class="hm-fuel-card">
         <div class="hm-card-lbl">
           <span>FUEL &middot; WEEKDAY</span>
-          <span id="hmFuelLeft" style="color:var(--lime-text)">690 kcal left</span>
+          <span id="hmFuelLeft" class="hm-lime-text">690 kcal left</span>
         </div>
         <div class="hm-fuel-big"><span id="hmFuelEaten">1,520</span> / <span id="hmFuelTarget">2,210</span><small> kcal</small></div>
         <div class="hm-macro-row">
@@ -1875,6 +1880,20 @@ function renderHomeHero(){
   hmSet('hmStatWks',wkNum);
   hmSet('hmStatWksOf',' of '+TOTAL_WEEKS);
   var wb=document.getElementById('hmWkBar');if(wb)wb.style.width=Math.round(wkNum/TOTAL_WEEKS*100)+'%';
+  /* Sparklines */
+  function mkSpark(vals,accent){
+    if(!vals||vals.length<2)return'<svg viewBox="0 0 60 20" style="width:60px;height:20px"><line x1="0" y1="10" x2="60" y2="10" stroke="currentColor" stroke-width="1.5" stroke-opacity=".3"/></svg>';
+    var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals),rng=mx-mn||1;
+    var pts=vals.map(function(v,i){return(i/(vals.length-1)*58+1)+','+(18-(v-mn)/rng*16);});
+    return'<svg viewBox="0 0 60 20" style="width:100%;height:20px"><polyline points="'+pts.join(' ')+'" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  }
+  var dw=STATE.dailyW||SEED_D||[];
+  var wvals=dw.map(function(e){return e.weight;}).slice(-8);
+  var bfvals=scans.map(function(e){return e.bf;}).slice(-8);
+  var flvals=scans.map(function(e,i){if(i===0)return 0;var s=scans[0];return Math.max(0,(s.bf*s.weight-e.bf*e.weight)/100);}).slice(-8);
+  var spW=document.getElementById('hmSparkW');if(spW)spW.innerHTML='<div style="color:var(--lime)">'+mkSpark(wvals)+'</div>';
+  var spBF=document.getElementById('hmSparkBF');if(spBF)spBF.innerHTML='<div style="color:var(--muted)">'+mkSpark(bfvals)+'</div>';
+  var spFL=document.getElementById('hmSparkFL');if(spFL)spFL.innerHTML='<div style="color:var(--lime)">'+mkSpark(flvals)+'</div>';
 }
 
 function renderHomeBF(){
@@ -1920,12 +1939,16 @@ function renderScalePath(){
   var x0=sx(0),y0=sy(sW),x9=sx(TOTAL_WEEKS),y9=sy(planEnd);
   /* Current dot */
   var xc=sx(wksNow),yc=sy(cW);
-  var svg='<line x1="'+x0+'" y1="'+y0+'" x2="'+x9+'" y2="'+y9+'" stroke="var(--line)" stroke-width="2" stroke-dasharray="5 4"/>';
-  svg+='<circle cx="'+xc+'" cy="'+yc+'" r="5" fill="var(--lime)" stroke="var(--card)" stroke-width="2"/>';
-  svg+='<text x="'+(xc+8)+'" y="'+(yc+4)+'" font-size="9" font-weight="700" fill="var(--muted)">you · '+cW.toFixed(1)+'</text>';
-  /* Axis dots */
-  svg+='<circle cx="'+x0+'" cy="'+y0+'" r="3" fill="var(--muted2)"/>';
-  svg+='<circle cx="'+x9+'" cy="'+y9+'" r="3" fill="var(--muted2)"/>';
+  var bot=H-PB;
+  var svg='<defs><linearGradient id="scaleGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="currentColor" stop-opacity="0.28"/><stop offset="100%" stop-color="currentColor" stop-opacity="0"/></linearGradient></defs>';
+  /* Area fill under trajectory */
+  svg+='<path d="M '+x0+','+y0+' L '+x9+','+y9+' L '+x9+','+bot+' L '+x0+','+bot+' Z" fill="url(#scaleGrad)"/>';
+  /* Dashed trajectory line on top of fill */
+  svg+='<line x1="'+x0+'" y1="'+y0+'" x2="'+x9+'" y2="'+y9+'" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 4" stroke-opacity="0.5"/>';
+  /* Current position dot with glow ring */
+  svg+='<circle cx="'+xc+'" cy="'+yc+'" r="8" fill="currentColor" fill-opacity="0.18"/>';
+  svg+='<circle cx="'+xc+'" cy="'+yc+'" r="4.5" fill="currentColor" stroke="var(--card)" stroke-width="2"/>';
+  svg+='<text x="'+(xc+11)+'" y="'+(yc+4)+'" font-size="9" font-weight="700" fill="currentColor">you · '+cW.toFixed(1)+'</text>';
   var svgEl=document.getElementById('hmScaleSvg');if(svgEl)svgEl.innerHTML=svg;
   /* Scale end label */
   hmSet('hmScaleEnd',planEnd+' · Wk '+TOTAL_WEEKS+' · 27 Aug');
