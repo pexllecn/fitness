@@ -1679,7 +1679,7 @@ function syncPull(onDone){
       localStorage.setItem(SYNC_KEY_LS,c.key);
       localStorage.setItem(SYNC_BIN_LS,c.bin);
       localStorage.setItem(KEY,JSON.stringify(o));
-      var _savedDay=curDay;loadState();bootRender();curDay=_savedDay;renderDayTabs();renderWorkout();syncPills();syncLoadInputs();
+      var _savedDay=curDay,_savedRest=restMode;loadState();bootRender();curDay=_savedDay;restMode=_savedRest;renderDayTabs();if(restMode!==null){renderRestDay(restMode);}else{renderWorkout();}syncPills();syncLoadInputs();
       var t=new Date().toLocaleTimeString('en-GB',{hour:'2-digit',minute:'2-digit'});
       syncSetStatus('✓ Pulled at '+t+'. Data loaded from cloud.');
       toast('Synced from cloud');
@@ -1748,7 +1748,7 @@ syncLoadInputs();
           setTimeout(reset,1000);
         });
       } else {
-        var _sd=curDay;bootRender();curDay=_sd;renderDayTabs();renderWorkout();
+        var _sd=curDay,_sr=restMode;bootRender();curDay=_sd;restMode=_sr;renderDayTabs();if(restMode!==null){renderRestDay(restMode);}else{renderWorkout();}
         label.textContent='Refreshed';
         setTimeout(reset,1200);
       }
