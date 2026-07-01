@@ -146,22 +146,26 @@ button{cursor:pointer}
 .chip.lime{background:var(--lime);color:var(--on-lime)}
 
 /* ── Hero card ── */
-.hero{position:relative;overflow:hidden;background:var(--card);color:var(--text);border-radius:var(--r-xl);padding:20px;box-shadow:var(--shadow)}
-.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 85% 40%,color-mix(in srgb,var(--lime) 30%,transparent) 0%,transparent 60%);pointer-events:none;z-index:0}
+.hero{position:relative;overflow:hidden;background:var(--ink);color:var(--on-ink);border-radius:var(--r-xl);padding:24px;box-shadow:var(--shadow)}
+.hero .blobs{position:absolute;inset:0;filter:blur(48px);opacity:.75;pointer-events:none}
+.blob{position:absolute;border-radius:50%}
+.blob.l{width:220px;height:220px;background:var(--lime);top:-40px;right:0;opacity:.5}
+.blob.f{width:180px;height:180px;background:var(--forest-2);bottom:-60px;right:120px;opacity:.65}
+.blob.k{width:140px;height:140px;background:#2f7d59;top:50px;right:200px;opacity:.3}
 .hero>*{position:relative;z-index:1}
 .hero .htop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
-.hlab{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
-.hero .hday{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:7px;line-height:1.06;color:var(--text)}
-.hero .hsub{font-size:13px;color:var(--muted);font-weight:400;margin-top:7px;max-width:80%;line-height:1.5}
+.hlab{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.hero .hday{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:7px;line-height:1.06;color:#fff}
+.hero .hsub{font-size:13px;color:rgba(255,255,255,.6);font-weight:400;margin-top:7px;max-width:80%;line-height:1.5}
 .ring{position:relative;width:72px;height:72px;flex:0 0 auto}
 .ring svg{transform:rotate(-90deg)}
 .ring .fil{transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)}
 .ring .rt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.ring .rt b{font-size:15px;font-weight:700;line-height:1;color:var(--text)}
-.ring .rt span{font-size:8px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.ring .rt b{font-size:15px;font-weight:700;line-height:1;color:#fff}
+.ring .rt span{font-size:8px;color:rgba(255,255,255,.45);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
 .hchips{display:flex;gap:8px;margin-top:20px;flex-wrap:wrap}
-.hchip{display:flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--hair);padding:8px 13px;border-radius:12px;font-size:12px;font-weight:500;color:var(--muted)}
-.hchip b{font-weight:700;font-size:13px;color:var(--text)}
+.hchip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:8px 13px;border-radius:12px;font-size:12px;font-weight:500;color:rgba(255,255,255,.8)}
+.hchip b{font-weight:700;font-size:13px;color:#fff}
 .herostats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
 .hs .v{font-size:18px;font-weight:700;letter-spacing:-.02em;color:#fff}
 .hs .k{font-size:10px;color:rgba(255,255,255,.45);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
@@ -994,6 +998,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
   <section class="view" id="v-workout">
     <div class="block">
       <div class="hero">
+        <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
         <div class="htop">
           <div><div class="hlab">Today's session</div><div class="hday" id="hDay">Lower A</div><div class="hsub" id="hSub">Quad lead &middot; tap any move for its form video</div></div>
           <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="var(--panel)" stroke-width="7" fill="none"/><circle class="fil" id="ringFil" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="ringNum">0/7</b><span>Done</span></div></div>
