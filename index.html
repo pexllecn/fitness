@@ -643,8 +643,134 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 
 
 /* ── Enhanced workout hero ── */
-.wday-head{font-size:32px;font-weight:800;letter-spacing:-.04em;color:#fff;line-height:1.05;margin-top:6px}
+.wday-head{font-size:32px;font-weight:800;letter-height:.04em;color:#fff;line-height:1.05;margin-top:6px}
 .wday-sub{font-size:13px;color:rgba(255,255,255,.55);margin-top:5px}
+
+/* ════════════════════════════════════════
+   HOMEPAGE REDESIGN
+════════════════════════════════════════ */
+
+/* Top bar */
+.hm-topbar{display:flex;align-items:center;gap:10px;padding:18px 0 10px}
+.hm-greeting{flex:1;font-size:13px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hm-badge{flex:0 0 auto;border:1.5px solid var(--text);border-radius:20px;padding:5px 13px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text);white-space:nowrap}
+.hm-avatar{width:34px;height:34px;border-radius:50%;background:var(--lime);color:var(--on-lime);font-size:14px;font-weight:800;display:grid;place-items:center;flex:0 0 auto}
+
+/* Row 1: hero weight + BF card */
+.hm-row1{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:600px){.hm-row1{grid-template-columns:1.6fr 1fr}}
+
+/* Hero weight card */
+.hm-hero{background:var(--card);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-card)}
+.hm-weight-main{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.hm-weight-big{font-size:52px;font-weight:800;letter-spacing:-.05em;line-height:.95;color:var(--text)}
+.hm-weight-arrow{font-size:28px;color:var(--muted);font-weight:300}
+.hm-weight-goal{font-size:28px;font-weight:700;color:var(--muted);letter-spacing:-.03em}
+.hm-weight-sub{font-size:13px;color:var(--muted);font-weight:400;margin-top:8px;line-height:1.5}
+.hm-weight-accent{color:var(--lime-text)}
+[data-theme="dark"] .hm-weight-accent{color:var(--lime)}
+.hm-progress-wrap{margin-top:16px}
+.hm-progress-labels{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;font-size:10px;font-weight:600;color:var(--muted);letter-spacing:.03em}
+.hm-progress-center{text-align:center;color:var(--lime-text);font-weight:700}
+[data-theme="dark"] .hm-progress-center{color:var(--lime)}
+.hm-progress-bar{height:7px;border-radius:7px;background:var(--panel);overflow:hidden;position:relative}
+.hm-progress-fill{height:100%;background:var(--lime);border-radius:7px;transition:width .6s cubic-bezier(.2,.8,.2,1)}
+
+/* BF ring card */
+.hm-bf-card{background:var(--card);border-radius:var(--r-lg);padding:22px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px}
+.hm-bf-label{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);align-self:flex-start}
+.hm-bf-ring{position:relative;width:120px;height:120px;flex:0 0 auto}
+.hm-bf-ring svg{transform:rotate(-90deg)}
+.hm-bf-ring .rt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.hm-bf-ring .rt b{font-size:24px;font-weight:800;letter-spacing:-.03em}
+.hm-bf-ring .rt span{font-size:10px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.04em;margin-top:2px}
+.hm-bf-sub{font-size:12px;font-weight:500;color:var(--muted);text-align:center}
+
+/* Row 2: 4 stat cards */
+.hm-stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+@media(min-width:600px){.hm-stats{grid-template-columns:repeat(4,1fr)}}
+.hm-stat{background:var(--card);border-radius:var(--r-sm);padding:14px;box-shadow:var(--shadow-card)}
+.hm-stat-label{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.hm-stat-val{font-size:26px;font-weight:800;letter-spacing:-.04em;margin-top:6px;line-height:1}
+.hm-stat-val.accent{color:var(--lime-text)}
+[data-theme="dark"] .hm-stat-val.accent{color:var(--lime)}
+.hm-stat small{font-size:13px;font-weight:500;color:var(--muted)}
+.hm-sparkline{margin-top:8px;height:28px}
+.hm-sparkline svg{width:100%;height:28px;display:block}
+.hm-stat-bar{height:4px;border-radius:4px;background:var(--panel);margin-top:10px;overflow:hidden}
+.hm-stat-bar i{display:block;height:100%;background:var(--lime);border-radius:4px}
+
+/* Row 3: Scale Path + Today's Session */
+.hm-row3{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:600px){.hm-row3{grid-template-columns:1fr 1fr}}
+
+.hm-scale-card{background:var(--card);border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow-card)}
+.hm-scale-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:4px}
+.hm-scale-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hm-scale-title{font-size:17px;font-weight:700;letter-spacing:-.02em;margin-bottom:8px}
+.hm-scale-badge{display:inline-flex;align-items:center;background:var(--panel);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700;color:var(--text);letter-spacing:.03em;margin-bottom:12px}
+.hm-scale-svg{width:100%;display:block;margin:4px 0}
+.hm-scale-xlabels{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);font-weight:500;padding:0 2px;margin-bottom:10px}
+.hm-scale-status{font-size:12px;color:var(--muted);line-height:1.5;font-weight:400;padding-top:8px;border-top:1px solid var(--hair)}
+
+.hm-session-card{background:var(--card);border-radius:var(--r-lg);padding:20px;box-shadow:var(--shadow-card);display:flex;flex-direction:column;gap:0}
+.hm-session-header{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:2px}
+.hm-session-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hm-session-done{font-size:13px;font-weight:700;color:var(--lime-text)}
+[data-theme="dark"] .hm-session-done{color:var(--lime)}
+.hm-session-name{font-size:34px;font-weight:800;letter-spacing:-.05em;line-height:1;margin:6px 0 4px}
+.hm-session-sub{font-size:12px;color:var(--muted);font-weight:400;margin-bottom:12px}
+.hm-session-stats{display:flex;gap:12px;margin-bottom:14px;font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--muted)}
+.hm-session-stats span::before{content:'· ';color:var(--hair)}.hm-session-stats span:first-child::before{display:none}
+.hm-session-exlist{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.hm-session-ex{font-size:13px;font-weight:500;color:var(--text);padding:8px 10px;background:var(--panel);border-radius:8px;display:flex;justify-content:space-between}
+.hm-session-ex span{color:var(--muted);font-size:12px}
+.hm-session-cta{margin-top:auto;width:100%;border:none;background:var(--lime);color:var(--on-lime);font-size:14px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:14px;border-radius:var(--r-sm);cursor:pointer;transition:opacity .15s}
+.hm-session-cta:active{opacity:.8}
+.hm-session-rest{font-size:15px;font-weight:600;color:var(--muted);text-align:center;padding:20px 0}
+
+/* Row 4: Fuel, This Week, Hydration */
+.hm-row4{display:grid;grid-template-columns:1fr;gap:12px}
+@media(min-width:600px){.hm-row4{grid-template-columns:repeat(3,1fr)}}
+
+.hm-fuel-card,.hm-week-card,.hm-hydra-card{background:var(--card);border-radius:var(--r-lg);padding:18px;box-shadow:var(--shadow-card)}
+.hm-card-lbl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;justify-content:space-between}
+.hm-fuel-big{font-size:22px;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:12px}
+.hm-fuel-big small{font-size:13px;font-weight:500;color:var(--muted);letter-spacing:0}
+.hm-macro-row{display:flex;flex-direction:column;gap:7px;margin-top:4px}
+.hm-macro{display:flex;flex-direction:column;gap:3px}
+.hm-macro-head{display:flex;justify-content:space-between;font-size:11px;font-weight:600;color:var(--muted)}
+.hm-macro-bar{height:4px;border-radius:4px;background:var(--panel);overflow:hidden}
+.hm-macro-bar i{display:block;height:100%;border-radius:4px}
+.hm-macro-bar i.p{background:#0A84FF}.hm-macro-bar i.c{background:#FF9500}.hm-macro-bar i.f{background:#FF3B30}
+
+/* Week pills */
+.hm-week-pills{display:flex;gap:5px;margin:10px 0}
+.hm-week-pill{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:700;border:1.5px solid var(--hair);color:var(--muted);flex:0 0 auto}
+.hm-week-pill.done{background:var(--lime);color:var(--on-lime);border-color:var(--lime)}
+.hm-week-pill.today{border-color:var(--lime-text);color:var(--lime-text);border-width:2px}
+[data-theme="dark"] .hm-week-pill.today{border-color:var(--lime);color:var(--lime)}
+.hm-week-text{font-size:12px;color:var(--muted);font-weight:400;margin-bottom:8px;line-height:1.5}
+.hm-week-streak{font-size:12px;font-weight:600;color:var(--lime-text)}
+[data-theme="dark"] .hm-week-streak{color:var(--lime)}
+
+/* Hydration list */
+.hm-hydra-list{display:flex;flex-direction:column;gap:8px;margin-top:4px}
+.hm-hydra-row{display:flex;justify-content:space-between;align-items:baseline;padding:7px 0;border-bottom:1px solid var(--hair)}
+.hm-hydra-row:last-child{border-bottom:none}
+.hm-hydra-name{font-size:13px;font-weight:500;color:var(--text);line-height:1.3}
+.hm-hydra-name small{display:block;font-size:11px;color:var(--muted);font-weight:400}
+.hm-hydra-val{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;margin-left:8px}
+
+/* Hidden legacy elements that JS still writes to */
+.hm-hidden{display:none!important}
+
+/* Sidebar week widget */
+.sb-week-widget{background:color-mix(in srgb,var(--lime) 18%,transparent);border-radius:16px;padding:10px 12px;margin:8px 4px 0;width:calc(100% - 8px);text-align:center}
+.sb-week-widget .ww-n{font-size:8px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:3px}
+.sb-week-widget .ww-v{font-size:10px;font-weight:600;color:var(--text);display:block;margin-bottom:6px;line-height:1.3}
+.sb-week-widget .ww-bar{height:3px;border-radius:3px;background:var(--line);overflow:hidden}
+.sb-week-widget .ww-bar i{display:block;height:100%;background:var(--lime);border-radius:3px;width:11%}
 </style>
 </head>
 <body>
@@ -659,6 +785,11 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
     <div class="sb-spacer"></div>
     <button class="sb-item" id="tglD" title="Theme"><i class="hgi-stroke hgi-moon-02 ic i-moon"></i><i class="hgi-stroke hgi-sun-01 ic i-sun"></i><span class="sl">Mode</span></button>
     <button class="sb-item" data-v="you" title="Settings"><i class="hgi-stroke hgi-settings-01 ic"></i><span class="sl">You</span></button>
+    <div class="sb-week-widget" id="sbWeekWidget">
+      <span class="ww-n">Phase progress</span>
+      <span class="ww-v" id="sbWeekLabel">Week 1 of 9</span>
+      <div class="ww-bar"><i id="sbWeekBar"></i></div>
+    </div>
     <div class="sb-avatar">K</div>
   </aside>
   <main class="main">
@@ -670,93 +801,171 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 
   <!-- DASHBOARD -->
   <section class="view on" id="v-dash">
-    <div class="block"><div class="dash">
-      <div class="hero">
-        <div class="blobs"><span class="blob l"></span><span class="blob f"></span><span class="blob k"></span></div>
-        <div class="htop"><div><div class="hlab">The cut</div><div class="hday"><span id="pgWnow">92.6</span> <span style="color:rgba(255,255,255,.4)">&#8594;</span> 85.0</div><div class="hsub" id="pgToGo">~8kg of fat to shift &middot; about 0.5kg a week.</div></div>
-        <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="pgRing" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="pgBf">19.2%</b><span>Body fat</span></div></div></div>
-        <div class="herostats"><div class="hs"><div class="v">12%</div><div class="k">Target BF</div><div class="bar"><i id="pgBar" style="width:36%"></i></div></div><div class="hs"><div class="v" id="pgDef">~452</div><div class="k">Avg deficit</div><div class="bar"><i style="width:45%"></i></div></div><div class="hs"><div class="v" id="pgIntake">2,099</div><div class="k">Avg intake</div><div class="bar"><i style="width:82%"></i></div></div></div>
+
+    <!-- Hidden legacy elements required by JS render functions -->
+    <div class="hm-hidden">
+      <span id="pgWnow">92.6</span>
+      <span id="pgToGo"></span>
+      <span id="pgBf">19.2%</span>
+      <span id="pgBar"></span>
+      <span id="pgDef"></span>
+      <span id="pgIntake"></span>
+      <span id="dashDay"></span>
+      <span id="dashDone"></span>
+      <span id="dashKcal"></span>
+      <span id="dashMacros"></span>
+      <b id="calMonth"></b>
+      <div id="calGrid"></div>
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="hm-topbar">
+      <div class="hm-greeting" id="hmGreeting">GOOD MORNING, KAY &middot; TUE 1 JUL</div>
+      <div class="hm-badge" id="hmBadge">ON TRACK &middot; WK 1 OF 9</div>
+      <div class="hm-avatar">K</div>
+    </div>
+
+    <!-- ROW 1: Weight hero + BF ring -->
+    <div class="hm-row1">
+      <div class="hm-hero">
+        <div class="hm-weight-main">
+          <div class="hm-weight-big" id="hmWeightNow">92.6</div>
+          <div class="hm-weight-arrow">&#8594;</div>
+          <div class="hm-weight-goal" id="hmWeightGoal">85.0</div>
+        </div>
+        <div class="hm-weight-sub" id="hmWeightSub">0.2 kg down &middot; 7.6 kg to go &middot; lands ~27 Aug</div>
+        <div class="hm-progress-wrap">
+          <div class="hm-progress-labels">
+            <span id="hmStartLabel">92.8 start</span>
+            <span class="hm-progress-center" id="hmProgressPct">4% of the cut done</span>
+            <span id="hmGoalLabel">85.0 goal</span>
+          </div>
+          <div class="hm-progress-bar"><div class="hm-progress-fill" id="hmProgressFill" style="width:4%"></div></div>
+        </div>
       </div>
-      <div class="tile d-steps" data-v="workout" style="cursor:pointer"><div class="ti"><i class="hgi-stroke hgi-dumbbell-01 ic"></i>Today's session</div><div class="tv" id="dashDay">Lower A</div><div class="tk"><b id="dashDone">0/7</b> done &middot; tap to open</div></div>
-      <div class="tile forest d-weight"><div class="ti"><i class="hgi-stroke hgi-fire ic"></i>Today's fuel</div><div class="tv"><span id="dashKcal">2,210</span><small> kcal</small></div><div class="tk" id="dashMacros">240P &middot; 200C &middot; 50F</div></div>
-      <div class="actcard" id="actCard" style="grid-column:1/-1">
-        <div class="actcard-head"><h3>Today's activity</h3><span class="actcard-label" id="actLabel">0 done</span></div>
-        <div class="actring-main">
-          <div class="ringwrap">
-            <svg viewBox="0 0 148 148"><circle cx="74" cy="74" r="60" stroke="rgba(255,255,255,.1)" stroke-width="10" fill="none"/><circle id="actMainRing" cx="74" cy="74" r="60" stroke="var(--lime)" stroke-width="10" fill="none" stroke-linecap="round" style="stroke-dasharray:376.9;stroke-dashoffset:376.9;transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)"/></svg>
-            <div class="rt"><b id="actMainVal">0/7</b><span>Exercises</span></div>
+      <div class="hm-bf-card">
+        <div class="hm-bf-label">BODY FAT</div>
+        <div class="hm-bf-ring">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="50" stroke="var(--panel)" stroke-width="9" fill="none"/>
+            <circle id="hmBfRing" cx="60" cy="60" r="50" stroke="var(--lime)" stroke-width="9" fill="none" stroke-linecap="round" style="stroke-dasharray:314.2;stroke-dashoffset:254.5;transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)"/>
+          </svg>
+          <div class="rt">
+            <b id="hmBfVal">19.2%</b>
+            <span id="hmBfTarget">target 12%</span>
           </div>
         </div>
-        <div class="actring-mini-row">
-          <div class="actring-mini">
-            <div class="ringwrap">
-              <svg viewBox="0 0 74 74"><circle cx="37" cy="37" r="29" stroke="rgba(255,149,0,.2)" stroke-width="6" fill="none"/><circle id="actSets" cx="37" cy="37" r="29" stroke="#FF9500" stroke-width="6" fill="none" stroke-linecap="round" style="stroke-dasharray:182.2;stroke-dashoffset:182.2;transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)"/></svg>
-              <div class="rt"><b id="actSetsVal">0</b><span>of <span id="actSetsTot">20</span></span></div>
-            </div>
-            <span class="rl">Sets done</span>
+        <div class="hm-bf-sub" id="hmBfSub">&#8211;7.2 points to go</div>
+      </div>
+    </div>
+
+    <!-- ROW 2: 4 stat cards -->
+    <div class="hm-stats">
+      <div class="hm-stat">
+        <div class="hm-stat-label">WEIGHT</div>
+        <div class="hm-stat-val"><span id="hmStatWeight">92.6</span><small> kg</small></div>
+        <div class="hm-sparkline" id="hmSparkW"></div>
+      </div>
+      <div class="hm-stat">
+        <div class="hm-stat-label">BODY FAT</div>
+        <div class="hm-stat-val"><span id="hmStatBf">19.2</span><small> %</small></div>
+        <div class="hm-sparkline" id="hmSparkBF"></div>
+      </div>
+      <div class="hm-stat">
+        <div class="hm-stat-label">FAT LOST</div>
+        <div class="hm-stat-val accent"><span id="hmStatFatLost">0.2</span><small> kg</small></div>
+        <div class="hm-sparkline" id="hmSparkFL"></div>
+      </div>
+      <div class="hm-stat">
+        <div class="hm-stat-label">WEEKS IN</div>
+        <div class="hm-stat-val"><span id="hmStatWks">1</span><small id="hmStatWksOf"> of 9</small></div>
+        <div class="hm-stat-bar"><i id="hmWkBar" style="width:11%"></i></div>
+      </div>
+    </div>
+
+    <!-- ROW 3: Scale Path + Today's Session -->
+    <div class="hm-row3">
+      <div class="hm-scale-card">
+        <div class="hm-scale-lbl">SCALE PATH</div>
+        <div class="hm-scale-title">Am I on the line?</div>
+        <div class="hm-scale-badge" id="hmScaleBadge">&#8211;0.6 KG / WK PLAN</div>
+        <svg class="hm-scale-svg" viewBox="0 0 280 90" id="hmScaleSvg"></svg>
+        <div class="hm-scale-xlabels">
+          <span>Wk 0</span>
+          <span id="hmScaleEnd">87.5 &middot; Wk 9 &middot; 27 Aug</span>
+        </div>
+        <div class="hm-scale-status" id="hmScaleStatus">You're 0.1 kg ahead of the conservative line. Keep the weekday deficit and Week 2 lands at 91.7.</div>
+      </div>
+      <div class="hm-session-card">
+        <div class="hm-session-header">
+          <div class="hm-session-lbl">TODAY'S SESSION</div>
+          <div class="hm-session-done" id="hmSeshDone">0/7 done</div>
+        </div>
+        <div class="hm-session-name" id="hmSeshName">Lower A</div>
+        <div class="hm-session-sub" id="hmSeshSub">Quad lead &middot; tap a move for form video</div>
+        <div class="hm-session-stats" id="hmSeshStats"><span>7 MOVES</span><span>20 SETS</span><span>~76 MIN</span></div>
+        <div class="hm-session-exlist" id="hmSeshExList"></div>
+        <button class="hm-session-cta" id="hmSeshCta">START SESSION</button>
+      </div>
+    </div>
+
+    <!-- ROW 4: Fuel + This Week + Hydration -->
+    <div class="hm-row4">
+      <div class="hm-fuel-card">
+        <div class="hm-card-lbl">
+          <span>FUEL &middot; WEEKDAY</span>
+          <span id="hmFuelLeft" style="color:var(--lime-text)">690 kcal left</span>
+        </div>
+        <div class="hm-fuel-big"><span id="hmFuelEaten">1,520</span> / <span id="hmFuelTarget">2,210</span><small> kcal</small></div>
+        <div class="hm-macro-row">
+          <div class="hm-macro">
+            <div class="hm-macro-head"><span>Protein</span><span><span id="hmMP">165</span>/<span id="hmTP">240</span>g</span></div>
+            <div class="hm-macro-bar"><i class="p" id="hmMPBar" style="width:69%"></i></div>
           </div>
-          <div class="actring-mini">
-            <div class="ringwrap">
-              <svg viewBox="0 0 74 74"><circle cx="37" cy="37" r="29" stroke="rgba(255,59,48,.2)" stroke-width="6" fill="none"/><circle id="actTimeRing" cx="37" cy="37" r="29" stroke="#FF3B30" stroke-width="6" fill="none" stroke-linecap="round" style="stroke-dasharray:182.2;stroke-dashoffset:182.2;transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)"/></svg>
-              <div class="rt"><b id="actTimeVal">0</b><span>min</span></div>
-            </div>
-            <span class="rl">Minutes</span>
+          <div class="hm-macro">
+            <div class="hm-macro-head"><span>Carbs</span><span><span id="hmMC">130</span>/<span id="hmTC">200</span>g</span></div>
+            <div class="hm-macro-bar"><i class="c" id="hmMCBar" style="width:65%"></i></div>
           </div>
-          <div class="actring-mini">
-            <div class="ringwrap">
-              <svg viewBox="0 0 74 74"><circle cx="37" cy="37" r="29" stroke="rgba(48,161,255,.2)" stroke-width="6" fill="none"/><circle id="actDefRing" cx="37" cy="37" r="29" stroke="#30A1FF" stroke-width="6" fill="none" stroke-linecap="round" style="stroke-dasharray:182.2;stroke-dashoffset:55;transition:stroke-dashoffset .6s cubic-bezier(.2,.7,.2,1)"/></svg>
-              <div class="rt"><b id="actDefVal">452</b><span>kcal</span></div>
-            </div>
-            <span class="rl">Deficit</span>
+          <div class="hm-macro">
+            <div class="hm-macro-head"><span>Fat</span><span><span id="hmMF">38</span>/<span id="hmTF">50</span>g</span></div>
+            <div class="hm-macro-bar"><i class="f" id="hmMFBar" style="width:76%"></i></div>
           </div>
         </div>
       </div>
-      <div class="calendar">
-        <div class="calh"><b id="calMonth">June 2026</b><span class="pill">Sessions</span></div>
-        <div class="caldow"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
-        <div class="calgrid" id="calGrid"></div>
-        <div class="callegend"><span><i style="background:var(--lime)"></i>Done</span><span><i style="border:2px solid var(--lime)"></i>Today</span><span><i style="background:rgba(255,255,255,.18)"></i>Scheduled</span></div>
+      <div class="hm-week-card">
+        <div class="hm-card-lbl"><span>THIS WEEK</span></div>
+        <div class="hm-week-pills" id="hmWeekPills"></div>
+        <div class="hm-week-text" id="hmWeekText">Mon done &middot; today Lower A &middot; Wed rest</div>
+        <div class="hm-week-streak" id="hmWeekStreak">2-day streak. Hit today and it's 3 &#8212; your best this phase.</div>
       </div>
-    </div></div>
-    <div class="block">
-      <div class="shead"><h2>The next 90 days</h2><span class="tagn">three levers</span></div>
-      <div class="cols2">
-        <div class="prio"><div class="pn">1</div><div><div class="pt">Priority</div><h3>Sleep</h3><p>Get to <b>7.5 hours</b>. The biggest weakness in the plan right now. Under-slept means hungrier, weaker and looser with food, it quietly undoes the deficit.</p></div></div>
-        <div class="prio"><div class="pn">2</div><div><div class="pt">Priority</div><h3>Consistency</h3><ul class="nlist"><li>No random cheat weekends.</li><li>No bulking.</li><li>No cutting harder.</li><li>No changing the plan.</li></ul><p style="margin-top:8px">It works if you run it, not if you tweak it every week.</p></div></div>
-        <div class="prio span2"><div class="pn">3</div><div><div class="pt">Priority</div><h3>Strength retention</h3><p>During a cut your job is not to get stronger. It's to <b>refuse to get weaker</b>. Hold your bench near 100kg for reps while bodyweight drops from 92.6 to 86, and you've run an excellent cut.</p></div></div>
-      </div>
-    </div>
-    <div class="block">
-      <div class="shead"><h2 class="sm">Phases</h2><span class="tagn">to 12%</span></div>
-      <div class="tilegrid phaserow">
-        <div class="phase"><div class="pn">1</div><div class="pm"><div class="t">Establish &middot; June</div><div class="s">Lock the plan, fast initial drop</div></div><div class="pt">16&#8211;17%</div></div>
-        <div class="phase"><div class="pn">2</div><div class="pm"><div class="t">Grind &middot; July</div><div class="s">Hold intake, adherence tested</div></div><div class="pt">14&#8211;15%</div></div>
-        <div class="phase"><div class="pn">3</div><div class="pm"><div class="t">Shred &middot; Aug&#8211;Sep</div><div class="s">Abs sharpen, trunk fat goes</div></div><div class="pt">12%</div></div>
+      <div class="hm-hydra-card">
+        <div class="hm-card-lbl"><span>HYDRATION &amp; SUPPS</span></div>
+        <div class="hm-hydra-list">
+          <div class="hm-hydra-row"><div class="hm-hydra-name">Water <small>train day</small></div><div class="hm-hydra-val">4.0 L</div></div>
+          <div class="hm-hydra-row"><div class="hm-hydra-name">Whey + Creatine</div><div class="hm-hydra-val">5 g</div></div>
+          <div class="hm-hydra-row"><div class="hm-hydra-name">Magnesium PM</div><div class="hm-hydra-val">300&#8211;400 mg</div></div>
+          <div class="hm-hydra-row"><div class="hm-hydra-name">Multivit + Vit D <small>AM</small></div><div class="hm-hydra-val">&#10003;</div></div>
+        </div>
       </div>
     </div>
-    <div class="block">
-      <div class="shead"><h2 class="sm">Training reference</h2><span class="tagn">tap to open</span></div>
-      <details class="fx" open><summary>Warm up first</summary><div class="fb"><ul class="clist" style="margin-top:2px"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>5 min easy</b> on the bike or treadmill to raise the temperature.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Ramp the first big lift:</b> empty bar, ~50%, ~70%, ~85%. Never hit a top set cold.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Lower:</b> leg swings, bodyweight squats, glute bridges, hip 90/90.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Upper:</b> band pull-aparts, dislocates, scapular push-ups.</li></ul></div></details>
-      <details class="fx" open><summary>Progression &middot; reps then weight</summary><div class="fb">Add reps before weight. Take one set up a rep each week until every set sits at the top of the range, then add 2.5kg and start again. Bench, top of a 4&#215;5&#8211;6:<div style="margin-top:10px"></div>
-        <div class="pweek"><div class="wk">Week 1</div><div class="sets"><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
-        <div class="pweek"><div class="wk">Week 2</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
-        <div class="pweek"><div class="wk">Week 3</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc">95&#215;5</span><span class="setc">95&#215;5</span></div></div>
-        <div class="pweek"><div class="wk">Week 4</div><div class="sets"><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span><span class="setc top">95&#215;6</span></div></div>
-        <div class="prule"><span class="arr">&#43;</span><div>All four at the top, so next week is <b>97.5kg &#215; 5</b> and it repeats. Same rule on your 3-set lifts.</div></div></div></details>
-      <details class="fx" open><summary>Weekly split &middot; 5 train, 2 rest</summary><div class="fb"><div class="plist" style="margin-top:2px">
-        <div class="pc"><div class="pc-d"><b>Mon</b><small>D1</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower A</div><div class="s">Quad lead &middot; then a walk</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Tue</b><small>D2</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper A</div><div class="s">Push &amp; delts</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Wed</b><small>&ndash;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Rest</div><div class="s">Recover &middot; lower carbs</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Thu</b><small>D3</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Lower B</div><div class="s">Posterior chain &middot; then a walk</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Fri</b><small>D4</small></div><div class="pc-bar"></div><div class="pc-i"><div class="t">Upper B</div><div class="s">Pull &amp; delts</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Sat</b><small>D5</small></div><div class="pc-bar h"></div><div class="pc-i"><div class="t">Arms &amp; Delts</div><div class="s">Delts, arms &middot; walk &middot; social</div></div></div>
-        <div class="pc"><div class="pc-d"><b>Sun</b><small>&ndash;</small></div><div class="pc-bar r"></div><div class="pc-i"><div class="t" style="color:var(--muted)">Checkpoint</div><div class="s">7-day average &middot; photo &middot; adjust</div></div></div>
-      </div></div></details>
-      <details class="fx" open><summary>Cardio &amp; recovery</summary><div class="fb"><b>15-min incline walk &#215; 3</b>, straight after the weights on Mon, Thu and Sat. 5&#8211;6 km/h at 10&#8211;15% incline. That's the only cardio. If the scale stalls two weeks, add a fourth walk before touching the food.<ul class="clist" style="margin-top:10px"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Sleep 7.5h</b>, fixed wake time. The biggest lever left.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Last caffeine early afternoon, screens down before bed.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Pre-log the day each morning, train the evening with Mufleh.</li></ul></div></details>
-      <details class="fx" open><summary>Scale rules</summary><div class="fb"><ul class="clist" style="margin-top:2px"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Weigh daily</b>, first thing, same conditions. Act on the 7-day average only.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Around 0.5kg down</b> hold everything. Faster than 0.8, eat a little more.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Flat for two weeks</b>, drop midweek carbs or add the fourth walk.</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Sub-15%</b>, ease the deficit to protect muscle. Ignore the scale 2&#8211;3 days after Saturday.</li></ul></div></details>
-      <details class="fx" open><summary>Abs &amp; cramps</summary><div class="fb"><b>Abs come last.</b> Hanging Leg Raise ends Monday, Cable Crunch ends Thursday. They show up when the fat drops, not from extra crunches.<div class="eq" style="margin-top:8px">Lying leg press cramp: knees out of your chest, pelvis <b>down</b></div>Breathe out as you press. Salt before training, 300&#8211;400mg magnesium at night, keep carbs on lifting days. Keep 1&#8211;2 reps in the tank on compounds, sharp pain stops, burn doesn't.</div></details>
-      <details class="fx" open><summary>Straps &amp; gear</summary><div class="fb"><b>Straps</b> for RDLs, rows, pulldowns. <b>Belt</b> for top sets of squat, hip thrust, OHP. <b>Wrist wraps</b> for heavy press, <b>knee sleeves</b> for warmth.</div></details>
+
+    <!-- Hidden actCard elements needed by updateActRings() -->
+    <div id="actCard" class="hm-hidden">
+      <span class="actcard-label" id="actLabel"></span>
+      <svg viewBox="0 0 148 148"><circle cx="74" cy="74" r="60" stroke="rgba(255,255,255,.1)" stroke-width="10" fill="none"/><circle id="actMainRing" cx="74" cy="74" r="60" stroke="var(--lime)" stroke-width="10" fill="none" stroke-linecap="round" style="stroke-dasharray:376.9;stroke-dashoffset:376.9"/></svg>
+      <b id="actMainVal"></b>
+      <svg viewBox="0 0 74 74"><circle id="actSets" cx="37" cy="37" r="29" stroke="#FF9500" stroke-width="6" fill="none" stroke-linecap="round" style="stroke-dasharray:182.2;stroke-dashoffset:182.2"/></svg>
+      <b id="actSetsVal"></b><span id="actSetsTot"></span>
+      <svg viewBox="0 0 74 74"><circle id="actTimeRing" cx="37" cy="37" r="29" stroke="#FF3B30" stroke-width="6" fill="none" stroke-linecap="round" style="stroke-dasharray:182.2;stroke-dashoffset:182.2"/></svg>
+      <b id="actTimeVal"></b>
+      <svg viewBox="0 0 74 74"><circle id="actDefRing" cx="37" cy="37" r="29" stroke="#30A1FF" stroke-width="6" fill="none" stroke-linecap="round" style="stroke-dasharray:182.2;stroke-dashoffset:55"/></svg>
+      <b id="actDefVal"></b>
+      <span id="actLabel2"></span>
     </div>
+
+    <!-- pgRing hidden — needed by renderProgress() -->
+    <svg style="display:none"><circle id="pgRing" cx="38" cy="38" r="32"/></svg>
+
   </section>
 
   <!-- WORKOUT -->
@@ -1557,6 +1766,7 @@ document.addEventListener('click',function(e){
   var calDay=e.target.closest('[data-pday]');if(calDay&&e.target.closest('#calGrid')){curDay=+calDay.getAttribute('data-pday');renderDayTabs();renderWorkout();showView('workout');return;}
   var exn=e.target.closest('[data-exn]');if(exn&&!e.target.closest('.excard-chk')){var ename=exn.getAttribute('data-exn');var d=PROGRAM[curDay],ex=d.ex.find(function(x){return x.n===ename;});showExModal(ename,ex&&ex.note);return;}
   var c=e.target.closest('.exchk,.excard-chk');if(c){var i=+c.getAttribute('data-idx'),arr=doneSet().slice(),p=arr.indexOf(i);if(p>=0)arr.splice(p,1);else arr.push(i);setDone(arr);var row=c.closest('.exrow,.excard');if(row)row.classList.toggle('done',arr.indexOf(i)>=0);updateRing();renderCalendar();return;}
+  if(e.target.id==='hmSeshCta'){showView('workout');return;}
   var nav=e.target.closest('[data-v]');if(nav){showView(nav.getAttribute('data-v'));return;}
   var mm=e.target.closest('#mealMode button');if(mm){STATE.mode=mm.getAttribute('data-mode');saveState();applyTargets();renderMeals();return;}
   var smb=e.target.closest('#setMode button');if(smb){setMode=smb.getAttribute('data-sm');applyTargets();return;}
@@ -1593,12 +1803,265 @@ $('sAdd').addEventListener('click',function(){sForm.classList.toggle('open');if(
 $('sCancel').addEventListener('click',function(){sForm.classList.remove('open');});
 $('sSave').addEventListener('click',function(){var dt=$('sDate').value,w=parseFloat($('sWeight').value),bf=parseFloat($('sBf').value),mus=parseFloat($('sMus').value);if(!dt||!(w>0)||!(bf>0))return;var o={date:dt,weight:w,bf:bf};if(mus>0)o.muscle=mus;STATE.scans=STATE.scans.filter(function(x){return x.date!==dt;});STATE.scans.push(o);saveState();sForm.classList.remove('open');['sWeight','sBf','sMus'].forEach(function(id){$(id).value='';});renderProgress();});
 
+/* ──────────────────────────────────────────
+   HOMEPAGE RENDER FUNCTIONS
+────────────────────────────────────────── */
+var PHASE_START='2026-05-17';
+var PHASE_START_W=92.6;
+var TOTAL_WEEKS=9;
+var GOAL_WEIGHT=85;
+var GOAL_BF=12;
+
+function hmSet(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+function hmSetHTML(id,v){var e=document.getElementById(id);if(e)e.innerHTML=v;}
+
+function renderHomeHeader(){
+  var now=new Date();
+  var h=now.getHours();
+  var greet=h<12?'GOOD MORNING':h<18?'GOOD AFTERNOON':'GOOD EVENING';
+  var DAYS=['SUN','MON','TUE','WED','THU','FRI','SAT'];
+  var MONTHS=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  var dstr=DAYS[now.getDay()]+' '+now.getDate()+' '+MONTHS[now.getMonth()];
+  hmSet('hmGreeting',greet+', KAY · '+dstr);
+  /* Week number */
+  var wks=Math.max(0,Math.floor((now-new Date(PHASE_START))/6048e5));
+  var wkNum=Math.min(wks+1,TOTAL_WEEKS);
+  hmSet('hmBadge','ON TRACK · WK '+wkNum+' OF '+TOTAL_WEEKS);
+  /* Sidebar widget */
+  hmSet('sbWeekLabel','Week '+wkNum+' of '+TOTAL_WEEKS);
+  var wb=document.getElementById('sbWeekBar');if(wb)wb.style.width=Math.round(wkNum/TOTAL_WEEKS*100)+'%';
+}
+
+function renderHomeHero(){
+  var scans=STATE.scans;
+  if(!scans||!scans.length)return;
+  var L=scans[scans.length-1];
+  var cW=L.weight,cBF=L.bf;
+  var startScan=null;
+  for(var i=scans.length-1;i>=0;i--){if(scans[i].date<=PHASE_START){startScan=scans[i];break;}}
+  if(!startScan)startScan={weight:PHASE_START_W,bf:19.2};
+  var sW=startScan.weight;
+  var goalW=STATE.targets&&STATE.targets.goalWeight?STATE.targets.goalWeight:GOAL_WEIGHT;
+  var toGo=Math.max(0,cW-goalW);
+  var down=Math.max(0,sW-cW);
+  /* Progress */
+  var range=sW-goalW;
+  var pct=range>0?Math.round(down/range*100):0;
+  pct=Math.max(0,Math.min(100,pct));
+  /* Days left */
+  var endDate=new Date('2026-08-27');
+  var today=new Date();
+  var daysLeft=Math.max(0,Math.round((endDate-today)/86400000));
+  var weeksLeft=Math.round(daysLeft/7);
+  hmSet('hmWeightNow',cW.toFixed(1));
+  hmSet('hmWeightGoal',goalW.toFixed(1));
+  var sub=down>0.05?(down.toFixed(1)+' kg down · '):('');
+  sub+=toGo.toFixed(1)+' kg to go · lands ~27 Aug';
+  hmSet('hmWeightSub',sub);
+  hmSet('hmStartLabel',sW.toFixed(1)+' start');
+  hmSet('hmGoalLabel',goalW.toFixed(1)+' goal');
+  hmSet('hmProgressPct',pct+'% of the cut done');
+  var pf=document.getElementById('hmProgressFill');if(pf)pf.style.width=pct+'%';
+  /* Stats row */
+  hmSet('hmStatWeight',cW.toFixed(1));
+  hmSet('hmStatBf',cBF.toFixed(1));
+  /* Fat lost: (startBf%*startW - curBf%*curW)/100 */
+  var fatLost=Math.max(0,(startScan.bf*startScan.weight - cBF*cW)/100);
+  hmSet('hmStatFatLost',fatLost.toFixed(1));
+  /* Weeks in */
+  var now2=new Date();
+  var wksIn=Math.max(0,Math.floor((now2-new Date(PHASE_START))/6048e5));
+  var wkNum=Math.min(wksIn+1,TOTAL_WEEKS);
+  hmSet('hmStatWks',wkNum);
+  hmSet('hmStatWksOf',' of '+TOTAL_WEEKS);
+  var wb=document.getElementById('hmWkBar');if(wb)wb.style.width=Math.round(wkNum/TOTAL_WEEKS*100)+'%';
+}
+
+function renderHomeBF(){
+  var scans=STATE.scans;
+  if(!scans||!scans.length)return;
+  var L=scans[scans.length-1];
+  var cBF=L.bf;
+  var goalBF=STATE.targets&&STATE.targets.goalBf?STATE.targets.goalBf:GOAL_BF;
+  /* Ring: circumference 314.2 (r=50). Fill = cBF/30 (30% = max scale) */
+  var circ=314.2;
+  var frac=Math.min(1,cBF/30);
+  var offset=circ*(1-frac);
+  var ring=document.getElementById('hmBfRing');if(ring)ring.style.strokeDashoffset=offset;
+  hmSet('hmBfVal',cBF.toFixed(1)+'%');
+  hmSet('hmBfTarget','target '+goalBF+'%');
+  var diff=cBF-goalBF;
+  hmSet('hmBfSub','–'+diff.toFixed(1)+' points to go');
+}
+
+function renderScalePath(){
+  var scans=STATE.scans;
+  if(!scans||!scans.length)return;
+  var L=scans[scans.length-1];
+  var goalW=STATE.targets&&STATE.targets.goalWeight?STATE.targets.goalWeight:GOAL_WEIGHT;
+  var startScan=null;
+  for(var i=scans.length-1;i>=0;i--){if(scans[i].date<=PHASE_START){startScan=scans[i];break;}}
+  if(!startScan)startScan={weight:PHASE_START_W};
+  var sW=startScan.weight;
+  var cW=L.weight;
+  /* Planned end weight: ~87.5 at wk9 */
+  var planEnd=87.5;
+  /* SVG: 280x90, pad 16 each side */
+  var W=280,H=90,PL=18,PR=18,PT=12,PB=18;
+  var iW=W-PL-PR,iH=H-PT-PB;
+  var minY=Math.min(planEnd,cW)-1.5;
+  var maxY=Math.max(sW,cW)+1.5;
+  function sx(wk){return PL+wk/TOTAL_WEEKS*iW;}
+  function sy(w){return PT+iH-(w-minY)/(maxY-minY)*iH;}
+  /* Weeks since start */
+  var now3=new Date();
+  var wksNow=Math.max(0,(now3-new Date(PHASE_START))/6048e5);
+  /* Trajectory line: sW at wk0, planEnd at wk9 */
+  var x0=sx(0),y0=sy(sW),x9=sx(TOTAL_WEEKS),y9=sy(planEnd);
+  /* Current dot */
+  var xc=sx(wksNow),yc=sy(cW);
+  var svg='<line x1="'+x0+'" y1="'+y0+'" x2="'+x9+'" y2="'+y9+'" stroke="var(--line)" stroke-width="2" stroke-dasharray="5 4"/>';
+  svg+='<circle cx="'+xc+'" cy="'+yc+'" r="5" fill="var(--lime)" stroke="var(--card)" stroke-width="2"/>';
+  svg+='<text x="'+(xc+8)+'" y="'+(yc+4)+'" font-size="9" font-weight="700" fill="var(--muted)">you · '+cW.toFixed(1)+'</text>';
+  /* Axis dots */
+  svg+='<circle cx="'+x0+'" cy="'+y0+'" r="3" fill="var(--muted2)"/>';
+  svg+='<circle cx="'+x9+'" cy="'+y9+'" r="3" fill="var(--muted2)"/>';
+  var svgEl=document.getElementById('hmScaleSvg');if(svgEl)svgEl.innerHTML=svg;
+  /* Scale end label */
+  hmSet('hmScaleEnd',planEnd+' · Wk '+TOTAL_WEEKS+' · 27 Aug');
+  /* Conservative plan deficit */
+  hmSet('hmScaleBadge','–0.6 KG / WK PLAN');
+  /* Status */
+  var planWNow=sW-(sW-planEnd)*wksNow/TOTAL_WEEKS;
+  var diff=(planWNow-cW);
+  var statusMsg='';
+  if(diff>0.05){statusMsg="You're "+diff.toFixed(1)+" kg ahead of the conservative line. Keep the weekday deficit.";}
+  else if(diff<-0.05){statusMsg="You're "+Math.abs(diff).toFixed(1)+" kg behind the conservative line. Tighten the deficit this week.";}
+  else{statusMsg="You're right on the conservative line. Keep going.";}
+  hmSet('hmScaleStatus',statusMsg);
+}
+
+function renderHomeTodaySession(){
+  var d=null,doneN=0,totEx=0,totSets=0;
+  if(todayProgramIdx>=0){
+    d=PROGRAM[todayProgramIdx];
+    var t=STATE.ticks[todayISO()];
+    doneN=(t&&t.key===d.key&&Array.isArray(t.done))?t.done.length:0;
+    totEx=d.ex.length;
+    totSets=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10)||0;},0);
+  }
+  if(d){
+    hmSet('hmSeshDone',doneN+'/'+totEx+' done');
+    hmSet('hmSeshName',d.name);
+    hmSet('hmSeshSub',d.focus+' · tap a move for form video');
+    hmSetHTML('hmSeshStats','<span>'+totEx+' MOVES</span><span>'+totSets+' SETS</span><span>~'+(d.time||'75')+' MIN</span>');
+    /* first 3 exercises */
+    var exHtml=d.ex.slice(0,3).map(function(e){
+      return '<div class="hm-session-ex">'+e.n+'<span>'+e.sr+'</span></div>';
+    }).join('');
+    hmSetHTML('hmSeshExList',exHtml);
+    var cta=document.getElementById('hmSeshCta');
+    if(cta){cta.style.display='';cta.textContent=doneN>0?'CONTINUE SESSION':'START SESSION';}
+  } else {
+    /* Rest day */
+    var wd=new Date().getDay();
+    var rd=REST_DAYS[wd];
+    hmSet('hmSeshDone','');
+    hmSet('hmSeshName',rd?rd.name:'Rest Day');
+    hmSet('hmSeshSub',rd?rd.sub:'Recovery · sleep · lower carbs');
+    hmSetHTML('hmSeshStats','');
+    hmSetHTML('hmSeshExList','<div class="hm-session-rest">Recovery day — no session today.</div>');
+    var cta=document.getElementById('hmSeshCta');if(cta)cta.style.display='none';
+  }
+}
+
+function renderHomeFuel(){
+  var tgt=STATE.targets[STATE.mode]||STATE.targets.weekday;
+  var kcalTarget=Math.round(tgt.p*4+tgt.c*4+tgt.f*9);
+  /* Estimate eaten: sum meals that have been "logged" — we use target as placeholder */
+  var meals=STATE.meals[STATE.mode]||[];
+  var ep=0,ec=0,ef=0;
+  /* Use a rough 69% of target as "eaten so far" for demo */
+  ep=Math.round(tgt.p*0.69);ec=Math.round(tgt.c*0.65);ef=Math.round(tgt.f*0.76);
+  var kcalEaten=Math.round(ep*4+ec*4+ef*9);
+  var kcalLeft=Math.max(0,kcalTarget-kcalEaten);
+  hmSet('hmFuelEaten',fmtK(kcalEaten));
+  hmSet('hmFuelTarget',fmtK(kcalTarget));
+  hmSet('hmFuelLeft',fmtK(kcalLeft)+' kcal left');
+  hmSet('hmMP',ep);hmSet('hmTP',tgt.p);
+  hmSet('hmMC',ec);hmSet('hmTC',tgt.c);
+  hmSet('hmMF',ef);hmSet('hmTF',tgt.f);
+  var pb=document.getElementById('hmMPBar');if(pb)pb.style.width=Math.min(100,Math.round(ep/Math.max(1,tgt.p)*100))+'%';
+  var cb=document.getElementById('hmMCBar');if(cb)cb.style.width=Math.min(100,Math.round(ec/Math.max(1,tgt.c)*100))+'%';
+  var fb=document.getElementById('hmMFBar');if(fb)fb.style.width=Math.min(100,Math.round(ef/Math.max(1,tgt.f)*100))+'%';
+  /* mode label */
+  var lbl=document.getElementById('hmFuelLeft');
+  if(lbl){var parent=lbl.parentElement;if(parent){var firstSpan=parent.querySelector('span');if(firstSpan)firstSpan.textContent='FUEL · '+(STATE.mode==='weekday'?'WEEKDAY':'WEEKEND');}}
+}
+
+function renderHomeWeek(){
+  var now=new Date();
+  var todayWd=now.getDay();
+  var monday=new Date(now);monday.setDate(now.getDate()-(todayWd===0?6:todayWd-1));
+  var DAY_LABELS=['M','T','W','T','F','S','S'];
+  var html='';
+  WEEK_ORDER.forEach(function(wd,i){
+    var dayDate=new Date(monday);dayDate.setDate(monday.getDate()+(wd===0?6:wd-1));
+    var iso=dayDate.getFullYear()+'-'+String(dayDate.getMonth()+1).padStart(2,'0')+'-'+String(dayDate.getDate()).padStart(2,'0');
+    var tick=STATE.ticks[iso];
+    var isToday=wd===todayWd;
+    var hasSession=!!WEEKDAY_TO_KEY[wd];
+    var done=tick&&tick.done&&tick.done.length>0;
+    var cls='hm-week-pill'+(done?' done':isToday?' today':'');
+    html+='<div class="'+cls+'">'+DAY_LABELS[i]+'</div>';
+  });
+  hmSetHTML('hmWeekPills',html);
+  /* streak */
+  var streak=0;
+  for(var back=0;back<14;back++){
+    var d2=new Date(now);d2.setDate(now.getDate()-back);
+    var wd2=d2.getDay();
+    if(!WEEKDAY_TO_KEY[wd2])continue;
+    var iso2=d2.getFullYear()+'-'+String(d2.getMonth()+1).padStart(2,'0')+'-'+String(d2.getDate()).padStart(2,'0');
+    var tick2=STATE.ticks[iso2];
+    if(tick2&&tick2.done&&tick2.done.length>0)streak++;
+    else if(back>0)break;
+  }
+  /* Week summary text */
+  var todaySession=WEEKDAY_TO_KEY[todayWd];
+  var todayProg=todaySession?PROGRAM.find(function(p){return p.key===todaySession;}):null;
+  var textParts=[];
+  /* Yesterday */
+  var yd=new Date(now);yd.setDate(now.getDate()-1);var ydWd=yd.getDay();
+  if(WEEKDAY_TO_KEY[ydWd]){var yiso=yd.getFullYear()+'-'+String(yd.getMonth()+1).padStart(2,'0')+'-'+String(yd.getDate()).padStart(2,'0');if(STATE.ticks[yiso]&&STATE.ticks[yiso].done&&STATE.ticks[yiso].done.length)textParts.push(WD_NAMES[ydWd]+' done');}
+  if(todayProg)textParts.push('today '+todayProg.name);else{var rd2=REST_DAYS[todayWd];textParts.push('today '+(rd2?rd2.name:'rest'));}
+  /* Tomorrow */
+  var tom=new Date(now);tom.setDate(now.getDate()+1);var tomWd=tom.getDay();
+  if(!WEEKDAY_TO_KEY[tomWd]){var rd3=REST_DAYS[tomWd];textParts.push(WD_NAMES[tomWd]+' '+(rd3?rd3.name.toLowerCase():'rest'));}
+  hmSet('hmWeekText',textParts.join(' · '));
+  if(streak>0){hmSet('hmWeekStreak',streak+'-day streak. Hit today and it\'s '+(streak+1)+' — your best this phase.');}
+  else{hmSet('hmWeekStreak','Start your streak today — hit the session.');}
+}
+
+function renderHomeDash(){
+  renderHomeHeader();
+  renderHomeHero();
+  renderHomeBF();
+  renderScalePath();
+  renderHomeTodaySession();
+  renderHomeFuel();
+  renderHomeWeek();
+}
+
+/* ── END HOMEPAGE RENDER FUNCTIONS ── */
+
 /* ---------- boot ---------- */
 function bootRender(){
   applyTheme(STATE.theme==='system'?'system':STATE.theme,false);
   applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);
   initToday();renderDayTabs();if(restMode!==null){renderRestDay(restMode);}else{renderWorkout();}renderDashToday();renderCalendar();
   applyTargets();renderMeals();renderProgress();
+  renderHomeDash();
   var savedView=localStorage.getItem('tcView');
   if(savedView&&$('v-'+savedView))showView(savedView);
 }
