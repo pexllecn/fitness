@@ -807,12 +807,14 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
       </div>
     </div>
 
-    <!-- Hidden rings still updated by JS for backward compat -->
-    <div style="display:none">
-      <circle id="actMainRing"/><span id="actMainVal"></span><span id="actLabel"></span>
-      <circle id="actSets"/><span id="actSetsVal"></span><span id="actSetsTot"></span>
-      <circle id="actTimeRing"/><span id="actTimeVal"></span>
-      <circle id="actDefRing"/><span id="actDefVal"></span>
+    <!-- Hidden stubs for JS backward compat -->
+    <svg style="display:none" aria-hidden="true">
+      <circle id="actMainRing"/><circle id="actSets"/><circle id="actTimeRing"/><circle id="actDefRing"/>
+    </svg>
+    <div style="display:none" aria-hidden="true">
+      <span id="actMainVal"></span><span id="actLabel"></span>
+      <span id="actSetsVal"></span><span id="actSetsTot"></span>
+      <span id="actTimeVal"></span><span id="actDefVal"></span>
       <span id="dashDay"></span><span id="dashDone"></span><span id="dashKcal"></span><span id="dashMacros"></span>
     </div>
   </section>
@@ -1188,8 +1190,8 @@ function applyTargets(){
   if($('wkAvg'))$('wkAvg').textContent=fmtK(w.avg);
   if($('wkDef'))$('wkDef').innerHTML=(w.def>=0?'~'+fmtK(w.def):'+'+fmtK(-w.def))+'<small> kcal</small>';
   if($('wkRate'))$('wkRate').innerHTML=(w.def>0?w.wk.toFixed(2):'0.00')+'<small> kg/wk</small>';
-  $('pgDef').textContent=w.def>0?'~'+fmtK(w.def):'+'+fmtK(-w.def);
-  $('pgIntake').textContent=fmtK(w.avg);
+  if($('pgDef'))$('pgDef').textContent=w.def>0?'~'+fmtK(w.def):'+'+fmtK(-w.def);
+  if($('pgIntake'))$('pgIntake').textContent=fmtK(w.avg);
   var _dk=$('dashKcal');if(_dk)_dk.textContent=fmtK(ck);var _dm=$('dashMacros');if(_dm)_dm.textContent=cur.p+'P · '+cur.c+'C · '+cur.f+'F';
   renderFuelDesktop();
   renderMealTotals();
@@ -1363,12 +1365,12 @@ function updateActRings(){
   var sEl=document.getElementById('actSets');
   var totSets=d.ex.reduce(function(a,e){return a+parseInt(e.sr,10);},0);
   var doneSets=(t&&t.key===d.key&&Array.isArray(t.done))?t.done.reduce(function(a,i){return a+parseInt(d.ex[i]&&d.ex[i].sr||'0',10);},0):0;
-  document.getElementById('actSetsTot').textContent=totSets;
-  document.getElementById('actSetsVal').textContent=doneSets;
+  var _st=document.getElementById('actSetsTot');if(_st)_st.textContent=totSets;
+  var _sv=document.getElementById('actSetsVal');if(_sv)_sv.textContent=doneSets;
   if(sEl){sEl.style.strokeDasharray=sRC;sEl.style.strokeDashoffset=sRC*(1-doneSets/Math.max(1,totSets));}
   var tEl=document.getElementById('actTimeRing');
   var tMin=Math.round((n/Math.max(1,tot))*parseInt(d.time));
-  document.getElementById('actTimeVal').textContent=tMin||0;
+  var _tv=document.getElementById('actTimeVal');if(_tv)_tv.textContent=tMin||0;
   if(tEl){tEl.style.strokeDasharray=sRC;tEl.style.strokeDashoffset=sRC*(1-tMin/Math.max(1,parseInt(d.time)));}
   var dEl=document.getElementById('actDefRing');
   if(dEl){dEl.style.strokeDasharray=sRC;dEl.style.strokeDashoffset=sRC*(1-452/700);}
@@ -1673,11 +1675,11 @@ function wksBet(a,b){return(new Date(b)-new Date(a))/6048e5;}
 function renderProgress(){
   byDate(STATE.scans);
   var L=STATE.scans[STATE.scans.length-1];
-  $('pgBf').textContent=L.bf.toFixed(1)+'%';$('pgWnow').textContent=L.weight.toFixed(1);
+  if($('pgBf'))$('pgBf').textContent=L.bf.toFixed(1)+'%';if($('pgWnow'))$('pgWnow').textContent=L.weight.toFixed(1);
   var tw=tgtW(),toLose=L.weight-tw;
-  $('pgToGo').textContent='~'+(toLose>0.05?toLose.toFixed(1):'0')+'kg of fat to shift · about 0.5kg a week.';
+  if($('pgToGo'))$('pgToGo').textContent='~'+(toLose>0.05?toLose.toFixed(1):'0')+'kg of fat to shift · about 0.5kg a week.';
   var sf=fatMass(STATE.scans[0]),tf=tw*TBF/100,prog=(sf-fatMass(L))/(sf-tf)*100;prog=Math.max(0,Math.min(100,prog));
-  $('pgBar').style.width=prog.toFixed(0)+'%';var pr=$('pgRing');pr.style.strokeDasharray=RC;pr.style.strokeDashoffset=RC*(1-prog/100);
+  if($('pgBar'))$('pgBar').style.width=prog.toFixed(0)+'%';var pr=$('pgRing');if(pr){pr.style.strokeDasharray=RC;pr.style.strokeDashoffset=RC*(1-prog/100);}
   drawM(curM);renderVerdict();renderBreakdown();renderSHist();
 }
 function drawM(m){curM=m;var c=document.querySelectorAll('#mchips .pill');for(var i=0;i<c.length;i++)c[i].classList.toggle('active',c[i].getAttribute('data-m')===m);var vals=STATE.scans.map(function(s){return m==='weight'?s.weight:m==='bf'?s.bf:m==='fat'?fatMass(s):(s.muscle!=null?s.muscle:null);});lineChart('mChart',vals,STATE.scans.map(function(s){return shortD(s.date);}),false);}
