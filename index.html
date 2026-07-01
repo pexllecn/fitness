@@ -1372,9 +1372,9 @@ document.addEventListener('DOMContentLoaded',function(){
 
 function initToday(){
   var wd=new Date().getDay(),k=WEEKDAY_TO_KEY[wd];
-  if(k){for(var i=0;i<PROGRAM.length;i++){if(PROGRAM[i].key===k){curDay=i;todayProgramIdx=i;return;}}}
+  if(k){for(var i=0;i<PROGRAM.length;i++){if(PROGRAM[i].key===k){curDay=i;todayProgramIdx=i;restMode=null;return;}}}
   todayProgramIdx=-1;
-  // rest day — point curDay at next scheduled session
+  restMode=wd; // 3=Wed, 0=Sun — show rest day by default
   for(var off=1;off<=7;off++){var nw=(wd+off)%7,nk=WEEKDAY_TO_KEY[nw];if(nk){for(var i=0;i<PROGRAM.length;i++){if(PROGRAM[i].key===nk){curDay=i;return;}}}}
 }
 function renderDashToday(){
@@ -1597,7 +1597,7 @@ $('sSave').addEventListener('click',function(){var dt=$('sDate').value,w=parseFl
 function bootRender(){
   applyTheme(STATE.theme==='system'?'system':STATE.theme,false);
   applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);
-  initToday();renderDayTabs();renderWorkout();renderDashToday();renderCalendar();
+  initToday();renderDayTabs();if(restMode!==null){renderRestDay(restMode);}else{renderWorkout();}renderDashToday();renderCalendar();
   applyTargets();renderMeals();renderProgress();
   var savedView=localStorage.getItem('tcView');
   if(savedView&&$('v-'+savedView))showView(savedView);
