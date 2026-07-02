@@ -26,8 +26,8 @@
   --ink:#101214; --on-ink:#F0F2EE;
 
   /* iOS system backgrounds */
-  --bg:#F3F4EE; --card:#FFFFFF; --panel:#EAECE0;
-  --card2:#F3F4EE; --grouped-hdr:#6C6C70;
+  --bg:#F5F5F7; --card:#FFFFFF; --panel:#ECECF1;
+  --card2:#F5F5F7; --grouped-hdr:#6C6C70;
 
   /* iOS semantic labels */
   --text:#000000; --muted:rgba(60,60,67,.78); --muted2:rgba(60,60,67,.58);
@@ -667,7 +667,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 [data-theme="dark"] .hchip{background:rgba(255,255,255,.07)}
 [data-theme="dark"] .sidebar{background:var(--glass);border-right:1px solid rgba(255,255,255,.07)}
 /* VOLT light */
-[data-theme="light"] body{background:radial-gradient(1100px 560px at 78% -12%,color-mix(in srgb,var(--lime) 15%,transparent),transparent 60%),radial-gradient(900px 560px at -8% 104%,color-mix(in srgb,var(--lime) 8%,transparent),transparent 55%),var(--bg);background-attachment:fixed}
+[data-theme="light"] body{background:radial-gradient(1100px 560px at 78% -12%,color-mix(in srgb,var(--lime) 5%,transparent),transparent 60%),var(--bg);background-attachment:fixed}
 [data-theme="light"] .topbar{background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
 [data-theme="light"] .card:not(.ink):not(.forest):not(.outline),[data-theme="light"] .tile:not(.lime):not(.ink):not(.forest),[data-theme="light"] .meal,[data-theme="light"] .excard,[data-theme="light"] .chartcard,[data-theme="light"] .fcolcard,[data-theme="light"] .phase,[data-theme="light"] .prio,[data-theme="light"] details.fx,[data-theme="light"] .hist,[data-theme="light"] .form,[data-theme="light"] .pw{border:1px solid rgba(24,28,12,.08)}
 [data-theme="light"] .hero,[data-theme="light"] .calendar,[data-theme="light"] .actcard,[data-theme="light"] .kcalrow{background:radial-gradient(120% 150% at 0% 0%,color-mix(in srgb,var(--lime) 12%,transparent),transparent 55%),linear-gradient(180deg,#15181B,#0E1012);border:1px solid rgba(255,255,255,.07)}
@@ -1625,7 +1625,7 @@ function eff(m){return m==='system'?(mq.matches?'dark':'light'):m;}
 function applyTheme(m,save){
   STATE.theme=m;root.setAttribute('data-theme',eff(m));
   var bs=document.querySelectorAll('#themeSeg button');for(var i=0;i<bs.length;i++)bs[i].classList.toggle('on',bs[i].getAttribute('data-t')===m);
-  var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',eff(m)==='dark'?'#0A0B0C':'#F3F4EE');
+  var mt=document.querySelector('meta[name=theme-color]');if(mt)mt.setAttribute('content',eff(m)==='dark'?'#0A0B0C':'#F5F5F7');
   if($('v-progress').classList.contains('on'))renderProgress();
   if(save)saveState();
 }
