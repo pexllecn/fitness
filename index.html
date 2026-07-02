@@ -729,6 +729,11 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 [data-theme="light"] .d2ph{color:var(--muted2)}
 .d2inphoto{border:1px dashed rgba(255,255,255,.16);border-radius:var(--r-sm);min-height:96px;margin-bottom:14px}
 [data-theme="light"] .d2inphoto{border-color:rgba(20,24,10,.2)}
+.d2inphoto.has-cover{border-style:solid;border-color:transparent}
+.d2inphoto img{filter:saturate(.85) brightness(.9)}
+.d2inphoto.has-cover::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,color-mix(in srgb,var(--lime) 10%,transparent),rgba(16,18,20,.55)),linear-gradient(0deg,rgba(16,18,20,.35),transparent 60%);pointer-events:none}
+.d2inphoto.has-cover .d2ph{position:relative;z-index:1;color:rgba(255,255,255,.85);font-weight:700;text-shadow:0 1px 8px rgba(0,0,0,.6)}
+.d2inphoto.has-cover .d2ph u{display:none}
 .d2move{display:flex;justify-content:space-between;font-size:13px;padding:9px 0;border-bottom:1px solid rgba(255,255,255,.07)}
 [data-theme="light"] .d2move{border-color:rgba(20,24,10,.08)}
 .d2btn{display:block;width:100%;text-align:center;background:linear-gradient(135deg,color-mix(in srgb,var(--lime) 85%,#fff),var(--lime));color:var(--on-lime);font-weight:800;font-size:13px;letter-spacing:.09em;text-transform:uppercase;border:none;border-radius:var(--r-sm);padding:14px;margin-top:16px;box-shadow:0 8px 26px color-mix(in srgb,var(--lime) 28%,transparent);cursor:pointer}
@@ -750,7 +755,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .d2row1{grid-template-columns:2.1fr 1fr}
 .d2stats{grid-template-columns:repeat(4,1fr)}
 .d2main{grid-template-columns:1.9fr 1fr}
-.d2row4{grid-template-columns:1.25fr 1fr 1fr}
+.d2row4{grid-template-columns:1.25fr 1fr}
 .d2big{font-size:66px}
 }
 /* ── legacy (unused) ── */
@@ -820,17 +825,13 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
         <div class="d2bar"><i id="pgBar" style="width:4%"></i></div>
         <div class="d2tick"><span>92.8 start</span><span class="d2acc" style="font-weight:700" id="d2cutpct">on the line</span><span>85.0 goal</span></div>
       </div>
-      <div class="d2c" style="text-align:center;display:flex;flex-direction:column;justify-content:center">
-        <div class="d2lbl">Body fat</div>
-        <div class="d2ring"><svg width="124" height="124" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="var(--line)" stroke-width="6" fill="none"/><circle class="fil" id="pgRing" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="6" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="pgBf">19.2%</b><span>target 12%</span></div></div>
-        <div class="d2acc" style="font-size:12px;font-weight:700" id="d2pts">&#8722;7.2 points to go</div>
+      <div class="d2c" style="display:flex;flex-direction:column;justify-content:center">
+        <div class="d2lbl">Scale trend</div>
+        <div class="d2num" style="margin-top:10px"><span id="d2avg7">–</span> <span class="d2mut" style="font-size:14px">kg · 7-day avg</span></div>
+        <div class="d2acc" style="font-size:12px;font-weight:700;margin-top:8px" id="d2avgTrend">log daily to see the trend</div>
+        <div class="d2mut" style="font-size:11.5px;margin-top:6px">Act on this number, not today's scale.</div>
+        <div style="display:none"><b id="pgBf"></b><svg><circle id="pgRing" r="1"/></svg><span id="d2pts"></span></div>
       </div>
-      </div>
-      <div class="d2stats">
-      <div class="d2c"><div class="d2lbl">Weight</div><div class="d2num"><span id="d2w">92.6</span> <span class="d2mut" style="font-size:14px">kg</span></div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26"><polyline points="0,6 18,8 36,7 54,11 72,14 90,17" fill="none" stroke="var(--lime)" stroke-width="2"/></svg></div>
-      <div class="d2c"><div class="d2lbl">Body fat</div><div class="d2num"><span id="d2bf">19.2</span> <span class="d2mut" style="font-size:14px">%</span></div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26"><polyline points="0,7 18,9 36,10 54,12 72,13 90,15" fill="none" stroke="var(--muted2)" stroke-width="2"/></svg></div>
-      <div class="d2c"><div class="d2lbl">Fat lost</div><div class="d2num d2acc"><span id="d2lost">0.2</span> <span class="d2mut" style="font-size:14px">kg</span></div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26"><polyline points="0,20 18,19 36,18 54,16 72,15 90,13" fill="none" stroke="var(--lime)" stroke-width="2"/></svg></div>
-      <div class="d2c"><div class="d2lbl">Weeks in</div><div class="d2num"><span id="d2wk">1</span> <span class="d2mut" style="font-size:14px">of 9</span></div><div class="d2bar" style="height:6px;margin-top:16px"><i id="d2wkb" style="width:11%"></i></div></div>
       </div>
       <div class="d2main">
       <div class="d2c"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="d2lbl">Scale path</div><div style="font-size:17px;font-weight:800;margin-top:6px">Am I on the line?</div></div><span class="d2chip">&#8722;0.6 kg / wk plan</span></div>
@@ -845,6 +846,12 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
         <div class="d2move"><span id="d2m2">Romanian Deadlift</span><span class="d2mut" id="d2m2s">2 &#215; 8-10</span></div>
         <button class="d2btn" data-v="workout">Start session</button></div>
       </div>
+      <div class="d2stats">
+      <div class="d2c"><div class="d2lbl">Weight</div><div class="d2num"><span id="d2w">92.6</span> <span class="d2mut" style="font-size:14px">kg</span></div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26"><polyline points="0,6 18,8 36,7 54,11 72,14 90,17" fill="none" stroke="var(--lime)" stroke-width="2"/></svg></div>
+      <div class="d2c"><div class="d2lbl">Body fat</div><div class="d2num"><span id="d2bf">19.2</span> <span class="d2mut" style="font-size:14px">%</span></div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26"><polyline points="0,7 18,9 36,10 54,12 72,13 90,15" fill="none" stroke="var(--muted2)" stroke-width="2"/></svg></div>
+      <div class="d2c"><div class="d2lbl">Fat lost</div><div class="d2num d2acc"><span id="d2lost">0.2</span> <span class="d2mut" style="font-size:14px">kg</span></div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26"><polyline points="0,20 18,19 36,18 54,16 72,15 90,13" fill="none" stroke="var(--lime)" stroke-width="2"/></svg></div>
+      <div class="d2c"><div class="d2lbl">Weeks in</div><div class="d2num"><span id="d2wk">1</span> <span class="d2mut" style="font-size:14px">of 9</span></div><div class="d2bar" style="height:6px;margin-top:16px"><i id="d2wkb" style="width:11%"></i></div></div>
+      </div>
       <div class="d2row4">
       <div class="d2c"><div style="display:flex;justify-content:space-between;align-items:center"><div class="d2lbl">Fuel &middot; <span id="d2mode">weekday</span></div><span class="d2mut" style="font-size:12px" id="d2under">~690 kcal under</span></div>
         <div style="font-size:26px;font-weight:800;margin-top:8px"><span id="dashKcal">2,210</span> <span class="d2mut" style="font-size:14px;font-weight:600">kcal target</span></div>
@@ -857,8 +864,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
         <div class="calgrid" id="calGrid"></div>
         <div class="callegend"><span><i style="background:var(--lime)"></i>Done</span><span><i style="border:2px solid var(--lime)"></i>Today</span><span><i style="background:rgba(255,255,255,.18)"></i>Scheduled</span></div>
       </div>
-      <div class="d2c"><div class="d2lbl">Hydration &amp; supps</div><div class="d2li" style="margin-top:8px"><span>Water &middot; train day</span><b>4.0 L</b></div><div class="d2li"><span>Whey + Creatine</span><span class="d2mut">5 g</span></div><div class="d2li"><span>Magnesium PM</span><span class="d2mut">300&#8211;400 mg</span></div><div class="d2li" style="border-bottom:0"><span>Multivit + Vit D</span><span class="d2mut">AM</span></div></div>
-      </div>
+            </div>
       <div class="actcard" id="actCard" style="display:none">
         <div class="actcard-head"><h3>Today's activity</h3><span class="actcard-label" id="actLabel">0 done</span></div>
         <div class="actring-main">
@@ -1018,7 +1024,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
     <div class="block">
       <div class="cols2">
         <div class="card"><div class="ch"><i class="hgi-stroke hgi-droplet ic"></i>Hydration</div><ul class="clist"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>4.0 L</b>&nbsp;train &amp; Sat</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>3.5 L</b>&nbsp;rest days</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Salt + electrolytes pre-train</li></ul></div>
-        <div class="card"><div class="ch"><i class="hgi-stroke hgi-kitchen-utensils ic"></i>Supps</div><ul class="clist"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Whey &amp; Creatine 5g</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Magnesium</b> 300&#8211;400mg PM, cramps</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Multivit &amp; Vit D, AM</li></ul></div>
+        <div class="card"><div class="ch"><i class="hgi-stroke hgi-kitchen-utensils ic"></i>Supps</div><ul class="clist"><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Whey <b>30g</b> + Creatine <b>5g</b>, post-train</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Magnesium</b> 300&#8211;400mg PM, cramps</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span>Multivit &amp; Vit D, AM</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Omega-3</b> with a meal</li><li><span class="ck"><i class="hgi-stroke hgi-checkmark-01"></i></span><b>Collagen</b> 1 scoop</li></ul></div>
       </div>
     </div>
   </section>
@@ -1383,6 +1389,7 @@ function dateISO(d){return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2
 function todayISO(){return dateISO(new Date());}
 /* ---------- daily weigh-in ---------- */
 function curWeight(L){var best=L?{w:L.weight,d:L.date}:null;if(Array.isArray(STATE.daily))STATE.daily.forEach(function(e){if(e&&e.weight&&(!best||e.date>=best.d))best={w:e.weight,d:e.date};});return best?best.w:0;}
+function dwAvgRange(a,b){var arr=(STATE.daily||[]).filter(function(e){return e.date>=a&&e.date<=b;});if(!arr.length)return null;return arr.reduce(function(s,e){return s+e.weight;},0)/arr.length;}
 function dwAvg7(){var cut=dateISO(new Date(Date.now()-6*864e5));var a=(STATE.daily||[]).filter(function(e){return e.date>=cut;});if(!a.length)return null;return a.reduce(function(s,e){return s+e.weight;},0)/a.length;}
 function renderDW(){var el=$('dwHist');if(!el)return;var dd=$('dwDate');if(dd){dd.max=todayISO();if(!dd.value)dd.value=todayISO();}byDate(STATE.daily);var av=dwAvg7();var ae=$('dwAvg');if(ae)ae.textContent=av?av.toFixed(1)+' kg':'–';el.innerHTML=STATE.daily.slice(-7).slice().reverse().map(function(e){var i=STATE.daily.indexOf(e);return '<div class="hist"><div class="hd"><b>'+shortD(e.date)+'</b><small>'+e.date.slice(8)+'/'+e.date.slice(5,7)+'</small></div><div class="hm"><span>W <b>'+e.weight.toFixed(1)+'</b> kg</span></div><button class="del" aria-label="Delete weigh-in" data-dwd="'+i+'">&times;</button></div>';}).join('')||'<p style="font-size:12px;color:var(--muted)">No entries yet.</p>';}
 var curDate=todayISO(); /* real date the selected day pill refers to */
@@ -1971,7 +1978,11 @@ _s('d2lost',Math.max(0,F.weight-cw).toFixed(1));
 var wk=Math.max(1,Math.min(9,Math.floor((Date.now()-new Date('2026-06-25').getTime())/6048e5)+1));
 _s('d2wk',wk);var wkb=_g('d2wkb');if(wkb)wkb.style.width=Math.round(wk/9*100)+'%';
 _s('d2wkchip','On track \u00b7 Wk '+wk+' of 9');
-document.querySelectorAll('.proj-weeks .pw').forEach(function(p,i){p.classList.toggle('now',i===wk-1);});
+var _a7=dwAvg7();var _e7=_g('d2avg7');if(_e7)_e7.textContent=_a7?_a7.toFixed(1):'–';
+var _tEl=_g('d2avgTrend');if(_tEl){var _p7=dwAvgRange(dateISO(new Date(Date.now()-13*864e5)),dateISO(new Date(Date.now()-7*864e5)));
+if(_a7&&_p7){var _d=_a7-_p7;_tEl.textContent=(_d<=0?'↓ ':'↑ ')+Math.abs(_d).toFixed(1)+' kg vs last week';}
+else if(_a7){_tEl.textContent='keep logging for the weekly trend';}else{_tEl.textContent='log daily to see the trend';}}
+var wkTile=Math.max(1,Math.min(9,Math.floor((Date.now()-new Date('2026-06-26').getTime())/6048e5)+1));document.querySelectorAll('.proj-weeks .pw').forEach(function(p,i){p.classList.toggle('now',i===wkTile-1);});
 _s('d2you','you \u00b7 '+cw.toFixed(1));
 _s('d2pts','\u2212'+(L.bf-12).toFixed(1)+' points to go');
 var pb=_g('pgBar');if(pb&&pb.style.width)_s('d2cutpct',parseInt(pb.style.width)+'% of the cut done');
@@ -1989,8 +2000,11 @@ var _at=applyTargets;applyTargets=function(){_at();d2fill();};
 d2fill();
 document.querySelectorAll('.d2photo').forEach(function(l){
 var inp=l.querySelector('input'),img=l.querySelector('img'),key='tcPhoto-'+inp.getAttribute('data-photo');
-try{var d=localStorage.getItem(key);if(d){img.src=d;img.style.display='block';}}catch(e){}
-function load(f){if(!f||!/^image\//.test(f.type))return;var r=new FileReader();r.onload=function(){img.src=r.result;img.style.display='block';try{localStorage.setItem(key,r.result);}catch(e){}};r.readAsDataURL(f);}
+var DEF_COVERS={upperA:'https://images.unsplash.com/photo-1517836357463-d25dfeac3438?auto=format&fit=crop&w=800&q=60',lowerA:'https://images.unsplash.com/photo-1574680096145-d05b474e2155?auto=format&fit=crop&w=800&q=60',upperB:'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?auto=format&fit=crop&w=800&q=60',lowerB:'https://images.unsplash.com/photo-1526506118085-60ce8714f8c5?auto=format&fit=crop&w=800&q=60',arms:'https://images.unsplash.com/photo-1534438327276-14e5300c3a48?auto=format&fit=crop&w=800&q=60'};
+var saved=null;try{saved=localStorage.getItem(key);}catch(e){}
+if(saved){img.src=saved;img.style.display='block';l.classList.add('has-cover');}
+else if(inp.getAttribute('data-photo')==='session'&&typeof todayProgramIdx!=='undefined'&&todayProgramIdx>=0){var dc=DEF_COVERS[PROGRAM[todayProgramIdx].key];if(dc){img.src=dc;img.onerror=function(){img.style.display='none';l.classList.remove('has-cover');};img.style.display='block';l.classList.add('has-cover');var ph=l.querySelector('.d2ph');if(ph)ph.innerHTML=PROGRAM[todayProgramIdx].name;}}
+function load(f){if(!f||!/^image\//.test(f.type))return;var r=new FileReader();r.onload=function(){img.src=r.result;img.style.display='block';l.classList.add('has-cover');try{localStorage.setItem(key,r.result);}catch(e){}};r.readAsDataURL(f);}
 inp.addEventListener('change',function(){load(inp.files[0]);});
 l.addEventListener('dragover',function(e){e.preventDefault();});
 l.addEventListener('drop',function(e){e.preventDefault();load(e.dataTransfer.files[0]);});
