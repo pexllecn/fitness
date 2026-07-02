@@ -85,7 +85,7 @@ button{cursor:pointer}
 .main{flex:1;min-width:0;width:100%;max-width:540px;margin:0 auto;padding:0 16px calc(104px + env(safe-area-inset-bottom))}
 
 /* ── Top bar ── */
-.topbar{display:flex;align-items:center;gap:10px;padding:16px 0 12px;position:sticky;top:0;z-index:30;background:var(--bg)}
+.topbar{display:flex;align-items:center;gap:10px;margin:0 -16px;padding:calc(16px + env(safe-area-inset-top)) 16px 12px;position:sticky;top:0;z-index:30;background:var(--bg)}
 .brand{display:flex;align-items:center;gap:10px}
 .logo{width:40px;height:40px;border-radius:12px;background:var(--text);display:grid;place-items:center;color:var(--lime)}
 .logo svg{width:22px;height:22px;stroke-width:2.2}
@@ -505,7 +505,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
   .sb-avatar{width:40px;height:40px;border-radius:50%;background:var(--lime);color:var(--on-lime);display:grid;place-items:center;font-weight:700;font-size:16px;margin-top:6px}
   .tabbar{display:none}
   .main{margin-left:82px;max-width:none;padding:0 40px 52px;width:auto}
-  .topbar{padding:30px 0 12px;background:transparent;position:static;border-bottom:none}
+  .topbar{margin:0;padding:30px 0 12px;background:transparent;position:static;border-bottom:none}
   .brand{display:none}
   .tttext{display:block}
   .tttext b{font-size:26px;font-weight:700;letter-spacing:0;display:block;line-height:1}
