@@ -2099,14 +2099,13 @@ var higMove;
 (function(){
   var bar=document.querySelector('.tabbar'),pl=document.getElementById('higPlatter');
   if(!bar||!pl)return;
-  var curX=4,tgtX=4,curW=72,tgtW=72,press=0,pressT=0,raf=null,down=false,dragging=false,settling=false,velX=0,pendT=null;
+  var curX=4,tgtX=4,curW=72,tgtW=72,press=0,pressT=0,raf=null,down=false,dragging=false,settling=false,velX=0;
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   function kick(){if(!raf)raf=requestAnimationFrame(step);}
   function step(){
     if(down){curX+=(tgtX-curX)*0.5;velX=(tgtX-curX)*0.5;}      /* finger-tracking: tight */
     else{velX+=(tgtX-curX)*0.10;velX*=0.72;curX+=velX;}         /* free slide: soft spring w/ overshoot */
     curW+=(tgtW-curW)*0.35;press+=(pressT-press)*0.35;
-    if(pendT&&press>0.75){tgtX=pendT.offsetLeft;tgtW=pendT.offsetWidth;pendT=null;} /* bubble grown -> glide */
     var v=tgtX-curX;
     var sp=down?Math.abs(v):Math.abs(velX)*2.2;
     var wobX=reduce?1:1+Math.min(0.22,sp*0.010);
@@ -2116,11 +2115,11 @@ var higMove;
     pl.style.translate=(curX-4)+'px 0';
     pl.style.scale=(sc*wobX).toFixed(4)+' '+(sc*wobY).toFixed(4);
     var atRest=Math.abs(v)<=0.6&&Math.abs(tgtW-curW)<=0.6&&Math.abs(velX)<=0.35;
-    if(atRest&&settling&&!down&&!pendT){settling=false;pressT=0;pl.classList.remove('pressed');} /* landed: melt the bubble */
+    if(atRest&&settling&&!down){settling=false;pressT=0;pl.classList.remove('pressed');} /* landed: melt the bubble */
     if(!atRest||Math.abs(pressT-press)>0.01){raf=requestAnimationFrame(step);}
     else{curX=tgtX;curW=tgtW;press=pressT;velX=0;var s2=1+press*0.28;pl.style.translate=(curX-4)+'px 0';pl.style.width=curW+'px';pl.style.scale=s2+' '+s2;raf=null;}
   }
-  function toActive(){if(pendT){kick();return;}var a=bar.querySelector('.tab.active');if(a){tgtX=a.offsetLeft;tgtW=a.offsetWidth;kick();}}
+  function toActive(){var a=bar.querySelector('.tab.active');if(a){tgtX=a.offsetLeft;tgtW=a.offsetWidth;kick();}}
   higMove=toActive;
   function tabs(){return [].slice.call(bar.querySelectorAll('.tab'));}
   function nearest(cx){var best=null,bd=1e9;tabs().forEach(function(t){var c=t.offsetLeft+t.offsetWidth/2,d=Math.abs(c-cx);if(d<bd){bd=d;best=t;}});return best;}
@@ -2133,14 +2132,12 @@ var higMove;
   }
   bar.addEventListener('pointerdown',function(e){var t=e.target.closest('.tab');if(!t)return;
     down=true;dragging=false;pressT=1;pl.classList.add('pressed');
-    pendT=t; /* inflate first; slide starts once the bubble has grown */
-    kick();},{passive:true});
-  window.addEventListener('pointermove',function(e){if(!down)return;dragging=true;pendT=null;dragTo(e.clientX);},{passive:true});
+    tgtX=t.offsetLeft;tgtW=t.offsetWidth;kick();},{passive:true});
+  window.addEventListener('pointermove',function(e){if(!down)return;dragging=true;dragTo(e.clientX);},{passive:true});
   function release(e){if(!down)return;down=false;settling=true; /* bubble stays inflated and slides; melts on arrival */
     var br=bar.getBoundingClientRect();
-    var t=pendT||nearest(e&&e.clientX!=null?e.clientX-br.left:curX+curW/2);
-    if(t){pendT=t; /* slide fires from the loop once the bubble is inflated */
-      var v=t.getAttribute('data-v');if(v)showView(v);}
+    var t=nearest(e&&e.clientX!=null?e.clientX-br.left:curX+curW/2);
+    if(t){tgtX=t.offsetLeft;tgtW=t.offsetWidth;var v=t.getAttribute('data-v');if(v)showView(v);}
     kick();
   }
   window.addEventListener('pointerup',release,{passive:true});
