@@ -183,7 +183,7 @@
   gap: 3px;
   height: 54px;
   border-radius: 27px;
-  color: rgba(22, 26, 30, 0.55);
+  color: rgba(22, 26, 30, 0.72);
   background: transparent;
   border: none;
   transition: color 0.3s, opacity 0.3s;
@@ -193,10 +193,10 @@
   cursor: pointer;
 }
 
-[data-theme="dark"] .tab { color: rgba(255, 255, 255, 0.55); }
+[data-theme="dark"] .tab { color: rgba(255, 255, 255, 0.66); }
 .tab svg { width: 22px; height: 22px; }
-.tab .tl { font-size: 9px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; opacity: 0.85; }
+.tab .tl { font-size: 9px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; }
 .tab:active { opacity: 0.6; }
-.tab.active { color: var(--on-lime); }
+.tab.active { color: var(--lime-text, var(--on-lime)); }
 [data-theme="dark"] .tab.active { color: var(--lime); }
 .tab.active .tl { opacity: 1; }
