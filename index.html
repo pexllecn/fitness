@@ -13,7 +13,7 @@
 <title>The Cut</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" crossorigin="anonymous">
 <link rel="stylesheet" href="liquid-glass.css">
 
@@ -43,7 +43,7 @@
   --shadow-card:0 1px 1px rgba(0,0,0,.06);
 
   /* Typography */
-  --font:'Montserrat',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  --font:'Nunito',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
 
   /* Radii — iOS standard */
   --r:16px; --r-sm:12px; --r-lg:22px; --r-xl:28px;
@@ -89,7 +89,7 @@ button{cursor:pointer}
 .brand{display:flex;align-items:center;gap:10px}
 .logo{width:40px;height:40px;border-radius:12px;background:var(--text);display:grid;place-items:center;color:var(--lime)}
 .logo svg{width:22px;height:22px;stroke-width:2.2}
-.brand .bt b{font-size:17px;font-weight:700;letter-spacing:-.02em;display:block;line-height:1}
+.brand .bt b{font-size:17px;font-weight:700;letter-spacing:0;display:block;line-height:1}
 .brand .bt span{font-size:13px;color:var(--muted);font-weight:400}
 .tttext{display:none}
 .ttools{margin-left:auto;display:flex;gap:6px}
@@ -110,8 +110,8 @@ button{cursor:pointer}
 
 /* iOS section header */
 .shead{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;padding:0 4px}
-.shead h2{font-size:22px;font-weight:700;letter-spacing:-.03em}
-.shead h2.sm{font-size:17px;font-weight:600;letter-spacing:-.02em}
+.shead h2{font-size:22px;font-weight:700;letter-spacing:-.01em}
+.shead h2.sm{font-size:17px;font-weight:600;letter-spacing:0}
 .shead .tagn{font-size:12px;font-weight:500;color:var(--blue);padding-bottom:2px;white-space:nowrap;text-transform:none;letter-spacing:0}
 
 /* ── Cards ── */
@@ -135,7 +135,7 @@ button{cursor:pointer}
 .tile.lime{background:var(--lime);color:var(--on-lime)}
 .tile .ti{display:flex;align-items:center;gap:6px;font-size:11px;font-weight:500;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
 .tile.ink .ti,.tile.forest .ti{color:rgba(255,255,255,.55)}.tile.lime .ti{color:rgba(22,25,26,.5)}
-.tile .tv{font-size:28px;font-weight:700;letter-spacing:-.03em;margin-top:9px;line-height:1}
+.tile .tv{font-size:28px;font-weight:700;letter-spacing:0;margin-top:9px;line-height:1}
 .tile .tv small{font-size:13px;font-weight:500;color:var(--muted)}
 .tile.ink .tv small,.tile.forest .tv small{color:rgba(255,255,255,.5)}.tile.lime .tv small{color:rgba(22,25,26,.5)}
 .tile .tk{font-size:12px;font-weight:400;color:var(--muted);margin-top:4px;line-height:1.35}
@@ -156,7 +156,7 @@ button{cursor:pointer}
 .hero>*{position:relative;z-index:1}
 .hero .htop{display:flex;align-items:flex-start;justify-content:space-between;gap:14px}
 .hlab{font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.45)}
-.hero .hday{font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:7px;line-height:1.06;color:#fff}
+.hero .hday{font-size:30px;font-weight:700;letter-spacing:0;margin-top:7px;line-height:1.06;color:#fff}
 .hero .hsub{font-size:13px;color:rgba(255,255,255,.6);font-weight:400;margin-top:7px;max-width:80%;line-height:1.5}
 .ring{position:relative;width:72px;height:72px;flex:0 0 auto}
 .ring svg{transform:rotate(-90deg)}
@@ -168,11 +168,11 @@ button{cursor:pointer}
 .hchip{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.14);padding:8px 13px;border-radius:12px;font-size:12px;font-weight:500;color:rgba(255,255,255,.8)}
 .hchip b{font-weight:700;font-size:13px;color:#fff}
 .herostats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:20px}
-.hs .v{font-size:18px;font-weight:700;letter-spacing:-.02em;color:#fff}
+.hs .v{font-size:18px;font-weight:700;letter-spacing:0;color:#fff}
 .hs .k{font-size:10px;color:rgba(255,255,255,.45);font-weight:500;text-transform:uppercase;letter-spacing:.05em;margin-top:3px}
 .hs .bar{height:3px;border-radius:3px;background:rgba(255,255,255,.14);margin-top:8px;overflow:hidden}
 .hs .bar i{display:block;height:100%;background:var(--lime);border-radius:3px}
-.bignum{font-size:48px;font-weight:700;letter-spacing:-.04em;line-height:.95}
+.bignum{font-size:48px;font-weight:700;letter-spacing:0;line-height:.95}
 .bignum small{font-size:17px;font-weight:500;color:var(--muted);letter-spacing:0}
 .bigsub{font-size:13px;font-weight:400;color:var(--muted);margin-top:6px}
 
@@ -234,7 +234,7 @@ button{cursor:pointer}
 .exbody{flex:1;min-width:0}
 .en{display:flex;gap:8px;align-items:baseline}
 .enum{font-size:12px;font-weight:500;color:var(--muted2);min-width:16px}
-.ename{font-size:15px;font-weight:600;letter-spacing:-.01em;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:7px}
+.ename{font-size:15px;font-weight:600;letter-spacing:0;color:var(--text);text-decoration:none;display:inline-flex;align-items:center;gap:7px}
 .ename .play{flex:0 0 auto;width:18px;height:18px;border-radius:6px;background:var(--lime);display:grid;place-items:center}
 .ename .play i{font-size:9px;color:var(--on-lime)}
 .exmeta{display:flex;flex-wrap:wrap;gap:5px;margin:9px 0 0 24px}
@@ -274,7 +274,7 @@ button{cursor:pointer}
 /* ── Macros / Nutrition ── */
 .macrobar{display:flex;gap:10px;margin-top:14px}
 .mb{flex:1;text-align:center}
-.mb .v{font-size:22px;font-weight:700;letter-spacing:-.02em}
+.mb .v{font-size:22px;font-weight:700;letter-spacing:0}
 .mb .v small{font-size:12px;color:var(--muted);font-weight:400}
 .mb .l{font-size:11px;font-weight:500;color:var(--muted);margin-top:2px}
 .modetog{display:flex;gap:2px;background:var(--panel);border-radius:12px;padding:3px}
@@ -340,7 +340,7 @@ button{cursor:pointer}
 .prio{display:flex;gap:14px;background:var(--card);border-radius:var(--r);padding:20px;box-shadow:var(--shadow-card);align-items:flex-start}
 .prio .pn{flex:0 0 auto;width:36px;height:36px;border-radius:10px;background:var(--lime);color:var(--on-lime);font-size:17px;font-weight:700;display:grid;place-items:center}
 .prio .pt{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.prio h3{font-size:18px;font-weight:700;letter-spacing:-.02em;margin:4px 0 8px}
+.prio h3{font-size:18px;font-weight:700;letter-spacing:0;margin:4px 0 8px}
 .prio p{font-size:13px;font-weight:400;color:var(--text);line-height:1.6}
 .prio .nlist{list-style:none}
 .prio .nlist li{font-size:13px;font-weight:500;padding:3px 0 3px 16px;position:relative;color:var(--text)}
@@ -507,7 +507,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
   .topbar{padding:30px 0 12px;background:transparent;position:static;border-bottom:none}
   .brand{display:none}
   .tttext{display:block}
-  .tttext b{font-size:26px;font-weight:700;letter-spacing:-.03em;display:block;line-height:1}
+  .tttext b{font-size:26px;font-weight:700;letter-spacing:0;display:block;line-height:1}
   .tttext span{font-size:13px;color:var(--muted);font-weight:400}
   .ttools{display:none}
   .view{max-width:1060px;margin:0 auto}.view.on{gap:30px}
@@ -538,7 +538,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .fcol{display:flex;flex-direction:column;gap:10px}
 .fcolcard{background:var(--card);border-radius:var(--r);padding:18px;box-shadow:var(--shadow-card)}
 .fcol-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:4px}
-.fcol-h .ft{font-size:16px;font-weight:600;letter-spacing:-.02em}
+.fcol-h .ft{font-size:16px;font-weight:600;letter-spacing:0}
 .fcol-h .fd{font-size:12px;font-weight:500;color:var(--muted)}
 .fcol .bignum{font-size:36px}
 .fcol .meal{border-radius:var(--r-sm)}
@@ -584,7 +584,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .ex-modal-media .play-hint i{font-size:48px;color:#fff;opacity:.9}
 .ex-modal-media.playing .play-hint{opacity:0;pointer-events:none}
 .ex-modal-info{padding:18px 20px 22px}
-.ex-modal-title{font-size:19px;font-weight:800;letter-spacing:-.025em;margin-bottom:4px}
+.ex-modal-title{font-size:19px;font-weight:800;letter-spacing:0;margin-bottom:4px}
 .ex-modal-note{font-size:13px;color:var(--muted);line-height:1.5;margin-top:8px}
 .ex-modal-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border-radius:50%;background:rgba(0,0,0,.45);border:none;color:#fff;font-size:16px;display:grid;place-items:center;z-index:10;cursor:pointer}
 .excard-thumb-ov{position:absolute;inset:0;background:rgba(0,0,0,.38)}
@@ -598,7 +598,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .cat-arms{background:linear-gradient(145deg,#1a0020 0%,#7d0077 100%)}
 .cat-core{background:linear-gradient(145deg,#00180a 0%,#005a20 100%)}
 .excard-body{flex:1;min-width:0;padding:12px 10px 12px 14px;display:flex;flex-direction:column;justify-content:center;gap:5px}
-.excard-name{font-size:15px;font-weight:700;letter-spacing:-.02em;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:7px;line-height:1.2;background:none;border:none;padding:0;text-align:left;cursor:pointer;width:100%}
+.excard-name{font-size:15px;font-weight:700;letter-spacing:0;color:var(--text);text-decoration:none;display:flex;align-items:center;gap:7px;line-height:1.2;background:none;border:none;padding:0;text-align:left;cursor:pointer;width:100%}
 .excard-name .play{flex:0 0 auto;width:18px;height:18px;border-radius:6px;background:var(--lime);display:grid;place-items:center}
 .excard-name .play i{font-size:9px;color:var(--on-lime)}
 .excard-tags{display:flex;flex-wrap:wrap;gap:5px}
@@ -615,13 +615,13 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 /* ── Activity rings card (GorillaFit vibe) ── */
 .actcard{background:var(--ink);color:var(--on-ink);border-radius:var(--r-xl);padding:22px 20px 20px;box-shadow:var(--shadow)}
 .actcard-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
-.actcard-head h3{font-size:17px;font-weight:700;letter-spacing:-.02em;color:#fff}
+.actcard-head h3{font-size:17px;font-weight:700;letter-spacing:0;color:#fff}
 .actcard-label{font-size:11px;font-weight:700;color:var(--lime);letter-spacing:.04em;text-transform:uppercase}
 .actring-main{display:flex;justify-content:center;margin-bottom:20px}
 .actring-main .ringwrap{position:relative;width:148px;height:148px}
 .actring-main .ringwrap svg{transform:rotate(-90deg);width:148px;height:148px}
 .actring-main .ringwrap .rt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.actring-main .ringwrap .rt b{font-size:30px;font-weight:800;letter-spacing:-.04em;color:#fff;line-height:1}
+.actring-main .ringwrap .rt b{font-size:30px;font-weight:800;letter-spacing:0;color:#fff;line-height:1}
 .actring-main .ringwrap .rt span{font-size:10px;color:rgba(255,255,255,.4);font-weight:600;text-transform:uppercase;letter-spacing:.08em;margin-top:4px}
 .actring-mini-row{display:flex;justify-content:space-around;gap:8px}
 .actring-mini{display:flex;flex-direction:column;align-items:center;gap:7px}
@@ -645,14 +645,14 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 
 
 /* ── Enhanced workout hero ── */
-.wday-head{font-size:32px;font-weight:800;letter-spacing:-.04em;color:#fff;line-height:1.05;margin-top:6px}
+.wday-head{font-size:32px;font-weight:800;letter-spacing:0;color:#fff;line-height:1.05;margin-top:6px}
 .wday-sub{font-size:13px;color:rgba(255,255,255,.55);margin-top:5px}
 
 /* ═══════════ VOLT overrides ═══════════ */
 [data-theme="dark"] body{background:radial-gradient(1100px 560px at 78% -12%,color-mix(in srgb,var(--lime) 8%,transparent),transparent 60%),radial-gradient(900px 560px at -8% 104%,color-mix(in srgb,var(--lime) 4%,transparent),transparent 55%),var(--bg);background-attachment:fixed}
 [data-theme="dark"] .topbar{background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px)}
 .shead h2{font-weight:800}
-.hero .hday,.bignum,.tile .tv,.tttext b{font-weight:800;letter-spacing:-.04em}
+.hero .hday,.bignum,.tile .tv,.tttext b{font-weight:800;letter-spacing:-.01em}
 [data-theme="dark"] .card:not(.ink):not(.forest):not(.outline){background:linear-gradient(180deg,#15181B,#101214);border:1px solid rgba(255,255,255,.06)}
 [data-theme="dark"] .tile:not(.lime),[data-theme="dark"] .meal,[data-theme="dark"] .excard,[data-theme="dark"] .chartcard,[data-theme="dark"] .fcolcard,[data-theme="dark"] .phase,[data-theme="dark"] .prio,[data-theme="dark"] details.fx,[data-theme="dark"] .hist,[data-theme="dark"] .form,[data-theme="dark"] .pw{border:1px solid rgba(255,255,255,.06)}
 [data-theme="dark"] .hero,[data-theme="dark"] .calendar,[data-theme="dark"] .actcard{background:radial-gradient(120% 150% at 0% 0%,color-mix(in srgb,var(--lime) 9%,transparent),transparent 55%),linear-gradient(180deg,#15181B,#0E1012);border:1px solid rgba(255,255,255,.07)}
@@ -683,8 +683,8 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 [data-theme="light"] .d2mut{color:var(--muted)}
 .d2acc{color:var(--lime)}
 [data-theme="light"] .d2acc{color:var(--lime-text)}
-.d2big{font-size:54px;font-weight:800;letter-spacing:-.045em;line-height:.95}
-.d2num{font-size:27px;font-weight:800;letter-spacing:-.02em;margin-top:8px}
+.d2big{font-size:54px;font-weight:800;letter-spacing:0;line-height:.95}
+.d2num{font-size:27px;font-weight:800;letter-spacing:0;margin-top:8px}
 .d2spark{margin-top:10px;display:block}
 .d2bar{height:9px;border-radius:99px;background:rgba(255,255,255,.1);position:relative;margin-top:16px;overflow:hidden}
 [data-theme="light"] .d2bar{background:rgba(20,24,10,.1)}
@@ -695,7 +695,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .d2ring{position:relative;width:124px;height:124px;margin:10px auto 8px}
 .d2ring svg{transform:rotate(-90deg);display:block}
 .d2ring .rt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.d2ring .rt b{font-size:24px;font-weight:800;letter-spacing:-.03em;line-height:1}
+.d2ring .rt b{font-size:24px;font-weight:800;letter-spacing:0;line-height:1}
 .d2ring .rt span{font-size:8px;color:rgba(240,242,238,.45);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 [data-theme="light"] .d2ring .rt span{color:var(--muted2)}
 .d2photo{display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;min-height:150px;cursor:pointer}
@@ -742,7 +742,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .d2-ringbig{position:relative;width:124px;height:124px;margin:12px auto 8px}
 .d2-ringbig svg{transform:rotate(-90deg);display:block}
 .d2-ringbig .rt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
-.d2-ringbig .rt b{font-size:23px;font-weight:800;letter-spacing:-.03em;color:#fff;line-height:1}
+.d2-ringbig .rt b{font-size:23px;font-weight:800;letter-spacing:0;color:#fff;line-height:1}
 .d2-ringbig .rt span{font-size:8px;color:rgba(255,255,255,.45);font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:3px}
 .d2-ring .hsub{max-width:none}
 @media(min-width:980px){
