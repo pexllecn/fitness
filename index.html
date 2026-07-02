@@ -1630,13 +1630,14 @@ function applyTheme(m,save){
 }
 mq.addEventListener('change',function(){if(STATE.theme==='system')applyTheme('system',false);});
 var ACCENTS=[
-  {lime:'#D9FF3D',deep:'#C6F01F',on:'#0A0B0C',forest:'#1A2410',f2:'#26330F'},
-  {lime:'#FF8A3D',deep:'#F2701A',on:'#1A0E04',forest:'#5A2410',f2:'#7A3417'},
-  {lime:'#54A0FF',deep:'#2E86F0',on:'#06122A',forest:'#13335E',f2:'#1B477E'},
-  {lime:'#A78BFA',deep:'#8B6CF0',on:'#16101F',forest:'#3A2A66',f2:'#4C3A82'},
-  {lime:'#FB7185',deep:'#F4576E',on:'#2A0A12',forest:'#5E1830',f2:'#7E2444'}
+  {lime:'#D9FF3D',deep:'#C6F01F',on:'#0A0B0C',forest:'#1A2410',f2:'#26330F',txt:'#3E7200'},
+  {lime:'#FF8A3D',deep:'#F2701A',on:'#1A0E04',forest:'#5A2410',f2:'#7A3417',txt:'#A34700'},
+  {lime:'#54A0FF',deep:'#2E86F0',on:'#06122A',forest:'#13335E',f2:'#1B477E',txt:'#1D5FBF'},
+  {lime:'#A78BFA',deep:'#8B6CF0',on:'#16101F',forest:'#3A2A66',f2:'#4C3A82',txt:'#6D4AD1'},
+  {lime:'#FB7185',deep:'#F4576E',on:'#2A0A12',forest:'#5E1830',f2:'#7E2444',txt:'#C41F3E'},
+  {lime:'#FF453A',deep:'#E6342A',on:'#FFFFFF',forest:'#5C130D',f2:'#7C1B12',txt:'#C41F16'}
 ];
-function applyAccent(i,save){var a=ACCENTS[i];STATE.accent=i;root.style.setProperty('--lime',a.lime);root.style.setProperty('--lime-deep',a.deep);root.style.setProperty('--on-lime',a.on);root.style.setProperty('--forest',a.forest);root.style.setProperty('--forest-2',a.f2);var sw=document.querySelectorAll('.sw');for(var k=0;k<sw.length;k++)sw[k].classList.toggle('on',k===i);if(save)saveState();}
+function applyAccent(i,save){var a=ACCENTS[i];STATE.accent=i;root.style.setProperty('--lime',a.lime);root.style.setProperty('--lime-deep',a.deep);root.style.setProperty('--on-lime',a.on);root.style.setProperty('--forest',a.forest);root.style.setProperty('--forest-2',a.f2);root.style.setProperty('--lime-text',a.txt||'#3E7200');var sw=document.querySelectorAll('.sw');for(var k=0;k<sw.length;k++)sw[k].classList.toggle('on',k===i);if(save)saveState();}
 function buildSwatches(){$('swatches').innerHTML=ACCENTS.map(function(a,i){return '<button class="sw'+(i===STATE.accent?' on':'')+'" data-acc="'+i+'" style="background:'+a.lime+'"></button>';}).join('');}
 
 /* ---------- progress / tracker ---------- */
