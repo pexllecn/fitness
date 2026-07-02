@@ -1730,7 +1730,7 @@ function renderProgress(){
   $('pgBf').textContent=L.bf.toFixed(1)+'%';$('pgWnow').textContent=cw.toFixed(1);
   var tw=tgtW(),toLose=cw-tw;
   $('pgToGo').textContent='~'+(toLose>0.05?toLose.toFixed(1):'0')+'kg of fat to shift · about 0.5kg a week.';
-  var sf=fatMass(STATE.scans[0]),tf=tw*TBF/100,prog=(sf-fatMass(L))/(sf-tf)*100;prog=Math.max(0,Math.min(100,prog));
+  var _bs=STATE.scans.filter(function(x){return x.date>='2026-05-01';})[0]||STATE.scans[0];var sf=fatMass(_bs),tf=tw*TBF/100,prog=(sf-fatMass(L))/(sf-tf)*100;prog=Math.max(0,Math.min(100,prog));
   $('pgBar').style.width=prog.toFixed(0)+'%';var pr=$('pgRing');pr.style.strokeDasharray=RC;pr.style.strokeDashoffset=RC*(1-prog/100);
   drawM(curM);renderVerdict();renderBreakdown();renderSHist();
 }
@@ -1989,9 +1989,9 @@ function _g(id){return document.getElementById(id);}
 function _s(id,v){var el=_g(id);if(el)el.textContent=v;}
 function d2fill(){try{
 var sc=STATE.scans.slice().sort(function(a,b){return a.date<b.date?-1:1;});
-var L=sc[sc.length-1],F=sc[0],cw=curWeight(L);
+var L=sc[sc.length-1],F=sc[0],cw=curWeight(L);var B=sc.filter(function(x){return x.date>='2026-05-01';})[0]||F;
 _s('d2w',cw.toFixed(1));_s('d2bf',L.bf.toFixed(1));
-_s('d2lost',Math.max(0,F.weight-cw).toFixed(1));
+_s('d2lost',Math.max(0,(B.weight*B.bf-L.weight*L.bf)/100).toFixed(1));
 var wk=Math.max(1,Math.min(9,Math.floor((Date.now()-new Date('2026-06-25').getTime())/6048e5)+1));
 _s('d2wk',wk);var wkb=_g('d2wkb');if(wkb)wkb.style.width=Math.round(wk/9*100)+'%';
 _s('d2wkchip','On track \u00b7 Wk '+wk+' of 9');
@@ -2003,9 +2003,9 @@ function _spark(id,vals){var el=_g(id);if(!el||!vals||vals.length<2)return;var m
 var _wSeries=(STATE.daily||[]).slice(-14).map(function(e){return e.weight;});if(_wSeries.length<2)_wSeries=sc.map(function(x){return x.weight;});
 _spark('d2sparkW',_wSeries);
 _spark('d2sparkBF',sc.map(function(x){return x.bf;}));
-_spark('d2sparkFL',sc.map(function(x){return x.weight*x.bf/100;}).map(function(v,i,a){return a[0]-v;}));
-var _ws=_g('d2wSub');if(_ws)_ws.textContent='from '+F.weight.toFixed(1)+' start';
-var _ls=_g('d2lostSub');if(_ls)_ls.textContent='since '+shortD(F.date);
+var _cutSc=sc.filter(function(x){return x.date>=B.date;});_spark('d2sparkFL',_cutSc.map(function(x){return (B.weight*B.bf-x.weight*x.bf)/100;}));
+var _ws=_g('d2wSub');if(_ws)_ws.textContent='from '+B.weight.toFixed(1)+' start';
+var _ls=_g('d2lostSub');if(_ls)_ls.textContent='fat mass · since '+shortD(B.date);
 var _ks=_g('d2wkSub');if(_ks)_ks.textContent=(9-wk)+' to go';
 var wkTile=Math.max(1,Math.min(9,Math.floor((Date.now()-new Date('2026-06-26').getTime())/6048e5)+1));document.querySelectorAll('.proj-weeks .pw').forEach(function(p,i){p.classList.toggle('now',i===wkTile-1);});
 _s('d2you','you \u00b7 '+cw.toFixed(1));
