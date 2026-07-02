@@ -15,6 +15,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" crossorigin="anonymous">
+<link rel="stylesheet" href="liquid-glass.css">
 
 <style>
 /* ── Apple design tokens ── */
@@ -473,14 +474,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .pw.goal{background:color-mix(in srgb,var(--lime) 18%,var(--panel))}
 .proj-note{margin-top:14px;font-size:13px;font-weight:400;color:var(--muted)}
 
-/* ── Tab bar (self-contained VOLT) ── */
-.tabbar{position:fixed;left:14px;right:14px;bottom:calc(12px + env(safe-area-inset-bottom));height:64px;display:flex;align-items:center;background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);border:1px solid rgba(255,255,255,.09);border-radius:22px;z-index:60;box-shadow:0 14px 44px rgba(0,0,0,.5);padding:0 6px}
-[data-theme="light"] .tabbar{background:rgba(255,255,255,.88);border-color:rgba(0,0,0,.08);box-shadow:0 10px 34px rgba(0,0,0,.16)}
-.tabbar .tg-glass,.tabbar .tg-border,.tabbar .tabpill{display:none}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;color:var(--muted2);padding:8px 0;transition:color .18s}
-.tab .tl{font-size:9.5px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
-.tab.active{color:var(--lime)}
-[data-theme="light"] .tab.active{color:var(--lime-text)}
+/* ── Tab bar + pill: see liquid-glass.css ── */
 @media (prefers-reduced-motion:reduce){.tab,.tab svg{transition:none}}
 
 /* ── Desktop sidebar ── */
@@ -1947,5 +1941,6 @@ l.addEventListener('drop',function(e){e.preventDefault();load(e.dataTransfer.fil
 });
 })();
 </script>
+<script src="liquid-glass.js"></script>
 </body>
 </html>
