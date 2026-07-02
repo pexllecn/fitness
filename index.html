@@ -883,13 +883,26 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
   background:rgba(255,255,255,.78);
   box-shadow:0 3px 10px rgba(0,0,0,.12),0 .5px 1px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 .5px rgba(255,255,255,.5);
   transform-origin:center;
-  transition:translate .45s cubic-bezier(.3,1.55,.42,1),width .45s cubic-bezier(.3,1.55,.42,1),scale .22s cubic-bezier(.3,1.3,.5,1)}
-/* touch inflate: the liquid glass pill swells under the finger */
-.hig-platter.pressed{scale:1.12 1.22;background:rgba(255,255,255,.9);box-shadow:0 6px 18px rgba(0,0,0,.16),0 .5px 1px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.95),inset 0 0 0 .5px rgba(255,255,255,.6)}
-[data-theme="dark"] .hig-platter.pressed{background:rgba(84,84,88,.8)}
+  transition:background .12s ease-out,box-shadow .12s ease-out}
 [data-theme="dark"] .hig-platter{
   background:rgba(70,70,74,.65);
   box-shadow:0 3px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 .5px rgba(255,255,255,.08)}
+/* pressed: fill turns to clear liquid glass (repo: bg opacity x0.1, convex insets, refraction on) */
+.hig-platter.pressed{
+  background:rgba(255,255,255,.10);
+  box-shadow:0 6px 20px rgba(0,0,0,.14),
+    inset 2px 7px 24px rgba(0,0,0,.09),inset -2px -7px 24px rgba(255,255,255,.09),
+    inset 0 0 0 .5px rgba(255,255,255,.5),inset 0 1px 0 rgba(255,255,255,.7)}
+[data-theme="dark"] .hig-platter.pressed{
+  background:rgba(84,84,88,.12);
+  box-shadow:0 6px 20px rgba(0,0,0,.4),
+    inset 2px 7px 24px rgba(0,0,0,.25),inset -2px -7px 24px rgba(255,255,255,.08),
+    inset 0 0 0 .5px rgba(255,255,255,.18),inset 0 1px 0 rgba(255,255,255,.22)}
+/* refraction layer: fades in on press (100ms), out after release (280ms, repo timing) */
+.hig-platter .pg{position:absolute;inset:0;border-radius:inherit;display:block;opacity:0;
+  -webkit-backdrop-filter:blur(1px) saturate(140%);backdrop-filter:url(#lgPillFilter);
+  transition:opacity .28s ease}
+.hig-platter.pressed .pg{opacity:1;transition:opacity .1s ease-out}
 @media (prefers-reduced-motion:reduce){.hig-platter,.tabbar .tab .ic{transition:none}}
 @media (min-width:980px){.tabbar{display:none}}
 
@@ -1289,7 +1302,14 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
   </div>
 </div>
 <div class="tabbar">
-  <span class="hig-platter" id="higPlatter" aria-hidden="true"></span>
+  <span class="hig-platter" id="higPlatter" aria-hidden="true"><i class="pg"></i></span>
+  <svg aria-hidden="true" style="position:absolute;width:0;height:0">
+    <filter id="lgPillFilter" primitiveUnits="objectBoundingBox">
+      <feImage id="lgPillMap" result="map" width="100%" height="100%" x="0" y="0" preserveAspectRatio="none" href=""/>
+      <feGaussianBlur in="SourceGraphic" stdDeviation="0.005" result="blur"/>
+      <feDisplacementMap in="blur" in2="map" scale="0.32" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </svg>
   <button class="tab active" data-v="dash" aria-label="Home"><i class="hgi-stroke hgi-home-01 ic"></i><span class="tl">Home</span></button>
   <button class="tab" data-v="workout" aria-label="Workout"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><span class="tl">Workout</span></button>
   <button class="tab" data-v="food" aria-label="Nutrition"><i class="hgi-stroke hgi-fire ic"></i><span class="tl">Fuel</span></button>
@@ -2074,32 +2094,69 @@ syncLoadInputs();
     label.textContent='Pull to sync';
   }
 
-/* HIG selection platter tracking */
-function higMove(){
-  var bar=document.querySelector('.tabbar'),pl=document.getElementById('higPlatter');
-  if(!bar||!pl||bar.offsetWidth===0)return;
-  var act=bar.querySelector('.tab.active');if(!act)return;
-  pl.style.width=act.offsetWidth+'px';
-  pl.style.translate=(act.offsetLeft-4)+'px 0';
-}
-var _higSV=showView;showView=function(v){_higSV(v);higMove();};
-window.addEventListener('resize',function(){higMove();});
-setTimeout(higMove,50);
-/* liquid touch: pill inflates on press and follows the finger across tabs */
+/* HIG platter: physics-based liquid glass (port of LiquidGlassBottomNavBar) */
+var higMove;
 (function(){
   var bar=document.querySelector('.tabbar'),pl=document.getElementById('higPlatter');
   if(!bar||!pl)return;
-  function tabAt(x){var t=null;bar.querySelectorAll('.tab').forEach(function(el){var r=el.getBoundingClientRect();if(x>=r.left&&x<=r.right)t=el;});return t;}
-  function slideTo(el){if(!el)return;pl.style.width=el.offsetWidth+'px';pl.style.translate=(el.offsetLeft-4)+'px 0';}
-  var down=false;
-  bar.addEventListener('pointerdown',function(e){var t=e.target.closest('.tab');if(!t)return;down=true;pl.classList.add('pressed');slideTo(t);},{passive:true});
-  bar.addEventListener('pointermove',function(e){if(!down)return;var t=tabAt(e.clientX);if(t)slideTo(t);},{passive:true});
-  function release(e){if(!down)return;down=false;pl.classList.remove('pressed');
-    var t=(e&&e.clientX!=null)?tabAt(e.clientX):null;
-    if(t&&t.getAttribute('data-v')){showView(t.getAttribute('data-v'));}else{higMove();}}
-  bar.addEventListener('pointerup',release,{passive:true});
-  bar.addEventListener('pointercancel',function(){down=false;pl.classList.remove('pressed');higMove();},{passive:true});
+  var curX=4,tgtX=4,curW=72,tgtW=72,press=0,pressT=0,raf=null,down=false,dragging=false;
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function kick(){if(!raf)raf=requestAnimationFrame(step);}
+  function step(){
+    curX+=(tgtX-curX)*0.5;curW+=(tgtW-curW)*0.5;press+=(pressT-press)*0.35;
+    var v=tgtX-curX;
+    var wobX=reduce?1:1+Math.min(0.22,Math.abs(v)*0.010);
+    var wobY=reduce?1:1-Math.min(0.15,Math.abs(v)*0.007);
+    var sc=1+press*0.28; /* rest->pressed ~ switch's 0.65->0.9 */
+    pl.style.width=curW+'px';
+    pl.style.translate=(curX-4)+'px 0';
+    pl.style.scale=(sc*wobX).toFixed(4)+' '+(sc*wobY).toFixed(4);
+    if(Math.abs(v)>0.1||Math.abs(tgtW-curW)>0.1||Math.abs(pressT-press)>0.01){raf=requestAnimationFrame(step);}
+    else{curX=tgtX;curW=tgtW;press=pressT;var s2=1+press*0.28;pl.style.translate=(curX-4)+'px 0';pl.style.width=curW+'px';pl.style.scale=s2+' '+s2;raf=null;}
+  }
+  function toActive(){var a=bar.querySelector('.tab.active');if(a){tgtX=a.offsetLeft;tgtW=a.offsetWidth;kick();}}
+  higMove=toActive;
+  function tabs(){return [].slice.call(bar.querySelectorAll('.tab'));}
+  function nearest(cx){var best=null,bd=1e9;tabs().forEach(function(t){var c=t.offsetLeft+t.offsetWidth/2,d=Math.abs(c-cx);if(d<bd){bd=d;best=t;}});return best;}
+  function dragTo(clientX){
+    var br=bar.getBoundingClientRect(),x=clientX-br.left;
+    var min=4+curW/2,max=bar.offsetWidth-4-curW/2;
+    if(x<min)x=min+(x-min)/3; /* edge damping: overflow/3 */
+    if(x>max)x=max+(x-max)/3;
+    tgtX=x-curW/2;var t=nearest(x);if(t)tgtW=t.offsetWidth;kick();
+  }
+  bar.addEventListener('pointerdown',function(e){var t=e.target.closest('.tab');if(!t)return;
+    down=true;dragging=false;pressT=1;pl.classList.add('pressed');
+    tgtX=t.offsetLeft;tgtW=t.offsetWidth;kick();},{passive:true});
+  window.addEventListener('pointermove',function(e){if(!down)return;dragging=true;dragTo(e.clientX);},{passive:true});
+  function release(e){if(!down)return;down=false;pressT=0;pl.classList.remove('pressed');
+    var br=bar.getBoundingClientRect();
+    var t=nearest(e&&e.clientX!=null?e.clientX-br.left:curX+curW/2);
+    if(t){tgtX=t.offsetLeft;tgtW=t.offsetWidth;var v=t.getAttribute('data-v');if(v)showView(v);else kick();}else{toActive();}
+  }
+  window.addEventListener('pointerup',release,{passive:true});
+  window.addEventListener('pointercancel',function(){down=false;pressT=0;pl.classList.remove('pressed');toActive();},{passive:true});
+  /* pill refraction map: rounded-rect SDF + Snell edge bend (studio math) */
+  function pillMap(){
+    var img=document.getElementById('lgPillMap');if(!img)return;
+    var W=160,H=112,R=H/2,TH=34,RF=1.6;
+    var c=document.createElement('canvas');c.width=W;c.height=H;
+    var ctx=c.getContext('2d'),d=ctx.createImageData(W,H),px=d.data;
+    function sdf(x,y){var qx=Math.abs(x-W/2)-(W/2-R),qy=Math.abs(y-H/2)-(H/2-R);
+      var ax=Math.max(qx,0),ay=Math.max(qy,0);return Math.sqrt(ax*ax+ay*ay)+Math.min(Math.max(qx,qy),0)-R;}
+    for(var y=0;y<H;y++)for(var x=0;x<W;x++){
+      var i=(y*W+x)*4,dst=-sdf(x,y),ox=0,oy=0;
+      if(dst>=0&&dst<TH){var r2=1-dst/TH,sinI=Math.min(1,r2*r2),thI=Math.asin(sinI),thT=Math.asin(sinI/RF);
+        var ef=-Math.tan(thT-thI),e=.75,nx=(sdf(x+e,y)-sdf(x-e,y))/(2*e),ny=(sdf(x,y+e)-sdf(x,y-e))/(2*e);
+        var nl=Math.hypot(nx,ny)||1;ox=nx/nl*ef;oy=ny/nl*ef;}
+      px[i]=Math.round(128+ox*127);px[i+1]=Math.round(128+oy*127);px[i+2]=128;px[i+3]=255;}
+    ctx.putImageData(d,0,0);var u=c.toDataURL();
+    img.setAttribute('href',u);img.setAttributeNS('http://www.w3.org/1999/xlink','href',u);
+  }
+  setTimeout(function(){pillMap();toActive();},50);
+  window.addEventListener('resize',toActive);
 })();
+var _higSV=showView;showView=function(v){_higSV(v);if(higMove)higMove();};
 })();
 </script>
 <script>
