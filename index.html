@@ -710,6 +710,10 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 [data-theme="light"] .d2acc{color:var(--lime-text)}
 .d2big{font-size:54px;font-weight:800;letter-spacing:0;line-height:.95}
 .d2num{font-size:27px;font-weight:800;letter-spacing:0;margin-top:8px}
+.d2lbl-row{display:flex;align-items:center;gap:6px}
+.d2lbl-ic{font-size:13px;width:13px;height:13px;display:inline-flex;align-items:center;color:var(--lime)}
+[data-theme="light"] .d2lbl-ic{color:var(--lime-text)}
+.d2sub{font-size:11px;color:var(--muted2);margin-top:3px;font-weight:500}
 .d2spark{margin-top:10px;display:block}
 .d2bar{height:9px;border-radius:99px;background:rgba(255,255,255,.1);position:relative;margin-top:16px;overflow:hidden}
 [data-theme="light"] .d2bar{background:rgba(20,24,10,.1)}
@@ -847,10 +851,10 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
         <button class="d2btn" data-v="workout">Start session</button></div>
       </div>
       <div class="d2stats">
-      <div class="d2c"><div class="d2lbl">Weight</div><div class="d2num"><span id="d2w">92.6</span> <span class="d2mut" style="font-size:14px">kg</span></div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26"><polyline points="0,6 18,8 36,7 54,11 72,14 90,17" fill="none" stroke="var(--lime)" stroke-width="2"/></svg></div>
-      <div class="d2c"><div class="d2lbl">Body fat</div><div class="d2num"><span id="d2bf">19.2</span> <span class="d2mut" style="font-size:14px">%</span></div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26"><polyline points="0,7 18,9 36,10 54,12 72,13 90,15" fill="none" stroke="var(--muted2)" stroke-width="2"/></svg></div>
-      <div class="d2c"><div class="d2lbl">Fat lost</div><div class="d2num d2acc"><span id="d2lost">0.2</span> <span class="d2mut" style="font-size:14px">kg</span></div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26"><polyline points="0,20 18,19 36,18 54,16 72,15 90,13" fill="none" stroke="var(--lime)" stroke-width="2"/></svg></div>
-      <div class="d2c"><div class="d2lbl">Weeks in</div><div class="d2num"><span id="d2wk">1</span> <span class="d2mut" style="font-size:14px">of 9</span></div><div class="d2bar" style="height:6px;margin-top:16px"><i id="d2wkb" style="width:11%"></i></div></div>
+      <div class="d2c"><div class="d2lbl-row"><i class="hgi-stroke hgi-analytics-01 d2lbl-ic"></i><span class="d2lbl">Weight</span></div><div class="d2num"><span id="d2w">92.6</span> <span class="d2mut" style="font-size:14px">kg</span></div><div class="d2sub" id="d2wSub">from 92.8 start</div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26" aria-hidden="true"><polyline id="d2sparkW" points="" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="d2c"><div class="d2lbl-row"><i class="hgi-stroke hgi-fire d2lbl-ic"></i><span class="d2lbl">Body fat</span></div><div class="d2num"><span id="d2bf">19.2</span> <span class="d2mut" style="font-size:14px">%</span></div><div class="d2sub" id="d2bfSub">target 12%</div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26" aria-hidden="true"><polyline id="d2sparkBF" points="" fill="none" stroke="var(--muted2)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="d2c"><div class="d2lbl-row"><i class="hgi-stroke hgi-checkmark-01 d2lbl-ic"></i><span class="d2lbl">Fat lost</span></div><div class="d2num d2acc"><span id="d2lost">0.2</span> <span class="d2mut" style="font-size:14px">kg</span></div><div class="d2sub" id="d2lostSub">since first scan</div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26" aria-hidden="true"><polyline id="d2sparkFL" points="" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="d2c"><div class="d2lbl-row"><i class="hgi-stroke hgi-clock-01 d2lbl-ic"></i><span class="d2lbl">Weeks in</span></div><div class="d2num"><span id="d2wk">1</span> <span class="d2mut" style="font-size:14px">of 9</span></div><div class="d2sub" id="d2wkSub">8 to go</div><div class="d2bar" style="height:6px;margin-top:12px"><i id="d2wkb" style="width:11%"></i></div></div>
       </div>
       <div class="d2row4">
       <div class="d2c"><div style="display:flex;justify-content:space-between;align-items:center"><div class="d2lbl">Fuel &middot; <span id="d2mode">weekday</span></div><span class="d2mut" style="font-size:12px" id="d2under">~690 kcal under</span></div>
@@ -1982,6 +1986,14 @@ var _a7=dwAvg7();var _e7=_g('d2avg7');if(_e7)_e7.textContent=_a7?_a7.toFixed(1):
 var _tEl=_g('d2avgTrend');if(_tEl){var _p7=dwAvgRange(dateISO(new Date(Date.now()-13*864e5)),dateISO(new Date(Date.now()-7*864e5)));
 if(_a7&&_p7){var _d=_a7-_p7;_tEl.textContent=(_d<=0?'↓ ':'↑ ')+Math.abs(_d).toFixed(1)+' kg vs last week';}
 else if(_a7){_tEl.textContent='keep logging for the weekly trend';}else{_tEl.textContent='log daily to see the trend';}}
+function _spark(id,vals){var el=_g(id);if(!el||!vals||vals.length<2)return;var mn=Math.min.apply(null,vals),mx=Math.max.apply(null,vals);var sp=(mx-mn)||1;el.setAttribute('points',vals.map(function(v,i){return (i*(90/(vals.length-1))).toFixed(1)+','+(22-((v-mn)/sp)*18+2).toFixed(1);}).join(' '));}
+var _wSeries=(STATE.daily||[]).slice(-14).map(function(e){return e.weight;});if(_wSeries.length<2)_wSeries=sc.map(function(x){return x.weight;});
+_spark('d2sparkW',_wSeries);
+_spark('d2sparkBF',sc.map(function(x){return x.bf;}));
+_spark('d2sparkFL',sc.map(function(x){return x.weight*x.bf/100;}).map(function(v,i,a){return a[0]-v;}));
+var _ws=_g('d2wSub');if(_ws)_ws.textContent='from '+F.weight.toFixed(1)+' start';
+var _ls=_g('d2lostSub');if(_ls)_ls.textContent='since '+shortD(F.date);
+var _ks=_g('d2wkSub');if(_ks)_ks.textContent=(9-wk)+' to go';
 var wkTile=Math.max(1,Math.min(9,Math.floor((Date.now()-new Date('2026-06-26').getTime())/6048e5)+1));document.querySelectorAll('.proj-weeks .pw').forEach(function(p,i){p.classList.toggle('now',i===wkTile-1);});
 _s('d2you','you \u00b7 '+cw.toFixed(1));
 _s('d2pts','\u2212'+(L.bf-12).toFixed(1)+' points to go');
