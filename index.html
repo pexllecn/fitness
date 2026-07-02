@@ -1054,6 +1054,13 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
         <div class="kcalrow" style="margin-top:14px"><div class="kl">Daily average</div><div class="kn" id="wkAvg">2,448</div></div>
         <div class="tilegrid g2" style="margin-top:14px"><div class="tile soft"><div class="ti">Avg deficit</div><div class="tv" id="wkDef" style="font-size:21px">~452<small> kcal</small></div></div><div class="tile soft"><div class="ti">Projected loss</div><div class="tv" id="wkRate" style="font-size:21px">0.41<small> kg/wk</small></div></div></div>
       </div>
+      <div class="card">
+        <div class="ch"><i class="hgi-stroke hgi-analytics-01 ic" style="color:var(--lime-deep)"></i>Daily weigh-in</div>
+        <p style="color:var(--muted);margin-bottom:12px">Log your scale weight each morning, same conditions. The newest entry becomes your current weight across the app — act on the 7-day average, not any single day.</p>
+        <div class="addrow"><input type="number" step="0.1" min="30" max="300" inputmode="decimal" id="dwIn" placeholder="kg" style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text);font-size:14px;width:110px"><button class="btn solid" id="dwSave">Log today</button></div>
+        <div class="kcalrow" style="margin-top:12px"><div class="kl">7-day average</div><div class="kn" id="dwAvg">–</div></div>
+        <div id="dwHist" style="margin-top:10px;display:flex;flex-direction:column;gap:6px"></div>
+      </div>
       </div>
       <div class="setcol">
         <div class="sgroup"><h3>Theme</h3><div class="seg2" id="themeSeg"><button data-t="light" class="on">Light</button><button data-t="dark">Dark</button><button data-t="system">System</button></div></div>
@@ -1338,6 +1345,10 @@ var EX_IMGS={
 var curDay=0,todayProgramIdx=-1,RC=2*Math.PI*32,play='<i class="hgi-stroke hgi-play"></i>';
 var WD_NAMES=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
 function todayISO(){return new Date().toISOString().slice(0,10);}
+/* ---------- daily weigh-in ---------- */
+function curWeight(L){var best=L?{w:L.weight,d:L.date}:null;if(Array.isArray(STATE.daily))STATE.daily.forEach(function(e){if(e&&e.weight&&(!best||e.date>=best.d))best={w:e.weight,d:e.date};});return best?best.w:0;}
+function dwAvg7(){var cut=new Date(Date.now()-6*864e5).toISOString().slice(0,10);var a=(STATE.daily||[]).filter(function(e){return e.date>=cut;});if(!a.length)return null;return a.reduce(function(s,e){return s+e.weight;},0)/a.length;}
+function renderDW(){var el=$('dwHist');if(!el)return;byDate(STATE.daily);var av=dwAvg7();var ae=$('dwAvg');if(ae)ae.textContent=av?av.toFixed(1)+' kg':'–';el.innerHTML=STATE.daily.slice(-7).slice().reverse().map(function(e){var i=STATE.daily.indexOf(e);return '<div class="hist"><div class="hd"><b>'+shortD(e.date)+'</b><small>'+e.date.slice(8)+'/'+e.date.slice(5,7)+'</small></div><div class="hm"><span>W <b>'+e.weight.toFixed(1)+'</b> kg</span></div><button class="del" data-dwd="'+i+'">&times;</button></div>';}).join('')||'<p style="font-size:12px;color:var(--muted)">No entries yet.</p>';}
 function doneSet(){var t=STATE.ticks[todayISO()];return(t&&t.key===PROGRAM[curDay].key&&Array.isArray(t.done))?t.done:[];}
 function setDone(arr){STATE.ticks[todayISO()]={key:PROGRAM[curDay].key,done:arr};saveState();}
 /* restMode: null=workout, 3=Wed rest, 0=Sun rest */
@@ -1652,8 +1663,9 @@ function wksBet(a,b){return(new Date(b)-new Date(a))/6048e5;}
 function renderProgress(){
   byDate(STATE.scans);
   var L=STATE.scans[STATE.scans.length-1];
-  $('pgBf').textContent=L.bf.toFixed(1)+'%';$('pgWnow').textContent=L.weight.toFixed(1);
-  var tw=tgtW(),toLose=L.weight-tw;
+  var cw=curWeight(L);
+  $('pgBf').textContent=L.bf.toFixed(1)+'%';$('pgWnow').textContent=cw.toFixed(1);
+  var tw=tgtW(),toLose=cw-tw;
   $('pgToGo').textContent='~'+(toLose>0.05?toLose.toFixed(1):'0')+'kg of fat to shift · about 0.5kg a week.';
   var sf=fatMass(STATE.scans[0]),tf=tw*TBF/100,prog=(sf-fatMass(L))/(sf-tf)*100;prog=Math.max(0,Math.min(100,prog));
   $('pgBar').style.width=prog.toFixed(0)+'%';var pr=$('pgRing');pr.style.strokeDasharray=RC;pr.style.strokeDashoffset=RC*(1-prog/100);
@@ -1715,6 +1727,8 @@ document.addEventListener('click',function(e){
   if(e.target.id==='copyBackup'){var code=btoa(unescape(encodeURIComponent(JSON.stringify(STATE))));var ta=$('restoreBox');ta.value=code;ta.select();try{document.execCommand('copy');}catch(_){}if(navigator.clipboard)navigator.clipboard.writeText(code).catch(function(){});toast('Backup code copied');return;}
   if(e.target.id==='restoreBtn'){try{var o=JSON.parse(decodeURIComponent(escape(atob($('restoreBox').value.trim()))));localStorage.setItem(KEY,JSON.stringify(o));loadState();bootRender();toast('Data restored');}catch(err){toast('That code did not read');}return;}
   if(e.target.id==='wipeBtn'){if(confirm('Reset all data to defaults? This clears your logs and edits.')){localStorage.removeItem(KEY);STATE=defState();bootRender();toast('All data reset');}return;}
+  if(e.target.id==='dwSave'){var dwv=parseFloat($('dwIn').value);if(!(dwv>30&&dwv<300)){toast('Enter your weight in kg');return;}var dwt=todayISO();var dwe=STATE.daily.find(function(x){return x.date===dwt;});if(dwe)dwe.weight=dwv;else STATE.daily.push({date:dwt,weight:dwv});byDate(STATE.daily);saveState();$('dwIn').value='';renderDW();renderProgress();toast('Weigh-in logged · '+dwv.toFixed(1)+' kg');return;}
+  var dwd=e.target.closest('[data-dwd]');if(dwd){STATE.daily.splice(+dwd.getAttribute('data-dwd'),1);saveState();renderDW();renderProgress();return;}
   if(e.target.id==='syncPush'){syncPush();return;}
   if(e.target.id==='syncPull'){syncPull();return;}
 });
@@ -1739,7 +1753,7 @@ function bootRender(){
   applyTheme(STATE.theme==='system'?'system':STATE.theme,false);
   applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);
   initToday();renderDayTabs();if(restMode!==null){renderRestDay(restMode);}else{renderWorkout();}renderDashToday();renderCalendar();
-  applyTargets();renderMeals();renderProgress();
+  applyTargets();renderMeals();renderProgress();renderDW();
   var savedView=localStorage.getItem('tcView');
   if(savedView&&$('v-'+savedView))showView(savedView);
 }
@@ -1912,13 +1926,13 @@ function _g(id){return document.getElementById(id);}
 function _s(id,v){var el=_g(id);if(el)el.textContent=v;}
 function d2fill(){try{
 var sc=STATE.scans.slice().sort(function(a,b){return a.date<b.date?-1:1;});
-var L=sc[sc.length-1],F=sc[0];
-_s('d2w',L.weight.toFixed(1));_s('d2bf',L.bf.toFixed(1));
-_s('d2lost',Math.max(0,F.weight-L.weight).toFixed(1));
+var L=sc[sc.length-1],F=sc[0],cw=curWeight(L);
+_s('d2w',cw.toFixed(1));_s('d2bf',L.bf.toFixed(1));
+_s('d2lost',Math.max(0,F.weight-cw).toFixed(1));
 var wk=Math.max(1,Math.min(9,Math.floor((Date.now()-new Date('2026-06-25').getTime())/6048e5)+1));
 _s('d2wk',wk);var wkb=_g('d2wkb');if(wkb)wkb.style.width=Math.round(wk/9*100)+'%';
 _s('d2wkchip','On track \u00b7 Wk '+wk+' of 9');
-_s('d2you','you \u00b7 '+L.weight.toFixed(1));
+_s('d2you','you \u00b7 '+cw.toFixed(1));
 _s('d2pts','\u2212'+(L.bf-12).toFixed(1)+' points to go');
 var pb=_g('pgBar');if(pb&&pb.style.width)_s('d2cutpct',parseInt(pb.style.width)+'% of the cut done');
 var d=(typeof todayProgramIdx!=='undefined'&&todayProgramIdx>=0)?PROGRAM[todayProgramIdx]:null;
