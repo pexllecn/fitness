@@ -19,7 +19,7 @@
 <link rel="preconnect" href="https://cdn.hugeicons.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" crossorigin="anonymous">
-<link rel="stylesheet" href="liquid-glass.css">
+<!-- liquid-glass.css replaced by Apple HIG Liquid Glass tab bar (test branch) -->
 
 <style>
 /* ── Apple design tokens ── */
@@ -837,6 +837,57 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
 [data-theme="dark"] body.frost-nav .tabpill-inner{
   background:color-mix(in srgb,var(--lime) 24%,rgba(255,255,255,.06));
   border-color:color-mix(in srgb,var(--lime) 32%,transparent)}
+
+/* ── Apple HIG tab bar — iOS 26 Liquid Glass recreation ──
+   Floating capsule, system chrome material, specular top edge,
+   capsule selection platter, tint-colored selected item, 10pt labels. */
+.tabbar{
+  position:fixed;z-index:60;left:50%;translate:-50%;bottom:calc(12px + env(safe-area-inset-bottom));
+  display:flex;align-items:center;gap:2px;
+  width:min(392px,calc(100% - 24px));height:64px;box-sizing:border-box;padding:4px;
+  border-radius:99em;
+  background:rgba(252,252,253,.62);
+  -webkit-backdrop-filter:blur(25px) saturate(190%);backdrop-filter:blur(25px) saturate(190%);
+  border:.5px solid rgba(255,255,255,.55);
+  box-shadow:
+    0 10px 32px rgba(0,0,0,.14),
+    0 1px 2px rgba(0,0,0,.06),
+    inset 0 1px 0 rgba(255,255,255,.65),
+    inset 0 -0.5px 0 rgba(0,0,0,.04)}
+[data-theme="dark"] .tabbar{
+  background:rgba(28,28,30,.6);
+  border-color:rgba(255,255,255,.09);
+  box-shadow:
+    0 10px 32px rgba(0,0,0,.5),
+    0 1px 2px rgba(0,0,0,.3),
+    inset 0 1px 0 rgba(255,255,255,.12),
+    inset 0 -0.5px 0 rgba(0,0,0,.25)}
+/* refractive edge: subtle inner lensing ring, the Liquid Glass signature */
+.tabbar::before{content:'';position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  box-shadow:inset 0 0 12px rgba(255,255,255,.18),inset 0 0 1px rgba(255,255,255,.4)}
+[data-theme="dark"] .tabbar::before{box-shadow:inset 0 0 12px rgba(255,255,255,.06),inset 0 0 1px rgba(255,255,255,.22)}
+.tabbar .tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  height:100%;border-radius:99em;border:none;background:none;padding:0;
+  color:rgba(60,60,67,.65);cursor:pointer;position:relative;z-index:2;
+  transition:color .25s;-webkit-tap-highlight-color:transparent}
+[data-theme="dark"] .tabbar .tab{color:rgba(235,235,245,.6)}
+.tabbar .tab .ic{width:23px;height:23px;font-size:23px;transition:transform .25s cubic-bezier(.3,1.4,.5,1)}
+.tabbar .tab .tl{font-size:10px;font-weight:600;letter-spacing:.01em}
+.tabbar .tab.active{color:var(--lime-text)}
+[data-theme="dark"] .tabbar .tab.active{color:var(--lime)}
+.tabbar .tab:active .ic{transform:scale(.88)}
+/* selection platter: capsule glass pill under the active item */
+.hig-platter{
+  position:absolute;left:4px;top:4px;height:calc(100% - 8px);width:72px;border-radius:99em;z-index:1;
+  background:rgba(255,255,255,.78);
+  box-shadow:0 3px 10px rgba(0,0,0,.12),0 .5px 1px rgba(0,0,0,.06),inset 0 1px 0 rgba(255,255,255,.9),inset 0 0 0 .5px rgba(255,255,255,.5);
+  transition:translate .35s cubic-bezier(.25,1.25,.4,1),width .35s cubic-bezier(.25,1.25,.4,1)}
+[data-theme="dark"] .hig-platter{
+  background:rgba(70,70,74,.65);
+  box-shadow:0 3px 10px rgba(0,0,0,.35),inset 0 1px 0 rgba(255,255,255,.16),inset 0 0 0 .5px rgba(255,255,255,.08)}
+@media (prefers-reduced-motion:reduce){.hig-platter,.tabbar .tab .ic{transition:none}}
+
 </style>
 </head>
 <body>
@@ -1233,9 +1284,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
   </div>
 </div>
 <div class="tabbar">
-  <div class="tg-glass"></div>
-  <div class="tg-border"></div>
-  <div class="tabpill" id="tabPill"><div class="tabpill-inner"></div></div>
+  <span class="hig-platter" id="higPlatter" aria-hidden="true"></span>
   <button class="tab active" data-v="dash" aria-label="Home"><i class="hgi-stroke hgi-home-01 ic"></i><span class="tl">Home</span></button>
   <button class="tab" data-v="workout" aria-label="Workout"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><span class="tl">Workout</span></button>
   <button class="tab" data-v="food" aria-label="Nutrition"><i class="hgi-stroke hgi-fire ic"></i><span class="tl">Fuel</span></button>
@@ -2019,6 +2068,18 @@ syncLoadInputs();
     indicator.style.top='-64px';
     label.textContent='Pull to sync';
   }
+
+/* HIG selection platter tracking */
+function higMove(){
+  var bar=document.querySelector('.tabbar'),pl=document.getElementById('higPlatter');
+  if(!bar||!pl||bar.offsetWidth===0)return;
+  var act=bar.querySelector('.tab.active');if(!act)return;
+  pl.style.width=act.offsetWidth+'px';
+  pl.style.translate=(act.offsetLeft-4)+'px 0';
+}
+var _higSV=showView;showView=function(v){_higSV(v);higMove();};
+window.addEventListener('resize',function(){higMove();});
+setTimeout(higMove,50);
 })();
 </script>
 <script>
@@ -2074,6 +2135,6 @@ l.addEventListener('drop',function(e){e.preventDefault();load(e.dataTransfer.fil
 });
 })();
 </script>
-<script src="liquid-glass.js"></script>
+<!-- liquid-glass.js replaced by Apple HIG Liquid Glass tab bar (test branch) -->
 </body>
 </html>
