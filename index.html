@@ -445,6 +445,20 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .seg2{display:flex;gap:2px;background:var(--panel);border-radius:12px;padding:3px}
 .seg2 button{flex:1;border:none;background:transparent;color:var(--muted);font-weight:500;font-size:13px;padding:10px;border-radius:9px}
 .seg2 button.on{background:var(--lime);color:var(--on-lime);font-weight:600}
+/* Sliding thumb for segmented controls (fluid tab animation) */
+@supports selector(:has(*)){
+.modetog,.seg,.seg2{position:relative;isolation:isolate}
+.modetog::before,.seg::before,.seg2::before{content:'';position:absolute;top:3px;bottom:3px;left:3px;width:calc(50% - 4px);border-radius:9px;background:var(--card);box-shadow:var(--shadow-card);transition:transform .32s cubic-bezier(.3,1.2,.36,1);z-index:0}
+.seg2::before{background:var(--lime);box-shadow:0 2px 10px color-mix(in srgb,var(--lime) 30%,transparent)}
+.modetog:has(>button:nth-child(3))::before,.seg:has(>button:nth-child(3))::before,.seg2:has(>button:nth-child(3))::before{width:calc((100% - 10px)/3)}
+.modetog:has(>button:nth-child(2).on)::before,.seg:has(>button:nth-child(2).on)::before,.seg2:has(>button:nth-child(2).on)::before{transform:translateX(calc(100% + 2px))}
+.modetog:has(>button:nth-child(3).on)::before,.seg:has(>button:nth-child(3).on)::before,.seg2:has(>button:nth-child(3).on)::before{transform:translateX(calc(200% + 4px))}
+.modetog:not(:has(button.on))::before,.seg:not(:has(button.on))::before,.seg2:not(:has(button.on))::before{opacity:0}
+.modetog button,.seg button,.seg2 button{position:relative;z-index:1;transition:color .2s,font-weight .2s}
+.modetog button.on,.seg button.on{background:transparent;box-shadow:none}
+.seg2 button.on{background:transparent}
+}
+@media (prefers-reduced-motion:reduce){.modetog::before,.seg::before,.seg2::before{transition:none}}
 .swatches{display:flex;gap:10px}
 .sw{width:40px;height:40px;border-radius:14px;border:3px solid transparent;transition:.15s}
 .sw.on{border-color:var(--text);transform:scale(1.08)}
