@@ -198,13 +198,14 @@ button{cursor:pointer}
 .daypill.rest{background:color-mix(in srgb,var(--lime) 18%,var(--card));color:var(--lime);opacity:1;box-shadow:0 1px 3px rgba(0,0,0,.06),0 0 0 1px var(--hair)}
 [data-theme="light"] .daypill.rest{color:var(--lime-text)}
 .daypill.rest.active{background:var(--lime);color:var(--on-lime);opacity:1;box-shadow:0 1px 3px rgba(0,0,0,.08),0 0 0 1px var(--hair)}
-.restday-card{background:var(--surface);border-radius:var(--r-l);padding:20px;display:flex;flex-direction:column;gap:16px}
-.restday-title{font-size:20px;font-weight:700;color:var(--ink)}
+.restday-card{background:var(--card);border-radius:var(--r);padding:20px;display:flex;flex-direction:column;gap:16px;box-shadow:var(--shadow-card)}
+.restday-title{font-size:20px;font-weight:700;color:var(--text)}
 .restday-sub{font-size:13px;color:var(--muted);margin-top:2px}
 .rest-section{display:flex;flex-direction:column;gap:8px}
 .rest-section-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
-.rest-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--ink);line-height:1.4}
-.rest-item .ck{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:var(--surface-soft);display:flex;align-items:center;justify-content:center;color:var(--ac);margin-top:1px}
+.rest-item{display:flex;align-items:flex-start;gap:10px;font-size:14px;color:var(--text);line-height:1.4}
+.rest-item .ck{flex-shrink:0;width:22px;height:22px;border-radius:50%;background:color-mix(in srgb,var(--lime) 18%,var(--panel));display:flex;align-items:center;justify-content:center;color:var(--lime);margin-top:1px}
+[data-theme="light"] .rest-item .ck{color:var(--lime-text)}
 .rest-item strong{font-weight:600}
 
 /* ── Calendar ── */
