@@ -197,6 +197,6 @@
 .tab svg { width: 22px; height: 22px; }
 .tab .tl { font-size: 9px; font-weight: 700; letter-spacing: 0.03em; text-transform: uppercase; opacity: 0.85; }
 .tab:active { opacity: 0.6; }
-.tab.active { color: var(--on-lime); }
+.tab.active { color: var(--lime-text, var(--on-lime)); }
 [data-theme="dark"] .tab.active { color: var(--lime); }
 .tab.active .tl { opacity: 1; }
