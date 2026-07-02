@@ -794,6 +794,19 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important;scroll-behavior:auto!important}
 }
+
+/* Mobile: goal → trend → chart → stat tiles → session → rest */
+@media(max-width:979px){
+#v-dash .block:has(.d2row1){display:grid;grid-template-columns:1fr 1fr;gap:12px}
+#v-dash .d2row1,#v-dash .d2main,#v-dash .d2stats,#v-dash .d2row4{display:contents}
+#v-dash .d2row1>.d2c,#v-dash .d2main>.d2c,#v-dash .d2row4>*{grid-column:1/-1}
+#v-dash .d2row1>.d2c{order:0}
+#v-dash .d2main>.d2c:first-child{order:1}
+#v-dash .d2stats>.d2c{order:2}
+#v-dash .d2main>.d2c:last-child{order:3}
+#v-dash .d2row4>*{order:4}
+#v-dash .block:has(.d2row1) .actcard{order:5;grid-column:1/-1}
+}
 </style>
 </head>
 <body>
