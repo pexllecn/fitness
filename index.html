@@ -926,7 +926,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
           <div><div class="hlab">Today's session</div><div class="hday" id="hDay">Lower A</div><div class="hsub" id="hSub">Quad lead &middot; tap any move for its form video</div></div>
           <div class="ring"><svg width="76" height="76" viewBox="0 0 76 76"><circle cx="38" cy="38" r="32" stroke="rgba(255,255,255,.16)" stroke-width="7" fill="none"/><circle class="fil" id="ringFil" cx="38" cy="38" r="32" stroke="var(--lime)" stroke-width="7" fill="none" stroke-linecap="round"/></svg><div class="rt"><b id="ringNum">0/7</b><span>Done</span></div></div>
         </div>
-        <div class="hchips"><div class="hchip"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><b id="cMoves">7</b>&nbsp;moves</div><div class="hchip"><i class="hgi-stroke hgi-bar-chart-02 ic"></i><b id="cSets">20</b>&nbsp;sets</div><div class="hchip"><i class="hgi-stroke hgi-clock-01 ic"></i><b id="cTime">~76</b>&nbsp;min</div></div>
+        <div class="hchips"><div class="hchip"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><b id="cMoves">7</b>&nbsp;moves</div><div class="hchip"><i class="hgi-stroke hgi-analytics-01 ic"></i><b id="cSets">20</b>&nbsp;sets</div><div class="hchip"><i class="hgi-stroke hgi-clock-01 ic"></i><b id="cTime">~76</b>&nbsp;min</div></div>
       </div>
     </div>
     <div class="block">
@@ -1035,7 +1035,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
     <div class="block"><div class="shead"><h2>Daily weigh-in</h2><span class="tagn">scale weight</span></div>
       <div class="card">
         <p style="color:var(--muted);margin-bottom:12px">Log your scale weight each morning, same conditions. The newest entry becomes your current weight across the app — act on the 7-day average, not any single day.</p>
-        <div class="addrow"><input type="number" step="0.1" min="30" max="300" inputmode="decimal" id="dwIn" placeholder="kg" style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text);font-size:14px;width:110px"><button class="btn solid" id="dwSave">Log today</button></div>
+        <div class="addrow" style="flex-wrap:wrap"><input type="number" step="0.1" min="30" max="300" inputmode="decimal" id="dwIn" placeholder="kg" style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text);font-size:14px;width:100px"><input type="date" id="dwDate" style="background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--text);font-size:14px;font-family:var(--font)"><button class="btn solid" id="dwSave">Log</button></div>
         <div class="kcalrow" style="margin-top:12px"><div class="kl">7-day average</div><div class="kn" id="dwAvg">–</div></div>
         <div id="dwHist" style="margin-top:10px;display:flex;flex-direction:column;gap:6px"></div>
       </div>
@@ -1074,7 +1074,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
         <div class="deficitrow"><button class="reset" id="macReset">Reset both to plan</button></div>
       </div>
       <div class="card">
-        <div class="ch"><i class="hgi-stroke hgi-bar-chart-02 ic" style="color:var(--lime-deep)"></i>Weekly bank</div>
+        <div class="ch"><i class="hgi-stroke hgi-analytics-01 ic" style="color:var(--lime-deep)"></i>Weekly bank</div>
         <p style="margin-bottom:14px">Five weekdays bank the deficit, the weekend spends some of it. The rate comes from the weekly average, not any single day.</p>
         <div class="tilegrid g2"><div class="tile soft"><div class="ti">Weekday &#215; 5</div><div class="tv" id="wkWd" style="font-size:21px">11,825<small> kcal</small></div></div><div class="tile soft"><div class="ti">Weekend &#215; 2</div><div class="tv" id="wkWe" style="font-size:21px">5,310<small> kcal</small></div></div></div>
         <div class="kcalrow" style="margin-top:14px"><div class="kl">Daily average</div><div class="kn" id="wkAvg">2,448</div></div>
@@ -1367,7 +1367,7 @@ function todayISO(){return new Date().toISOString().slice(0,10);}
 /* ---------- daily weigh-in ---------- */
 function curWeight(L){var best=L?{w:L.weight,d:L.date}:null;if(Array.isArray(STATE.daily))STATE.daily.forEach(function(e){if(e&&e.weight&&(!best||e.date>=best.d))best={w:e.weight,d:e.date};});return best?best.w:0;}
 function dwAvg7(){var cut=new Date(Date.now()-6*864e5).toISOString().slice(0,10);var a=(STATE.daily||[]).filter(function(e){return e.date>=cut;});if(!a.length)return null;return a.reduce(function(s,e){return s+e.weight;},0)/a.length;}
-function renderDW(){var el=$('dwHist');if(!el)return;byDate(STATE.daily);var av=dwAvg7();var ae=$('dwAvg');if(ae)ae.textContent=av?av.toFixed(1)+' kg':'–';el.innerHTML=STATE.daily.slice(-7).slice().reverse().map(function(e){var i=STATE.daily.indexOf(e);return '<div class="hist"><div class="hd"><b>'+shortD(e.date)+'</b><small>'+e.date.slice(8)+'/'+e.date.slice(5,7)+'</small></div><div class="hm"><span>W <b>'+e.weight.toFixed(1)+'</b> kg</span></div><button class="del" data-dwd="'+i+'">&times;</button></div>';}).join('')||'<p style="font-size:12px;color:var(--muted)">No entries yet.</p>';}
+function renderDW(){var el=$('dwHist');if(!el)return;var dd=$('dwDate');if(dd){dd.max=todayISO();if(!dd.value)dd.value=todayISO();}byDate(STATE.daily);var av=dwAvg7();var ae=$('dwAvg');if(ae)ae.textContent=av?av.toFixed(1)+' kg':'–';el.innerHTML=STATE.daily.slice(-7).slice().reverse().map(function(e){var i=STATE.daily.indexOf(e);return '<div class="hist"><div class="hd"><b>'+shortD(e.date)+'</b><small>'+e.date.slice(8)+'/'+e.date.slice(5,7)+'</small></div><div class="hm"><span>W <b>'+e.weight.toFixed(1)+'</b> kg</span></div><button class="del" data-dwd="'+i+'">&times;</button></div>';}).join('')||'<p style="font-size:12px;color:var(--muted)">No entries yet.</p>';}
 function doneSet(){var t=STATE.ticks[todayISO()];return(t&&t.key===PROGRAM[curDay].key&&Array.isArray(t.done))?t.done:[];}
 function setDone(arr){STATE.ticks[todayISO()]={key:PROGRAM[curDay].key,done:arr};saveState();}
 /* restMode: null=workout, 3=Wed rest, 0=Sun rest */
@@ -1746,7 +1746,7 @@ document.addEventListener('click',function(e){
   if(e.target.id==='copyBackup'){var code=btoa(unescape(encodeURIComponent(JSON.stringify(STATE))));var ta=$('restoreBox');ta.value=code;ta.select();try{document.execCommand('copy');}catch(_){}if(navigator.clipboard)navigator.clipboard.writeText(code).catch(function(){});toast('Backup code copied');return;}
   if(e.target.id==='restoreBtn'){try{var o=JSON.parse(decodeURIComponent(escape(atob($('restoreBox').value.trim()))));localStorage.setItem(KEY,JSON.stringify(o));loadState();bootRender();toast('Data restored');}catch(err){toast('That code did not read');}return;}
   if(e.target.id==='wipeBtn'){if(confirm('Reset all data to defaults? This clears your logs and edits.')){localStorage.removeItem(KEY);STATE=defState();bootRender();toast('All data reset');}return;}
-  if(e.target.id==='dwSave'){var dwv=parseFloat($('dwIn').value);if(!(dwv>30&&dwv<300)){toast('Enter your weight in kg');return;}var dwt=todayISO();var dwe=STATE.daily.find(function(x){return x.date===dwt;});if(dwe)dwe.weight=dwv;else STATE.daily.push({date:dwt,weight:dwv});byDate(STATE.daily);saveState();$('dwIn').value='';renderDW();renderProgress();toast('Weigh-in logged · '+dwv.toFixed(1)+' kg');return;}
+  if(e.target.id==='dwSave'){var dwv=parseFloat($('dwIn').value);if(!(dwv>30&&dwv<300)){toast('Enter your weight in kg');return;}var dwt=($('dwDate')&&$('dwDate').value)||todayISO();if(dwt>todayISO()){toast('That date is in the future');return;}var dwe=STATE.daily.find(function(x){return x.date===dwt;});if(dwe)dwe.weight=dwv;else STATE.daily.push({date:dwt,weight:dwv});byDate(STATE.daily);saveState();$('dwIn').value='';renderDW();renderProgress();toast('Weigh-in logged · '+dwv.toFixed(1)+' kg · '+fullD(dwt));return;}
   var dwd=e.target.closest('[data-dwd]');if(dwd){STATE.daily.splice(+dwd.getAttribute('data-dwd'),1);saveState();renderDW();renderProgress();return;}
   if(e.target.id==='syncPush'){syncPush();return;}
   if(e.target.id==='syncPull'){syncPull();return;}
