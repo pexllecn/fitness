@@ -2003,7 +2003,7 @@ function _spark(id,vals){var el=_g(id);if(!el||!vals||vals.length<2)return;var m
 var _wSeries=(STATE.daily||[]).slice(-14).map(function(e){return e.weight;});if(_wSeries.length<2)_wSeries=sc.map(function(x){return x.weight;});
 _spark('d2sparkW',_wSeries);
 _spark('d2sparkBF',sc.map(function(x){return x.bf;}));
-var _cutSc=sc.filter(function(x){return x.date>=B.date;});_spark('d2sparkFL',_cutSc.map(function(x){return (B.weight*B.bf-x.weight*x.bf)/100;}));
+var _cutSc=sc.filter(function(x){return x.date>=B.date;});_spark('d2sparkFL',_cutSc.map(function(x){return x.weight*x.bf/100;}));
 var _ws=_g('d2wSub');if(_ws)_ws.textContent='from '+B.weight.toFixed(1)+' start';
 var _ls=_g('d2lostSub');if(_ls)_ls.textContent='fat mass · since '+shortD(B.date);
 var _ks=_g('d2wkSub');if(_ks)_ks.textContent=(9-wk)+' to go';
