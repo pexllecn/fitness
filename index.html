@@ -73,7 +73,7 @@
   --glass-brd:rgba(255,255,255,.12); --glass-text:rgba(255,255,255,.6);
 }
 vercel-live-feedback,#__vercel_toolbar_wrapper{display:none!important}
-*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 html{-webkit-text-size-adjust:100%}
 body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.5;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;transition:background-color .3s,color .3s;overscroll-behavior-y:none}
 i.ic{width:20px;height:20px;font-size:20px;flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center}
@@ -807,6 +807,35 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 #v-dash .d2row4>*{order:4}
 #v-dash .block:has(.d2row1) .actcard{order:5;grid-column:1/-1}
 }
+
+/* iOS-style switch */
+.switchrow{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--card);border-radius:var(--r-sm);padding:12px 14px;cursor:pointer;box-shadow:var(--shadow-card)}
+.switchrow>span{font-size:14px;font-weight:600;display:flex;flex-direction:column;gap:2px}
+.switchrow>span small{font-size:11.5px;font-weight:500;color:var(--muted)}
+.switchrow input{position:absolute;opacity:0;pointer-events:none}
+.switchrow .knob{flex:0 0 auto;width:50px;height:30px;border-radius:99px;background:var(--panel);position:relative;transition:background .22s;font-style:normal}
+.switchrow .knob::after{content:'';position:absolute;top:2px;left:2px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);transition:transform .22s cubic-bezier(.3,1.2,.4,1)}
+.switchrow input:checked~.knob{background:var(--lime)}
+.switchrow input:checked~.knob::after{transform:translateX(20px)}
+.switchrow input:focus-visible~.knob{outline:2px solid var(--blue);outline-offset:2px}
+
+/* Frosted glass navigation */
+body.frost-nav .tabbar,body.frost-nav .tabbar.lg-backdrop{
+  -webkit-backdrop-filter:blur(36px) saturate(160%);backdrop-filter:blur(36px) saturate(160%);
+  background:rgba(255,255,255,.72);border:1px solid rgba(255,255,255,.9);
+  box-shadow:0 8px 30px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.95)}
+[data-theme="dark"] body.frost-nav .tabbar,[data-theme="dark"] body.frost-nav .tabbar.lg-backdrop{
+  background:rgba(24,26,29,.78);border-color:rgba(255,255,255,.1);
+  box-shadow:0 8px 30px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,255,255,.08)}
+body.frost-nav .tg-glass,body.frost-nav .tg-border{display:none}
+body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
+  -webkit-backdrop-filter:none;backdrop-filter:none;
+  background:color-mix(in srgb,var(--lime) 30%,rgba(255,255,255,.55));
+  border:1px solid color-mix(in srgb,var(--lime) 40%,transparent);
+  box-shadow:0 4px 14px color-mix(in srgb,var(--lime) 22%,transparent)}
+[data-theme="dark"] body.frost-nav .tabpill-inner{
+  background:color-mix(in srgb,var(--lime) 24%,rgba(255,255,255,.06));
+  border-color:color-mix(in srgb,var(--lime) 32%,transparent)}
 </style>
 </head>
 <body>
@@ -1122,6 +1151,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
       </div>
       <div class="setcol">
         <div class="sgroup"><h3>Theme</h3><div class="seg2" id="themeSeg"><button data-t="light" class="on">Light</button><button data-t="dark">Dark</button><button data-t="system">System</button></div></div>
+        <div class="sgroup"><h3>Navigation</h3><label class="switchrow"><span>Frosted glass bar<small>Milky frosted finish instead of clear glass</small></span><input type="checkbox" id="frostTgl" role="switch" aria-label="Frosted glass navigation bar"><i class="knob" aria-hidden="true"></i></label></div>
         <div class="sgroup"><h3>Accent</h3><div class="swatches" id="swatches"></div></div>
       <div class="card backup">
         <div class="ch"><i class="hgi-stroke hgi-floppy-disk ic"></i>Backup &amp; restore</div>
@@ -1308,10 +1338,10 @@ var SEED_D=[{date:'2026-05-17',weight:92.6},{date:'2026-06-06',weight:93.8}];
 /* ---------- state + persistence ---------- */
 var KEY='tcA-v1';
 function clone(o){return JSON.parse(JSON.stringify(o));}
-function defState(){return{targets:clone(DEFAULT_TARGETS),maint:2900,theme:'dark',accent:0,mode:'weekday',meals:clone(DEFAULT_MEALS),scans:clone(SEED_S),daily:clone(SEED_D),ticks:{}};}
+function defState(){return{targets:clone(DEFAULT_TARGETS),maint:2900,theme:'dark',accent:0,frost:false,mode:'weekday',meals:clone(DEFAULT_MEALS),scans:clone(SEED_S),daily:clone(SEED_D),ticks:{}};}
 var STATE=defState();
 function migrate(){try{var os=localStorage.getItem('tc-scans'),od=localStorage.getItem('tc-daily');if(os){var a=JSON.parse(os);if(Array.isArray(a)&&a.length)STATE.scans=a;}if(od){var b=JSON.parse(od);if(Array.isArray(b)&&b.length)STATE.daily=b;}}catch(e){}}
-function loadState(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);var d=defState();var tg=d.targets;if(o.targets&&o.targets.weekday&&o.targets.weekend){tg={weekday:Object.assign({},d.targets.weekday,o.targets.weekday),weekend:Object.assign({},d.targets.weekend,o.targets.weekend)};}else if(o.macros){tg={weekday:Object.assign({},d.targets.weekday,o.macros),weekend:clone(d.targets.weekend)};}STATE={targets:tg,maint:o.maint||d.maint,theme:o.theme||d.theme,accent:o.accent||0,mode:o.mode||'weekday',meals:o.meals&&o.meals.weekday?o.meals:d.meals,scans:Array.isArray(o.scans)&&o.scans.length?o.scans:d.scans,daily:Array.isArray(o.daily)?o.daily:d.daily,ticks:o.ticks||{}};}else{migrate();}}catch(e){STATE=defState();}}
+function loadState(){try{var r=localStorage.getItem(KEY);if(r){var o=JSON.parse(r);var d=defState();var tg=d.targets;if(o.targets&&o.targets.weekday&&o.targets.weekend){tg={weekday:Object.assign({},d.targets.weekday,o.targets.weekday),weekend:Object.assign({},d.targets.weekend,o.targets.weekend)};}else if(o.macros){tg={weekday:Object.assign({},d.targets.weekday,o.macros),weekend:clone(d.targets.weekend)};}STATE={targets:tg,maint:o.maint||d.maint,theme:o.theme||d.theme,accent:o.accent||0,frost:!!o.frost,mode:o.mode||'weekday',meals:o.meals&&o.meals.weekday?o.meals:d.meals,scans:Array.isArray(o.scans)&&o.scans.length?o.scans:d.scans,daily:Array.isArray(o.daily)?o.daily:d.daily,ticks:o.ticks||{}};}else{migrate();}}catch(e){STATE=defState();}}
 function saveState(){try{localStorage.setItem(KEY,JSON.stringify(STATE));}catch(e){}}
 
 /* ---------- macro math (split weekday / weekend) ---------- */
@@ -1711,6 +1741,7 @@ var ACCENTS=[
   {lime:'#FB7185',deep:'#F4576E',on:'#2A0A12',forest:'#5E1830',f2:'#7E2444',txt:'#C41F3E'},
   {lime:'#FF453A',deep:'#E6342A',on:'#FFFFFF',forest:'#5C130D',f2:'#7C1B12',txt:'#C41F16'}
 ];
+function applyFrost(v,save){document.body.classList.toggle('frost-nav',!!v);var t=$('frostTgl');if(t)t.checked=!!v;STATE.frost=!!v;if(save)saveState();}
 function applyAccent(i,save){i=Math.max(0,Math.min(ACCENTS.length-1,i|0));var a=ACCENTS[i];STATE.accent=i;root.style.setProperty('--lime',a.lime);root.style.setProperty('--lime-deep',a.deep);root.style.setProperty('--on-lime',a.on);root.style.setProperty('--forest',a.forest);root.style.setProperty('--forest-2',a.f2);root.style.setProperty('--lime-text',a.txt||'#3E7200');var sw=document.querySelectorAll('.sw');for(var k=0;k<sw.length;k++)sw[k].classList.toggle('on',k===i);if(save)saveState();}
 function buildSwatches(){$('swatches').innerHTML=ACCENTS.map(function(a,i){return '<button class="sw'+(i===STATE.accent?' on':'')+'" aria-label="Accent color '+(i+1)+'" data-acc="'+i+'" style="background:'+a.lime+'"></button>';}).join('');}
 
@@ -1784,6 +1815,7 @@ document.addEventListener('click',function(e){
   if(e.target.id==='macReset'){STATE.targets=clone(DEFAULT_TARGETS);STATE.maint=2900;saveState();applyTargets();toast('Reset to plan');return;}
   var mc=e.target.closest('#mchips .pill');if(mc){drawM(mc.getAttribute('data-m'));return;}
   var ts=e.target.closest('#themeSeg button');if(ts){applyTheme(ts.getAttribute('data-t'),true);return;}
+  if(e.target.id==='frostTgl'){applyFrost(e.target.checked,true);return;}
   var sw=e.target.closest('.sw');if(sw){applyAccent(+sw.getAttribute('data-acc'),true);return;}
   if(e.target.id==='sReset'){STATE.scans=clone(SEED_S);saveState();renderProgress();return;}
   var sd=e.target.closest('[data-sd]');if(sd){if(STATE.scans.length>1){STATE.scans.splice(+sd.getAttribute('data-sd'),1);saveState();renderProgress();}return;}
@@ -1814,7 +1846,7 @@ $('sSave').addEventListener('click',function(){var dt=$('sDate').value,w=parseFl
 /* ---------- boot ---------- */
 function bootRender(){
   applyTheme(STATE.theme==='system'?'system':STATE.theme,false);
-  applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);
+  applyAccent(STATE.accent,false);buildSwatches();applyAccent(STATE.accent,false);applyFrost(STATE.frost,false);
   initToday();renderDayTabs();if(restMode!==null){renderRestDay(restMode);}else{renderWorkout();}renderDashToday();renderCalendar();
   applyTargets();renderMeals();renderProgress();renderDW();
   var savedView=localStorage.getItem('tcView');
