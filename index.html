@@ -1649,15 +1649,15 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
 
     var weeksNeeded = etaWeeks != null ? Math.ceil(etaWeeks + isoDiffDays(state.cutStart, today) / 7) : state.cutWeeks;
     var K = Math.max(state.cutWeeks, Math.min(16, weeksNeeded));
-    /* current tile = the most recent checkpoint reached (last week weighed in),
-       i.e. the largest k whose checkpoint date is on/before today. This keeps
-       the highlight on your latest confirmed standing and never on a
-       future-dated tile. Before the first checkpoint it stays on week 1. */
+    /* current tile = the week we're living in — largest k whose start date
+       (the previous checkpoint) is on/before today. Tiles are labelled by
+       their start date, so the current week's label is never in the future. */
     var curIdx = 1;
-    for (var ci = 1; ci <= K; ci++) { if (checkpointISO(state, ci) <= today) curIdx = ci; else break; }
+    for (var ci = 1; ci <= K; ci++) { if (checkpointISO(state, ci - 1) <= today) curIdx = ci; else break; }
     var rows = [];
     for (var k = 1; k <= K; k++) {
       var d = checkpointISO(state, k);
+      var wkStart = checkpointISO(state, k - 1);
       var w;
       var actual = false;
       if (d <= today) {
@@ -1668,7 +1668,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
         w = startW - rate * (isoDiffDays(today, d) / 7);
       }
       w = Math.max(gw, w);
-      rows.push({ n: k, date: d, weight: w, bf: bfAt(w), actual: actual, current: k === curIdx });
+      rows.push({ n: k, date: d, start: wkStart, weight: w, bf: bfAt(w), actual: actual, current: k === curIdx });
     }
     var band = rate > 0 ? {
       etaEarly: isoAddDays(today, Math.round(toLose / (rate * 1.2) * 7)),
@@ -2380,7 +2380,7 @@ function renderProjection(P) {
     var isGoal = !goalHit && !w.actual && Math.abs(w.weight - P.goalWeight) < 0.005;
     if (isGoal) goalHit = true;
     var cls = 'pw' + (w.current ? ' now' : '') + (isGoal ? ' goal' : '');
-    return '<div class="' + cls + '"><span class="pw-n">Week ' + w.n + '</span><span class="pw-d">' + fmtDM(w.date) + (w.actual ? ' ✓' : '') + '</span><span class="pw-v">' + w.weight.toFixed(1) + '</span><span class="pw-f">' + w.bf.toFixed(1) + '% fat</span></div>';
+    return '<div class="' + cls + '"><span class="pw-n">Week ' + w.n + '</span><span class="pw-d">' + fmtDM(w.start || w.date) + (w.actual ? ' ✓' : '') + '</span><span class="pw-v">' + w.weight.toFixed(1) + '</span><span class="pw-f">' + w.bf.toFixed(1) + '% fat</span></div>';
   }).join('');
   var note;
   if (P.method === 'measured' && P.band) note = 'At ±20% of the current rate, ' + P.goalWeight.toFixed(1) + ' kg lands between ' + fmtDM(P.band.etaEarly) + ' and ' + fmtDM(P.band.etaLate) + '. Ticked weeks are your actual 7-day averages.';
