@@ -1649,6 +1649,12 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
 
     var weeksNeeded = etaWeeks != null ? Math.ceil(etaWeeks + isoDiffDays(state.cutStart, today) / 7) : state.cutWeeks;
     var K = Math.max(state.cutWeeks, Math.min(16, weeksNeeded));
+    /* current tile = the week we're commencing: first checkpoint on/after today
+       (checkpoints are the end of each 7-day block, so this is the block that
+       contains today). Falls back to the last tile once the plan is fully past. */
+    var curIdx = 0;
+    for (var ci = 1; ci <= K; ci++) { if (checkpointISO(state, ci) >= today) { curIdx = ci; break; } }
+    if (curIdx === 0) curIdx = K;
     var rows = [];
     for (var k = 1; k <= K; k++) {
       var d = checkpointISO(state, k);
@@ -1662,7 +1668,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
         w = startW - rate * (isoDiffDays(today, d) / 7);
       }
       w = Math.max(gw, w);
-      rows.push({ n: k, date: d, weight: w, bf: bfAt(w), actual: actual, current: weekOf(state, now).clamped === k });
+      rows.push({ n: k, date: d, weight: w, bf: bfAt(w), actual: actual, current: k === curIdx });
     }
     var band = rate > 0 ? {
       etaEarly: isoAddDays(today, Math.round(toLose / (rate * 1.2) * 7)),
