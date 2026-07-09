@@ -1649,12 +1649,12 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
 
     var weeksNeeded = etaWeeks != null ? Math.ceil(etaWeeks + isoDiffDays(state.cutStart, today) / 7) : state.cutWeeks;
     var K = Math.max(state.cutWeeks, Math.min(16, weeksNeeded));
-    /* current tile = the week we're commencing: first checkpoint on/after today
-       (checkpoints are the end of each 7-day block, so this is the block that
-       contains today). Falls back to the last tile once the plan is fully past. */
-    var curIdx = 0;
-    for (var ci = 1; ci <= K; ci++) { if (checkpointISO(state, ci) >= today) { curIdx = ci; break; } }
-    if (curIdx === 0) curIdx = K;
+    /* current tile = the most recent checkpoint reached (last week weighed in),
+       i.e. the largest k whose checkpoint date is on/before today. This keeps
+       the highlight on your latest confirmed standing and never on a
+       future-dated tile. Before the first checkpoint it stays on week 1. */
+    var curIdx = 1;
+    for (var ci = 1; ci <= K; ci++) { if (checkpointISO(state, ci) <= today) curIdx = ci; else break; }
     var rows = [];
     for (var k = 1; k <= K; k++) {
       var d = checkpointISO(state, k);
