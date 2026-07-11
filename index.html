@@ -1365,7 +1365,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
   var YT = 'https://www.youtube.com/results?search_query=';
   function q(s) { return YT + encodeURIComponent(s + ' proper form'); }
   var PROGRAM = [
-    { key: 'upperA', name: 'Upper A', focus: 'Heavy push · full chest', sub: 'Heavy push &amp; full chest · all 2-set compounds = top set then −10% to failure', time: '~75', ex: [
+    { key: 'upperA', name: 'Upper A', focus: 'Heavy push · full chest', sub: 'Heavy push &amp; full chest · all 2-set compounds = top set then −10% to failure', time: '~80', ex: [
       { n: 'Barbell Bench Press', sr: '2 × 6-8', rir: '2 RIR', ld: '85 → 100kg', q: q('barbell bench press'), note: 'Top set at target weight, 1 rep in reserve. Back-off: drop 10%, push to failure. Holding strength through the cut is the win.' },
       { n: 'Overhead Press', sr: '2 × 8-10', rir: '1-2 RIR', ld: '50 → 60kg', q: q('standing overhead press barbell'), note: 'Strict — no leg drive. Brace hard, ribs down. Top set then −10% back-off.' },
       { n: 'Weighted Pull-up / Pulldown', sr: '2 × 8-10', ld: 'BW → +10kg', q: q('weighted pull up'), note: 'Vertical pull anchor. Top set bodyweight, add load as reps become easy.' },
@@ -1373,7 +1373,8 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
       { n: 'Cable Crossovers', sr: '3 × 12-15', ld: 'by feel', q: q('high to low cable crossover chest'), note: 'Set cables high, cross hands at the bottom. The stretch at the top is what grows the lower chest — do not rush it.' },
       { n: 'Lateral Raise', sr: '3 × 12-15', rir: '0-1 RIR', ld: '10 → 16kg', q: q('dumbbell lateral raise'), note: 'Delt width is a goal. Strict, lead with the elbow.' },
       { n: 'Reverse Grip Triceps Pushdown', sr: '2 × 10-12', ld: 'by feel · add a plate', q: q('reverse grip triceps pushdown barbell'), note: 'Underhand grip shifts the load to the medial head — the horseshoe detail. Elbows pinned, full lockout. Top set then back-off.' },
-      { n: 'Cable Biceps Curl', sr: '2 × 10-12', ld: 'by feel · add a plate', q: q('cable biceps curl'), note: 'Constant cable tension beats dumbbells at the top. Squeeze hard, slow negative.' }
+      { n: 'Cable Biceps Curl', sr: '2 × 10-12', ld: 'by feel · add a plate', q: q('cable biceps curl'), note: 'Constant cable tension beats dumbbells at the top. Squeeze hard, slow negative.' },
+      { n: 'Barbell Wrist Curl', sr: '2 × 15-20', rir: '0-1 RIR', ld: 'by feel · light', q: q('barbell wrist curl forearm flexors'), note: 'Forearms on your thighs, palms UP — let the bar roll to your fingertips, then curl it up. Trains the flexors, the underside forearm mass. Full range, squeeze the top, no swing.' }
     ] },
     { key: 'lowerA', name: 'Lower A', focus: 'Quad lead · calves · core', sub: 'Quad lead &amp; calves · all 2-set compounds = top set then −10% to failure', time: '~75', ex: [
       { n: 'Back Squat', sr: '2 × 5-8', rir: '2 RIR', ld: '80 → 100kg', q: q('barbell back squat'), note: 'Top set heavy, 1 rep in reserve. Back-off −10%, push for extra reps. Add weight only when 8 is clean.' },
@@ -1405,7 +1406,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
       { n: 'Cable Crunch', sr: '3 × 12-15', ld: 'moderate · add load', q: q('cable crunch abs'), note: 'Upper abs. Pull from the sternum down, not the neck.' },
       { n: 'Cable Woodchop', sr: '2 × 12-15 each side', ld: 'light', q: q('cable woodchop obliques'), note: 'High cable, pull diagonally to the opposite hip. Rotate from the core, not the arms. Obliques only show when they are actually trained.' }
     ] },
-    { key: 'arms', name: 'Arms & Delts', focus: '3D symmetry · all heads', sub: 'Delts, arms &amp; forearms · your Saturday pump', time: '~65', ex: [
+    { key: 'arms', name: 'Arms & Delts', focus: '3D symmetry · all heads', sub: 'Delts, arms &amp; forearms · your Saturday pump', time: '~70', ex: [
       { n: 'DB Lateral Raise', sr: '3 × 12-15', rir: '0-1 RIR', ld: '10 → 16kg', q: q('dumbbell lateral raise'), note: 'Width is the goal. Strict, lead with the elbow, no swing.' },
       { n: 'Rear Delt Fly', sr: '3 × 15', rir: '1 RIR', ld: 'by feel', q: q('rear delt fly'), note: 'Pull with the rear delt, not the traps.' },
       { n: 'Cable Lateral Raise', sr: '2 × 15', rir: '0 RIR', ld: 'light · constant tension', q: q('cable lateral raise'), note: 'Burns the side delt from top to bottom.' },
@@ -1415,7 +1416,8 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
       { n: 'Triceps Pushdown', sr: '2 × 12-15', rir: '0-1 RIR', ld: 'by feel', q: q('rope triceps pushdown'), note: 'Lateral head pump finisher. Elbows glued, full extension each rep.' },
       { n: 'Hammer Curl + Wrist Curl', sr: '2 × 12-15 superset', ld: 'by feel', q: q('hammer curl wrist curl forearm'), note: 'Brachioradialis then wrist flexors, back to back. Palms-facing hammer for forearm thickness, then curl the bar up in your palms for the underside.' },
       { n: 'Reverse Wrist Curl', sr: '2 × 15-20', rir: '0-1 RIR', ld: 'light · strict', q: q('reverse wrist curl dumbbell forearm extensors'), note: 'Forearms flat on a bench, palms DOWN, curl the knuckles toward you. Trains the extensors — the top of the forearm the wrist curl misses. Light and full range, squeeze the top.' },
-      { n: 'Wrist Roller', sr: '2 × up-and-down', ld: 'light plate on a cord', q: q('wrist roller forearm exercise'), note: 'Arms out in front, roll the weight all the way up and back down. Burns grip plus both flexors and extensors through their full range — the finisher that ties every forearm angle together.' }
+      { n: 'Wrist Roller', sr: '2 × up-and-down', ld: 'light plate on a cord', q: q('wrist roller forearm exercise'), note: 'Arms out in front, roll the weight all the way up and back down. Burns grip plus both flexors and extensors through their full range.' },
+      { n: 'DB Pronation & Supination', sr: '2 × 12-15 each way', ld: 'light dumbbell, held by one end', q: q('dumbbell pronation supination forearm rotation'), note: 'Forearm braced on a bench, hold the dumbbell by one end and rotate the palm up then down under control. Trains the rotators the curls and wrist work miss — the last angle for complete forearms.' }
     ] }
   ];
 
@@ -2059,7 +2061,8 @@ var EXDB = {
   'Overhead Triceps Extension': _ex('0092', '5uFK1xr'), 'Incline DB Curl': _ex('0318', 'ae9UoXQ'),
   'DB Lateral Raise': _ex('0334', 'DsgkuIt'), 'Hammer Curl + Wrist Curl': _ex('0313', 'slDvUAU'),
   'Reverse EZ-Bar Curl': _ex('0451', 'Y5X65IB'), 'Reverse Wrist Curl': _ex('0082', 'LsZkfU6'),
-  'Wrist Roller': _ex('0859', 'bd5b860')
+  'Wrist Roller': _ex('0859', 'bd5b860'), 'Barbell Wrist Curl': _ex('0126', '82LxxkW'),
+  'DB Pronation & Supination': _ex('0399', '7f2jsqP')
 };
 var EX_IMGS = {
   'cat-legs': 'https://images.unsplash.com/photo-1581009146145-b5ef050c2e1e?w=300&q=70&fit=crop',
