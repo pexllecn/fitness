@@ -1136,7 +1136,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
       <div class="shead"><h2 id="projTitle">Scale path</h2><span class="tagn" id="projTag"></span></div>
       <div class="card">
         <div class="proj-top">
-          <div class="proj-stat"><span class="ps-l">Trend now</span><span class="ps-v" id="projStart">–</span></div>
+          <div class="proj-stat"><span class="ps-l">Current</span><span class="ps-v" id="projStart">–</span></div>
           <div class="proj-stat"><span class="ps-l">Rate</span><span class="ps-v" id="projRate">–</span></div>
           <div class="proj-stat"><span class="ps-l">Goal lands</span><span class="ps-v" id="projEta">–</span></div>
         </div>
@@ -1655,7 +1655,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
     else { method = 'plan'; rate = planRate; }
 
     var series = trendSeries(state.daily);
-    var startW = trendNow(state, now);          // current trend weight
+    var startW = curWeight(state);              // current weight = latest logged weigh-in
     var startAnchor = cutStartWeight(state);    // weight on the cut-start date
 
     var toLose = Math.max(0, startW - gw);
@@ -2551,7 +2551,7 @@ function renderPlanInputs() {
 function dashFill() {
   try {
     var sc = STATE.scans.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
-    var L = sc[sc.length - 1], cw = KF.trendNow(STATE, new Date()), B = KF.baselineScan(STATE);
+    var L = sc[sc.length - 1], cw = KF.curWeight(STATE), B = KF.baselineScan(STATE);
     var startW = KF.cutStartWeight(STATE);
     var _s = function (id, val) { var el = $(id); if (el) el.textContent = val; };
     _s('d2w', cw.toFixed(1)); _s('d2bf', L.bf.toFixed(1));
