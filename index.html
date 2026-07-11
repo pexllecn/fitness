@@ -1554,6 +1554,22 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
     for (var i = 0; i < series.length; i++) { if (series[i].date <= iso) v = series[i].trend; else break; }
     return v;
   }
+  /* Canonical "current weight" for display everywhere: the EWMA trend at today,
+     falling back to the latest raw entry. */
+  function trendNow(state, now) {
+    var t = trendAt(trendSeries(state.daily), todayISO(now));
+    return t != null ? t : curWeight(state);
+  }
+  /* Canonical "cut-start weight": the 7-day average ending on the cut-start
+     date, else the trend there, else the latest weight. This is the Week-1
+     value and the "X start" reference used across every screen. */
+  function cutStartWeight(state) {
+    var a = avgRange(state, isoAddDays(state.cutStart, -6), state.cutStart);
+    if (a != null) return a;
+    var t = trendAt(trendSeries(state.daily), state.cutStart);
+    if (t != null) return t;
+    return curWeight(state);
+  }
   /* Least-squares slope on RAW weights over the last `days`, in kg/week.
      Regression over 7+ daily points is itself the noise filter; using the
      EWMA here would understate the rate badly on short histories (the trend
@@ -1639,8 +1655,8 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
     else { method = 'plan'; rate = planRate; }
 
     var series = trendSeries(state.daily);
-    var startW = trendAt(series, today);
-    if (startW == null) startW = curWeight(state);
+    var startW = trendNow(state, now);          // current trend weight
+    var startAnchor = cutStartWeight(state);    // weight on the cut-start date
 
     var toLose = Math.max(0, startW - gw);
     var etaWeeks = rate > 0 ? toLose / rate : null;
@@ -1655,21 +1671,26 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
        their start date, so the current week's label is never in the future. */
     var curIdx = 1;
     for (var ci = 1; ci <= K; ci++) { if (checkpointISO(state, ci - 1) <= today) curIdx = ci; else break; }
+    /* Each tile is the week commencing wkStart (its label). Its weight is the
+       weight AT that start date: the real 7-day average if we have it (✓),
+       otherwise a straight line from the cut-start anchor to today's trend for
+       past weeks, and the rate projection forward for future weeks. This keeps
+       the number under each date honest and monotonic. */
+    var elapsed = Math.max(1, isoDiffDays(state.cutStart, today));
     var rows = [];
     for (var k = 1; k <= K; k++) {
-      var d = checkpointISO(state, k);
       var wkStart = checkpointISO(state, k - 1);
-      var w;
-      var actual = false;
-      if (d <= today) {
-        var a = avgRange(state, isoAddDays(d, -6), d);
-        if (a != null) { w = a; actual = true; }
-        else { w = startW + rate * (isoDiffDays(d, today) / 7); }
+      var w, actual = false;
+      var a = wkStart <= today ? avgRange(state, isoAddDays(wkStart, -6), wkStart) : null;
+      if (a != null) { w = a; actual = true; }
+      else if (wkStart <= today) {
+        var frac = Math.min(1, Math.max(0, isoDiffDays(state.cutStart, wkStart) / elapsed));
+        w = startAnchor + frac * (startW - startAnchor);
       } else {
-        w = startW - rate * (isoDiffDays(today, d) / 7);
+        w = startW - rate * (isoDiffDays(today, wkStart) / 7);
       }
       w = Math.max(gw, w);
-      rows.push({ n: k, date: d, start: wkStart, weight: w, bf: bfAt(w), actual: actual, current: k === curIdx });
+      rows.push({ n: k, date: checkpointISO(state, k), start: wkStart, weight: w, bf: bfAt(w), actual: actual, current: k === curIdx });
     }
     var band = rate > 0 ? {
       etaEarly: isoAddDays(today, Math.round(toLose / (rate * 1.2) * 7)),
@@ -1677,7 +1698,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
     } : null;
 
     return {
-      method: method, ratePerWeek: rate, startWeight: startW, goalWeight: gw,
+      method: method, ratePerWeek: rate, startWeight: startW, startAnchor: startAnchor, goalWeight: gw,
       goalBf: state.goalBf, leanMass: lean, toLose: toLose,
       etaWeeks: etaWeeks, etaDate: etaDate, band: band, weeks: rows,
       cutEnd: checkpointISO(state, state.cutWeeks)
@@ -1964,7 +1985,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
     goalWeight: goalWeight, cutProgress: cutProgress, curWeight: curWeight,
     validateWeighIn: validateWeighIn, upsertDaily: upsertDaily,
     avgRange: avgRange, avg7: avg7, weeklyTrendDelta: weeklyTrendDelta,
-    trendSeries: trendSeries, trendAt: trendAt, slopeKgPerWeek: slopeKgPerWeek,
+    trendSeries: trendSeries, trendAt: trendAt, trendNow: trendNow, cutStartWeight: cutStartWeight, slopeKgPerWeek: slopeKgPerWeek,
     estimateTDEE: estimateTDEE,
     weekOf: weekOf, checkpointISO: checkpointISO, buildProjection: buildProjection,
     recommendations: recommendations, statusChip: statusChip,
@@ -1993,7 +2014,9 @@ var $ = function (id) { return document.getElementById(id); };
 function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]; }); }
 function toast(m) { var t = $('toast'); t.textContent = m; t.classList.add('show'); clearTimeout(t._t); t._t = setTimeout(function () { t.classList.remove('show'); }, 1900); }
 var MMS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+var DOWS = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 function fmtDM(iso) { var p = iso.split('-'); return (+p[2]) + ' ' + MMS[+p[1] - 1]; }
+function dow(iso) { var p = iso.split('-'); return DOWS[new Date(Date.UTC(+p[0], +p[1] - 1, +p[2])).getUTCDay()]; }
 
 /* ── state ─────────────────────────────────────────────────────────────── */
 var STORE = KF.createStore(window.localStorage);
@@ -2397,7 +2420,7 @@ function renderDW() {
   var ae = $('dwAvg'); if (ae) ae.textContent = av ? av.toFixed(1) + ' kg' : '–';
   el.innerHTML = STATE.daily.slice(-7).slice().reverse().map(function (e) {
     var i = STATE.daily.indexOf(e);
-    return '<div class="hist"><div class="hd"><b>' + KF.shortD(e.date) + '</b><small>' + e.date.slice(8) + '/' + e.date.slice(5, 7) + '</small></div><div class="hm"><span>W <b>' + e.weight.toFixed(1) + '</b> kg</span></div><button class="del" aria-label="Delete weigh-in" data-dwd="' + i + '">&times;</button></div>';
+    return '<div class="hist"><div class="hd"><b>' + fmtDM(e.date) + '</b><small>' + dow(e.date) + '</small></div><div class="hm"><span>W <b>' + e.weight.toFixed(1) + '</b> kg</span></div><button class="del" aria-label="Delete weigh-in" data-dwd="' + i + '">&times;</button></div>';
   }).join('') || '<p style="font-size:12px;color:var(--muted)">No entries yet.</p>';
 }
 function drawM(m) {
@@ -2466,7 +2489,7 @@ function renderSHist() {
   $('sCount').textContent = STATE.scans.length + ' logged';
   $('sHist').innerHTML = STATE.scans.slice().reverse().map(function (s, ri) {
     var idx = STATE.scans.length - 1 - ri;
-    return '<div class="hist"><div class="hd"><b>' + KF.shortD(s.date) + '</b><small>' + s.date.slice(8) + '/' + s.date.slice(5, 7) + '</small></div><div class="hm"><span>W <b>' + s.weight.toFixed(1) + '</b> kg</span><span>BF <b>' + s.bf.toFixed(1) + '</b>%</span>' + (s.muscle != null ? '<span>Mus <b>' + s.muscle.toFixed(1) + '</b> kg</span>' : '') + '</div><button class="del" aria-label="Delete scan" data-sd="' + idx + '">&times;</button></div>';
+    return '<div class="hist"><div class="hd"><b>' + fmtDM(s.date) + '</b><small>' + s.date.slice(0, 4) + '</small></div><div class="hm"><span>W <b>' + s.weight.toFixed(1) + '</b> kg</span><span>BF <b>' + s.bf.toFixed(1) + '</b>%</span>' + (s.muscle != null ? '<span>Mus <b>' + s.muscle.toFixed(1) + '</b> kg</span>' : '') + '</div><button class="del" aria-label="Delete scan" data-sd="' + idx + '">&times;</button></div>';
   }).join('') + '<button class="reset" id="sReset">Reset to Tanita history</button>';
 }
 function renderProgress() {
@@ -2477,9 +2500,7 @@ function renderProgress() {
   $('pgWnow').textContent = P.startWeight.toFixed(1);
   $('pgGoalTop').innerHTML = '&#8594; ' + gw.toFixed(1);
   $('pgGoalLbl').textContent = gw.toFixed(1) + ' goal';
-  var startAt = KF.trendAt(KF.trendSeries(STATE.daily), STATE.cutStart);
-  if (startAt == null) startAt = KF.baselineScan(STATE).weight;
-  $('pgStartLbl').textContent = startAt.toFixed(1) + ' start';
+  $('pgStartLbl').textContent = P.startAnchor.toFixed(1) + ' start';
   $('pgToGo').textContent = '~' + (P.toLose > 0.05 ? P.toLose.toFixed(1) : '0') + 'kg to go · ' + P.ratePerWeek.toFixed(2) + ' kg a week (' + (P.method === 'measured' ? 'measured' : 'plan') + ').';
   var prog = KF.cutProgress(STATE);
   $('pgBar').style.width = prog.toFixed(0) + '%';
@@ -2530,7 +2551,8 @@ function renderPlanInputs() {
 function dashFill() {
   try {
     var sc = STATE.scans.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
-    var L = sc[sc.length - 1], cw = KF.curWeight(STATE), B = KF.baselineScan(STATE);
+    var L = sc[sc.length - 1], cw = KF.trendNow(STATE, new Date()), B = KF.baselineScan(STATE);
+    var startW = KF.cutStartWeight(STATE);
     var _s = function (id, val) { var el = $(id); if (el) el.textContent = val; };
     _s('d2w', cw.toFixed(1)); _s('d2bf', L.bf.toFixed(1));
     _s('d2lost', Math.max(0, KF.fatMass(B) - KF.fatMass(L)).toFixed(1));
@@ -2558,7 +2580,7 @@ function dashFill() {
     spark('d2sparkBF', sc.map(function (x) { return x.bf; }));
     var cutSc = sc.filter(function (x) { return x.date >= B.date; });
     spark('d2sparkFL', cutSc.map(function (x) { return KF.fatMass(x); }));
-    var ws = $('d2wSub'); if (ws) ws.textContent = 'from ' + B.weight.toFixed(1) + ' start';
+    var ws = $('d2wSub'); if (ws) ws.textContent = 'from ' + startW.toFixed(1) + ' start';
     var bs = $('d2bfSub'); if (bs) bs.textContent = 'target ' + STATE.goalBf + '%';
     var ls = $('d2lostSub'); if (ls) ls.textContent = 'fat mass · since ' + KF.shortD(B.date);
     var ks = $('d2wkSub'); if (ks) ks.textContent = (STATE.cutWeeks - wk) + ' to go';
