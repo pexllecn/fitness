@@ -719,10 +719,10 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 [data-theme="light"] .d2next-title{color:var(--lime-text)}
 .d2next-by{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em;white-space:nowrap}
 .d2nextrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
-.d2nextrow>div{display:flex;flex-direction:column;gap:3px}
-.d2nl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2)}
+.d2nextrow>div{display:block}
+.d2nl{display:block;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2);margin-bottom:4px}
 .d2nextrow b{font-size:28px;font-weight:900;letter-spacing:-.02em;line-height:1}
-.d2nextrow small{font-size:12px;color:var(--muted);font-weight:600}
+.d2nextrow small{font-size:12px;color:var(--muted);font-weight:600;margin-left:5px}
 .d2next-note{font-size:12px;color:var(--muted);font-weight:500;margin-top:12px;line-height:1.4}
 .d2c{background:radial-gradient(120% 150% at 0% 0%,color-mix(in srgb,var(--lime) 7%,transparent),transparent 55%),linear-gradient(180deg,#15181B,#101214);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:20px;color:#F0F2EE}
 [data-theme="light"] .d2c{background:var(--card);border:1px solid rgba(24,28,12,.08);color:var(--text)}
@@ -2681,16 +2681,22 @@ function renderScaleGraphs() {
     /* fat mass */
     var scCut = sc.filter(function (s) { return s.date >= cutStart; });
     var B0 = KF.baselineScan(STATE);
+    /* carry each scan-based metric forward to today so its "current" dot
+       lands on the shared TODAY line, exactly like the weight lane */
+    function toToday(arr) { var last = arr[arr.length - 1]; if (last && last.date < today) arr.push({ date: today, y: last.y }); return arr; }
     var fA = scCut.map(function (s) { return { date: s.date, y: KF.fatMass(s) }; });
     if (!fA.length || fA[0].date > cutStart) fA.unshift({ date: cutStart, y: KF.fatMass(B0) });
+    toToday(fA);
     var goalFat = P.goalWeight * STATE.goalBf / 100;
     /* muscle — hold the line */
     var mA = scCut.map(function (s) { return { date: s.date, y: (s.muscle != null ? s.muscle : KF.ffm(s)) }; });
     if (!mA.length || mA[0].date > cutStart) mA.unshift({ date: cutStart, y: (B0.muscle != null ? B0.muscle : KF.ffm(B0)) });
+    toToday(mA);
     var holdMus = mA[mA.length - 1].y;
-    /* body-fat % — plotted on its own right-hand axis */
+    /* body-fat % */
     var pA = scCut.map(function (s) { return { date: s.date, y: s.bf }; });
     if (!pA.length || pA[0].date > cutStart) pA.unshift({ date: cutStart, y: B0.bf });
+    toToday(pA);
     /* combined body-composition chart — weight, fat, muscle, bf% on one canvas */
     var gc = $('gCombo');
     if (gc) gc.innerHTML = comboGraphSVG({
