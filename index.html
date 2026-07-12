@@ -804,15 +804,26 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 
 /* Mobile: goal → trend → chart → stat tiles → session → rest */
 @media(max-width:979px){
+.d2graphs{display:grid;gap:12px;grid-template-columns:1fr;margin-top:12px}
+.d2next{margin-top:12px}
+.d2nextrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+.d2nextrow>div{display:flex;flex-direction:column;gap:2px}
+.d2nl{font-size:10px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2)}
+.d2nextrow b{font-size:22px;font-weight:800;letter-spacing:-.01em;line-height:1}
+.d2nextrow small{font-size:11px;color:var(--muted);font-weight:600}
+@media(min-width:980px){.d2graphs{grid-template-columns:1fr 1fr}}
 #v-dash .block:has(.d2row1){display:grid;grid-template-columns:1fr 1fr;gap:12px}
-#v-dash .d2row1,#v-dash .d2main,#v-dash .d2stats,#v-dash .d2row4{display:contents}
-#v-dash .d2row1>.d2c,#v-dash .d2main>.d2c,#v-dash .d2row4>*{grid-column:1/-1}
+#v-dash .d2row1,#v-dash .d2main,#v-dash .d2stats,#v-dash .d2row4,#v-dash .d2graphs{display:contents}
+#v-dash .d2row1>.d2c,#v-dash .d2main>.d2c,#v-dash .d2row4>*,#v-dash .d2next,#v-dash .d2graphs>.d2c{grid-column:1/-1}
 #v-dash .d2row1>.d2c{order:0}
 #v-dash .d2main>.d2c:first-child{order:1}
-#v-dash .d2stats>.d2c{order:2}
-#v-dash .d2main>.d2c:last-child{order:3}
-#v-dash .d2row4>*{order:4}
-#v-dash .block:has(.d2row1) .actcard{order:5;grid-column:1/-1}
+#v-dash .d2next{order:2}
+#v-dash .d2graphs>.d2c:first-child{order:3}
+#v-dash .d2graphs>.d2c:last-child{order:4}
+#v-dash .d2stats>.d2c{order:5}
+#v-dash .d2main>.d2c:last-child{order:6}
+#v-dash .d2row4>*{order:7}
+#v-dash .block:has(.d2row1) .actcard{order:8;grid-column:1/-1}
 }
 
 /* iOS-style switch */
@@ -946,7 +957,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
       </div>
       <div class="d2main">
       <div class="d2c"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="d2lbl">Scale path</div><div style="font-size:17px;font-weight:800;margin-top:6px">Am I on the line?</div></div><span class="d2chip">&#8722;0.6 kg / wk plan</span></div>
-        <svg width="100%" viewBox="0 0 560 210" style="margin-top:14px"><defs><linearGradient id="d2ga" x1="0" y1="0" x2="0" y2="1"><stop offset="0" style="stop-color:var(--lime)" stop-opacity=".14"/><stop offset="1" style="stop-color:var(--lime)" stop-opacity="0"/></linearGradient></defs><path d="M20,20 L78,35 L136,54 L194,72 L252,91 L310,109 L368,128 L426,146 L484,165 L542,180 L542,210 L20,210 Z" fill="url(#d2ga)"/><line class="d2cg" x1="20" y1="60" x2="542" y2="60"/><line class="d2cg" x1="20" y1="110" x2="542" y2="110"/><line class="d2cg" x1="20" y1="160" x2="542" y2="160"/><polyline points="20,20 78,35 136,54 194,72 252,91 310,109 368,128 426,146 484,165 542,180" fill="none" class="d2cp" stroke-width="2" stroke-dasharray="5 6"/><polyline points="20,20 46,26" fill="none" stroke="var(--lime)" stroke-width="3" stroke-linecap="round"/><circle cx="46" cy="26" r="5" fill="var(--lime)"/><circle cx="46" cy="26" r="10" fill="none" stroke="var(--lime)" opacity=".4"/><text x="60" y="24" class="d2cy" id="d2you">you &middot; 92.6</text><text x="542" y="200" text-anchor="end" class="d2ct">87.5 &middot; Wk 9 &middot; 27 Aug</text><text x="20" y="205" class="d2ct">Wk 0</text></svg>
+        <div id="gWeight" style="margin-top:14px;min-height:150px"></div>
         <div class="d2mut" style="font-size:12.5px;margin-top:6px">Avg deficit <b class="d2acc" id="pgDef">–</b> kcal &middot; avg intake <b id="pgIntake">–</b> kcal. Hold the weekday plan and the line holds.</div></div>
       <div class="d2c" style="padding:14px 20px 20px"><label class="d2photo d2inphoto"><input type="file" accept="image/*" hidden data-photo="session"><img alt="" style="display:none"><span class="d2ph">session cover &mdash; drop or <u>browse</u></span></label>
         <div style="display:flex;justify-content:space-between;align-items:center"><div class="d2lbl">Today's session</div><span class="d2acc" style="font-size:12px;font-weight:800" id="dashDone">0/7 done</span></div>
@@ -956,6 +967,19 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
         <div class="d2move" style="margin-top:8px"><span id="d2m1">Back Squat</span><span class="d2mut" id="d2m1s">2 &#215; 5-8</span></div>
         <div class="d2move"><span id="d2m2">Romanian Deadlift</span><span class="d2mut" id="d2m2s">2 &#215; 8-10</span></div>
         <button class="d2btn" data-v="workout">Start session</button></div>
+      </div>
+      <div class="d2c d2next">
+        <div style="display:flex;justify-content:space-between;align-items:baseline"><div class="d2lbl">This week's target</div><span class="d2mut" style="font-size:11.5px" id="nBy">–</span></div>
+        <div class="d2nextrow">
+          <div><span class="d2nl">Weight</span><b id="nWeight">–</b><small>kg</small></div>
+          <div><span class="d2nl">Fat mass</span><b id="nFat">–</b><small>kg</small></div>
+          <div><span class="d2nl">Muscle</span><b id="nMus">–</b><small>kg</small></div>
+        </div>
+        <div class="d2mut" style="font-size:11.5px;margin-top:8px" id="nNote">Hit the weight, keep fat falling and hold the muscle line.</div>
+      </div>
+      <div class="d2graphs">
+        <div class="d2c"><div class="d2lbl-row"><i class="hgi-stroke hgi-fire d2lbl-ic" style="color:#F2701A"></i><span class="d2lbl">Fat mass</span></div><div id="gFat" style="margin-top:10px;min-height:140px"></div><div class="d2mut" style="font-size:11px;margin-top:4px">From your body-fat scans — the number that matters most on a cut.</div></div>
+        <div class="d2c"><div class="d2lbl-row"><i class="hgi-stroke hgi-dumbbell-01 d2lbl-ic" style="color:#2E86F0"></i><span class="d2lbl">Muscle mass</span></div><div id="gMuscle" style="margin-top:10px;min-height:140px"></div><div class="d2mut" style="font-size:11px;margin-top:4px">Hold this line — keeping muscle is the win during the cut.</div></div>
       </div>
       <div class="d2stats">
       <div class="d2c"><div class="d2lbl-row"><i class="hgi-stroke hgi-analytics-01 d2lbl-ic"></i><span class="d2lbl">Weight</span></div><div class="d2num"><span id="d2w">92.6</span> <span class="d2mut" style="font-size:14px">kg</span></div><div class="d2sub" id="d2wSub">from 92.8 start</div><svg class="d2spark" width="90" height="26" viewBox="0 0 90 26" aria-hidden="true"><polyline id="d2sparkW" points="" fill="none" stroke="var(--lime)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
@@ -2559,8 +2583,83 @@ function renderPlanInputs() {
 }
 
 /* ── dashboard fill (v1 d2fill, fully computed) ────────────────────────── */
+/* ── scale-path graphs (weight / fat / muscle) ─────────────────────────── */
+function scaleGraphSVG(cfg) {
+  var W = 560, H = 190, L = 10, R = 12, T = 18, B = 26;
+  var t0 = Date.parse(cfg.x0 + 'T00:00:00Z'), t1 = Date.parse(cfg.x1 + 'T00:00:00Z');
+  var span = (t1 - t0) || 1;
+  function px(iso) { return L + (Date.parse(iso + 'T00:00:00Z') - t0) / span * (W - L - R); }
+  var pts = cfg.actual.filter(function (p) { return p.y != null && isFinite(p.y); });
+  if (pts.length < 1) return '';
+  var last = pts[pts.length - 1];
+  var ys = pts.map(function (p) { return p.y; }).concat([cfg.projY]);
+  var mn = Math.min.apply(null, ys), mx = Math.max.apply(null, ys), sp = (mx - mn) || 1;
+  var pad = sp * 0.28; mn -= pad; mx += pad; sp = mx - mn;
+  function py(v) { return T + (1 - (v - mn) / sp) * (H - T - B); }
+  var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + px(p.date).toFixed(1) + ' ' + py(p.y).toFixed(1); }).join(' ');
+  var area = 'M' + px(pts[0].date).toFixed(1) + ' ' + (H - B) + ' ' +
+    pts.map(function (p) { return 'L' + px(p.date).toFixed(1) + ' ' + py(p.y).toFixed(1); }).join(' ') +
+    ' L' + px(last.date).toFixed(1) + ' ' + (H - B) + ' Z';
+  var lx = px(last.date), ly = py(last.y);
+  var gx = px(cfg.x1), gy = py(cfg.projY);
+  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block;overflow:visible">';
+  svg += '<defs><linearGradient id="' + cfg.gid + '" x1="0" y1="0" x2="0" y2="1">' +
+    '<stop offset="0" stop-color="' + cfg.color + '" stop-opacity="0.24"/>' +
+    '<stop offset="1" stop-color="' + cfg.color + '" stop-opacity="0"/></linearGradient></defs>';
+  for (var g = 0; g <= 2; g++) { var yy = T + g * (H - T - B) / 2; svg += '<line x1="' + L + '" y1="' + yy.toFixed(1) + '" x2="' + (W - R) + '" y2="' + yy.toFixed(1) + '" class="d2cg"/>'; }
+  svg += '<path d="' + area + '" fill="url(#' + cfg.gid + ')"/>';
+  svg += '<path d="' + line + '" fill="none" stroke="' + cfg.color + '" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>';
+  svg += '<line x1="' + lx.toFixed(1) + '" y1="' + ly.toFixed(1) + '" x2="' + gx.toFixed(1) + '" y2="' + gy.toFixed(1) + '" stroke="var(--muted2,#8a8f98)" stroke-width="2" stroke-dasharray="5 5" opacity="0.7"/>';
+  svg += '<circle cx="' + gx.toFixed(1) + '" cy="' + gy.toFixed(1) + '" r="3.5" fill="none" stroke="var(--muted2,#8a8f98)" stroke-width="2"/>';
+  svg += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="7" fill="' + cfg.color + '" opacity="0.22"/>';
+  svg += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="3.6" fill="' + cfg.color + '"/>';
+  svg += '<text x="' + Math.min(lx, W - 60).toFixed(1) + '" y="' + Math.max(12, ly - 11).toFixed(1) + '" class="d2ct" fill="' + cfg.color + '">' + cfg.actual[0].y.toFixed(1) + '→' + last.y.toFixed(1) + ' kg</text>';
+  svg += '<text x="' + (W - R).toFixed(1) + '" y="' + Math.max(12, gy - 9).toFixed(1) + '" class="d2ct" text-anchor="end" fill="var(--muted)">goal ' + cfg.projY.toFixed(1) + '</text>';
+  svg += '</svg>';
+  return svg;
+}
+function renderScaleGraphs() {
+  try {
+    var P = KF.buildProjection(STATE, new Date());
+    var today = KF.todayISO(), cutStart = STATE.cutStart, goalDate = P.cutEnd;
+    var sc = STATE.scans.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
+    /* weight */
+    var ser = KF.trendSeries(STATE.daily).filter(function (p) { return p.date >= cutStart; });
+    var wA = ser.map(function (p) { return { date: p.date, y: p.trend }; });
+    if (!wA.length || wA[0].date > cutStart) wA.unshift({ date: cutStart, y: P.startAnchor });
+    if (wA[wA.length - 1].date < today) wA.push({ date: today, y: P.startWeight });
+    else wA[wA.length - 1].y = P.startWeight;
+    var gw = $('gWeight'); if (gw) gw.innerHTML = scaleGraphSVG({ gid: 'ggW', color: 'var(--lime)', x0: cutStart, x1: goalDate, actual: wA, projY: P.goalWeight });
+    /* fat mass */
+    var scCut = sc.filter(function (s) { return s.date >= cutStart; });
+    var B0 = KF.baselineScan(STATE);
+    var fA = scCut.map(function (s) { return { date: s.date, y: KF.fatMass(s) }; });
+    if (!fA.length || fA[0].date > cutStart) fA.unshift({ date: cutStart, y: KF.fatMass(B0) });
+    var goalFat = P.goalWeight * STATE.goalBf / 100;
+    var gf = $('gFat'); if (gf) gf.innerHTML = scaleGraphSVG({ gid: 'ggF', color: '#F2701A', x0: cutStart, x1: goalDate, actual: fA, projY: goalFat });
+    /* muscle — hold the line */
+    var mA = scCut.map(function (s) { return { date: s.date, y: (s.muscle != null ? s.muscle : KF.ffm(s)) }; });
+    if (!mA.length || mA[0].date > cutStart) mA.unshift({ date: cutStart, y: (B0.muscle != null ? B0.muscle : KF.ffm(B0)) });
+    var holdMus = mA[mA.length - 1].y;
+    var gm = $('gMuscle'); if (gm) gm.innerHTML = scaleGraphSVG({ gid: 'ggM', color: '#2E86F0', x0: cutStart, x1: goalDate, actual: mA, projY: holdMus });
+    /* coming-week targets */
+    var wk = KF.weekOf(STATE, new Date()).clamped;
+    var nextChk = KF.checkpointISO(STATE, Math.min(STATE.cutWeeks, wk));
+    var tW = Math.max(P.goalWeight, P.startWeight - P.ratePerWeek);
+    var lastFat = fA[fA.length - 1].y, fatRate = P.ratePerWeek * 0.75;
+    var tF = Math.max(goalFat, lastFat - fatRate);
+    var _s = function (id, v) { var el = $(id); if (el) el.textContent = v; };
+    _s('nBy', 'by ' + KF.fullD(nextChk));
+    _s('nWeight', tW.toFixed(1));
+    _s('nFat', tF.toFixed(1));
+    _s('nMus', holdMus.toFixed(1));
+    _s('nNote', 'Get to ' + tW.toFixed(1) + ' kg (−' + (P.startWeight - tW).toFixed(1) + '), keep fat falling, hold muscle at ~' + holdMus.toFixed(1) + ' kg.');
+  } catch (e) {}
+}
+
 function dashFill() {
   try {
+    renderScaleGraphs();
     var sc = STATE.scans.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; });
     var L = sc[sc.length - 1], cw = KF.curWeight(STATE), B = KF.baselineScan(STATE);
     var startW = KF.cutStartWeight(STATE);
