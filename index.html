@@ -718,7 +718,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .d2next-title{font-size:22px;font-weight:900;letter-spacing:-.03em;line-height:1.1;color:var(--lime)}
 [data-theme="light"] .d2next-title{color:var(--lime-text)}
 .d2next-by{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em;white-space:nowrap}
-.d2nextrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.d2nextrow{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:14px}
 .d2nextrow>div{display:flex;flex-direction:column;gap:3px}
 .d2nl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2)}
 .d2nextrow b{font-size:28px;font-weight:900;letter-spacing:-.02em;line-height:1}
@@ -951,7 +951,8 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
       <div class="d2next-head"><span class="d2next-title">This week's target</span><span class="d2next-by" id="nBy">–</span></div>
       <div class="d2nextrow">
         <div><span class="d2nl">Weight</span><b id="nWeight">–</b><small>kg</small></div>
-        <div><span class="d2nl">Fat</span><b id="nFat">–</b><small>kg</small></div>
+        <div><span class="d2nl">Body fat</span><b id="nBfp">–</b><small>%</small></div>
+        <div><span class="d2nl">Fat mass</span><b id="nFat">–</b><small>kg</small></div>
         <div><span class="d2nl">Muscle</span><b id="nMus">–</b><small>kg</small></div>
       </div>
       <div class="d2next-note" id="nNote">Hit the weight, keep fat falling and hold the muscle line.</div>
@@ -2703,12 +2704,14 @@ function renderScaleGraphs() {
     var tW = Math.max(P.goalWeight, P.startWeight - P.ratePerWeek);
     var lastFat = fA[fA.length - 1].y, fatRate = P.ratePerWeek * 0.75;
     var tF = Math.max(goalFat, lastFat - fatRate);
+    var tBfp = Math.max(STATE.goalBf, tW > 0 ? (1 - P.leanMass / tW) * 100 : STATE.goalBf);
     var _s = function (id, v) { var el = $(id); if (el) el.textContent = v; };
     _s('nBy', 'by ' + KF.fullD(nextChk));
     _s('nWeight', tW.toFixed(1));
+    _s('nBfp', tBfp.toFixed(1));
     _s('nFat', tF.toFixed(1));
     _s('nMus', holdMus.toFixed(1));
-    _s('nNote', 'Get to ' + tW.toFixed(1) + ' kg (−' + (P.startWeight - tW).toFixed(1) + '), keep fat falling, hold muscle at ~' + holdMus.toFixed(1) + ' kg.');
+    _s('nNote', 'Get to ' + tW.toFixed(1) + ' kg / ' + tBfp.toFixed(1) + '% body fat, keep fat mass falling, hold muscle at ~' + holdMus.toFixed(1) + ' kg.');
   } catch (e) {}
 }
 
