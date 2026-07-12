@@ -707,6 +707,19 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .d2stats{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin-top:12px}
 .d2main{display:grid;gap:12px;grid-template-columns:1fr;margin-top:12px}
 .d2row4{display:grid;gap:12px;grid-template-columns:1fr;margin-top:12px}
+.d2graphs{display:grid;gap:12px;grid-template-columns:1fr 1fr;margin-top:12px}
+.d2next{margin:0 0 12px;padding:20px;border-radius:var(--r);background:radial-gradient(140% 120% at 0% 0%,color-mix(in srgb,var(--lime) 18%,transparent),transparent 60%),linear-gradient(180deg,#15181B,#101214);border:1.5px solid color-mix(in srgb,var(--lime) 35%,transparent);box-shadow:0 0 24px color-mix(in srgb,var(--lime) 12%,transparent)}
+[data-theme="light"] .d2next{background:radial-gradient(140% 120% at 0% 0%,color-mix(in srgb,var(--lime) 14%,transparent),transparent 60%),var(--card);border-color:color-mix(in srgb,var(--lime) 30%,transparent);box-shadow:0 0 20px color-mix(in srgb,var(--lime) 8%,transparent)}
+.d2next-head{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.d2next-title{font-size:22px;font-weight:900;letter-spacing:-.03em;line-height:1.1;color:var(--lime)}
+[data-theme="light"] .d2next-title{color:var(--lime-text)}
+.d2next-by{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em;white-space:nowrap}
+.d2nextrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
+.d2nextrow>div{display:flex;flex-direction:column;gap:3px}
+.d2nl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2)}
+.d2nextrow b{font-size:28px;font-weight:900;letter-spacing:-.02em;line-height:1}
+.d2nextrow small{font-size:12px;color:var(--muted);font-weight:600}
+.d2next-note{font-size:12px;color:var(--muted);font-weight:500;margin-top:12px;line-height:1.4}
 .d2c{background:radial-gradient(120% 150% at 0% 0%,color-mix(in srgb,var(--lime) 7%,transparent),transparent 55%),linear-gradient(180deg,#15181B,#101214);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:20px;color:#F0F2EE}
 [data-theme="light"] .d2c{background:var(--card);border:1px solid rgba(24,28,12,.08);color:var(--text)}
 .d2lbl{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:rgba(240,242,238,.62);font-weight:600}
@@ -763,7 +776,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 .d2cy{fill:var(--lime);font-size:12px;font-weight:700}
 [data-theme="light"] .d2cy{fill:var(--lime-text)}
 @media(min-width:980px){
-.d2row1{grid-template-columns:2.1fr 1fr}
+.d2row1{grid-template-columns:1fr}
 .d2stats{grid-template-columns:repeat(4,1fr)}
 .d2main{grid-template-columns:1.9fr 1fr}
 .d2row4{grid-template-columns:1.25fr 1fr}
@@ -804,20 +817,7 @@ details.fx .eq{background:var(--bg);border-radius:8px;padding:8px 10px;font-size
 
 /* Mobile: goal → trend → chart → stat tiles → session → rest */
 @media(max-width:979px){
-.d2graphs{display:grid;gap:12px;grid-template-columns:1fr;margin-top:12px}
-.d2next{margin-bottom:12px;padding:20px;border-radius:var(--r);background:radial-gradient(140% 120% at 0% 0%,color-mix(in srgb,var(--lime) 18%,transparent),transparent 60%),linear-gradient(180deg,#15181B,#101214);border:1.5px solid color-mix(in srgb,var(--lime) 35%,transparent);box-shadow:0 0 24px color-mix(in srgb,var(--lime) 12%,transparent)}
-[data-theme="light"] .d2next{background:radial-gradient(140% 120% at 0% 0%,color-mix(in srgb,var(--lime) 14%,transparent),transparent 60%),var(--card);border-color:color-mix(in srgb,var(--lime) 30%,transparent);box-shadow:0 0 20px color-mix(in srgb,var(--lime) 8%,transparent)}
-.d2next-head{display:flex;justify-content:space-between;align-items:baseline}
-.d2next-title{font-size:22px;font-weight:900;letter-spacing:-.03em;line-height:1.1;color:var(--lime)}
-[data-theme="light"] .d2next-title{color:var(--lime-text)}
-.d2next-by{font-size:12px;font-weight:600;color:var(--muted);letter-spacing:.02em}
-.d2nextrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px}
-.d2nextrow>div{display:flex;flex-direction:column;gap:3px}
-.d2nl{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted2)}
-.d2nextrow b{font-size:28px;font-weight:900;letter-spacing:-.02em;line-height:1}
-.d2nextrow small{font-size:12px;color:var(--muted);font-weight:600}
-.d2next-note{font-size:12px;color:var(--muted);font-weight:500;margin-top:12px;line-height:1.4}
-@media(min-width:980px){.d2graphs{grid-template-columns:1fr 1fr}}
+.d2graphs{grid-template-columns:1fr}
 #v-dash .block:has(.d2row1){display:grid;grid-template-columns:1fr 1fr;gap:12px}
 #v-dash .d2row1,#v-dash .d2main,#v-dash .d2stats,#v-dash .d2row4,#v-dash .d2graphs{display:contents}
 #v-dash .d2row1>.d2c,#v-dash .d2main>.d2c,#v-dash .d2row4>*,#v-dash .d2graphs>.d2c{grid-column:1/-1}
@@ -961,13 +961,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
         <div class="d2bar"><i id="pgBar" style="width:4%"></i></div>
         <div class="d2tick"><span id="pgStartLbl">92.8 start</span><span class="d2acc" style="font-weight:700" id="d2cutpct">on the line</span><span id="pgGoalLbl">85.0 goal</span></div>
       </div>
-      <div class="d2c" style="display:flex;flex-direction:column;justify-content:center">
-        <div class="d2lbl">Scale trend</div>
-        <div class="d2num" style="margin-top:10px"><span id="d2avg7">–</span> <span class="d2mut" style="font-size:14px">kg · 7-day avg</span></div>
-        <div class="d2acc" style="font-size:12px;font-weight:700;margin-top:8px" id="d2avgTrend">log daily to see the trend</div>
-        <div class="d2mut" style="font-size:11.5px;margin-top:6px">Act on this number, not today's scale.</div>
-        <div style="display:none"><b id="pgBf"></b><svg><circle id="pgRing" r="1"/></svg><span id="d2pts"></span></div>
-      </div>
+      <div style="display:none"><span id="d2avg7"></span><span id="d2avgTrend"></span><b id="pgBf"></b><svg><circle id="pgRing" r="1"/></svg><span id="d2pts"></span></div>
       </div>
       <div class="d2main">
       <div class="d2c"><div style="display:flex;justify-content:space-between;align-items:center"><div><div class="d2lbl">Scale path</div><div style="font-size:17px;font-weight:800;margin-top:6px">Am I on the line?</div></div><span class="d2chip">&#8722;0.6 kg / wk plan</span></div>
