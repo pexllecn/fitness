@@ -987,8 +987,9 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
             <span class="d2lbl">Body composition &middot; the whole story</span>
             <div class="d2legend">
               <span><i style="background:var(--lime)"></i>Weight</span>
-              <span><i style="background:#F2701A"></i>Fat</span>
               <span><i style="background:#2E86F0"></i>Muscle</span>
+              <span><i style="background:#F2701A"></i>Fat mass</span>
+              <span><i style="background:#8B5CF6"></i>Body fat %</span>
             </div>
           </div>
           <div id="gCombo" style="margin-top:12px;min-height:200px"></div>
@@ -2599,38 +2600,45 @@ function renderPlanInputs() {
 /* ── dashboard fill (v1 d2fill, fully computed) ────────────────────────── */
 /* ── scale-path graphs (weight / fat / muscle) ─────────────────────────── */
 function comboGraphSVG(o) {
-  var W = 760, H = 215, L = 12, R = 16, T = 24, B = 30;
+  var series = o.series, N = series.length;
+  var W = 760, L = 14, R = 18, laneH = 66, T = 6, B = 20;
+  var H = T + N * laneH + B;
   var t0 = Date.parse(o.x0 + 'T00:00:00Z'), t1 = Date.parse(o.x1 + 'T00:00:00Z'), tN = Date.parse(o.today + 'T00:00:00Z');
   var span = (t1 - t0) || 1;
   function px(iso) { var t = (typeof iso === 'number') ? iso : Date.parse(iso + 'T00:00:00Z'); return L + (t - t0) / span * (W - L - R); }
-  var ally = [];
-  o.series.forEach(function (s) { s.actual.forEach(function (p) { if (p.y != null && isFinite(p.y)) ally.push(p.y); }); if (isFinite(s.projY)) ally.push(s.projY); });
-  if (!ally.length) return '';
-  var mn = Math.min.apply(null, ally), mx = Math.max.apply(null, ally), sp = (mx - mn) || 1;
-  var pad = sp * 0.18; mn -= pad; mx += pad; sp = mx - mn;
-  function py(v) { return T + (1 - (v - mn) / sp) * (H - T - B); }
-  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block;overflow:visible">';
-  /* week gridlines */
-  for (var t = t0; t <= t1 + 1; t += 7 * 86400000) { var gx0 = px(t); svg += '<line x1="' + gx0.toFixed(1) + '" y1="' + T + '" x2="' + gx0.toFixed(1) + '" y2="' + (H - B) + '" stroke="var(--hair)" stroke-width="1" opacity="0.45"/>'; }
-  svg += '<line x1="' + L + '" y1="' + (H - B).toFixed(1) + '" x2="' + (W - R) + '" y2="' + (H - B).toFixed(1) + '" class="d2cg"/>';
-  /* today marker */
   var xN = px(tN);
-  svg += '<line x1="' + xN.toFixed(1) + '" y1="' + (T - 8) + '" x2="' + xN.toFixed(1) + '" y2="' + (H - B) + '" stroke="var(--muted2)" stroke-width="1.4" stroke-dasharray="2 3" opacity="0.65"/>';
-  svg += '<text x="' + xN.toFixed(1) + '" y="' + (T - 12) + '" class="d2ct" text-anchor="middle" fill="var(--muted)" style="letter-spacing:.1em">TODAY</text>';
-  svg += '<text x="' + (W - R).toFixed(1) + '" y="' + (H - B + 18) + '" class="d2ct" text-anchor="end" fill="var(--muted)">goal</text>';
-  o.series.forEach(function (s) {
+  var svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" width="100%" preserveAspectRatio="xMidYMid meet" style="display:block;overflow:visible">';
+  svg += '<defs>';
+  series.forEach(function (s, i) { svg += '<linearGradient id="cg' + i + '" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="' + s.color + '" stop-opacity="0.30"/><stop offset="1" stop-color="' + s.color + '" stop-opacity="0"/></linearGradient>'; });
+  svg += '</defs>';
+  series.forEach(function (s, i) {
+    var laneTop = T + i * laneH, laneBot = laneTop + laneH - 10, innerTop = laneTop + 20;
     var pts = s.actual.filter(function (p) { return p.y != null && isFinite(p.y); });
+    var unit = s.unit || '';
+    /* lane baseline + metric label */
+    svg += '<line x1="' + L + '" y1="' + laneBot.toFixed(1) + '" x2="' + (W - R) + '" y2="' + laneBot.toFixed(1) + '" class="d2cg"/>';
+    svg += '<text x="' + L + '" y="' + (laneTop + 12) + '" fill="' + s.color + '" style="font-weight:800;letter-spacing:.07em;font-size:10.5px;text-transform:uppercase">' + s.name + '</text>';
     if (!pts.length) return;
+    var vals = pts.map(function (p) { return p.y; }).concat([s.projY]);
+    var mn = Math.min.apply(null, vals), mx = Math.max.apply(null, vals), sp = (mx - mn) || 1, pad = (mx - mn) ? sp * 0.25 : Math.max(0.5, Math.abs(mx) * 0.02);
+    mn -= pad; mx += pad; sp = mx - mn;
+    function py(v) { return innerTop + (1 - (v - mn) / sp) * (laneBot - innerTop); }
     var last = pts[pts.length - 1];
-    var line = pts.map(function (p, i) { return (i ? 'L' : 'M') + px(p.date).toFixed(1) + ' ' + py(p.y).toFixed(1); }).join(' ');
+    var line = pts.map(function (p, j) { return (j ? 'L' : 'M') + px(p.date).toFixed(1) + ' ' + py(p.y).toFixed(1); }).join(' ');
+    var area = 'M' + px(pts[0].date).toFixed(1) + ' ' + laneBot.toFixed(1) + ' ' + pts.map(function (p) { return 'L' + px(p.date).toFixed(1) + ' ' + py(p.y).toFixed(1); }).join(' ') + ' L' + px(last.date).toFixed(1) + ' ' + laneBot.toFixed(1) + ' Z';
     var lx = px(last.date), ly = py(last.y), gx = px(o.x1), gy = py(s.projY);
-    svg += '<path d="' + line + '" fill="none" stroke="' + s.color + '" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>';
-    svg += '<line x1="' + lx.toFixed(1) + '" y1="' + ly.toFixed(1) + '" x2="' + gx.toFixed(1) + '" y2="' + gy.toFixed(1) + '" stroke="' + s.color + '" stroke-width="1.8" stroke-dasharray="5 5" opacity="0.45"/>';
-    svg += '<circle cx="' + gx.toFixed(1) + '" cy="' + gy.toFixed(1) + '" r="3.2" fill="none" stroke="' + s.color + '" stroke-width="1.8" opacity="0.7"/>';
-    svg += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="6" fill="' + s.color + '" opacity="0.2"/>';
-    svg += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="3.4" fill="' + s.color + '"/>';
-    svg += '<text x="' + (lx + 9).toFixed(1) + '" y="' + (ly - 7).toFixed(1) + '" class="d2ct" fill="' + s.color + '" style="font-weight:700;font-size:12.5px">' + last.y.toFixed(1) + ' kg</text>';
+    svg += '<path d="' + area + '" fill="url(#cg' + i + ')"/>';
+    svg += '<path d="' + line + '" fill="none" stroke="' + s.color + '" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>';
+    svg += '<line x1="' + lx.toFixed(1) + '" y1="' + ly.toFixed(1) + '" x2="' + gx.toFixed(1) + '" y2="' + gy.toFixed(1) + '" stroke="' + s.color + '" stroke-width="1.8" stroke-dasharray="5 5" opacity="0.5"/>';
+    svg += '<circle cx="' + gx.toFixed(1) + '" cy="' + gy.toFixed(1) + '" r="3" fill="none" stroke="' + s.color + '" stroke-width="1.8" opacity="0.75"/>';
+    svg += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="5.5" fill="' + s.color + '" opacity="0.2"/>';
+    svg += '<circle cx="' + lx.toFixed(1) + '" cy="' + ly.toFixed(1) + '" r="3.3" fill="' + s.color + '"/>';
+    svg += '<text x="' + (lx + 8).toFixed(1) + '" y="' + (ly - 6).toFixed(1) + '" class="d2ct" fill="' + s.color + '" style="font-weight:700;font-size:12px">' + last.y.toFixed(1) + unit + '</text>';
+    svg += '<text x="' + (W - R).toFixed(1) + '" y="' + (gy < laneTop + 22 ? gy + 14 : gy - 6).toFixed(1) + '" class="d2ct" text-anchor="end" fill="var(--muted)" style="font-size:10px">goal ' + s.projY.toFixed(1) + unit + '</text>';
   });
+  /* one TODAY line across every lane */
+  svg += '<line x1="' + xN.toFixed(1) + '" y1="' + T + '" x2="' + xN.toFixed(1) + '" y2="' + (H - B).toFixed(1) + '" stroke="var(--muted2)" stroke-width="1.2" stroke-dasharray="2 3" opacity="0.55"/>';
+  svg += '<text x="' + xN.toFixed(1) + '" y="' + (H - B + 13) + '" class="d2ct" text-anchor="middle" fill="var(--muted)" style="letter-spacing:.1em;font-size:9.5px">TODAY</text>';
   svg += '</svg>';
   return svg;
 }
@@ -2689,13 +2697,17 @@ function renderScaleGraphs() {
     var mA = scCut.map(function (s) { return { date: s.date, y: (s.muscle != null ? s.muscle : KF.ffm(s)) }; });
     if (!mA.length || mA[0].date > cutStart) mA.unshift({ date: cutStart, y: (B0.muscle != null ? B0.muscle : KF.ffm(B0)) });
     var holdMus = mA[mA.length - 1].y;
-    /* combined body-composition chart — weight, fat, muscle on one canvas */
+    /* body-fat % — plotted on its own right-hand axis */
+    var pA = scCut.map(function (s) { return { date: s.date, y: s.bf }; });
+    if (!pA.length || pA[0].date > cutStart) pA.unshift({ date: cutStart, y: B0.bf });
+    /* combined body-composition chart — weight, fat, muscle, bf% on one canvas */
     var gc = $('gCombo');
     if (gc) gc.innerHTML = comboGraphSVG({
       x0: cutStart, x1: goalDate, today: today, series: [
-        { name: 'Weight', color: 'var(--lime)', actual: wA, projY: P.goalWeight },
-        { name: 'Fat', color: '#F2701A', actual: fA, projY: goalFat },
-        { name: 'Muscle', color: '#2E86F0', actual: mA, projY: holdMus }
+        { name: 'Weight', color: 'var(--lime)', unit: ' kg', actual: wA, projY: P.goalWeight },
+        { name: 'Body fat', color: '#8B5CF6', unit: '%', actual: pA, projY: STATE.goalBf },
+        { name: 'Fat mass', color: '#F2701A', unit: ' kg', actual: fA, projY: goalFat },
+        { name: 'Muscle', color: '#2E86F0', unit: ' kg', actual: mA, projY: holdMus }
       ]
     });
     /* coming-week targets */
