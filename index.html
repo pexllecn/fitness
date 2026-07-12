@@ -297,6 +297,12 @@ button{cursor:pointer}
 .mtime{display:flex;align-items:center;gap:7px;margin-bottom:8px;flex-wrap:wrap}
 .mt-time{font-size:11px;font-weight:600;letter-spacing:.01em;color:var(--on-lime);background:var(--lime);padding:3px 8px;border-radius:6px;font-variant-numeric:tabular-nums}
 .mt-slot{font-size:11px;font-weight:500;color:var(--muted)}
+.gymband{display:flex;align-items:center;gap:8px;margin:4px 0;padding:9px 14px;border-radius:12px;background:color-mix(in srgb,var(--lime) 14%,var(--card));border:1px dashed color-mix(in srgb,var(--lime) 45%,transparent)}
+.gymband i{font-size:16px;width:16px;height:16px;color:var(--lime-deep)}
+[data-theme="dark"] .gymband i{color:var(--lime)}
+.gymband b{font-size:12px;font-weight:800;letter-spacing:.08em;color:var(--lime-text)}
+[data-theme="dark"] .gymband b{color:var(--lime)}
+.gymband span{font-size:11.5px;font-weight:500;color:var(--muted)}
 .malts{display:flex;flex-wrap:wrap;align-items:center;gap:6px;margin-top:10px;padding-top:10px;border-top:1px dashed var(--line)}
 .malt-l{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:var(--muted)}
 .malt{font-size:12px;font-weight:500;color:var(--text);background:var(--panel);padding:3px 8px;border-radius:8px}
@@ -1329,12 +1335,12 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
 
   var DEFAULT_MEALS = {
     weekday: [
-      { name: 'Dessert Khuswa', slot: 'Breakfast', time: '8:00 am', foods: '', p: 58, c: 52, f: 9 },
-      { name: 'Chicken Khuswa', slot: 'Lunch', time: '12:30 pm', foods: '', p: 56, c: 49, f: 7 },
-      { name: 'Cheese sandwich · protein square', slot: 'Snack', time: '3:30 pm', foods: '', p: 31, c: 32, f: 9 },
-      { name: 'Cheese sandwich · wholemeal squares', slot: 'Pre-gym', time: '6:00 pm', foods: '', p: 26, c: 35, f: 10 },
-      { name: 'Protein + creatine shake', slot: 'Post-gym', time: '8:45 pm', foods: '', p: 24, c: 2, f: 1 },
-      { name: '4 eggs + tuna', slot: 'Dinner', time: '9:15 pm', foods: '', p: 50, c: 2, f: 21, alts: [{ name: '3 eggs + tuna', p: 44, c: 1, f: 16 }] }
+      { name: '4 eggs + tuna', slot: 'Breakfast', time: '8:00 am', foods: '', p: 50, c: 2, f: 21, alts: [{ name: '3 eggs + tuna', p: 44, c: 1, f: 16 }] },
+      { name: 'Cheese sandwich · protein square', slot: 'Lunch', time: '12:30 pm', foods: '', p: 31, c: 32, f: 9 },
+      { name: 'Chicken Khuswa', slot: 'Pre-gym fuel', time: '3:30 pm', foods: '', p: 56, c: 49, f: 7 },
+      { name: 'Cheese sandwich · wholemeal squares', slot: 'Pre-gym', time: '5:00 pm', foods: '', p: 26, c: 35, f: 10 },
+      { name: 'Protein + creatine shake', slot: 'Post-gym', time: '8:15 pm', foods: '', p: 24, c: 2, f: 1 },
+      { name: 'Dessert Khuswa', slot: 'Post-gym dinner', time: '8:45 pm', foods: '', p: 58, c: 52, f: 9 }
     ],
     weekend: [
       { name: 'Dessert Khuswa', slot: 'Breakfast', time: '9:00 am', foods: '', p: 58, c: 52, f: 9 },
@@ -1347,7 +1353,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
   };
 
   var PLAN_NOTES = {
-    weekday: 'No double Chicken Khuswa now. One at lunch, then eggs and tuna for dinner bring the fat up. Protein 245g, fat 57g, 2,181 kcal. Carbs land about 172g, a little under because eggs and tuna are carb-free, so calories sit just inside the deficit. Drop to 3 eggs for a lighter dinner.',
+    weekday: 'Gym 6–8 pm, and the carbs are now sequenced around it. Low-carb protein/fat morning (eggs &amp; tuna) keeps you lean early, then the two carb meals — Chicken Khuswa at 3:30 and the wholemeal sandwich at 5 — stack into the afternoon so you walk in fuelled and lift heavier. The shake hits fast protein right after, and the Dessert Khuswa lands as the post-gym dinner to refill glycogen while insulin is high. Same food, same 245g P · 172g C · 57g F · 2,181 kcal — just ordered to train on.',
     weekend: 'Beef day, no Chicken Khuswa to clash with it. The mince anchors dinner, eggs and tuna add protein and fat post-gym, two cheese sandwiches hold the carbs. Protein 237g, carbs 129g and fat 55g, all on target, 1,959 kcal. Bump to 4 eggs for a touch more.'
   };
 
@@ -1365,9 +1371,10 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
   var YT = 'https://www.youtube.com/results?search_query=';
   function q(s) { return YT + encodeURIComponent(s + ' proper form'); }
   var PROGRAM = [
-    { key: 'upperA', name: 'Upper A', focus: 'Chest & back thickness', sub: 'Horizontal push &amp; pull · upper + mid chest, mid-back, side delts', time: '~75', ex: [
+    { key: 'upperA', name: 'Upper A', focus: 'Chest & back thickness', sub: 'Horizontal push &amp; pull · lower/upper/mid chest, mid-back, side delts', time: '~80', ex: [
       { n: 'Incline Barbell Press', sr: '3-4 × 6-10', rir: '1-2 RIR', ld: 'by feel · progress reps then load', q: q('incline barbell bench press'), note: 'Upper-chest anchor (clavicular). Bench ~30°, bar to the upper sternum, drive up and slightly back. Heavy top sets hold the shelf through the cut.' },
       { n: 'Flat DB Press', sr: '3 × 8-12', rir: '1-2 RIR', ld: 'by feel', q: q('flat dumbbell bench press'), note: 'Mid chest (sternal). Dumbbells give a deeper stretch than the bar — control the bottom, press to a slight touch at the top.' },
+      { n: 'High-to-Low Cable Crossover', sr: '3 × 12-15', rir: '0-1 RIR', ld: 'light-moderate · constant tension', q: q('high to low cable crossover lower chest'), note: 'Lower-chest separation — the line under the pec. Set both cables HIGH, cross your hands low by your hips and squeeze hard at the bottom where the lower fibres shorten. Slow the stretch, chase the squeeze — this is what makes the bottom of the chest pop.' },
       { n: 'Chest-Supported Row', sr: '3-4 × 8-12', rir: '1-2 RIR', ld: 'by feel', q: q('chest supported row machine'), note: 'Mid-back thickness (rhomboids, mid-traps). Chest on the pad kills momentum — pull to the belly, squeeze the shoulder blades together, slow return.' },
       { n: 'Wide Lat Pulldown', sr: '3 × 10-12', rir: '1 RIR', ld: 'by feel', q: q('wide grip lat pulldown'), note: 'Lat width. Wide grip, drive the elbows down and back, pull to the collarbone. Lead with the elbows, not the biceps.' },
       { n: 'Cable Lateral Raise', sr: '4 × 12-20', rir: '0-1 RIR', ld: 'light · constant tension', q: q('cable lateral raise'), note: 'Side-delt width — your highest-leverage look. Cable keeps tension at the bottom. Strict, lead with the elbow, no swing. High volume, they recover fast.' },
@@ -2037,6 +2044,7 @@ var EXDB = {
   'Incline Barbell Press': _ex('0047', '3TZduzM'), 'Flat DB Press': _ex('0289', 'SpYC0Kp'),
   'Chest-Supported Row': _ex('1350', '7I6LNUG'), 'Wide Lat Pulldown': _ex('0673', 'ecpY0rH'),
   'Cable Lateral Raise': _ex('0178', 'goJ6ezq'), 'Overhead Cable Triceps Extension': _ex('0194', '2IxROQ1'),
+  'High-to-Low Cable Crossover': _ex('0158', '7saC5zz'),
   'Incline DB Curl': _ex('0318', 'ae9UoXQ'), 'Back Squat': _ex('0043', 'qXTaZnJ'),
   'Leg Press': _ex('0739', '10Z2DXU'), 'Leg Extension': _ex('0585', 'my33uHU'),
   'Seated Leg Curl': _ex('0599', 'Zg3XY7P'), 'Standing Calf Raise': _ex('1490', '6HmFgmx'),
@@ -2326,7 +2334,15 @@ function renderMeals() {
     }).join('');
     $('mealAddRow').style.display = 'flex'; $('editMeals').textContent = 'Editing';
   } else {
-    $('mealList').innerHTML = list.map(mealCard).join('');
+    var html = '', gymShown = false;
+    list.forEach(function (x) {
+      if (!gymShown && mode === 'weekday' && /post/i.test(x.slot || '')) {
+        html += '<div class="gymband"><i class="hgi-stroke hgi-dumbbell-01 ic"></i><b>GYM</b><span>6:00 – 8:00 pm · you’re fuelled, lift heavy</span></div>';
+        gymShown = true;
+      }
+      html += mealCard(x);
+    });
+    $('mealList').innerHTML = html;
     $('mealAddRow').style.display = 'none'; $('editMeals').textContent = 'Edit meals';
   }
   renderFuelDesktop(); renderMealTotals();
