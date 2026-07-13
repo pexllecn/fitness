@@ -1500,7 +1500,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
   function fatMass(s) { return s.weight * s.bf / 100; }
   function ffm(s) { return s.weight - fatMass(s); }
   function latestScan(state) { byDate(state.scans); return state.scans[state.scans.length - 1]; }
-  function goalWeight(state) { return ffm(latestScan(state)) / (1 - state.goalBf / 100); }
+  function goalWeight(state) { return (typeof state.goalWeightKg === 'number') ? state.goalWeightKg : ffm(latestScan(state)) / (1 - state.goalBf / 100); }
   function baselineScan(state) {
     /* v1 parity: baseline = first scan on/after 2026-05-01, else the first scan. */
     byDate(state.scans);
@@ -1685,6 +1685,8 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
     if (measured != null && measured < -0.05) { method = 'measured'; rate = -measured; }
     else if (measured != null && planRate > 0) { method = 'stalled'; rate = planRate; }
     else { method = 'plan'; rate = planRate; }
+    /* expected-scale trajectory follows the planned rate to the target weight */
+    if (typeof state.expectedRate === 'number' && state.expectedRate > 0) rate = state.expectedRate;
 
     var series = trendSeries(state.daily);
     var startW = curWeight(state);              // current weight = latest logged weigh-in
@@ -1905,7 +1907,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
       mode: 'weekday', autoMode: false,
       meals: clone(DEFAULT_MEALS),
       scans: clone(SEED_SCANS), daily: clone(SEED_DAILY), ticks: {},
-      goalBf: 12, cutStart: '2026-06-25', cutWeeks: 9
+      goalBf: 12, goalWeightKg: 85.8, expectedRate: 0.65, cutStart: '2026-06-25', cutWeeks: 9
     };
   }
 
@@ -1940,6 +1942,8 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
       daily: Array.isArray(raw.daily) ? raw.daily : d.daily,
       ticks: raw.ticks || {},
       goalBf: (typeof raw.goalBf === 'number' && raw.goalBf >= 5 && raw.goalBf <= 25) ? raw.goalBf : d.goalBf,
+      goalWeightKg: (typeof raw.goalWeightKg === 'number' && raw.goalWeightKg >= 40 && raw.goalWeightKg <= 200) ? raw.goalWeightKg : d.goalWeightKg,
+      expectedRate: (typeof raw.expectedRate === 'number' && raw.expectedRate > 0 && raw.expectedRate <= 2) ? raw.expectedRate : d.expectedRate,
       cutStart: (typeof raw.cutStart === 'string' && ISO_RE.test(raw.cutStart)) ? raw.cutStart : d.cutStart,
       cutWeeks: (Number.isInteger(raw.cutWeeks) && raw.cutWeeks >= 4 && raw.cutWeeks <= 24) ? raw.cutWeeks : d.cutWeeks
     };
