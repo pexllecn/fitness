@@ -1691,7 +1691,7 @@ body.frost-nav .tabpill-inner,body.frost-nav .tabbar.lg-backdrop .tabpill-inner{
     else if (measured != null && planRate > 0) { method = 'stalled'; rate = planRate; }
     else { method = 'plan'; rate = planRate; }
     /* expected-scale trajectory follows the planned rate to the target weight */
-    if (typeof state.expectedRate === 'number' && state.expectedRate > 0) rate = state.expectedRate;
+    if (typeof state.expectedRate === 'number' && state.expectedRate > 0) { rate = state.expectedRate; method = 'expected'; }
 
     var series = trendSeries(state.daily);
     var startW = curWeight(state);              // current weight = latest logged weigh-in
@@ -2442,11 +2442,11 @@ function applyTargets() {
 var curM = 'weight';
 function renderProjection(P) {
   $('projTitle').textContent = STATE.cutWeeks + '-week scale path';
-  $('projTag').textContent = P.method === 'measured' ? 'live · your 21-day trend' : P.method === 'stalled' ? 'stalled · plan rate shown' : 'plan · log daily to go live';
+  $('projTag').textContent = P.method === 'expected' ? 'expected · ' + P.ratePerWeek.toFixed(2) + ' kg/wk' : P.method === 'measured' ? 'live · your 21-day trend' : P.method === 'stalled' ? 'stalled · plan rate shown' : 'plan · log daily to go live';
   $('projStart').innerHTML = P.startWeight.toFixed(1) + '<small> kg</small>';
   $('projRate').innerHTML = P.ratePerWeek.toFixed(2) + '<small> kg/wk</small>';
   $('projEta').innerHTML = P.etaDate ? esc(fmtDM(P.etaDate)) : '–';
-  $('projMethod').textContent = P.method === 'measured' ? 'measured rate' : P.method === 'stalled' ? 'plan rate (trend flat)' : 'planned deficit';
+  $('projMethod').textContent = P.method === 'expected' ? 'expected rate' : P.method === 'measured' ? 'measured rate' : P.method === 'stalled' ? 'plan rate (trend flat)' : 'planned deficit';
   var goalHit = false;
   $('projWeeks').innerHTML = P.weeks.map(function (w) {
     var isGoal = !goalHit && !w.actual && Math.abs(w.weight - P.goalWeight) < 0.005;
@@ -2455,7 +2455,8 @@ function renderProjection(P) {
     return '<div class="' + cls + '"><span class="pw-n">Week ' + w.n + '</span><span class="pw-d">' + fmtDM(w.start || w.date) + (w.actual ? ' ✓' : '') + '</span><span class="pw-v">' + w.weight.toFixed(1) + '</span><span class="pw-f">' + w.bf.toFixed(1) + '% fat</span></div>';
   }).join('');
   var note;
-  if (P.method === 'measured' && P.band) note = 'At ±20% of the current rate, ' + P.goalWeight.toFixed(1) + ' kg lands between ' + fmtDM(P.band.etaEarly) + ' and ' + fmtDM(P.band.etaLate) + '. Ticked weeks are your actual 7-day averages.';
+  if (P.method === 'expected') note = 'Using your expected rate of ' + P.ratePerWeek.toFixed(2) + ' kg/wk. Ticked weeks are your actual 7-day averages.';
+  else if (P.method === 'measured' && P.band) note = 'At ±20% of the current rate, ' + P.goalWeight.toFixed(1) + ' kg lands between ' + fmtDM(P.band.etaEarly) + ' and ' + fmtDM(P.band.etaLate) + '. Ticked weeks are your actual 7-day averages.';
   else if (P.method === 'stalled') note = 'The trend has been flat, so the plan rate is shown. The Coach card has the protocol.';
   else note = 'Showing the planned deficit rate. Log daily weigh-ins and this switches to your measured trend.';
   $('projNote').textContent = note;
@@ -2549,7 +2550,7 @@ function renderProgress() {
   $('pgGoalTop').innerHTML = '&#8594; ' + gw.toFixed(1);
   $('pgGoalLbl').textContent = gw.toFixed(1) + ' goal';
   $('pgStartLbl').textContent = P.startAnchor.toFixed(1) + ' start';
-  $('pgToGo').textContent = '~' + (P.toLose > 0.05 ? P.toLose.toFixed(1) : '0') + 'kg to go · ' + P.ratePerWeek.toFixed(2) + ' kg a week (' + (P.method === 'measured' ? 'measured' : 'plan') + ').';
+  $('pgToGo').textContent = '~' + (P.toLose > 0.05 ? P.toLose.toFixed(1) : '0') + 'kg to go · ' + P.ratePerWeek.toFixed(2) + ' kg a week (' + (P.method === 'expected' ? 'expected' : P.method === 'measured' ? 'measured' : 'plan') + ').';
   var prog = KF.cutProgress(STATE);
   $('pgBar').style.width = prog.toFixed(0) + '%';
   var pr = $('pgRing'); pr.style.strokeDasharray = RC; pr.style.strokeDashoffset = RC * (1 - prog / 100);
@@ -2562,7 +2563,7 @@ function renderCoach() {
   var recs = KF.recommendations(STATE, new Date());
   var chip = KF.statusChip(STATE, new Date());
   var el = $('d2wkchip'); if (el) el.textContent = chip.text;
-  if ($('coachTag')) $('coachTag').textContent = chip.label.toLowerCase() + ' · ' + (KF.buildProjection(STATE, new Date()).method === 'measured' ? 'live' : 'plan');
+  var _cm = KF.buildProjection(STATE, new Date()).method; if ($('coachTag')) $('coachTag').textContent = chip.label.toLowerCase() + ' · ' + (_cm === 'measured' ? 'live' : _cm === 'expected' ? 'expected' : 'plan');
   if ($('coachList')) $('coachList').innerHTML = recs.map(function (r) {
     var cls = r.level === 'warn' ? 'warn' : r.level === 'ok' ? 'good' : '';
     var ico = r.level === 'warn' ? '!' : r.level === 'ok' ? '\u2713' : 'i';
@@ -2717,15 +2718,15 @@ function renderScaleGraphs() {
         { name: 'Muscle', color: '#2E86F0', unit: ' kg', actual: mA, projY: holdMus }
       ]
     });
-    /* coming-week targets */
-    var wk = KF.weekOf(STATE, new Date()).clamped;
-    var nextChk = KF.checkpointISO(STATE, Math.min(STATE.cutWeeks, wk));
-    var tW = Math.max(P.goalWeight, P.startWeight - P.ratePerWeek);
-    var lastFat = fA[fA.length - 1].y, fatRate = P.ratePerWeek * 0.75;
-    var tF = Math.max(goalFat, lastFat - fatRate);
-    var tBfp = Math.max(STATE.goalBf, tW > 0 ? (1 - P.leanMass / tW) * 100 : STATE.goalBf);
+    /* coming-week targets — pull from the same projection tile the progress page uses */
+    var curTile = null;
+    for (var ti = 0; ti < P.weeks.length; ti++) { if (P.weeks[ti].current) { curTile = P.weeks[ti]; break; } }
+    if (!curTile) curTile = P.weeks[0];
+    var tW = curTile.weight;
+    var tBfp = curTile.bf;
+    var tF = tW * tBfp / 100;
     var _s = function (id, v) { var el = $(id); if (el) el.textContent = v; };
-    _s('nBy', 'by ' + KF.fullD(nextChk));
+    _s('nBy', 'by ' + KF.fullD(curTile.date));
     _s('nWeight', tW.toFixed(1));
     _s('nBfp', tBfp.toFixed(1));
     _s('nFat', tF.toFixed(1));
